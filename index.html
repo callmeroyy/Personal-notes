@@ -12,6 +12,7 @@
   .card{background:#fff;border-radius:10px;padding:14px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
   input,select,button{font-size:16px;padding:10px;border-radius:8px;border:1px solid #ccc;width:100%;box-sizing:border-box;margin-bottom:8px}
   button{background:#2563eb;color:#fff;border:none;cursor:pointer}
+  button:disabled{background:#94a3b8;cursor:not-allowed}
   button.sec{background:#475569}
   button.kecil{width:auto;padding:4px 10px;margin:0;font-size:13px}
   button.beli{background:#16a34a}
@@ -24,15 +25,20 @@
   .row:last-child{border-bottom:none}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-  .stat b{display:block;font-size:16px;margin-top:4px;word-break:break-all}
+  .grid3 .card{margin-bottom:0;padding:10px}
+  .stat b{display:block;font-size:15px;margin-top:4px;word-break:break-all}
   .total{font-size:24px;font-weight:bold;margin:4px 0}
   .merah{color:#dc2626}.hijau{color:#16a34a}
   .muted{color:#64748b;font-size:13px}
   .aksi{display:flex;gap:6px;align-items:center}
-  .track{background:#eef2f7;border-radius:4px;height:10px;margin:3px 0 8px}
+  .track{background:#eef2f7;border-radius:4px;height:10px;margin:6px 0}
   .bar{height:10px;border-radius:4px}
   .bar.hijau{background:#16a34a}.bar.merah{background:#dc2626}
-  .chartrow{margin-bottom:10px}
+  .keranjang{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px;padding:8px;margin-bottom:8px}
+  .legend{display:flex;align-items:center;gap:8px;font-size:14px;margin:4px 0}
+  .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .svgbox{margin:8px 0}
+  details summary{cursor:pointer;font-size:13px;color:#64748b;margin-top:4px}
 </style>
 </head>
 <body>
@@ -77,24 +83,35 @@
       </select>
       <input type="date" id="tgl">
     </div>
-    <input type="text" id="nama" placeholder="Beli apa / sumber uang">
+    <input type="text" id="judul" placeholder="Nama transaksi (opsional, contoh: Belanja warung)">
     <select id="kategori"></select>
-    <div class="grid2">
-      <input type="number" id="qty" placeholder="Jumlah barang" value="1" min="1" inputmode="numeric">
-      <input type="number" id="harga" placeholder="Harga satuan (Rp)" min="1" inputmode="numeric">
+
+    <div class="keranjang">
+      <span class="muted">Tambah barang ke keranjang</span>
+      <input type="text" id="iNama" placeholder="Nama barang (contoh: Air mineral)">
+      <div class="grid2">
+        <input type="number" id="iQty" placeholder="Jumlah" value="1" min="1" inputmode="numeric">
+        <input type="number" id="iHarga" placeholder="Harga satuan (Rp)" min="1" inputmode="numeric">
+      </div>
+      <div class="grid2">
+        <button class="sec" id="btnScan">📷 Scan struk</button>
+        <button class="sec" id="btnTambahKrj">+ Keranjang</button>
+      </div>
+      <input type="file" id="fileScan" accept="image/*" capture="environment" style="display:none">
+      <p class="muted" id="statusScan"></p>
+      <div id="listKrj"></div>
+      <div class="row"><span>Total keranjang</span><b id="totKrj"></b></div>
     </div>
-    <p class="muted" id="previewTotal"></p>
-    <button class="sec" id="btnScan">📷 Scan struk</button>
-    <input type="file" id="fileScan" accept="image/*" capture="environment" style="display:none">
-    <p class="muted" id="statusScan"></p>
-    <button id="btnSimpan">Simpan</button>
+
+    <button id="btnSimpan">Simpan transaksi</button>
+    <button class="sec" id="btnKosongkan">Kosongkan keranjang</button>
   </div>
 
   <div class="card">
-    <h2>Mau dibeli</h2>
+    <h2>Target tabungan</h2>
     <input type="text" id="wNama" placeholder="Barang yang ingin dibeli">
-    <input type="number" id="wHarga" placeholder="Perkiraan harga (Rp)" min="1" inputmode="numeric">
-    <button class="sec" id="btnWish">Tambah ke daftar</button>
+    <input type="number" id="wTarget" placeholder="Target harga (Rp)" min="1" inputmode="numeric">
+    <button class="sec" id="btnWish">Tambah target</button>
     <div id="listWish"></div>
   </div>
 </section>
@@ -112,22 +129,27 @@
       <option value="masuk">Pemasukan saja</option>
       <option value="keluar">Pengeluaran saja</option>
     </select>
-    <input type="text" id="rCari" placeholder="Cari nama atau kategori">
+    <input type="text" id="rCari" placeholder="Cari nama barang, transaksi, atau kategori">
     <p class="muted" id="rRingkas"></p>
   </div>
-  <div class="card">
-    <div id="rList"></div>
-  </div>
+  <div class="card"><div id="rList"></div></div>
 </section>
 
 <!-- GRAFIK -->
 <section id="grafik" class="page">
   <div class="card">
     <h2>7 hari terakhir</h2>
-    <div id="chart"></div>
+    <div class="legend"><span class="sw" style="background:#16a34a"></span>Pemasukan <span class="sw" style="background:#dc2626"></span>Pengeluaran</div>
+    <div class="svgbox" id="chart7"></div>
   </div>
   <div class="card">
-    <h2>Bandingkan dua hari (pengeluaran)</h2>
+    <h2>Pengeluaran per kategori</h2>
+    <p class="muted">Mengikuti periode di Beranda.</p>
+    <div class="svgbox" id="donut"></div>
+    <div id="legendDonut"></div>
+  </div>
+  <div class="card">
+    <h2>Bandingkan dua hari</h2>
     <div class="grid2">
       <div><span class="muted">Hari A</span><input type="date" id="cmpA"></div>
       <div><span class="muted">Hari B</span><input type="date" id="cmpB"></div>
@@ -149,8 +171,10 @@
 </section>
 
 <script>
-const KEY = 'catatan-keuangan-v2';
-const KEY_LAMA = 'catatan-keuangan-v1';
+const KEY = 'catatan-keuangan-v3';
+const KEY_V2 = 'catatan-keuangan-v2';
+const KEY_V1 = 'catatan-keuangan-v1';
+const KEY_KRJ = 'catatan-keranjang-v3';
 const $ = id => document.getElementById(id);
 const rp = n => 'Rp ' + Math.round(Number(n) || 0).toLocaleString('id-ID');
 const tglStr = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -159,38 +183,52 @@ const geser = (s, hari) => { const [y,m,d] = s.split('-').map(Number); return tg
 const tglIndo = s => { const [y,m,d] = s.split('-'); return d + '/' + m + '/' + y; };
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
 const el = (tag, cls, teks) => { const e = document.createElement(tag); if (cls) e.className = cls; if (teks !== undefined) e.textContent = teks; return e; };
+const esc = s => String(s).replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const svg = (w, h, inner) => `<svg viewBox="0 0 ${w} ${h}" width="100%" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
+const PAL = ['#2563eb','#16a34a','#dc2626','#f59e0b','#9333ea','#0891b2','#64748b','#ec4899'];
 
 const KAT = {
-  keluar: ['Makan','Jajan','Transport','Kos','Kuota/Pulsa','Belanja','Lainnya'],
+  keluar: ['Makan','Jajan','Minuman','Transport','Kos','Kuota/Pulsa','Belanja','Tabungan','Lainnya'],
   masuk: ['Uang saku','Gaji','Jualan','Lainnya']
 };
 
 function normal(x) {
-  const qty = Number(x.qty) || 1;
-  const harga = Number(x.harga ?? x.jumlah) || 0;
+  const items = Array.isArray(x.items)
+    ? x.items.map(i => ({ nama: String(i.nama), qty: Number(i.qty) || 1, harga: Number(i.harga) || 0 }))
+    : [{ nama: String(x.nama || 'Barang'), qty: Number(x.qty) || 1, harga: Number(x.harga ?? x.jumlah) || 0 }];
+  const total = items.reduce((s, i) => s + i.qty * i.harga, 0);
+  const judul = x.judul || (items.length === 1 ? items[0].nama : (x.nama || 'Belanja ' + tglIndo(x.tanggal)));
   return {
     id: String(x.id || uid()),
     ts: Number(x.ts) || 0,
     tanggal: x.tanggal,
     tipe: x.tipe === 'masuk' ? 'masuk' : 'keluar',
-    nama: String(x.nama),
+    judul: String(judul),
     kategori: x.kategori || 'Lainnya',
-    qty, harga, total: qty * harga
+    items, total,
+    wishId: x.wishId || null
   };
 }
 
+const normalWish = list => list.map(w => ({ id: String(w.id || uid()), nama: String(w.nama), target: Number(w.target ?? w.harga) || 0 }));
+
 function muat() {
   try {
-    const v2 = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (v2) return { transaksi: (v2.transaksi || []).map(normal), wishlist: v2.wishlist || [] };
-    const v1 = JSON.parse(localStorage.getItem(KEY_LAMA) || '[]');
+    const v3 = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (v3) return { transaksi: (v3.transaksi || []).map(normal), wishlist: normalWish(v3.wishlist || []) };
+    const v2 = JSON.parse(localStorage.getItem(KEY_V2) || 'null');
+    if (v2) return { transaksi: (v2.transaksi || []).map(normal), wishlist: normalWish(v2.wishlist || []) };
+    const v1 = JSON.parse(localStorage.getItem(KEY_V1) || '[]');
     return { transaksi: v1.map(normal), wishlist: [] };
   } catch (e) {
     return { transaksi: [], wishlist: [] };
   }
 }
+
 let db = muat();
+let keranjang = JSON.parse(localStorage.getItem(KEY_KRJ) || '[]');
 function simpan() { localStorage.setItem(KEY, JSON.stringify(db)); }
+function simpanKrj() { localStorage.setItem(KEY_KRJ, JSON.stringify(keranjang)); }
 
 function filterTr({dari='', sampai='', tipe='semua', cari=''} = {}) {
   let a = dari, b = sampai;
@@ -199,48 +237,55 @@ function filterTr({dari='', sampai='', tipe='semua', cari=''} = {}) {
   return db.transaksi.filter(x =>
     (!a || x.tanggal >= a) && (!b || x.tanggal <= b) &&
     (tipe === 'semua' || x.tipe === tipe) &&
-    (!c || x.nama.toLowerCase().includes(c) || x.kategori.toLowerCase().includes(c)));
+    (!c || [x.judul, x.kategori, ...x.items.map(i => i.nama)].some(s => s.toLowerCase().includes(c))));
 }
 const sum = (list, tipe) => list.filter(x => x.tipe === tipe).reduce((s,x) => s + x.total, 0);
+const saldoTotal = () => sum(db.transaksi, 'masuk') - sum(db.transaksi, 'keluar');
 const urutTerbaru = list => [...list].sort((a,b) => b.tanggal.localeCompare(a.tanggal) || (b.ts - a.ts));
 const harianTipe = (tgl, tipe) => sum(db.transaksi.filter(x => x.tanggal === tgl), tipe);
+const terkumpul = wid => db.transaksi.filter(x => x.wishId === wid).reduce((s,x) => s + x.total, 0);
+const periode = () => ({ dari: $('fDari').value, sampai: $('fSampai').value });
 
 function isiKategori() {
   const s = $('kategori');
   s.innerHTML = '';
   KAT[$('tipe').value].forEach(k => { const o = document.createElement('option'); o.textContent = k; s.appendChild(o); });
-  $('nama').placeholder = $('tipe').value === 'masuk' ? 'Sumber uang (contoh: Uang saku)' : 'Beli apa? (contoh: Nasi goreng)';
-}
-
-function previewTotal() {
-  $('previewTotal').textContent = 'Total: ' + rp((Number($('qty').value) || 0) * (Number($('harga').value) || 0));
 }
 
 function baris(x) {
-  const row = el('div', 'row');
+  const wrap = el('div', 'row');
+  wrap.style.display = 'block';
+  const top = el('div', 'aksi');
+  top.style.justifyContent = 'space-between';
   const info = el('div');
-  info.appendChild(el('b', x.tipe === 'masuk' ? 'hijau' : 'merah', (x.tipe === 'masuk' ? '+ ' : '- ') + x.nama));
-  info.appendChild(el('div', 'muted', tglIndo(x.tanggal) + ' · ' + x.qty + ' x ' + rp(x.harga) + ' · ' + x.kategori));
-  const aksi = el('div', 'aksi');
-  aksi.appendChild(el('span', null, rp(x.total)));
+  info.appendChild(el('b', x.tipe === 'masuk' ? 'hijau' : 'merah', (x.tipe === 'masuk' ? '+ ' : '- ') + x.judul));
+  info.appendChild(el('div', 'muted', tglIndo(x.tanggal) + ' · ' + x.kategori + (x.items.length > 1 ? ' · ' + x.items.length + ' barang' : '')));
+  const kanan = el('div', 'aksi');
+  kanan.appendChild(el('span', null, rp(x.total)));
   const hapus = el('button', 'kecil del', 'Hapus');
   hapus.onclick = () => {
-    if (confirm('Hapus catatan ini?')) {
+    if (confirm('Hapus transaksi ini?')) {
       db.transaksi = db.transaksi.filter(d => d.id !== x.id);
       simpan(); renderSemua();
     }
   };
-  aksi.appendChild(hapus);
-  row.appendChild(info);
-  row.appendChild(aksi);
-  return row;
+  kanan.appendChild(hapus);
+  top.append(info, kanan);
+  wrap.appendChild(top);
+  if (x.items.length > 1 || x.items[0].nama !== x.judul) {
+    const det = document.createElement('details');
+    det.appendChild(el('summary', null, 'Lihat rincian'));
+    x.items.forEach(i => det.appendChild(el('div', 'muted', i.qty + ' x ' + i.nama + ' @ ' + rp(i.harga) + ' = ' + rp(i.qty * i.harga))));
+    wrap.appendChild(det);
+  }
+  return wrap;
 }
 
 function renderBeranda() {
-  const p = filterTr({ dari: $('fDari').value, sampai: $('fSampai').value });
+  const p = filterTr(periode());
   $('masuk').textContent = rp(sum(p, 'masuk'));
   $('keluar').textContent = rp(sum(p, 'keluar'));
-  $('saldo').textContent = rp(sum(db.transaksi, 'masuk') - sum(db.transaksi, 'keluar'));
+  $('saldo').textContent = rp(saldoTotal());
   const box = $('histori5');
   box.innerHTML = '';
   const lima = urutTerbaru(p).slice(0, 5);
@@ -248,69 +293,124 @@ function renderBeranda() {
   lima.forEach(x => box.appendChild(baris(x)));
 }
 
+function renderKeranjang() {
+  const box = $('listKrj');
+  box.innerHTML = '';
+  if (!keranjang.length) box.appendChild(el('p', 'muted', 'Keranjang kosong.'));
+  keranjang.forEach((it, i) => {
+    const row = el('div', 'row');
+    const info = el('div');
+    info.appendChild(el('b', null, it.nama));
+    info.appendChild(el('div', 'muted', it.qty + ' x ' + rp(it.harga)));
+    const aksi = el('div', 'aksi');
+    aksi.appendChild(el('span', null, rp(it.qty * it.harga)));
+    const hap = el('button', 'kecil del', '×');
+    hap.onclick = () => { keranjang.splice(i, 1); simpanKrj(); renderKeranjang(); };
+    aksi.appendChild(hap);
+    row.append(info, aksi);
+    box.appendChild(row);
+  });
+  $('totKrj').textContent = rp(keranjang.reduce((s,i) => s + i.qty * i.harga, 0));
+  $('btnSimpan').disabled = !keranjang.length;
+}
+
+function renderWish() {
+  const box = $('listWish');
+  box.innerHTML = '';
+  if (!db.wishlist.length) box.appendChild(el('p', 'muted', 'Belum ada target tabungan.'));
+  db.wishlist.forEach(w => {
+    const term = terkumpul(w.id);
+    const kur = Math.max(0, w.target - term);
+    const pct = w.target ? Math.min(100, term / w.target * 100) : 0;
+    const wrap = el('div', 'row');
+    wrap.style.display = 'block';
+    const info = el('div');
+    info.appendChild(el('b', null, w.nama));
+    info.appendChild(el('div', 'muted', 'Target ' + rp(w.target) + ' · terkumpul ' + rp(term)));
+    const track = el('div', 'track');
+    const b = el('div', 'bar hijau');
+    b.style.width = pct + '%';
+    track.appendChild(b);
+    info.appendChild(track);
+    info.appendChild(el('div', kur > 0 ? 'merah' : 'hijau', kur > 0 ? 'Kekurangan ' + rp(kur) : 'Target tercapai'));
+    wrap.appendChild(info);
+
+    const aksi = el('div', 'aksi');
+    const inp = document.createElement('input');
+    inp.type = 'number'; inp.placeholder = 'Setor (Rp)'; inp.min = 1; inp.inputMode = 'numeric';
+    inp.style.margin = '0';
+    const setor = el('button', 'kecil beli', 'Setor');
+    setor.onclick = () => {
+      const n = Number(inp.value) || 0;
+      if (n <= 0) { alert('Isi jumlah setoran.'); return; }
+      db.transaksi.push({ id: uid(), ts: Date.now(), tanggal: hariIni(), tipe: 'keluar',
+        judul: 'Tabungan: ' + w.nama, kategori: 'Tabungan',
+        items: [{ nama: 'Setor tabungan ' + w.nama, qty: 1, harga: n }], total: n, wishId: w.id });
+      simpan(); renderSemua();
+    };
+    const selesai = el('button', 'kecil sec', kur > 0 ? 'Hapus' : 'Selesai');
+    selesai.onclick = () => {
+      if (kur > 0 && !confirm('Hapus target ini? Setoran yang sudah masuk tetap tercatat.')) return;
+      db.wishlist = db.wishlist.filter(d => d.id !== w.id);
+      simpan(); renderSemua();
+    };
+    aksi.append(inp, setor, selesai);
+    wrap.appendChild(aksi);
+    box.appendChild(wrap);
+  });
+}
+
 function renderRiwayat() {
   const p = filterTr({ dari: $('rDari').value, sampai: $('rSampai').value, tipe: $('rTipe').value, cari: $('rCari').value });
-  $('rRingkas').textContent = 'Ditemukan ' + p.length + ' catatan · Masuk ' + rp(sum(p,'masuk')) + ' · Keluar ' + rp(sum(p,'keluar'));
+  $('rRingkas').textContent = 'Ditemukan ' + p.length + ' transaksi · Masuk ' + rp(sum(p,'masuk')) + ' · Keluar ' + rp(sum(p,'keluar'));
   const box = $('rList');
   box.innerHTML = '';
   if (!p.length) box.appendChild(el('p', 'muted', 'Tidak ada yang cocok.'));
   urutTerbaru(p).forEach(x => box.appendChild(baris(x)));
 }
 
-function renderWish() {
-  const box = $('listWish');
-  box.innerHTML = '';
-  if (!db.wishlist.length) box.appendChild(el('p', 'muted', 'Belum ada barang di daftar.'));
-  const s = sum(db.transaksi, 'masuk') - sum(db.transaksi, 'keluar');
-  db.wishlist.forEach(w => {
-    const row = el('div', 'row');
-    const info = el('div');
-    info.appendChild(el('b', null, w.nama));
-    info.appendChild(el('div', 'muted', 'Perkiraan ' + rp(w.harga)));
-    const kurang = w.harga - s;
-    info.appendChild(el('div', kurang > 0 ? 'merah' : 'hijau', kurang > 0 ? 'Saldo kurang ' + rp(kurang) : 'Saldo cukup'));
-    const aksi = el('div', 'aksi');
-    const beli = el('button', 'kecil beli', 'Beli');
-    beli.onclick = () => {
-      if (w.harga > s && !confirm('Saldo belum cukup. Tetap dicatat sebagai pengeluaran?')) return;
-      db.transaksi.push({ id: uid(), ts: Date.now(), tanggal: hariIni(), tipe: 'keluar', nama: w.nama,
-        kategori: 'Belanja', qty: 1, harga: w.harga, total: w.harga });
-      db.wishlist = db.wishlist.filter(d => d.id !== w.id);
-      simpan(); renderSemua();
-    };
-    const hapus = el('button', 'kecil del', 'Hapus');
-    hapus.onclick = () => { db.wishlist = db.wishlist.filter(d => d.id !== w.id); simpan(); renderSemua(); };
-    aksi.appendChild(beli);
-    aksi.appendChild(hapus);
-    row.appendChild(info);
-    row.appendChild(aksi);
-    box.appendChild(row);
-  });
-}
-
-function batang(kelas, nilai, max) {
-  const wrap = el('div', 'track');
-  const b = el('div', 'bar ' + kelas);
-  b.style.width = (nilai / max * 100) + '%';
-  wrap.appendChild(b);
-  return wrap;
-}
-
 function renderGrafik() {
-  const box = $('chart');
-  box.innerHTML = '';
   const data = [...Array(7)].map((_, i) => {
     const t = geser(hariIni(), i - 6);
     return { t, m: harianTipe(t, 'masuk'), k: harianTipe(t, 'keluar') };
   });
   const max = Math.max(1, ...data.flatMap(d => [d.m, d.k]));
-  data.forEach(d => {
-    const r = el('div', 'chartrow');
-    r.appendChild(el('div', null, tglIndo(d.t).slice(0,5)));
-    r.appendChild(el('div', 'muted', 'Masuk ' + rp(d.m) + ' · Keluar ' + rp(d.k)));
-    r.appendChild(batang('hijau', d.m, max));
-    r.appendChild(batang('merah', d.k, max));
-    box.appendChild(r);
+  const W = 600, H = 240, pad = 30, gw = (W - pad * 2) / 7, area = H - pad - 20;
+  let s = '';
+  data.forEach((d, i) => {
+    const x = pad + i * gw + gw * 0.15, bw = gw * 0.3;
+    const hm = d.m / max * area, hk = d.k / max * area;
+    s += `<rect x="${x}" y="${H - pad - hm}" width="${bw}" height="${hm}" rx="3" fill="#16a34a"/>`;
+    s += `<rect x="${x + bw + 4}" y="${H - pad - hk}" width="${bw}" height="${hk}" rx="3" fill="#dc2626"/>`;
+    s += `<text x="${x + bw}" y="${H - pad + 16}" text-anchor="middle" font-size="12" fill="#64748b">${tglIndo(d.t).slice(0,5)}</text>`;
+  });
+  s += `<line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" stroke="#cbd5e1"/>`;
+  $('chart7').innerHTML = svg(W, H, s);
+
+  const per = {};
+  filterTr(periode()).filter(x => x.tipe === 'keluar').forEach(x => per[x.kategori] = (per[x.kategori] || 0) + x.total);
+  const entries = Object.entries(per).sort((a,b) => b[1] - a[1]);
+  const tot = entries.reduce((s,e) => s + e[1], 0);
+  const C = 2 * Math.PI * 60;
+  let off = 0, arc = '';
+  entries.forEach(([k, v], i) => {
+    const len = tot ? v / tot * C : 0;
+    arc += `<circle cx="90" cy="90" r="60" fill="none" stroke="${PAL[i % PAL.length]}" stroke-width="28" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-off}" transform="rotate(-90 90 90)"/>`;
+    off += len;
+  });
+  arc += tot
+    ? `<text x="90" y="95" text-anchor="middle" font-size="13" fill="#222">${esc(rp(tot))}</text>`
+    : `<text x="90" y="95" text-anchor="middle" font-size="13" fill="#64748b">Kosong</text>`;
+  $('donut').innerHTML = svg(180, 180, arc);
+  const leg = $('legendDonut');
+  leg.innerHTML = '';
+  entries.forEach(([k, v], i) => {
+    const r = el('div', 'row');
+    const l = el('div', 'legend');
+    const sw = el('span', 'sw'); sw.style.background = PAL[i % PAL.length];
+    l.append(sw, el('span', null, k));
+    r.append(l, el('span', null, rp(v) + ' (' + (v / tot * 100).toFixed(0) + '%)'));
+    leg.appendChild(r);
   });
 }
 
@@ -324,32 +424,44 @@ function renderCompare() {
   const persen = ka === 0 ? '-' : ((selisih / ka) * 100).toFixed(1) + '%';
   const tanda = selisih > 0 ? 'lebih banyak' : (selisih < 0 ? 'lebih sedikit' : 'sama');
   const kelas = selisih > 0 ? 'merah' : (selisih < 0 ? 'hijau' : '');
-  const bar = (kiri, kanan, tebal, kls) => {
+  const row = (kiri, kanan, tebal, kls) => {
     const r = el('div', 'row');
     r.appendChild(el('span', null, kiri));
     r.appendChild(el(tebal ? 'b' : 'span', kls || null, kanan));
     return r;
   };
-  box.appendChild(bar(tglIndo(a), rp(ka)));
-  box.appendChild(bar(tglIndo(b), rp(kb)));
-  box.appendChild(bar('Selisih', rp(Math.abs(selisih)) + ' ' + tanda + ' (' + persen + ')', true, kelas));
+  box.append(row(tglIndo(a), rp(ka)), row(tglIndo(b), rp(kb)),
+             row('Selisih', rp(Math.abs(selisih)) + ' ' + tanda + ' (' + persen + ')', true, kelas));
+
   const kats = [...new Set(db.transaksi.filter(x => x.tipe === 'keluar' && (x.tanggal === a || x.tanggal === b)).map(x => x.kategori))];
-  if (kats.length) {
-    box.appendChild(el('p', 'muted', 'Per kategori (Hari A → Hari B)'));
-    kats.forEach(k => {
-      const va = db.transaksi.filter(x => x.tipe === 'keluar' && x.tanggal === a && x.kategori === k).reduce((s,x) => s + x.total, 0);
-      const vb = db.transaksi.filter(x => x.tipe === 'keluar' && x.tanggal === b && x.kategori === k).reduce((s,x) => s + x.total, 0);
-      box.appendChild(bar(k, rp(va) + ' → ' + rp(vb)));
-    });
-  }
+  if (!kats.length) return;
+  const val = (t, k) => db.transaksi.filter(x => x.tipe === 'keluar' && x.tanggal === t && x.kategori === k).reduce((s,x) => s + x.total, 0);
+  const rows = kats.map(k => [k, val(a, k), val(b, k)]);
+  const mx = Math.max(1, ...rows.flatMap(r => [r[1], r[2]]));
+  const LBL = 110, BW = 370;
+  let s = '';
+  rows.forEach((r, i) => {
+    const y = 10 + i * 50, wa = r[1] / mx * BW, wb = r[2] / mx * BW;
+    s += `<text x="0" y="${y + 18}" font-size="13" fill="#222">${esc(r[0])}</text>`;
+    s += `<rect x="${LBL}" y="${y}" width="${wa}" height="16" rx="3" fill="#2563eb"/>`;
+    s += `<text x="${LBL + wa + 6}" y="${y + 13}" font-size="12" fill="#64748b">${esc(rp(r[1]))}</text>`;
+    s += `<rect x="${LBL}" y="${y + 20}" width="${wb}" height="16" rx="3" fill="#f59e0b"/>`;
+    s += `<text x="${LBL + wb + 6}" y="${y + 33}" font-size="12" fill="#64748b">${esc(rp(r[2]))}</text>`;
+  });
+  box.appendChild(el('p', 'muted', 'Biru = ' + tglIndo(a) + ' · Oranye = ' + tglIndo(b)));
+  const holder = document.createElement('div');
+  holder.className = 'svgbox';
+  holder.innerHTML = svg(600, rows.length * 50 + 10, s);
+  box.appendChild(holder);
 }
 
 function renderSemua() {
   renderBeranda();
+  renderKeranjang();
+  renderWish();
   renderRiwayat();
   renderGrafik();
   renderCompare();
-  renderWish();
 }
 
 function goto(p) {
@@ -359,32 +471,44 @@ function goto(p) {
 }
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => goto(t.dataset.page));
 
-$('fDari').onchange = renderBeranda;
-$('fSampai').onchange = renderBeranda;
-$('btnHariIni').onclick = () => { $('fDari').value = hariIni(); $('fSampai').value = hariIni(); renderBeranda(); };
+['fDari','fSampai'].forEach(id => $(id).onchange = renderSemua);
+$('btnHariIni').onclick = () => { $('fDari').value = hariIni(); $('fSampai').value = hariIni(); renderSemua(); };
 ['rDari','rSampai','rTipe'].forEach(id => $(id).onchange = renderRiwayat);
 $('rCari').oninput = renderRiwayat;
 $('cmpA').onchange = renderCompare;
 $('cmpB').onchange = renderCompare;
 
 $('tipe').onchange = isiKategori;
-$('qty').oninput = previewTotal;
-$('harga').oninput = previewTotal;
+
+$('btnTambahKrj').onclick = () => {
+  const nama = $('iNama').value.trim();
+  const qty = Number($('iQty').value) || 0;
+  const harga = Number($('iHarga').value) || 0;
+  if (!nama || qty <= 0 || harga <= 0) { alert('Isi nama barang, jumlah, dan harga satuan dengan benar.'); return; }
+  keranjang.push({ nama, qty, harga });
+  simpanKrj();
+  $('iNama').value = ''; $('iHarga').value = ''; $('iQty').value = 1;
+  $('statusScan').textContent = '';
+  renderKeranjang();
+};
+
+$('btnKosongkan').onclick = () => {
+  if (!keranjang.length || !confirm('Kosongkan keranjang?')) return;
+  keranjang = []; simpanKrj(); renderKeranjang();
+};
 
 $('btnSimpan').onclick = () => {
+  if (!keranjang.length) return;
   const tipe = $('tipe').value;
   const tgl = $('tgl').value || hariIni();
-  const nama = $('nama').value.trim();
-  const qty = Number($('qty').value) || 0;
-  const harga = Number($('harga').value) || 0;
-  if (!nama || qty <= 0 || harga <= 0) { alert('Isi nama, jumlah barang, dan harga satuan dengan benar.'); return; }
-  db.transaksi.push({ id: uid(), ts: Date.now(), tanggal: tgl, tipe, nama, kategori: $('kategori').value,
-    qty, harga, total: qty * harga });
-  simpan();
-  $('nama').value = ''; $('harga').value = ''; $('qty').value = 1;
-  $('statusScan').textContent = '';
-  previewTotal();
-  renderSemua();
+  const items = keranjang.map(i => ({ ...i }));
+  const total = items.reduce((s,i) => s + i.qty * i.harga, 0);
+  const judul = $('judul').value.trim() || (items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
+  db.transaksi.push({ id: uid(), ts: Date.now(), tanggal: tgl, tipe, judul,
+    kategori: $('kategori').value, items, total });
+  keranjang = []; simpanKrj();
+  $('judul').value = '';
+  simpan(); renderSemua();
 };
 
 function muatTesseract() {
@@ -425,13 +549,11 @@ $('fileScan').onchange = async e => {
     await muatTesseract();
     const hasil = await Tesseract.recognize(f, 'ind+eng');
     const { nama, total } = bacaStruk(hasil.data.text);
-    $('tipe').value = 'keluar';
-    isiKategori();
-    if (nama) $('nama').value = nama;
-    if (total) { $('qty').value = 1; $('harga').value = total; previewTotal(); }
+    if (nama) $('iNama').value = nama;
+    if (total) { $('iQty').value = 1; $('iHarga').value = total; }
     st.textContent = total
-      ? 'Terisi otomatis. Cek nama dan angkanya sebelum disimpan.'
-      : 'Total tidak terbaca. Isi harga manual.';
+      ? 'Terisi otomatis. Cek dulu, lalu tekan "+ Keranjang". Kalau ada beberapa barang, isi satu-satu.'
+      : 'Total tidak terbaca. Isi manual.';
   } catch (err) {
     st.textContent = 'Gagal membaca struk. Coba foto yang lebih terang dan lurus, atau isi manual.';
   }
@@ -440,12 +562,12 @@ $('fileScan').onchange = async e => {
 
 $('btnWish').onclick = () => {
   const nama = $('wNama').value.trim();
-  const harga = Number($('wHarga').value) || 0;
-  if (!nama || harga <= 0) { alert('Isi nama barang dan perkiraan harganya.'); return; }
-  db.wishlist.push({ id: uid(), nama, harga });
+  const target = Number($('wTarget').value) || 0;
+  if (!nama || target <= 0) { alert('Isi nama barang dan target harganya.'); return; }
+  db.wishlist.push({ id: uid(), nama, target });
   simpan();
-  $('wNama').value = ''; $('wHarga').value = '';
-  renderWish();
+  $('wNama').value = ''; $('wTarget').value = '';
+  renderSemua();
 };
 
 function unduh(nama, isi, tipe) {
@@ -458,19 +580,20 @@ function unduh(nama, isi, tipe) {
 }
 
 $('btnExcel').onclick = () => {
-  const esc = v => '"' + String(v).replace(/"/g, '""') + '"';
-  const baris = [['Tanggal','Tipe','Nama','Kategori','Jumlah Barang','Harga Satuan','Total'],
-    ...[...db.transaksi].sort((x,y) => x.tanggal.localeCompare(y.tanggal))
-      .map(x => [tglIndo(x.tanggal), x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran',
-                 x.nama, x.kategori, x.qty, x.harga, x.total])];
+  const esc2 = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const baris = [['Tanggal','Tipe','Transaksi','Kategori','Barang','Jumlah','Harga Satuan','Subtotal']];
+  [...db.transaksi].sort((x,y) => x.tanggal.localeCompare(y.tanggal)).forEach(x => {
+    x.items.forEach(i => baris.push([tglIndo(x.tanggal), x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran',
+      x.judul, x.kategori, i.nama, i.qty, i.harga, i.qty * i.harga]));
+  });
   baris.push([]);
-  baris.push(['', '', '', '', '', 'Saldo total', sum(db.transaksi,'masuk') - sum(db.transaksi,'keluar')]);
-  const isi = '\uFEFF' + baris.map(r => r.map(esc).join(';')).join('\r\n');
+  baris.push(['', '', '', '', '', '', 'Saldo total', saldoTotal()]);
+  const isi = '\uFEFF' + baris.map(r => r.map(esc2).join(';')).join('\r\n');
   unduh('catatan-keuangan.csv', isi, 'text/csv;charset=utf-8');
 };
 
 $('btnBackup').onclick = () => {
-  const isi = JSON.stringify({ versi: 2, transaksi: db.transaksi, wishlist: db.wishlist }, null, 2);
+  const isi = JSON.stringify({ versi: 3, transaksi: db.transaksi, wishlist: db.wishlist }, null, 2);
   unduh('backup-keuangan-' + hariIni() + '.json', isi, 'application/json');
 };
 
@@ -487,13 +610,13 @@ $('fileImport').onchange = async e => {
     const idW = new Set(db.wishlist.map(x => x.id));
     let tambah = 0;
     listTr.forEach(x => {
-      if (x && x.tanggal && x.nama && !idTr.has(String(x.id))) {
+      if (x && x.tanggal && !idTr.has(String(x.id))) {
         const n = normal(x);
         db.transaksi.push(n); idTr.add(n.id); tambah++;
       }
     });
-    listW.forEach(w => {
-      if (w && w.id && w.nama && !idW.has(w.id)) { db.wishlist.push(w); idW.add(w.id); }
+    normalWish(listW).forEach(w => {
+      if (!idW.has(w.id)) { db.wishlist.push(w); idW.add(w.id); }
     });
     simpan(); renderSemua();
     alert('Import selesai. ' + tambah + ' transaksi baru ditambahkan (duplikat dilewati).');
@@ -509,7 +632,6 @@ $('fSampai').value = hariIni();
 $('cmpA').value = hariIni();
 $('cmpB').value = geser(hariIni(), -1);
 isiKategori();
-previewTotal();
 simpan();
 goto('beranda');
 
