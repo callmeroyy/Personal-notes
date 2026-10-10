@@ -13,40 +13,63 @@
   input,select,button{font-size:16px;padding:10px;border-radius:8px;border:1px solid #ccc;width:100%;box-sizing:border-box;margin-bottom:8px}
   button{background:#2563eb;color:#fff;border:none;cursor:pointer}
   button.sec{background:#475569}
-  button.del{background:#dc2626;width:auto;padding:4px 10px;margin:0;font-size:13px}
+  button.kecil{width:auto;padding:4px 10px;margin:0;font-size:13px}
+  button.beli{background:#16a34a}
+  button.del{background:#dc2626}
   .row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #eee;gap:8px}
   .row:last-child{border-bottom:none}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .total{font-size:18px;font-weight:bold}
-  .naik{color:#dc2626}.turun{color:#16a34a}
+  .total{font-size:24px;font-weight:bold;margin:4px 0}
+  .merah{color:#dc2626}.hijau{color:#16a34a}
   .muted{color:#64748b;font-size:13px}
+  .aksi{display:flex;gap:6px;align-items:center}
 </style>
 </head>
 <body>
 <h1>💰 Catatan Keuangan</h1>
 
 <div class="card">
-  <h2>Tambah pengeluaran</h2>
-  <input type="date" id="tgl">
-  <input type="text" id="nama" placeholder="Beli apa? (contoh: Nasi goreng)">
+  <span class="muted">Saldo sekarang</span>
+  <div class="total" id="saldo"></div>
+  <div class="muted">Total pemasukan <span id="totMasuk"></span> &middot; total pengeluaran <span id="totKeluar"></span></div>
+</div>
+
+<div class="card">
+  <h2>Catat transaksi</h2>
   <div class="grid2">
-    <select id="kategori">
-      <option>Makan</option><option>Jajan</option><option>Transport</option>
-      <option>Kos</option><option>Kuota/Pulsa</option><option>Belanja</option><option>Lainnya</option>
+    <select id="tipe">
+      <option value="keluar">Pengeluaran</option>
+      <option value="masuk">Pemasukan</option>
     </select>
-    <input type="number" id="jumlah" placeholder="Jumlah (Rp)" inputmode="numeric">
+    <input type="date" id="tgl">
   </div>
-  <button id="btnTambah">Simpan</button>
+  <input type="text" id="nama" placeholder="Beli apa / sumber uang">
+  <select id="kategori"></select>
+  <div class="grid2">
+    <input type="number" id="qty" placeholder="Jumlah barang" value="1" min="1" inputmode="numeric">
+    <input type="number" id="harga" placeholder="Harga satuan (Rp)" min="1" inputmode="numeric">
+  </div>
+  <p class="muted" id="previewTotal"></p>
+  <button id="btnSimpan">Simpan</button>
 </div>
 
 <div class="card">
-  <h2>Pengeluaran hari ini <span class="muted" id="labelHariIni"></span></h2>
+  <h2>Pencatatan hari ini <span class="muted" id="labelHariIni"></span></h2>
   <div id="listHariIni"></div>
-  <div class="row"><span>Total</span><span class="total" id="totalHariIni"></span></div>
+  <div class="row"><span>Pemasukan</span><b class="hijau" id="masukHariIni"></b></div>
+  <div class="row"><span>Pengeluaran</span><b class="merah" id="keluarHariIni"></b></div>
 </div>
 
 <div class="card">
-  <h2>Bandingkan dua hari</h2>
+  <h2>Mau dibeli</h2>
+  <input type="text" id="wNama" placeholder="Barang yang ingin dibeli">
+  <input type="number" id="wHarga" placeholder="Perkiraan harga (Rp)" min="1" inputmode="numeric">
+  <button id="btnWish" class="sec">Tambah ke daftar</button>
+  <div id="listWish"></div>
+</div>
+
+<div class="card">
+  <h2>Bandingkan dua hari (pengeluaran)</h2>
   <div class="grid2">
     <div><span class="muted">Hari A</span><input type="date" id="cmpA"></div>
     <div><span class="muted">Hari B</span><input type="date" id="cmpB"></div>
@@ -64,86 +87,211 @@
 </div>
 
 <script>
-const KEY = 'catatan-keuangan-v1';
-let data = JSON.parse(localStorage.getItem(KEY) || '[]');
+const KEY = 'catatan-keuangan-v2';
+const KEY_LAMA = 'catatan-keuangan-v1';
 const $ = id => document.getElementById(id);
-
-const rp = n => 'Rp ' + Number(n).toLocaleString('id-ID');
-// Format tanggal lokal (hindari toISOString karena bisa bergeser zona waktu)
+const rp = n => 'Rp ' + Math.round(Number(n) || 0).toLocaleString('id-ID');
 const tglStr = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 const hariIni = () => tglStr(new Date());
 const kemarin = () => { const d = new Date(); d.setDate(d.getDate()-1); return tglStr(d); };
 const tglIndo = s => { const [y,m,d] = s.split('-'); return d + '/' + m + '/' + y; };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const el = (tag, cls, teks) => { const e = document.createElement(tag); if (cls) e.className = cls; if (teks !== undefined) e.textContent = teks; return e; };
 
-function simpan() { localStorage.setItem(KEY, JSON.stringify(data)); }
-function itemPadaTgl(tgl) { return data.filter(x => x.tanggal === tgl); }
-function totalPadaTgl(tgl) { return itemPadaTgl(tgl).reduce((s,x) => s + Number(x.jumlah), 0); }
+const KAT = {
+  keluar: ['Makan','Jajan','Transport','Kos','Kuota/Pulsa','Belanja','Lainnya'],
+  masuk: ['Uang saku','Gaji','Jualan','Lainnya']
+};
+
+function normal(x) {
+  const qty = Number(x.qty) || 1;
+  const harga = Number(x.harga ?? x.jumlah) || 0;
+  return {
+    id: String(x.id || uid()),
+    tanggal: x.tanggal,
+    tipe: x.tipe === 'masuk' ? 'masuk' : 'keluar',
+    nama: String(x.nama),
+    kategori: x.kategori || 'Lainnya',
+    qty, harga, total: qty * harga
+  };
+}
+
+function muat() {
+  try {
+    const v2 = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (v2) return { transaksi: (v2.transaksi || []).map(normal), wishlist: v2.wishlist || [] };
+    const v1 = JSON.parse(localStorage.getItem(KEY_LAMA) || '[]');
+    return { transaksi: v1.map(normal), wishlist: [] };
+  } catch (e) {
+    return { transaksi: [], wishlist: [] };
+  }
+}
+let db = muat();
+
+function simpan() { localStorage.setItem(KEY, JSON.stringify(db)); }
+
+const totalTipe = tipe => db.transaksi.filter(x => x.tipe === tipe).reduce((s,x) => s + x.total, 0);
+const saldo = () => totalTipe('masuk') - totalTipe('keluar');
+const harianTipe = (tgl, tipe) => db.transaksi.filter(x => x.tanggal === tgl && x.tipe === tipe).reduce((s,x) => s + x.total, 0);
+
+function isiKategori() {
+  const s = $('kategori');
+  s.innerHTML = '';
+  KAT[$('tipe').value].forEach(k => {
+    const o = document.createElement('option');
+    o.textContent = k;
+    s.appendChild(o);
+  });
+  $('nama').placeholder = $('tipe').value === 'masuk' ? 'Sumber uang (contoh: Uang saku)' : 'Beli apa? (contoh: Nasi goreng)';
+}
+
+function previewTotal() {
+  const t = (Number($('qty').value) || 0) * (Number($('harga').value) || 0);
+  $('previewTotal').textContent = 'Total: ' + rp(t);
+}
+
+function renderSaldo() {
+  $('saldo').textContent = rp(saldo());
+  $('totMasuk').textContent = rp(totalTipe('masuk'));
+  $('totKeluar').textContent = rp(totalTipe('keluar'));
+}
 
 function renderHariIni() {
   const t = hariIni();
   $('labelHariIni').textContent = '(' + tglIndo(t) + ')';
-  const list = itemPadaTgl(t);
-  $('listHariIni').innerHTML = list.length ? '' : '<p class="muted">Belum ada catatan hari ini.</p>';
+  const box = $('listHariIni');
+  box.innerHTML = '';
+  const list = db.transaksi.filter(x => x.tanggal === t);
+  if (!list.length) box.appendChild(el('p', 'muted', 'Belum ada catatan hari ini.'));
   list.forEach(x => {
-    const row = document.createElement('div');
-    row.className = 'row';
-    row.innerHTML = `<div><b></b><br><span class="muted"></span></div>
-      <div style="display:flex;align-items:center;gap:8px"><span></span><button class="del">Hapus</button></div>`;
-    row.querySelector('b').textContent = x.nama;
-    row.querySelector('.muted').textContent = x.kategori;
-    row.querySelector('span:not(.muted)') ; 
-    row.querySelectorAll('span')[1].textContent = rp(x.jumlah);
-    row.querySelector('.del').onclick = () => {
-      if (confirm('Hapus catatan ini?')) { data = data.filter(d => d.id !== x.id); simpan(); renderSemua(); }
+    const row = el('div', 'row');
+    const info = el('div');
+    info.appendChild(el('b', x.tipe === 'masuk' ? 'hijau' : 'merah', (x.tipe === 'masuk' ? '+ ' : '- ') + x.nama));
+    info.appendChild(el('div', 'muted', x.qty + ' x ' + rp(x.harga) + ' · ' + x.kategori));
+    const aksi = el('div', 'aksi');
+    aksi.appendChild(el('span', null, rp(x.total)));
+    const hapus = el('button', 'kecil del', 'Hapus');
+    hapus.onclick = () => {
+      if (confirm('Hapus catatan ini?')) {
+        db.transaksi = db.transaksi.filter(d => d.id !== x.id);
+        simpan(); renderSemua();
+      }
     };
-    $('listHariIni').appendChild(row);
+    aksi.appendChild(hapus);
+    row.appendChild(info);
+    row.appendChild(aksi);
+    box.appendChild(row);
   });
-  $('totalHariIni').textContent = rp(totalPadaTgl(t));
+  $('masukHariIni').textContent = rp(harianTipe(t, 'masuk'));
+  $('keluarHariIni').textContent = rp(harianTipe(t, 'keluar'));
+}
+
+function renderWish() {
+  const box = $('listWish');
+  box.innerHTML = '';
+  if (!db.wishlist.length) box.appendChild(el('p', 'muted', 'Belum ada barang di daftar.'));
+  const s = saldo();
+  db.wishlist.forEach(w => {
+    const row = el('div', 'row');
+    const info = el('div');
+    info.appendChild(el('b', null, w.nama));
+    info.appendChild(el('div', 'muted', 'Perkiraan ' + rp(w.harga)));
+    const kurang = w.harga - s;
+    info.appendChild(el('div', kurang > 0 ? 'merah' : 'hijau', kurang > 0 ? 'Saldo kurang ' + rp(kurang) : 'Saldo cukup'));
+    const aksi = el('div', 'aksi');
+    const beli = el('button', 'kecil beli', 'Beli');
+    beli.onclick = () => {
+      if (w.harga > saldo() && !confirm('Saldo belum cukup. Tetap dicatat sebagai pengeluaran?')) return;
+      db.transaksi.push({ id: uid(), tanggal: hariIni(), tipe: 'keluar', nama: w.nama,
+        kategori: 'Belanja', qty: 1, harga: w.harga, total: w.harga });
+      db.wishlist = db.wishlist.filter(d => d.id !== w.id);
+      simpan(); renderSemua();
+    };
+    const hapus = el('button', 'kecil del', 'Hapus');
+    hapus.onclick = () => {
+      db.wishlist = db.wishlist.filter(d => d.id !== w.id);
+      simpan(); renderSemua();
+    };
+    aksi.appendChild(beli);
+    aksi.appendChild(hapus);
+    row.appendChild(info);
+    row.appendChild(aksi);
+    box.appendChild(row);
+  });
 }
 
 function renderCompare() {
   const a = $('cmpA').value, b = $('cmpB').value;
-  if (!a || !b) { $('hasilCmp').innerHTML = ''; return; }
-  const ta = totalPadaTgl(a), tb = totalPadaTgl(b);
-  const selisih = tb - ta;
-  const persen = ta === 0 ? '-' : ((selisih / ta) * 100).toFixed(1) + '%';
-  const kelas = selisih > 0 ? 'naik' : (selisih < 0 ? 'turun' : '');
+  const box = $('hasilCmp');
+  box.innerHTML = '';
+  if (!a || !b) return;
+  const ka = harianTipe(a, 'keluar'), kb = harianTipe(b, 'keluar');
+  const selisih = kb - ka;
+  const persen = ka === 0 ? '-' : ((selisih / ka) * 100).toFixed(1) + '%';
   const tanda = selisih > 0 ? 'lebih banyak' : (selisih < 0 ? 'lebih sedikit' : 'sama');
+  const kelas = selisih > 0 ? 'merah' : (selisih < 0 ? 'hijau' : '');
 
-  const kategoriSet = [...new Set([...itemPadaTgl(a), ...itemPadaTgl(b)].map(x => x.kategori))];
-  const perKat = kategoriSet.map(k => {
-    const ka = itemPadaTgl(a).filter(x => x.kategori === k).reduce((s,x)=>s+Number(x.jumlah),0);
-    const kb = itemPadaTgl(b).filter(x => x.kategori === k).reduce((s,x)=>s+Number(x.jumlah),0);
-    return `<div class="row"><span>${k}</span><span>${rp(ka)} &rarr; ${rp(kb)}</span></div>`;
-  }).join('');
+  const bar = (kiri, kanan, tebal) => {
+    const r = el('div', 'row');
+    r.appendChild(el('span', null, kiri));
+    r.appendChild(el(tebal ? 'b' : 'span', null, kanan));
+    return r;
+  };
+  box.appendChild(bar(tglIndo(a), rp(ka)));
+  box.appendChild(bar(tglIndo(b), rp(kb)));
+  box.appendChild(bar('Selisih', rp(Math.abs(selisih)) + ' ' + tanda + ' (' + persen + ')', true));
+  box.lastChild.lastChild.className = kelas;
 
-  $('hasilCmp').innerHTML = `
-    <div class="row"><span>${tglIndo(a)}</span><b>${rp(ta)}</b></div>
-    <div class="row"><span>${tglIndo(b)}</span><b>${rp(tb)}</b></div>
-    <div class="row"><span>Selisih</span><b class="${kelas}">${rp(Math.abs(selisih))} ${tanda} (${persen})</b></div>
-    ${perKat ? '<p class="muted" style="margin:10px 0 4px">Per kategori (Hari A &rarr; Hari B)</p>' + perKat : ''}`;
+  const kats = [...new Set(db.transaksi.filter(x => x.tipe === 'keluar' && (x.tanggal === a || x.tanggal === b)).map(x => x.kategori))];
+  if (kats.length) {
+    box.appendChild(el('p', 'muted', 'Per kategori (Hari A → Hari B)'));
+    kats.forEach(k => {
+      const va = db.transaksi.filter(x => x.tipe === 'keluar' && x.tanggal === a && x.kategori === k).reduce((s,x) => s + x.total, 0);
+      const vb = db.transaksi.filter(x => x.tipe === 'keluar' && x.tanggal === b && x.kategori === k).reduce((s,x) => s + x.total, 0);
+      box.appendChild(bar(k, rp(va) + ' → ' + rp(vb)));
+    });
+  }
 }
 
 function renderSemua() {
+  renderSaldo();
   renderHariIni();
+  renderWish();
   renderCompare();
 }
 
-$('btnTambah').onclick = () => {
+$('tipe').onchange = isiKategori;
+$('qty').oninput = previewTotal;
+$('harga').oninput = previewTotal;
+
+$('btnSimpan').onclick = () => {
+  const tipe = $('tipe').value;
   const tgl = $('tgl').value || hariIni();
   const nama = $('nama').value.trim();
-  const jumlah = Number($('jumlah').value);
-  if (!nama || !jumlah || jumlah <= 0) { alert('Isi nama barang dan jumlah dengan benar.'); return; }
-  data.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
-              tanggal: tgl, nama, kategori: $('kategori').value, jumlah });
+  const qty = Number($('qty').value) || 0;
+  const harga = Number($('harga').value) || 0;
+  if (!nama || qty <= 0 || harga <= 0) {
+    alert('Isi nama, jumlah barang, dan harga satuan dengan benar.');
+    return;
+  }
+  db.transaksi.push({ id: uid(), tanggal: tgl, tipe, nama, kategori: $('kategori').value,
+    qty, harga, total: qty * harga });
   simpan();
-  $('nama').value = ''; $('jumlah').value = '';
+  $('nama').value = ''; $('harga').value = ''; $('qty').value = 1;
+  previewTotal();
   renderSemua();
 };
 
-$('cmpA').value = hariIni();
-$('cmpB').value = kemarin();
-$('tgl').value = hariIni();
+$('btnWish').onclick = () => {
+  const nama = $('wNama').value.trim();
+  const harga = Number($('wHarga').value) || 0;
+  if (!nama || harga <= 0) { alert('Isi nama barang dan perkiraan harganya.'); return; }
+  db.wishlist.push({ id: uid(), nama, harga });
+  simpan();
+  $('wNama').value = ''; $('wHarga').value = '';
+  renderWish();
+};
+
 $('cmpA').onchange = renderCompare;
 $('cmpB').onchange = renderCompare;
 
@@ -158,16 +306,19 @@ function unduh(nama, isi, tipe) {
 
 $('btnExcel').onclick = () => {
   const esc = v => '"' + String(v).replace(/"/g, '""') + '"';
-  const baris = [['Tanggal','Nama Barang','Kategori','Jumlah'],
-    ...[...data].sort((x,y) => x.tanggal.localeCompare(y.tanggal))
-      .map(x => [tglIndo(x.tanggal), x.nama, x.kategori, x.jumlah])];
-  // Pakai ';' dan BOM agar Excel versi Indonesia membacanya dengan benar
+  const baris = [['Tanggal','Tipe','Nama','Kategori','Jumlah Barang','Harga Satuan','Total'],
+    ...[...db.transaksi].sort((x,y) => x.tanggal.localeCompare(y.tanggal))
+      .map(x => [tglIndo(x.tanggal), x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran',
+                 x.nama, x.kategori, x.qty, x.harga, x.total])];
+  baris.push([]);
+  baris.push(['', '', '', '', '', 'Saldo', saldo()]);
   const isi = '\uFEFF' + baris.map(r => r.map(esc).join(';')).join('\r\n');
   unduh('catatan-keuangan.csv', isi, 'text/csv;charset=utf-8');
 };
 
 $('btnBackup').onclick = () => {
-  unduh('backup-keuangan-' + hariIni() + '.json', JSON.stringify(data, null, 2), 'application/json');
+  const isi = JSON.stringify({ versi: 2, transaksi: db.transaksi, wishlist: db.wishlist }, null, 2);
+  unduh('backup-keuangan-' + hariIni() + '.json', isi, 'application/json');
 };
 
 $('btnImport').onclick = () => $('fileImport').click();
@@ -176,25 +327,37 @@ $('fileImport').onchange = async e => {
   if (!file) return;
   try {
     const masuk = JSON.parse(await file.text());
-    if (!Array.isArray(masuk)) throw new Error('format');
-    const idAda = new Set(data.map(x => x.id));
+    const listTr = Array.isArray(masuk) ? masuk : (masuk.transaksi || null);
+    const listW = Array.isArray(masuk) ? [] : (masuk.wishlist || []);
+    if (!Array.isArray(listTr)) throw new Error('format');
+    const idTr = new Set(db.transaksi.map(x => x.id));
+    const idW = new Set(db.wishlist.map(x => x.id));
     let tambah = 0;
-    masuk.forEach(x => {
-      if (x && x.id && !idAda.has(x.id) && x.tanggal && x.nama && x.jumlah != null) {
-        data.push(x); idAda.add(x.id); tambah++;
+    listTr.forEach(x => {
+      if (x && x.tanggal && x.nama && !idTr.has(String(x.id))) {
+        const n = normal(x);
+        db.transaksi.push(n); idTr.add(n.id); tambah++;
       }
     });
+    listW.forEach(w => {
+      if (w && w.id && w.nama && !idW.has(w.id)) { db.wishlist.push(w); idW.add(w.id); }
+    });
     simpan(); renderSemua();
-    alert('Import selesai. ' + tambah + ' catatan baru ditambahkan (duplikat dilewati).');
+    alert('Import selesai. ' + tambah + ' transaksi baru ditambahkan (duplikat dilewati).');
   } catch (err) {
     alert('File backup tidak valid.');
   }
   e.target.value = '';
 };
 
+$('tgl').value = hariIni();
+$('cmpA').value = hariIni();
+$('cmpB').value = kemarin();
+isiKategori();
+previewTotal();
+simpan();
 renderSemua();
 
-// Daftarkan service worker agar aplikasi bisa dibuka offline
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
