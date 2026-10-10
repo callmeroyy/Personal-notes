@@ -183,7 +183,7 @@ const geser = (s, hari) => { const [y,m,d] = s.split('-').map(Number); return tg
 const tglIndo = s => { const [y,m,d] = s.split('-'); return d + '/' + m + '/' + y; };
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
 const el = (tag, cls, teks) => { const e = document.createElement(tag); if (cls) e.className = cls; if (teks !== undefined) e.textContent = teks; return e; };
-const esc = s => String(s).replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const svg = (w, h, inner) => `<svg viewBox="0 0 ${w} ${h}" width="100%" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
 const PAL = ['#2563eb','#16a34a','#dc2626','#f59e0b','#9333ea','#0891b2','#64748b','#ec4899'];
 
@@ -192,6 +192,7 @@ const KAT = {
   masuk: ['Uang saku','Gaji','Jualan','Lainnya']
 };
 
+// Merapikan data lama (v1/v2 yang belum punya items) dan data baru
 function normal(x) {
   const items = Array.isArray(x.items)
     ? x.items.map(i => ({ nama: String(i.nama), qty: Number(i.qty) || 1, harga: Number(i.harga) || 0 }))
@@ -370,6 +371,7 @@ function renderRiwayat() {
 }
 
 function renderGrafik() {
+  // Batang 7 hari
   const data = [...Array(7)].map((_, i) => {
     const t = geser(hariIni(), i - 6);
     return { t, m: harianTipe(t, 'masuk'), k: harianTipe(t, 'keluar') };
@@ -387,6 +389,7 @@ function renderGrafik() {
   s += `<line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" stroke="#cbd5e1"/>`;
   $('chart7').innerHTML = svg(W, H, s);
 
+  // Donut kategori pengeluaran (ikut periode Beranda)
   const per = {};
   filterTr(periode()).filter(x => x.tipe === 'keluar').forEach(x => per[x.kategori] = (per[x.kategori] || 0) + x.total);
   const entries = Object.entries(per).sort((a,b) => b[1] - a[1]);
@@ -471,6 +474,7 @@ function goto(p) {
 }
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => goto(t.dataset.page));
 
+// Filter
 ['fDari','fSampai'].forEach(id => $(id).onchange = renderSemua);
 $('btnHariIni').onclick = () => { $('fDari').value = hariIni(); $('fSampai').value = hariIni(); renderSemua(); };
 ['rDari','rSampai','rTipe'].forEach(id => $(id).onchange = renderRiwayat);
@@ -478,6 +482,7 @@ $('rCari').oninput = renderRiwayat;
 $('cmpA').onchange = renderCompare;
 $('cmpB').onchange = renderCompare;
 
+// Form transaksi
 $('tipe').onchange = isiKategori;
 
 $('btnTambahKrj').onclick = () => {
@@ -511,6 +516,7 @@ $('btnSimpan').onclick = () => {
   simpan(); renderSemua();
 };
 
+// Scan struk (OCR di HP, butuh internet untuk pertama kali)
 function muatTesseract() {
   return new Promise((ok, err) => {
     if (window.Tesseract) return ok();
@@ -560,6 +566,7 @@ $('fileScan').onchange = async e => {
   e.target.value = '';
 };
 
+// Target tabungan
 $('btnWish').onclick = () => {
   const nama = $('wNama').value.trim();
   const target = Number($('wTarget').value) || 0;
@@ -570,6 +577,7 @@ $('btnWish').onclick = () => {
   renderSemua();
 };
 
+// Export & import
 function unduh(nama, isi, tipe) {
   const blob = new Blob([isi], { type: tipe });
   const url = URL.createObjectURL(blob);
@@ -626,6 +634,7 @@ $('fileImport').onchange = async e => {
   e.target.value = '';
 };
 
+// Inisialisasi
 $('tgl').value = hariIni();
 $('fDari').value = hariIni();
 $('fSampai').value = hariIni();
