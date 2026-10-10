@@ -28,17 +28,22 @@
   .grid3 .card{margin-bottom:0;padding:10px}
   .stat b{display:block;font-size:15px;margin-top:4px;word-break:break-all}
   .total{font-size:24px;font-weight:bold;margin:4px 0}
-  .merah{color:#dc2626}.hijau{color:#16a34a}
+  .merah{color:#dc2626}.hijau{color:#16a34a}.oranye{color:#d97706}
   .muted{color:#64748b;font-size:13px}
   .aksi{display:flex;gap:6px;align-items:center}
   .track{background:#eef2f7;border-radius:4px;height:10px;margin:6px 0}
   .bar{height:10px;border-radius:4px}
-  .bar.hijau{background:#16a34a}.bar.merah{background:#dc2626}
+  .bar.hijau{background:#16a34a}.bar.merah{background:#dc2626}.bar.oranye{background:#f59e0b}
   .keranjang{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px;padding:8px;margin-bottom:8px}
   .legend{display:flex;align-items:center;gap:8px;font-size:14px;margin:4px 0}
   .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
   .svgbox{margin:8px 0}
   details summary{cursor:pointer;font-size:13px;color:#64748b;margin-top:4px}
+  dialog{width:90%;max-width:520px;border:none;border-radius:12px;padding:16px;box-sizing:border-box}
+  dialog::backdrop{background:rgba(0,0,0,.4)}
+  .itemrow{display:grid;grid-template-columns:2fr 1fr 1.3fr auto;gap:6px;align-items:center;margin-bottom:6px}
+  .itemrow input{margin:0}
+  .itemrow button{width:auto;margin:0;padding:6px 10px}
 </style>
 </head>
 <body>
@@ -72,6 +77,20 @@
     <h2>Histori terbaru</h2>
     <div id="histori5"></div>
     <button class="sec" onclick="goto('riwayat')">Lihat semua riwayat</button>
+  </div>
+
+  <div class="card">
+    <h2>Batas anggaran</h2>
+    <div class="grid2">
+      <select id="bKategori"></select>
+      <select id="bPeriode">
+        <option value="minggu">Per minggu (7 hari)</option>
+        <option value="bulan">Per bulan</option>
+      </select>
+    </div>
+    <input type="number" id="bLimit" placeholder="Batas (Rp)" min="1" inputmode="numeric">
+    <button class="sec" id="btnBudget">Simpan batas</button>
+    <div id="listBudget"></div>
   </div>
 
   <div class="card">
@@ -170,6 +189,26 @@
   </div>
 </section>
 
+<!-- DIALOG EDIT TRANSAKSI -->
+<dialog id="dlgEdit">
+  <h2>Edit transaksi</h2>
+  <div class="grid2">
+    <select id="eTipe">
+      <option value="keluar">Pengeluaran</option>
+      <option value="masuk">Pemasukan</option>
+    </select>
+    <input type="date" id="eTgl">
+  </div>
+  <input type="text" id="eJudul" placeholder="Nama transaksi">
+  <select id="eKategori"></select>
+  <p class="muted">Barang di transaksi ini (bisa diubah, ditambah, atau dihapus):</p>
+  <div id="eItems"></div>
+  <button class="sec" id="btnEItem">+ Tambah barang</button>
+  <p class="muted" id="eTotal"></p>
+  <button id="btnESimpan">Simpan perubahan</button>
+  <button class="sec" id="btnEBatal">Batal</button>
+</dialog>
+
 <script>
 const KEY = 'catatan-keuangan-v3';
 const KEY_V2 = 'catatan-keuangan-v2';
@@ -192,7 +231,6 @@ const KAT = {
   masuk: ['Uang saku','Gaji','Jualan','Lainnya']
 };
 
-// Merapikan data lama (v1/v2 yang belum punya items) dan data baru
 function normal(x) {
   const items = Array.isArray(x.items)
     ? x.items.map(i => ({ nama: String(i.nama), qty: Number(i.qty) || 1, harga: Number(i.harga) || 0 }))
@@ -216,18 +254,20 @@ const normalWish = list => list.map(w => ({ id: String(w.id || uid()), nama: Str
 function muat() {
   try {
     const v3 = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (v3) return { transaksi: (v3.transaksi || []).map(normal), wishlist: normalWish(v3.wishlist || []) };
+    if (v3) return { transaksi: (v3.transaksi || []).map(normal), wishlist: normalWish(v3.wishlist || []), budgets: v3.budgets || {} };
     const v2 = JSON.parse(localStorage.getItem(KEY_V2) || 'null');
-    if (v2) return { transaksi: (v2.transaksi || []).map(normal), wishlist: normalWish(v2.wishlist || []) };
+    if (v2) return { transaksi: (v2.transaksi || []).map(normal), wishlist: normalWish(v2.wishlist || []), budgets: {} };
     const v1 = JSON.parse(localStorage.getItem(KEY_V1) || '[]');
-    return { transaksi: v1.map(normal), wishlist: [] };
+    return { transaksi: v1.map(normal), wishlist: [], budgets: {} };
   } catch (e) {
-    return { transaksi: [], wishlist: [] };
+    return { transaksi: [], wishlist: [], budgets: {} };
   }
 }
 
 let db = muat();
 let keranjang = JSON.parse(localStorage.getItem(KEY_KRJ) || '[]');
+let editId = null;
+let editItems = [];
 function simpan() { localStorage.setItem(KEY, JSON.stringify(db)); }
 function simpanKrj() { localStorage.setItem(KEY_KRJ, JSON.stringify(keranjang)); }
 
@@ -247,10 +287,25 @@ const harianTipe = (tgl, tipe) => sum(db.transaksi.filter(x => x.tanggal === tgl
 const terkumpul = wid => db.transaksi.filter(x => x.wishId === wid).reduce((s,x) => s + x.total, 0);
 const periode = () => ({ dari: $('fDari').value, sampai: $('fSampai').value });
 
+// Pemakaian anggaran: per minggu = 7 hari terakhir termasuk hari ini, per bulan = bulan berjalan
+function pakaiBudget(kat, per) {
+  const today = hariIni();
+  const awal = per === 'bulan' ? today.slice(0,7) + '-01' : geser(today, -6);
+  return db.transaksi
+    .filter(x => x.tipe === 'keluar' && x.kategori === kat && x.tanggal >= awal && x.tanggal <= today)
+    .reduce((s,x) => s + x.total, 0);
+}
+
 function isiKategori() {
   const s = $('kategori');
   s.innerHTML = '';
   KAT[$('tipe').value].forEach(k => { const o = document.createElement('option'); o.textContent = k; s.appendChild(o); });
+}
+
+function isiKategoriBudget() {
+  const s = $('bKategori');
+  s.innerHTML = '';
+  KAT.keluar.forEach(k => { const o = document.createElement('option'); o.textContent = k; s.appendChild(o); });
 }
 
 function baris(x) {
@@ -263,6 +318,8 @@ function baris(x) {
   info.appendChild(el('div', 'muted', tglIndo(x.tanggal) + ' · ' + x.kategori + (x.items.length > 1 ? ' · ' + x.items.length + ' barang' : '')));
   const kanan = el('div', 'aksi');
   kanan.appendChild(el('span', null, rp(x.total)));
+  const edit = el('button', 'kecil sec', 'Edit');
+  edit.onclick = () => bukaEdit(x.id);
   const hapus = el('button', 'kecil del', 'Hapus');
   hapus.onclick = () => {
     if (confirm('Hapus transaksi ini?')) {
@@ -270,7 +327,7 @@ function baris(x) {
       simpan(); renderSemua();
     }
   };
-  kanan.appendChild(hapus);
+  kanan.append(edit, hapus);
   top.append(info, kanan);
   wrap.appendChild(top);
   if (x.items.length > 1 || x.items[0].nama !== x.judul) {
@@ -282,6 +339,129 @@ function baris(x) {
   return wrap;
 }
 
+// ===== EDIT TRANSAKSI =====
+function bukaEdit(id) {
+  const x = db.transaksi.find(d => d.id === id);
+  if (!x) return;
+  editId = id;
+  editItems = x.items.map(i => ({ ...i }));
+  $('eTipe').value = x.tipe;
+  isiKategoriEdit(x.kategori);
+  $('eTgl').value = x.tanggal;
+  $('eJudul').value = x.judul;
+  renderEditItems();
+  $('dlgEdit').showModal();
+}
+
+function isiKategoriEdit(pilih) {
+  const s = $('eKategori');
+  s.innerHTML = '';
+  KAT[$('eTipe').value].forEach(k => { const o = document.createElement('option'); o.textContent = k; s.appendChild(o); });
+  if (pilih && KAT[$('eTipe').value].includes(pilih)) s.value = pilih;
+}
+
+function renderEditItems() {
+  const box = $('eItems');
+  box.innerHTML = '';
+  editItems.forEach((it, i) => {
+    const row = el('div', 'itemrow');
+    const nama = el('input'); nama.type = 'text'; nama.placeholder = 'Nama barang'; nama.value = it.nama;
+    nama.oninput = () => { editItems[i].nama = nama.value; hitungEdit(); };
+    const qty = el('input'); qty.type = 'number'; qty.min = 1; qty.inputMode = 'numeric'; qty.value = it.qty;
+    qty.oninput = () => { editItems[i].qty = Number(qty.value) || 0; hitungEdit(); };
+    const harga = el('input'); harga.type = 'number'; harga.min = 1; harga.inputMode = 'numeric'; harga.value = it.harga;
+    harga.oninput = () => { editItems[i].harga = Number(harga.value) || 0; hitungEdit(); };
+    const hap = el('button', 'del', '×');
+    hap.onclick = () => { editItems.splice(i, 1); renderEditItems(); };
+    row.append(nama, qty, harga, hap);
+    box.appendChild(row);
+  });
+  hitungEdit();
+}
+
+function hitungEdit() {
+  const t = editItems.reduce((s,i) => s + (Number(i.qty) || 0) * (Number(i.harga) || 0), 0);
+  $('eTotal').textContent = 'Total baru: ' + rp(t);
+}
+
+$('eTipe').onchange = () => isiKategoriEdit();
+$('btnEItem').onclick = () => { editItems.push({ nama: '', qty: 1, harga: 0 }); renderEditItems(); };
+$('btnEBatal').onclick = () => $('dlgEdit').close();
+
+$('btnESimpan').onclick = () => {
+  const x = db.transaksi.find(d => d.id === editId);
+  if (!x) { $('dlgEdit').close(); return; }
+  const items = editItems
+    .map(i => ({ nama: String(i.nama || '').trim(), qty: Number(i.qty) || 0, harga: Number(i.harga) || 0 }))
+    .filter(i => i.nama && i.qty > 0 && i.harga > 0);
+  if (!items.length) { alert('Sisakan minimal satu barang yang nama, jumlah, dan harganya terisi.'); return; }
+  const tgl = $('eTgl').value || x.tanggal;
+  const judul = $('eJudul').value.trim() || (items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
+  x.tipe = $('eTipe').value;
+  x.tanggal = tgl;
+  x.judul = judul;
+  x.kategori = $('eKategori').value;
+  x.items = items;
+  x.total = items.reduce((s,i) => s + i.qty * i.harga, 0);
+  simpan();
+  $('dlgEdit').close();
+  renderSemua();
+};
+
+// ===== BATAS ANGGARAN =====
+function renderBudget() {
+  const box = $('listBudget');
+  box.innerHTML = '';
+  const daftar = Object.entries(db.budgets);
+  if (!daftar.length) box.appendChild(el('p', 'muted', 'Belum ada batas anggaran.'));
+  daftar.forEach(([kat, b]) => {
+    const pakai = pakaiBudget(kat, b.periode);
+    const pct = b.limit ? pakai / b.limit * 100 : 0;
+    const label = b.periode === 'bulan' ? 'per bulan' : 'per minggu';
+    const wrap = el('div', 'row');
+    wrap.style.display = 'block';
+    const top = el('div', 'aksi');
+    top.style.justifyContent = 'space-between';
+    top.appendChild(el('b', null, kat + ' (' + label + ')'));
+    const hapus = el('button', 'kecil del', 'Hapus');
+    hapus.onclick = () => { delete db.budgets[kat]; simpan(); renderSemua(); };
+    top.appendChild(hapus);
+    wrap.appendChild(top);
+    const track = el('div', 'track');
+    const bar = el('div', 'bar ' + (pct >= 100 ? 'merah' : pct >= 80 ? 'oranye' : 'hijau'));
+    bar.style.width = Math.min(100, pct) + '%';
+    track.appendChild(bar);
+    wrap.appendChild(track);
+    const sisa = b.limit - pakai;
+    const teks = 'Terpakai ' + rp(pakai) + ' dari ' + rp(b.limit) + ' · ' +
+      (sisa >= 0 ? 'sisa ' + rp(sisa) : 'lewat ' + rp(-sisa));
+    wrap.appendChild(el('div', pct >= 100 ? 'merah' : pct >= 80 ? 'oranye' : 'muted', teks));
+    box.appendChild(wrap);
+  });
+}
+
+$('btnBudget').onclick = () => {
+  const kat = $('bKategori').value;
+  const limit = Number($('bLimit').value) || 0;
+  if (limit <= 0) { alert('Isi batas anggaran dengan benar.'); return; }
+  db.budgets[kat] = { limit, periode: $('bPeriode').value };
+  simpan();
+  $('bLimit').value = '';
+  renderSemua();
+};
+
+function cekBudget(kat) {
+  const b = db.budgets[kat];
+  if (!b) return;
+  const pakai = pakaiBudget(kat, b.periode);
+  if (pakai > b.limit) {
+    alert('Batas anggaran ' + kat + ' terlampaui. Terpakai ' + rp(pakai) + ' dari ' + rp(b.limit) + '.');
+  } else if (pakai >= b.limit * 0.8) {
+    alert('Hampir melewati batas ' + kat + '. Terpakai ' + rp(pakai) + ' dari ' + rp(b.limit) + '.');
+  }
+}
+
+// ===== RENDER =====
 function renderBeranda() {
   const p = filterTr(periode());
   $('masuk').textContent = rp(sum(p, 'masuk'));
@@ -371,7 +551,6 @@ function renderRiwayat() {
 }
 
 function renderGrafik() {
-  // Batang 7 hari
   const data = [...Array(7)].map((_, i) => {
     const t = geser(hariIni(), i - 6);
     return { t, m: harianTipe(t, 'masuk'), k: harianTipe(t, 'keluar') };
@@ -389,7 +568,6 @@ function renderGrafik() {
   s += `<line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" stroke="#cbd5e1"/>`;
   $('chart7').innerHTML = svg(W, H, s);
 
-  // Donut kategori pengeluaran (ikut periode Beranda)
   const per = {};
   filterTr(periode()).filter(x => x.tipe === 'keluar').forEach(x => per[x.kategori] = (per[x.kategori] || 0) + x.total);
   const entries = Object.entries(per).sort((a,b) => b[1] - a[1]);
@@ -460,6 +638,7 @@ function renderCompare() {
 
 function renderSemua() {
   renderBeranda();
+  renderBudget();
   renderKeranjang();
   renderWish();
   renderRiwayat();
@@ -509,11 +688,12 @@ $('btnSimpan').onclick = () => {
   const items = keranjang.map(i => ({ ...i }));
   const total = items.reduce((s,i) => s + i.qty * i.harga, 0);
   const judul = $('judul').value.trim() || (items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
-  db.transaksi.push({ id: uid(), ts: Date.now(), tanggal: tgl, tipe, judul,
-    kategori: $('kategori').value, items, total });
+  const kat = $('kategori').value;
+  db.transaksi.push({ id: uid(), ts: Date.now(), tanggal: tgl, tipe, judul, kategori: kat, items, total });
   keranjang = []; simpanKrj();
   $('judul').value = '';
   simpan(); renderSemua();
+  if (tipe === 'keluar') cekBudget(kat);
 };
 
 // Scan struk (OCR di HP, butuh internet untuk pertama kali)
@@ -601,7 +781,7 @@ $('btnExcel').onclick = () => {
 };
 
 $('btnBackup').onclick = () => {
-  const isi = JSON.stringify({ versi: 3, transaksi: db.transaksi, wishlist: db.wishlist }, null, 2);
+  const isi = JSON.stringify({ versi: 3, transaksi: db.transaksi, wishlist: db.wishlist, budgets: db.budgets }, null, 2);
   unduh('backup-keuangan-' + hariIni() + '.json', isi, 'application/json');
 };
 
@@ -613,6 +793,7 @@ $('fileImport').onchange = async e => {
     const masuk = JSON.parse(await file.text());
     const listTr = Array.isArray(masuk) ? masuk : (masuk.transaksi || null);
     const listW = Array.isArray(masuk) ? [] : (masuk.wishlist || []);
+    const budgetMasuk = Array.isArray(masuk) ? {} : (masuk.budgets || {});
     if (!Array.isArray(listTr)) throw new Error('format');
     const idTr = new Set(db.transaksi.map(x => x.id));
     const idW = new Set(db.wishlist.map(x => x.id));
@@ -625,6 +806,9 @@ $('fileImport').onchange = async e => {
     });
     normalWish(listW).forEach(w => {
       if (!idW.has(w.id)) { db.wishlist.push(w); idW.add(w.id); }
+    });
+    Object.entries(budgetMasuk).forEach(([k, b]) => {
+      if (!db.budgets[k] && b && b.limit) db.budgets[k] = { limit: Number(b.limit), periode: b.periode === 'bulan' ? 'bulan' : 'minggu' };
     });
     simpan(); renderSemua();
     alert('Import selesai. ' + tambah + ' transaksi baru ditambahkan (duplikat dilewati).');
@@ -641,6 +825,7 @@ $('fSampai').value = hariIni();
 $('cmpA').value = hariIni();
 $('cmpB').value = geser(hariIni(), -1);
 isiKategori();
+isiKategoriBudget();
 simpan();
 goto('beranda');
 
