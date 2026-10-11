@@ -426,6 +426,46 @@
   html[data-efek="ultra"] nav.bottom .tab.aktif{box-shadow:0 0 18px rgba(10,132,255,.45)}
   html[data-efek="ultra"][data-gaya="biasa"] .card,
   html[data-efek="ultra"][data-gaya="biasa"] nav.bottom{-webkit-backdrop-filter:none;backdrop-filter:none}
+
+  /* ===== KARTU SALDO IKUT WARNA FOTO LATAR ===== */
+  .saldo-hero{
+    background:linear-gradient(135deg,
+      hsla(var(--aksen-h,215),var(--aksen-s,90%),44%,.94),
+      hsla(calc(var(--aksen-h,215) + 28),var(--aksen-s,90%),34%,.9)) !important;
+  }
+
+  /* ===== ADAPTIF: teks dan kaca menyesuaikan kecerahan foto, tombol ikut warna foto ===== */
+  html[data-adaptif="terang"]{
+    --ink:#1c1c1e;--muted:#4b5563;--glass:rgba(255,255,255,var(--kaca));--glass-line:rgba(255,255,255,.8);
+    --navbg:rgba(255,255,255,var(--kaca));--input:rgba(255,255,255,.7);--rowline:rgba(60,60,67,.14);
+    --track:rgba(60,60,67,.18);
+    --ghostbg:hsla(var(--aksen-h,215),var(--aksen-s,90%),44%,.14);
+    --ghostink:hsl(var(--aksen-h,215),var(--aksen-s,90%),36%);
+    --pillbg:hsla(var(--aksen-h,215),var(--aksen-s,90%),44%,.16);
+    --pillink:hsl(var(--aksen-h,215),var(--aksen-s,90%),34%);
+    --card-solid:#ffffff;--line-solid:rgba(15,23,42,.1);
+    color-scheme:light;
+  }
+  html[data-adaptif="gelap"]{
+    --ink:#f5f5f7;--muted:#d1d5db;--glass:rgba(18,24,38,var(--kaca));--glass-line:rgba(255,255,255,.16);
+    --navbg:rgba(18,24,38,var(--kaca));--input:rgba(15,23,42,.45);--rowline:rgba(235,235,245,.14);
+    --track:rgba(235,235,245,.18);
+    --ghostbg:hsla(var(--aksen-h,215),var(--aksen-s,90%),60%,.18);
+    --ghostink:hsl(var(--aksen-h,215),var(--aksen-s,90%),72%);
+    --pillbg:hsla(var(--aksen-h,215),var(--aksen-s,90%),60%,.22);
+    --pillink:hsl(var(--aksen-h,215),var(--aksen-s,90%),78%);
+    --card-solid:#1e2535;--line-solid:rgba(255,255,255,.1);
+    color-scheme:dark;
+  }
+  html[data-adaptif] button:not(.sec):not(.ghost):not(.del):not(.beli){
+    background:linear-gradient(180deg,hsl(var(--aksen-h,215),var(--aksen-s,90%),52%),hsl(var(--aksen-h,215),var(--aksen-s,90%),42%));
+    box-shadow:0 6px 18px hsla(var(--aksen-h,215),var(--aksen-s,90%),42%,.35),inset 0 1px 0 rgba(255,255,255,.25);
+  }
+  html[data-adaptif] input:focus,
+  html[data-adaptif] select:focus{
+    border-color:hsl(var(--aksen-h,215),var(--aksen-s,90%),50%);
+    box-shadow:0 0 0 4px hsla(var(--aksen-h,215),var(--aksen-s,90%),50%,.22);
+  }
 </style>
 </head>
 <body>
@@ -690,6 +730,11 @@
       <option value="sedang">Sedang</option>
       <option value="hd">HD</option>
       <option value="ultra">Ultra HD (paling tajam dan mewah)</option>
+    </select>
+    <span class="muted">Sesuaikan otomatis dengan foto latar</span>
+    <select id="sAdaptif">
+      <option value="on">Aktif (teks dan tombol ikut foto)</option>
+      <option value="off">Mati</option>
     </select>
     <span class="muted">Tema</span>
     <select id="sTema">
@@ -2174,6 +2219,14 @@ function terapkanTampilan() {
   $('bgLayer').style.backgroundImage = url;
   $('bgPrev').style.backgroundImage = url;
   $('kacaLabel').textContent = tampilan.kaca + '%';
+  const aks = tampilan.aksen || { h: 215, s: 90 };
+  h.style.setProperty('--aksen-h', aks.h);
+  h.style.setProperty('--aksen-s', aks.s + '%');
+  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false) {
+    h.dataset.adaptif = tampilan.aksen.terang === true ? 'terang' : 'gelap';
+  } else {
+    delete h.dataset.adaptif;
+  }
 }
 
 function kompresBg(file) {
@@ -2207,6 +2260,12 @@ $('sKaca').oninput = () => {
 };
 $('sKaca').onchange = () => simpanTampilan();
 
+$('sAdaptif').value = tampilan.adaptif === false ? 'off' : 'on';
+$('sAdaptif').onchange = () => {
+  tampilan.adaptif = $('sAdaptif').value === 'on';
+  simpanTampilan();
+  terapkanTampilan();
+};
 $('sBuram').value = tampilan.buram || 0;
 $('sBuram').oninput = () => {
   tampilan.buram = Number($('sBuram').value);
@@ -2233,6 +2292,7 @@ $('fBg').onchange = async e => {
   const lama = tampilan.bg;
   try {
     tampilan.bg = await kompresUmum(f, 1280, 0.8);
+    tampilan.aksen = await warnaAksen(tampilan.bg);
     if (simpanTampilan()) {
       terapkanTampilan();
       $('bgStatus').textContent = 'Latar diterapkan.';
@@ -2249,6 +2309,7 @@ $('fBg').onchange = async e => {
 
 $('btnBgHapus').onclick = () => {
   tampilan.bg = '';
+  tampilan.aksen = null;
   simpanTampilan();
   terapkanTampilan();
   $('bgStatus').textContent = 'Latar dihapus.';
@@ -2490,6 +2551,44 @@ $('btnEbSimpan').onclick = () => {
   $('dlgBerulang').close();
   renderSemua();
 };
+
+// ===== WARNA AKSEN DARI FOTO LATAR =====
+// Mengambil warna rata-rata foto, lalu mengubahnya ke hue dan saturasi untuk kartu saldo.
+function warnaAksen(url) {
+  return new Promise(ok => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = 24; c.height = 24;
+      const g = c.getContext('2d');
+      g.drawImage(img, 0, 0, 24, 24);
+      const d = g.getImageData(0, 0, 24, 24).data;
+      let r = 0, gg = 0, b = 0, n = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        if (d[i + 3] < 128) continue;
+        r += d[i]; gg += d[i + 1]; b += d[i + 2]; n++;
+      }
+      if (!n) return ok(null);
+      r /= 255 * n; gg /= 255 * n; b /= 255 * n;
+      const max = Math.max(r, gg, b), min = Math.min(r, gg, b);
+      const dlt = max - min;
+      // Foto hampir abu-abu: pakai biru netral
+      const lum = 0.2126 * r + 0.7152 * gg + 0.0722 * b;
+      if (dlt < 0.05) return ok({ h: 215, s: 25, terang: lum > 0.55 });
+      const l = (max + min) / 2;
+      let s = dlt / (1 - Math.abs(2 * l - 1));
+      let h;
+      if (max === r) h = ((gg - b) / dlt) % 6;
+      else if (max === gg) h = (b - r) / dlt + 2;
+      else h = (r - gg) / dlt + 4;
+      h = Math.round(h * 60);
+      if (h < 0) h += 360;
+      ok({ h, s: Math.round(Math.min(1, Math.max(s, 0.55)) * 100), terang: lum > 0.55 });
+    };
+    img.onerror = () => ok(null);
+    img.src = url;
+  });
+}
 
 // ===== INISIALISASI =====
 $('hdr').textContent = 'Hari ini, ' + tglIndo(hariIni());
