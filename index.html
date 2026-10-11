@@ -508,6 +508,12 @@
     background:var(--sec2bg);color:var(--ink);border:none;border-radius:10px;
     padding:8px 12px;margin-right:10px;font:inherit;
   }
+
+  /* ===== FONT & TEKS ===== */
+  body{font-family:var(--font,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif)}
+  input,select{font-family:inherit}
+  .amt{font-weight:700;font-variant-numeric:tabular-nums}
+  .copy{text-align:center;color:var(--muted);font-size:12px;padding:6px 0 2px;opacity:.85}
 </style>
 
 </head>
@@ -530,6 +536,13 @@
     <div class="mini"><span>Pemasukan total <span id="totMasuk"></span></span><span>Pengeluaran total <span id="totKeluar"></span></span></div>
   </div>
 
+  <div class="banner" id="bannerBackup" style="display:none">
+    <span id="bannerBackupTeks"></span>
+    <span style="display:flex;gap:6px;flex-shrink:0">
+      <button class="ghost" id="btnBackupSekarang" style="margin:0;padding:8px 12px">Backup</button>
+      <button class="sec" id="btnBackupNanti" style="margin:0;padding:8px 12px">Nanti</button>
+    </span>
+  </div>
   <div class="banner" id="bannerPengingat" style="display:none">
     <span>Belum ada catatan hari ini. Yuk catat pengeluaranmu.</span>
     <button class="ghost" id="btnTutupBanner">Nanti</button>
@@ -717,7 +730,11 @@
   </div>
   <div class="card">
     <h2>Pengeluaran per kategori</h2>
-    <p class="sub">Mengikuti periode di Beranda.</p>
+    <p class="sub">Periode grafik ini terpisah dari Beranda. Kosongkan untuk semua tanggal.</p>
+    <div class="grid2">
+      <div><span class="muted">Dari</span><input type="date" id="gDari"></div>
+      <div><span class="muted">Sampai</span><input type="date" id="gSampai"></div>
+    </div>
     <div class="svgbox" id="donut"></div>
     <div id="legendDonut"></div>
   </div>
@@ -749,11 +766,23 @@
   </div>
   <div class="card">
     <h2>Data & backup</h2>
+    <span class="muted">Ingatkan backup</span>
+    <select id="sBackupIngat">
+      <option value="">Mati</option>
+      <option value="7">Tiap 7 hari</option>
+      <option value="14">Tiap 14 hari</option>
+      <option value="30">Tiap 30 hari</option>
+    </select>
     <button id="btnExcel">Export ke Excel (CSV)</button>
     <button class="sec" id="btnBackup">Export backup (JSON)</button>
     <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
     <button class="ghost" id="btnImport">Import backup (JSON)</button>
     <p class="muted">Simpan file backup secara rutin, misalnya ke Google Drive, sebelum ganti HP.</p>
+    <h2 style="margin-top:14px">Google Drive</h2>
+    <button id="btnDriveSimpan">☁️ Simpan ke Drive</button>
+    <button class="ghost" id="btnDriveAmbil">⬇️ Ambil dari Drive</button>
+    <p class="muted" id="driveStatus">Belum pernah disimpan ke Drive.</p>
+    <p class="muted">File disimpan sebagai <b>catatan-keuangan-backup.json</b> di Drive kamu. Aplikasi hanya bisa mengakses file yang dibuatnya sendiri.</p>
   </div>
 </section>
 
@@ -779,6 +808,19 @@
       <option value="on">Aktif (teks dan tombol ikut foto)</option>
       <option value="off">Mati</option>
     </select>
+    <span class="muted">Font</span>
+    <select id="sFont">
+      <option value="sistem">Modern (default)</option>
+      <option value="serif">Klasik (serif)</option>
+      <option value="bulat">Bulat (rounded)</option>
+      <option value="mono">Rapi (angka monospace)</option>
+      <option value="tegas">Tegas (tebal)</option>
+    </select>
+    <span class="muted">Warna teks</span>
+    <div class="setel-row">
+      <input type="color" id="sTeks" style="width:72px;height:44px;padding:4px;margin:0">
+      <button class="ghost kecil" id="btnTeksReset">Otomatis</button>
+    </div>
     <span class="muted">Tema</span>
     <select id="sTema">
       <option value="auto">Otomatis (ikut HP)</option>
@@ -806,6 +848,8 @@
     <button class="ghost" id="btnBgHapus">Hapus latar</button>
   </div>
 </section>
+
+<footer class="copy">© 2026 Roy · Catatan Keuangan</footer>
 </main>
 
 <nav class="bottom">
@@ -1066,7 +1110,7 @@ function baris(x) {
     (x.tags || []).forEach(t => tg.appendChild(el('span', 'pill', t)));
     info.appendChild(tg);
   }
-  top.append(info, el('span', null, rp(x.total)));
+  top.append(info, el('span', 'amt', rp(x.total)));
   wrap.appendChild(top);
 
   const aksi = el('div', 'aksi');
@@ -1120,13 +1164,14 @@ function buatKanvas(W, H) {
 }
 
 function setFont(g, w, s) {
-  g.font = (w ? w + ' ' : '') + s + 'px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+  g.font = (w ? w + ' ' : '') + s + 'px ' + fontStack(tampilan.font);
 }
 
 function headerGambar(g, W, tinggi, judul, sub) {
   const grad = g.createLinearGradient(0, 0, W, tinggi);
-  grad.addColorStop(0, '#4f46e5');
-  grad.addColorStop(1, '#7c3aed');
+  const ak = tampilan.aksen || { h: 215, s: 90 };
+  grad.addColorStop(0, `hsl(${ak.h} ${ak.s}% 52%)`);
+  grad.addColorStop(1, `hsl(${(ak.h + 28) % 360} ${ak.s}% 40%)`);
   g.fillStyle = grad;
   g.fillRect(0, 0, W, tinggi);
   g.fillStyle = '#ffffff';
@@ -1211,7 +1256,7 @@ function gambarStruk(x) {
   setFont(g, '', 12);
   g.fillStyle = '#94a3b8';
   g.textAlign = 'center';
-  g.fillText('Dibuat dengan Catatan Keuangan · ' + tglIndo(hariIni()), W / 2, H - 24);
+  g.fillText('© Roy · Catatan Keuangan · ' + tglIndo(hariIni()), W / 2, H - 24);
   g.textAlign = 'left';
   return c;
 }
@@ -1321,7 +1366,7 @@ function gambarRekap(list, dari, sampai) {
   setFont(g, '', 12);
   g.fillStyle = '#94a3b8';
   g.textAlign = 'center';
-  g.fillText('Dibuat dengan Catatan Keuangan · ' + tglIndo(hariIni()), W / 2, H - 24);
+  g.fillText('© Roy · Catatan Keuangan · ' + tglIndo(hariIni()), W / 2, H - 24);
   g.textAlign = 'left';
   return c;
 }
@@ -1354,6 +1399,10 @@ function bagikanCanvas(canvas, nama, judul) {
 }
 
 function cetakPdf(d) {
+  const ak = tampilan.aksen || { h: 215, s: 90 };
+  const warnaJudul = `hsl(${ak.h} ${ak.s}% 36%)`;
+  const warnaHead = `hsl(${ak.h} ${ak.s}% 94%)`;
+  const fontPdf = fontStack(tampilan.font);
   const masuk = sum(d.list, 'masuk'), keluar = sum(d.list, 'keluar');
   const label = (d.dari ? tglIndo(d.dari) : 'awal') + ' s/d ' + (d.sampai ? tglIndo(d.sampai) : 'sekarang');
   const katMap = {};
@@ -1366,12 +1415,12 @@ function cetakPdf(d) {
     .join('') || '<tr><td colspan="4">Tidak ada transaksi</td></tr>';
   const html = `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Rekap keuangan</title>
 <style>
-body{font-family:Arial,sans-serif;color:#111;margin:24px}
-h1{font-size:20px;margin:0}
+body{font-family:${fontPdf};color:#111;margin:24px}
+h1{font-size:20px;margin:0;color:${warnaJudul}}
 p{margin:4px 0 14px;color:#555}
 table{width:100%;border-collapse:collapse;margin-bottom:18px;font-size:13px}
 th,td{border-bottom:1px solid #ddd;padding:6px;text-align:left}
-th{background:#f3f4f6}
+th{background:${warnaHead}}
 .r{text-align:right}
 h2{font-size:15px;margin:16px 0 6px}
 </style></head><body>
@@ -1387,7 +1436,7 @@ h2{font-size:15px;margin:16px 0 6px}
 <table>${katRows}</table>
 <h2>Daftar transaksi (${d.list.length})</h2>
 <table><tr><th>Tanggal</th><th>Transaksi</th><th>Tipe</th><th class="r">Jumlah</th></tr>${trRows}</table>
-<p>Dibuat ${esc(tglIndo(hariIni()))} dengan Catatan Keuangan</p>
+<p>© Roy · Catatan Keuangan · Dibuat ${esc(tglIndo(hariIni()))}</p>
 </body></html>`;
   const f = document.createElement('iframe');
   f.style.cssText = 'position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0';
@@ -2075,7 +2124,7 @@ function renderGrafik() {
   $('chart7').innerHTML = svg(W, H, defsUltra + s);
 
   const per = {};
-  filterTr(periode()).filter(x => x.tipe === 'keluar').forEach(x => per[x.kategori] = (per[x.kategori] || 0) + x.total);
+  filterTr({ dari: $('gDari').value, sampai: $('gSampai').value }).filter(x => x.tipe === 'keluar').forEach(x => per[x.kategori] = (per[x.kategori] || 0) + x.total);
   const entries = Object.entries(per).sort((a,b) => b[1] - a[1]);
   const tot = entries.reduce((s,e) => s + e[1], 0);
   const C = 2 * Math.PI * 60;
@@ -2147,6 +2196,7 @@ function renderCompare() {
 function renderSemua() {
   renderTempo();
   renderTunai();
+  renderBackupBanner();
   renderPengingat();
   renderBeranda();
   renderSaldoAwal();
@@ -2196,9 +2246,12 @@ $('btnExcel').onclick = () => {
 
 $('btnBackup').onclick = () => {
   const isi = JSON.stringify({
-    versi: 3, transaksi: db.transaksi, wishlist: db.wishlist, budgets: db.budgets, berulang: db.berulang, uangFisik: db.uangFisik
+    versi: 3, transaksi: db.transaksi, wishlist: db.wishlist, budgets: db.budgets, berulang: db.berulang, uangFisik: db.uangFisik, tampilan: tampilan
   }, null, 2);
   unduh('backup-keuangan-' + hariIni() + '.json', isi, 'application/json');
+  set.backupTerakhir = hariIni();
+  simpanSet();
+  renderSemua();
 };
 
 $('btnImport').onclick = () => $('fileImport').click();
@@ -2228,6 +2281,11 @@ $('fileImport').onchange = async e => {
     normalBerulang(listB).forEach(r => {
       if (!idB.has(r.id)) { db.berulang.push(r); idB.add(r.id); }
     });
+    if (!Array.isArray(masuk) && masuk.tampilan && typeof masuk.tampilan === 'object') {
+      tampilan = { ...tampilan, ...masuk.tampilan };
+      simpanTampilan();
+      terapkanTampilan();
+    }
     if (!Array.isArray(masuk) && masuk.uangFisik && masuk.uangFisik.stok) {
       db.uangFisik = { aktif: !!masuk.uangFisik.aktif, stok: { ...stokKosong(), ...masuk.uangFisik.stok } };
     }
@@ -2288,6 +2346,11 @@ function terapkanTampilan() {
   } else {
     delete h.dataset.adaptif;
     kunciPalet.forEach(k => h.style.removeProperty(k));
+  }
+  h.style.setProperty('--font', fontStack(tampilan.font));
+  if (tampilan.warnaTeks) {
+    h.style.setProperty('--ink', tampilan.warnaTeks);
+    h.style.setProperty('--muted', tampilan.warnaTeks);
   }
 }
 
@@ -2729,11 +2792,220 @@ function paletAdaptif(aks, terang, kaca, kunci, root) {
   kunci.forEach(k => { if (v[k] !== undefined) root.style.setProperty(k, v[k]); });
 }
 
+// ===== FONT, WARNA TEKS, DAN PENGATURAN BARU =====
+function fontStack(key) {
+  const map = {
+    sistem: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif',
+    serif: 'Georgia, "Noto Serif", "Times New Roman", serif',
+    bulat: '"SF Pro Rounded", "Varela Round", ui-rounded, system-ui, sans-serif',
+    mono: '"Roboto Mono", "Droid Sans Mono", ui-monospace, Menlo, monospace',
+    tegas: '"Arial Black", "Roboto Condensed", Impact, sans-serif'
+  };
+  return map[key] || map.sistem;
+}
+
+$('sFont').value = tampilan.font || 'sistem';
+$('sFont').onchange = () => {
+  tampilan.font = $('sFont').value;
+  simpanTampilan();
+  terapkanTampilan();
+  renderSemua();
+};
+$('sTeks').value = tampilan.warnaTeks || '#1c1c1e';
+$('sTeks').oninput = () => {
+  tampilan.warnaTeks = $('sTeks').value;
+  terapkanTampilan();
+};
+$('sTeks').onchange = () => simpanTampilan();
+$('btnTeksReset').onclick = () => {
+  tampilan.warnaTeks = '';
+  simpanTampilan();
+  terapkanTampilan();
+  $('sTeks').value = '#1c1c1e';
+};
+
+// Periode grafik terpisah dari Beranda
+['gDari', 'gSampai'].forEach(id => $(id).addEventListener('change', renderGrafik));
+
+// ===== PENGINGAT BACKUP =====
+function renderBackupBanner() {
+  const n = Number(set.backupIngat) || 0;
+  let tampil = false;
+  let teks = '';
+  if (n > 0 && set.ditutupBackup !== hariIni()) {
+    if (!set.backupTerakhir) {
+      tampil = true;
+      teks = 'Kamu belum pernah backup. Export sekarang supaya data aman.';
+    } else {
+      const hari = selisihHari(set.backupTerakhir, hariIni());
+      if (hari >= n) {
+        tampil = true;
+        teks = 'Sudah ' + hari + ' hari sejak backup terakhir. Export backup sekarang?';
+      }
+    }
+  }
+  $('bannerBackup').style.display = tampil ? 'flex' : 'none';
+  $('bannerBackupTeks').textContent = teks;
+}
+
+$('sBackupIngat').value = set.backupIngat || '';
+$('sBackupIngat').onchange = () => {
+  set.backupIngat = $('sBackupIngat').value;
+  simpanSet();
+  renderBackupBanner();
+};
+$('btnBackupSekarang').onclick = () => $('btnBackup').click();
+$('btnBackupNanti').onclick = () => {
+  set.ditutupBackup = hariIni();
+  simpanSet();
+  renderBackupBanner();
+};
+
+// ===== GOOGLE DRIVE (scope drive.file: hanya file buatan aplikasi ini) =====
+const GDRIVE_CLIENT_ID = '1071189829838-1d8npfj56kqppvml7sd95t7jftk0tpei.apps.googleusercontent.com';
+const DRIVE_NAMA = 'catatan-keuangan-backup.json';
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
+let driveToken = null;
+let driveTokenExp = 0;
+
+function buatBackupObjek() {
+  return {
+    versi: 3,
+    transaksi: db.transaksi,
+    wishlist: db.wishlist,
+    budgets: db.budgets,
+    berulang: db.berulang,
+    uangFisik: db.uangFisik,
+    tampilan: tampilan
+  };
+}
+
+function loadGis() {
+  return new Promise((ok, err) => {
+    if (window.google && google.accounts && google.accounts.oauth2) return ok();
+    const s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client';
+    s.onload = () => ok();
+    s.onerror = () => err(new Error('Google tidak bisa dimuat. Cek koneksi internet.'));
+    document.head.appendChild(s);
+  });
+}
+
+async function mintaTokenDrive() {
+  if (driveToken && Date.now() < driveTokenExp) return driveToken;
+  await loadGis();
+  return new Promise((ok, err) => {
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: GDRIVE_CLIENT_ID,
+      scope: DRIVE_SCOPE,
+      callback: r => {
+        if (r.error) return err(new Error(r.error));
+        driveToken = r.access_token;
+        driveTokenExp = Date.now() + (Number(r.expires_in) || 3600) * 1000 - 60000;
+        ok(driveToken);
+      },
+      error_callback: e => err(new Error(e.type || 'login dibatalkan'))
+    });
+    client.requestAccessToken();
+  });
+}
+
+async function driveFetch(url, opsi = {}) {
+  const t = await mintaTokenDrive();
+  const res = await fetch(url, {
+    ...opsi,
+    headers: { ...(opsi.headers || {}), Authorization: 'Bearer ' + t }
+  });
+  if (!res.ok) {
+    const e = new Error('Drive ' + res.status);
+    e.status = res.status;
+    throw e;
+  }
+  return res;
+}
+
+function renderDriveStatus() {
+  $('driveStatus').textContent = set.driveSimpan
+    ? 'Terakhir disimpan ke Drive: ' + tglIndo(set.driveSimpan) + '.'
+    : 'Belum pernah disimpan ke Drive.';
+}
+
+async function simpanKeDrive(sudahCoba = false) {
+  const teks = JSON.stringify(buatBackupObjek(), null, 2);
+  const boundary = 'catatan' + uid();
+  const meta = { name: DRIVE_NAMA, mimeType: 'application/json' };
+  const body =
+    '--' + boundary + '\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(meta) +
+    '\r\n--' + boundary + '\r\nContent-Type: application/json\r\n\r\n' + teks +
+    '\r\n--' + boundary + '--';
+  const id = set.driveId;
+  const url = id
+    ? 'https://www.googleapis.com/upload/drive/v3/files/' + id + '?uploadType=multipart&fields=id'
+    : 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';
+  try {
+    const res = await driveFetch(url, {
+      method: id ? 'PATCH' : 'POST',
+      headers: { 'Content-Type': 'multipart/related; boundary=' + boundary },
+      body
+    });
+    const data = await res.json();
+    set.driveId = data.id;
+    set.driveSimpan = hariIni();
+    simpanSet();
+    renderDriveStatus();
+    alert('Backup tersimpan di Google Drive.');
+  } catch (e) {
+    // File di Drive sudah terhapus: buat file baru
+    if (e.status === 404 && id && !sudahCoba) {
+      set.driveId = '';
+      simpanSet();
+      return simpanKeDrive(true);
+    }
+    throw e;
+  }
+}
+
+async function ambilDariDrive() {
+  let id = set.driveId;
+  if (!id) {
+    const q = new URLSearchParams({
+      q: "name='" + DRIVE_NAMA + "' and trashed=false",
+      fields: 'files(id,modifiedTime)',
+      orderBy: 'modifiedTime desc',
+      pageSize: '1'
+    });
+    const r = await driveFetch('https://www.googleapis.com/drive/v3/files?' + q.toString());
+    const d = await r.json();
+    if (!d.files || !d.files.length) {
+      alert('Belum ada backup di Drive.');
+      return;
+    }
+    id = d.files[0].id;
+  }
+  const r = await driveFetch('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media');
+  const teks = await r.text();
+  set.driveId = id;
+  simpanSet();
+  // Memakai alur import yang sudah ada
+  const dt = new DataTransfer();
+  dt.items.add(new File([teks], 'drive-backup.json', { type: 'application/json' }));
+  $('fileImport').files = dt.files;
+  $('fileImport').dispatchEvent(new Event('change'));
+}
+
+function errorDrive(e) {
+  alert('Gagal memakai Google Drive: ' + (e && e.message ? e.message : e) + '. Pastikan internet aktif dan login Google diizinkan.');
+}
+
+$('btnDriveSimpan').onclick = () => simpanKeDrive().catch(errorDrive);
+$('btnDriveAmbil').onclick = () => ambilDariDrive().catch(errorDrive);
+renderDriveStatus();
+
 // ===== INISIALISASI =====
 $('hdr').textContent = 'Hari ini, ' + tglIndo(hariIni());
 $('tgl').value = hariIni();
-$('fDari').value = hariIni();
-$('fSampai').value = hariIni();
+$('fDari').value = '';
+$('fSampai').value = '';
 $('cmpA').value = hariIni();
 $('cmpB').value = geser(hariIni(), -1);
 $('rbMulai').value = hariIni();
