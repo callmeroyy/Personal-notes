@@ -396,6 +396,36 @@
     backdrop-filter:none;
   }
   html[data-efek="tanpa"] body::before{display:none}
+
+  /* ===== LATAR STABIL DI HP: tidak ikut bergeser saat bar browser naik/turun ===== */
+  body::before{
+    inset:0;top:0;left:0;right:0;bottom:0;
+    height:100vh;height:100lvh;
+    filter:none;
+    transform:translateZ(0);
+  }
+  #bgLayer{
+    top:-30px;left:-30px;
+    width:calc(100% + 60px);
+    height:calc(100vh + 60px);
+    height:calc(100lvh + 60px);
+    transform:translateZ(0);
+  }
+
+  /* ===== ULTRA HD: blur paling kuat, cahaya lebih hidup ===== */
+  html[data-efek="ultra"] .card,
+  html[data-efek="ultra"] .stat,
+  html[data-efek="ultra"] nav.bottom,
+  html[data-efek="ultra"] dialog{
+    -webkit-backdrop-filter:blur(44px) saturate(230%) brightness(1.04);
+    backdrop-filter:blur(44px) saturate(230%) brightness(1.04);
+    box-shadow:0 14px 44px rgba(31,38,135,.22),inset 0 1px 0 rgba(255,255,255,.75),inset 0 0 0 1px rgba(255,255,255,.12);
+  }
+  html[data-efek="ultra"] body::before{opacity:1}
+  html[data-efek="ultra"] .saldo-hero{box-shadow:0 18px 50px rgba(10,132,255,.5),inset 0 1px 0 rgba(255,255,255,.6)}
+  html[data-efek="ultra"] nav.bottom .tab.aktif{box-shadow:0 0 18px rgba(10,132,255,.45)}
+  html[data-efek="ultra"][data-gaya="biasa"] .card,
+  html[data-efek="ultra"][data-gaya="biasa"] nav.bottom{-webkit-backdrop-filter:none;backdrop-filter:none}
 </style>
 </head>
 <body>
@@ -658,7 +688,8 @@
     <select id="sEfek">
       <option value="tanpa">Tanpa efek (paling ringan)</option>
       <option value="sedang">Sedang</option>
-      <option value="hd">HD (paling bagus)</option>
+      <option value="hd">HD</option>
+      <option value="ultra">Ultra HD (paling tajam dan mewah)</option>
     </select>
     <span class="muted">Tema</span>
     <select id="sTema">
@@ -679,6 +710,11 @@
     <div class="setel-prev" id="bgPrev"></div>
     <input type="file" id="fBg" accept="image/*">
     <p class="muted" id="bgStatus">Pilih foto dari galeri sebagai latar. Foto dikecilkan otomatis dan disimpan di HP ini.</p>
+    <div class="setel-row">
+      <span class="muted">Buram latar</span>
+      <b id="buramLabel">0px</b>
+    </div>
+    <input type="range" id="sBuram" min="0" max="20" step="1">
     <button class="ghost" id="btnBgHapus">Hapus latar</button>
   </div>
 </section>
@@ -711,6 +747,33 @@
   <p class="muted" id="eTotal"></p>
   <button id="btnESimpan">Simpan perubahan</button>
   <button class="sec" id="btnEBatal">Batal</button>
+</dialog>
+
+<!-- DIALOG EDIT BERULANG -->
+<dialog id="dlgBerulang">
+  <h2>Edit transaksi berulang</h2>
+  <input type="text" id="ebNama" placeholder="Nama">
+  <div class="grid2">
+    <select id="ebTipe">
+      <option value="keluar">Pengeluaran</option>
+      <option value="masuk">Pemasukan</option>
+    </select>
+    <select id="ebKat"></select>
+  </div>
+  <div class="grid2">
+    <input type="number" id="ebQty" placeholder="Jumlah" min="1" inputmode="numeric">
+    <input type="number" id="ebHarga" placeholder="Nominal (Rp)" min="1" inputmode="numeric">
+  </div>
+  <div class="grid2">
+    <select id="ebPeriode">
+      <option value="bulan">Setiap bulan</option>
+      <option value="minggu">Setiap minggu</option>
+    </select>
+    <input type="date" id="ebMulai">
+  </div>
+  <p class="muted">Perubahan berlaku untuk tanggal berikutnya. Catatan yang sudah tercatat tidak ikut berubah.</p>
+  <button id="btnEbSimpan">Simpan perubahan</button>
+  <button class="sec" id="btnEbBatal">Batal</button>
 </dialog>
 
 <!-- DIALOG STRUK 1 TRANSAKSI -->
@@ -1320,7 +1383,7 @@ $('fFoto').onchange = async e => {
   if (!f) return;
   $('fotoStatus').textContent = 'Memproses foto...';
   try {
-    fotoForm = await kompresGambar(f);
+    fotoForm = await kompresUmum(f, 800, 0.6);
     $('fotoStatus').textContent = 'Foto siap disimpan bersama transaksi.';
   } catch (err) {
     fotoForm = null;
@@ -1524,7 +1587,11 @@ function renderBerulang() {
       db.berulang = db.berulang.filter(d => d.id !== r.id);
       simpan(); renderSemua();
     };
-    row.append(info, hapus);
+    const edit = el('button', 'kecil sec', 'Edit');
+    edit.onclick = () => bukaEditBerulang(r.id);
+    const aksiB = el('div', 'aksi');
+    aksiB.append(edit, hapus);
+    row.append(info, aksiB);
     box.appendChild(row);
   });
 }
@@ -2098,7 +2165,9 @@ function terapkanTampilan() {
   const h = document.documentElement;
   h.dataset.tema = tampilan.tema;
   h.dataset.gaya = tampilan.gaya === 'biasa' ? 'biasa' : 'glass';
-  h.dataset.efek = ['tanpa', 'sedang', 'hd'].includes(tampilan.efek) ? tampilan.efek : 'hd';
+  h.dataset.efek = ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'hd';
+  $('bgLayer').style.filter = tampilan.buram ? 'blur(' + tampilan.buram + 'px)' : 'none';
+  $('buramLabel').textContent = (tampilan.buram || 0) + 'px';
   h.style.setProperty('--kaca', (tampilan.kaca / 100).toFixed(2));
   h.classList.toggle('ada-bg', !!tampilan.bg);
   const url = tampilan.bg ? 'url("' + tampilan.bg + '")' : '';
@@ -2137,8 +2206,15 @@ $('sKaca').oninput = () => {
   terapkanTampilan();
 };
 $('sKaca').onchange = () => simpanTampilan();
+
+$('sBuram').value = tampilan.buram || 0;
+$('sBuram').oninput = () => {
+  tampilan.buram = Number($('sBuram').value);
+  terapkanTampilan();
+};
+$('sBuram').onchange = () => simpanTampilan();
 $('sGaya').value = tampilan.gaya === 'biasa' ? 'biasa' : 'glass';
-$('sEfek').value = ['tanpa', 'sedang', 'hd'].includes(tampilan.efek) ? tampilan.efek : 'hd';
+$('sEfek').value = ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'hd';
 $('sEfek').onchange = () => {
   tampilan.efek = $('sEfek').value;
   simpanTampilan();
@@ -2156,7 +2232,7 @@ $('fBg').onchange = async e => {
   $('bgStatus').textContent = 'Memproses foto...';
   const lama = tampilan.bg;
   try {
-    tampilan.bg = await kompresBg(f);
+    tampilan.bg = await kompresUmum(f, 1280, 0.8);
     if (simpanTampilan()) {
       terapkanTampilan();
       $('bgStatus').textContent = 'Latar diterapkan.';
@@ -2340,6 +2416,79 @@ $('btnPecahOtomatis').onclick = () => {
   }
   isiPecahan('pb', hasil);
   isiPecahan('pk', null);
+};
+
+// ===== KOMPRESI GAMBAR (ORIENTASI BENAR) =====
+// Foto dari kamera HP sering menyimpan arah putar di metadata (EXIF).
+// createImageBitmap dengan imageOrientation 'from-image' menerapkan putaran itu,
+// sehingga gambar tidak miring setelah dikecilkan.
+async function kompresUmum(file, maks, kualitas) {
+  let sumber = null;
+  try {
+    sumber = await createImageBitmap(file, { imageOrientation: 'from-image' });
+  } catch (e) {
+    sumber = null;
+  }
+  if (!sumber) {
+    sumber = await new Promise((ok, err) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => { URL.revokeObjectURL(url); ok(img); };
+      img.onerror = () => { URL.revokeObjectURL(url); err(new Error('gagal')); };
+      img.src = url;
+    });
+  }
+  const w = sumber.naturalWidth || sumber.width;
+  const h = sumber.naturalHeight || sumber.height;
+  const sc = Math.min(1, maks / Math.max(w, h));
+  const c = document.createElement('canvas');
+  c.width = Math.round(w * sc);
+  c.height = Math.round(h * sc);
+  c.getContext('2d').drawImage(sumber, 0, 0, c.width, c.height);
+  if (sumber.close) sumber.close();
+  return c.toDataURL('image/jpeg', kualitas);
+}
+
+// ===== EDIT TRANSAKSI BERULANG =====
+let editBerulangId = null;
+
+function bukaEditBerulang(id) {
+  const r = db.berulang.find(d => d.id === id);
+  if (!r) return;
+  editBerulangId = id;
+  $('ebNama').value = r.nama;
+  $('ebTipe').value = r.tipe;
+  isiKategoriSelect($('ebKat'), r.tipe, r.kategori);
+  $('ebQty').value = r.qty;
+  $('ebHarga').value = r.harga;
+  $('ebPeriode').value = r.periode;
+  $('ebMulai').value = r.mulai;
+  $('dlgBerulang').showModal();
+}
+
+$('ebTipe').onchange = () => isiKategoriSelect($('ebKat'), $('ebTipe').value);
+$('btnEbBatal').onclick = () => $('dlgBerulang').close();
+$('btnEbSimpan').onclick = () => {
+  const r = db.berulang.find(d => d.id === editBerulangId);
+  if (!r) { $('dlgBerulang').close(); return; }
+  const nama = $('ebNama').value.trim();
+  const qty = Number($('ebQty').value) || 0;
+  const harga = Number($('ebHarga').value) || 0;
+  const mulai = $('ebMulai').value;
+  if (!nama || qty <= 0 || harga <= 0 || !mulai) {
+    alert('Lengkapi nama, jumlah, nominal, dan tanggal mulai.');
+    return;
+  }
+  r.nama = nama;
+  r.tipe = $('ebTipe').value;
+  r.kategori = $('ebKat').value;
+  r.qty = qty;
+  r.harga = harga;
+  r.periode = $('ebPeriode').value;
+  r.mulai = mulai;
+  simpan();
+  $('dlgBerulang').close();
+  renderSemua();
 };
 
 // ===== INISIALISASI =====
