@@ -480,7 +480,36 @@
     border-color:hsl(var(--aksen-h,215),var(--aksen-s,90%),50%);
     box-shadow:0 0 0 4px hsla(var(--aksen-h,215),var(--aksen-s,90%),50%,.22);
   }
+
+  /* Bayangan kartu saldo mengikuti warna aksen, bukan biru tetap */
+  .saldo-hero{
+    box-shadow:0 14px 40px hsla(var(--aksen-h,215),var(--aksen-s,90%),40%,.4),inset 0 1px 0 rgba(255,255,255,.45);
+  }
+  html[data-efek="ultra"] .saldo-hero{
+    box-shadow:0 20px 56px hsla(var(--aksen-h,215),var(--aksen-s,90%),38%,.6),inset 0 1px 0 rgba(255,255,255,.6);
+  }
+  html[data-efek="ultra"] nav.bottom .tab.aktif{
+    box-shadow:0 0 18px hsla(var(--aksen-h,215),var(--aksen-s,90%),50%,.5);
+  }
+
+  /* ===== PEMBEDA ULTRA HD: sheen kaca, kedalaman teks, bayangan lebih dalam ===== */
+  html[data-efek="ultra"] .card,
+  html[data-efek="ultra"] .stat{
+    background-image:linear-gradient(155deg,rgba(255,255,255,.2),rgba(255,255,255,0) 42%),
+                     linear-gradient(330deg,rgba(255,255,255,.07),rgba(255,255,255,0) 35%);
+  }
+  html[data-efek="ultra"][data-gaya="biasa"] .card,
+  html[data-efek="ultra"][data-gaya="biasa"] .stat{background-image:none}
+  html[data-efek="ultra"] h2{text-shadow:0 1px 12px rgba(0,0,0,.22)}
+  html[data-efek="ultra"] header.top h1{text-shadow:0 2px 18px rgba(0,0,0,.28)}
+
+  /* Tombol pilih file mengikuti tema */
+  input[type=file]::file-selector-button{
+    background:var(--sec2bg);color:var(--ink);border:none;border-radius:10px;
+    padding:8px 12px;margin-right:10px;font:inherit;
+  }
 </style>
+
 </head>
 <body>
 <div id="bgLayer"></div>
@@ -2017,6 +2046,17 @@ function renderRiwayat() {
 
 // ===== GRAFIK =====
 function renderGrafik() {
+  const ultra = document.documentElement.dataset.efek === 'ultra';
+  const defsUltra = ultra
+    ? '<defs>' +
+      '<linearGradient id="gHijau" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6ee7a0"/><stop offset="1" stop-color="#15803d"/></linearGradient>' +
+      '<linearGradient id="gMerah" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fda4af"/><stop offset="1" stop-color="#be123c"/></linearGradient>' +
+      '<filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity=".35"/></filter>' +
+      '</defs>'
+    : '';
+  const fHijau = ultra ? 'url(#gHijau)' : '#16a34a';
+  const fMerah = ultra ? 'url(#gMerah)' : '#e11d48';
+  const fx = ultra ? ' filter="url(#glow)"' : '';
   const data = [...Array(7)].map((_, i) => {
     const t = geser(hariIni(), i - 6);
     return { t, m: harianTipe(t, 'masuk'), k: harianTipe(t, 'keluar') };
@@ -2027,12 +2067,12 @@ function renderGrafik() {
   data.forEach((d, i) => {
     const x = pad + i * gw + gw * 0.15, bw = gw * 0.3;
     const hm = d.m / max * area, hk = d.k / max * area;
-    s += `<rect x="${x}" y="${H - pad - hm}" width="${bw}" height="${hm}" rx="4" fill="#16a34a"/>`;
-    s += `<rect x="${x + bw + 4}" y="${H - pad - hk}" width="${bw}" height="${hk}" rx="4" fill="#e11d48"/>`;
+    s += `<rect x="${x}" y="${H - pad - hm}" width="${bw}" height="${hm}" rx="5" fill="${fHijau}"${fx}/>`;
+    s += `<rect x="${x + bw + 4}" y="${H - pad - hk}" width="${bw}" height="${hk}" rx="5" fill="${fMerah}"${fx}/>`;
     s += `<text x="${x + bw}" y="${H - pad + 16}" text-anchor="middle" font-size="12" fill="#64748b">${tglIndo(d.t).slice(0,5)}</text>`;
   });
   s += `<line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" stroke="#94a3b8"/>`;
-  $('chart7').innerHTML = svg(W, H, s);
+  $('chart7').innerHTML = svg(W, H, defsUltra + s);
 
   const per = {};
   filterTr(periode()).filter(x => x.tipe === 'keluar').forEach(x => per[x.kategori] = (per[x.kategori] || 0) + x.total);
@@ -2042,13 +2082,15 @@ function renderGrafik() {
   let off = 0, arc = '';
   entries.forEach(([k, v], i) => {
     const len = tot ? v / tot * C : 0;
-    arc += `<circle cx="90" cy="90" r="60" fill="none" stroke="${PAL[i % PAL.length]}" stroke-width="28" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-off}" transform="rotate(-90 90 90)"/>`;
+    const gap = ultra && entries.length > 1 ? 2 : 0;
+    const panjang = Math.max(0, len - gap);
+    arc += `<circle cx="90" cy="90" r="60" fill="none" stroke="${PAL[i % PAL.length]}" stroke-width="28"${ultra ? ' stroke-linecap="round"' : ''}${fx} stroke-dasharray="${panjang} ${C - panjang}" stroke-dashoffset="${-off}" transform="rotate(-90 90 90)"/>`;
     off += len;
   });
   arc += tot
     ? `<text x="90" y="95" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">${esc(rp(tot))}</text>`
     : `<text x="90" y="95" text-anchor="middle" font-size="13" fill="#64748b">Kosong</text>`;
-  $('donut').innerHTML = svg(180, 180, arc);
+  $('donut').innerHTML = svg(180, 180, defsUltra + arc);
   const leg = $('legendDonut');
   leg.innerHTML = '';
   entries.forEach(([k, v], i) => {
@@ -2238,7 +2280,7 @@ function terapkanTampilan() {
   h.style.setProperty('--aksen-s', aks.s + '%');
   const kunciPalet = ['--ink','--muted','--ok','--bad','--glass','--glass-line','--navbg','--input',
     '--rowline','--track','--ghostbg','--ghostink','--pillbg','--pillink','--card-solid','--line-solid',
-    '--delbg','--delink','--detline','--keranjangline','--banbg','--banink','--secbg','--sec2bg','--sec2ink'];
+    '--delbg','--delink','--detline','--keranjangline','--keranjangbg','--banbg','--banink','--secbg','--sec2bg','--sec2ink'];
   if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false) {
     const terang = tampilan.aksen.terang === true;
     h.dataset.adaptif = terang ? 'terang' : 'gelap';
@@ -2298,6 +2340,7 @@ $('sEfek').onchange = () => {
   tampilan.efek = $('sEfek').value;
   simpanTampilan();
   terapkanTampilan();
+  renderSemua();
 };
 $('sGaya').onchange = () => {
   tampilan.gaya = $('sGaya').value;
@@ -2648,7 +2691,8 @@ function paletAdaptif(aks, terang, kaca, kunci, root) {
       '--keranjangline': hsla(h, s, 40, .5),
       '--banbg': 'rgba(255,214,10,.3)',
       '--banink': '#5b4300',
-      '--secbg': 'rgba(60,60,67,.16)',
+      '--keranjangbg': 'rgba(255,255,255,.45)',
+      '--secbg': hsla(h, s, 50, .16),
       '--sec2bg': 'rgba(60,60,67,.14)',
       '--sec2ink': '#1c1c1e'
     });
@@ -2676,8 +2720,9 @@ function paletAdaptif(aks, terang, kaca, kunci, root) {
       '--keranjangline': hsla(h, s, 72, .5),
       '--banbg': 'rgba(255,214,10,.22)',
       '--banink': '#ffe58a',
-      '--secbg': 'rgba(255,255,255,.18)',
-      '--sec2bg': 'rgba(255,255,255,.16)',
+      '--keranjangbg': hsla(h, s, 16, .5),
+      '--secbg': hsla(h, s, 30, .55),
+      '--sec2bg': hsla(h, s, 30, .45),
       '--sec2ink': '#f8f8fa'
     });
   }
