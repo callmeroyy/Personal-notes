@@ -461,6 +461,20 @@
     background:linear-gradient(180deg,hsl(var(--aksen-h,215),var(--aksen-s,90%),52%),hsl(var(--aksen-h,215),var(--aksen-s,90%),42%));
     box-shadow:0 6px 18px hsla(var(--aksen-h,215),var(--aksen-s,90%),42%,.35),inset 0 1px 0 rgba(255,255,255,.25);
   }
+  html[data-adaptif] .card,
+  html[data-adaptif] .stat,
+  html[data-adaptif] nav.bottom,
+  html[data-adaptif] dialog{
+    -webkit-backdrop-filter:blur(30px) saturate(118%);
+    backdrop-filter:blur(30px) saturate(118%);
+  }
+  html[data-adaptif][data-gaya="biasa"] .card,
+  html[data-adaptif][data-gaya="biasa"] .stat,
+  html[data-adaptif][data-gaya="biasa"] nav.bottom,
+  html[data-adaptif][data-gaya="biasa"] dialog{
+    -webkit-backdrop-filter:none !important;
+    backdrop-filter:none !important;
+  }
   html[data-adaptif] input:focus,
   html[data-adaptif] select:focus{
     border-color:hsl(var(--aksen-h,215),var(--aksen-s,90%),50%);
@@ -2222,10 +2236,16 @@ function terapkanTampilan() {
   const aks = tampilan.aksen || { h: 215, s: 90 };
   h.style.setProperty('--aksen-h', aks.h);
   h.style.setProperty('--aksen-s', aks.s + '%');
+  const kunciPalet = ['--ink','--muted','--ok','--bad','--glass','--glass-line','--navbg','--input',
+    '--rowline','--track','--ghostbg','--ghostink','--pillbg','--pillink','--card-solid','--line-solid',
+    '--delbg','--delink','--detline','--keranjangline','--banbg','--banink','--secbg','--sec2bg','--sec2ink'];
   if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false) {
-    h.dataset.adaptif = tampilan.aksen.terang === true ? 'terang' : 'gelap';
+    const terang = tampilan.aksen.terang === true;
+    h.dataset.adaptif = terang ? 'terang' : 'gelap';
+    paletAdaptif(tampilan.aksen, terang, tampilan.kaca / 100, kunciPalet, h);
   } else {
     delete h.dataset.adaptif;
+    kunciPalet.forEach(k => h.style.removeProperty(k));
   }
 }
 
@@ -2588,6 +2608,80 @@ function warnaAksen(url) {
     img.onerror = () => ok(null);
     img.src = url;
   });
+}
+
+// ===== PALET ADAPTIF: SEMUA ELEMEN MENYESUAIKAN FOTO LATAR =====
+// Warna hijau (pemasukan) dan merah (pengeluaran) dipilih dari kandidat yang
+// paling jauh hue-nya dari warna foto, supaya tetap terbaca di latar apa pun.
+function paletAdaptif(aks, terang, kaca, kunci, root) {
+  const h = aks.h;
+  const s = aks.s;
+  const jauh = (a, b) => { const d = Math.abs(a - b) % 360; return Math.min(d, 360 - d); };
+  const pilih = list => list.reduce((best, c) => jauh(c, h) > jauh(best, h) ? c : best, list[0]);
+  const hOk = pilih([140, 165, 100, 190]);
+  const hBad = pilih([355, 25, 50, 300]);
+  const hsl = (hh, ss, ll) => `hsl(${hh} ${ss}% ${ll}%)`;
+  const hsla = (hh, ss, ll, a) => `hsla(${hh} ${ss}% ${ll}% / ${a})`;
+  const v = {};
+
+  if (terang) {
+    Object.assign(v, {
+      '--ink': '#1c1c1e',
+      '--muted': '#4b5563',
+      '--ok': hsl(hOk, 80, 26),
+      '--bad': hsl(hBad, 85, 38),
+      '--glass': `rgba(255,255,255,${kaca})`,
+      '--glass-line': 'rgba(255,255,255,.8)',
+      '--navbg': `rgba(255,255,255,${kaca})`,
+      '--input': 'rgba(255,255,255,.72)',
+      '--rowline': 'rgba(60,60,67,.14)',
+      '--track': 'rgba(60,60,67,.18)',
+      '--ghostbg': hsla(h, s, 40, .16),
+      '--ghostink': hsl(h, s, 28),
+      '--pillbg': hsla(h, s, 40, .18),
+      '--pillink': hsl(h, s, 26),
+      '--card-solid': '#ffffff',
+      '--line-solid': 'rgba(15,23,42,.1)',
+      '--delbg': hsla(hBad, 85, 40, .14),
+      '--delink': hsl(hBad, 85, 34),
+      '--detline': hsla(h, s, 40, .4),
+      '--keranjangline': hsla(h, s, 40, .5),
+      '--banbg': 'rgba(255,214,10,.3)',
+      '--banink': '#5b4300',
+      '--secbg': 'rgba(60,60,67,.16)',
+      '--sec2bg': 'rgba(60,60,67,.14)',
+      '--sec2ink': '#1c1c1e'
+    });
+  } else {
+    Object.assign(v, {
+      '--ink': '#f8f8fa',
+      '--muted': hsl(h, 22, 84),
+      '--ok': hsl(hOk, 85, 74),
+      '--bad': hsl(hBad, 95, 78),
+      '--glass': `rgba(16,20,32,${kaca})`,
+      '--glass-line': 'rgba(255,255,255,.18)',
+      '--navbg': `rgba(16,20,32,${kaca})`,
+      '--input': 'rgba(10,14,24,.45)',
+      '--rowline': 'rgba(255,255,255,.14)',
+      '--track': 'rgba(255,255,255,.2)',
+      '--ghostbg': hsla(h, s, 65, .28),
+      '--ghostink': hsl(h, s, 90),
+      '--pillbg': hsla(h, s, 65, .3),
+      '--pillink': hsl(h, s, 90),
+      '--card-solid': '#1e2535',
+      '--line-solid': 'rgba(255,255,255,.12)',
+      '--delbg': hsla(hBad, 95, 70, .22),
+      '--delink': hsl(hBad, 95, 84),
+      '--detline': hsla(h, s, 72, .45),
+      '--keranjangline': hsla(h, s, 72, .5),
+      '--banbg': 'rgba(255,214,10,.22)',
+      '--banink': '#ffe58a',
+      '--secbg': 'rgba(255,255,255,.18)',
+      '--sec2bg': 'rgba(255,255,255,.16)',
+      '--sec2ink': '#f8f8fa'
+    });
+  }
+  kunci.forEach(k => { if (v[k] !== undefined) root.style.setProperty(k, v[k]); });
 }
 
 // ===== INISIALISASI =====
