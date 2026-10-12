@@ -514,11 +514,61 @@
   .row b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .amt{white-space:nowrap;flex-shrink:0;text-align:right}
 
+  /* Angka di kartu pemasukan, pengeluaran, dan saldo tetap satu baris */
+  .stat b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(13px,3.8vw,15px)}
+  .saldo-hero .mini{flex-wrap:wrap;gap:6px 14px}
+  .saldo-hero .mini span{white-space:nowrap}
+
   /* ===== FONT & TEKS ===== */
   body{font-family:var(--font,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif)}
   input,select{font-family:inherit}
   .amt{font-weight:700;font-variant-numeric:tabular-nums}
   .copy{text-align:center;color:var(--muted);font-size:12px;padding:6px 0 2px;opacity:.85}
+
+  /* ===== NAVBAR BARU: ikon garis, tombol tengah Catat ===== */
+  nav.bottom{justify-content:space-around;align-items:flex-end;padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0}
+  .tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .tab span{font-size:11px;font-weight:600}
+  .nav-plus{flex:none;width:58px;height:58px;border-radius:50%;padding:0;margin:-30px 6px 6px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(180deg,hsl(var(--aksen-h,215) var(--aksen-s,90%) 60%),hsl(var(--aksen-h,215) var(--aksen-s,90%) 46%));
+    box-shadow:0 10px 24px hsla(var(--aksen-h,215),var(--aksen-s,90%),45%,.45),inset 0 1px 0 rgba(255,255,255,.35);
+    border:3px solid rgba(255,255,255,.7)}
+  .nav-plus svg{width:26px;height:26px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round}
+
+  /* ===== GAYA BERWARNA: kartu putih, garis tepi warna per jenis ===== */
+  html[data-gaya="berwarna"]{--card-solid:#ffffff;--line-solid:rgba(15,23,42,.08);background:#f8fafc !important}
+  @media (prefers-color-scheme: dark){
+    html[data-gaya="berwarna"][data-tema="auto"]{--card-solid:#1e2535;background:#0b0f1a !important}
+  }
+  html[data-gaya="berwarna"][data-tema="dark"]{--card-solid:#1e2535;background:#0b0f1a !important}
+  html[data-gaya="berwarna"] body::before,
+  html[data-gaya="berwarna"] #bgLayer{display:none !important}
+  html[data-gaya="berwarna"] .card,
+  html[data-gaya="berwarna"] .stat,
+  html[data-gaya="berwarna"] nav.bottom,
+  html[data-gaya="berwarna"] dialog{
+    background:var(--card-solid) !important;
+    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+    border:2px solid #3b82f6 !important;
+    box-shadow:0 2px 0 rgba(15,23,42,.06) !important;
+  }
+  html[data-gaya="berwarna"] .card#cardMingguan{border-color:#8b5cf6 !important}
+  html[data-gaya="berwarna"] .card#cardTempo{border-color:#f59e0b !important}
+  html[data-gaya="berwarna"] .card#cardTunai{border-color:#0ea5e9 !important}
+  html[data-gaya="berwarna"] .stat.s-masuk{border-color:#16a34a !important}
+  html[data-gaya="berwarna"] .stat.s-keluar{border-color:#e11d48 !important}
+  html[data-gaya="berwarna"] .saldo-hero{
+    background:var(--card-solid) !important;color:var(--ink) !important;
+    border:2px solid #f59e0b !important;box-shadow:0 2px 0 rgba(15,23,42,.06) !important;
+  }
+  html[data-gaya="berwarna"] .saldo-hero .lbl,
+  html[data-gaya="berwarna"] .saldo-hero .mini{color:var(--muted) !important}
+  html[data-gaya="berwarna"] input,
+  html[data-gaya="berwarna"] select{background:#f8fafc !important;border:1px solid rgba(15,23,42,.2) !important;color:#0f172a}
+  html[data-gaya="berwarna"][data-tema="dark"] input,
+  html[data-gaya="berwarna"][data-tema="dark"] select{background:#0f1a2e !important;border:1px solid rgba(235,235,245,.22) !important;color:#f5f5f7}
+  html[data-gaya="berwarna"] .keranjang{background:var(--card-solid) !important;backdrop-filter:none}
 </style>
 
 </head>
@@ -536,14 +586,14 @@
 <section id="beranda" class="page">
 
   <div class="saldo-hero">
-    <span class="lbl">Total saldo tunai</span>
+    <span class="lbl">Total saldo</span>
     <b id="saldo"></b>
     <div class="mini"><span>Pemasukan total <span id="totMasuk"></span></span><span>Pengeluaran total <span id="totKeluar"></span></span></div>
   </div>
 
   <div class="card" id="cardMingguan">
-    <h2>Ringkasan minggu ini</h2>
-    <p id="teksMingguan" style="margin:0;font-size:15px;line-height:1.5"></p>
+    <h2 id="judulMingguan">Ringkasan minggu ini</h2>
+    <p id="teksMingguan" style="margin:0;font-size:15px;line-height:1.5;white-space:pre-line"></p>
   </div>
 
   <div class="banner" id="bannerBackup" style="display:none">
@@ -606,7 +656,7 @@
     <button class="ghost" id="btnTunaiToggle">Nonaktifkan fitur</button>
   </div>
 
-  <div class="card">
+  <div class="card" id="cardCatat">
     <h2>Catat transaksi</h2>
     <div class="grid2">
       <select id="tipe">
@@ -799,12 +849,14 @@
 
 <!-- SETELAN -->
 <section id="setelan" class="page">
+  <button class="ghost" onclick="goto('data')" style="margin-top:4px">💾 Buka Data &amp; backup</button>
   <div class="card">
     <h2>Tampilan</h2>
     <span class="muted">Gaya tampilan</span>
     <select id="sGaya">
       <option value="glass">Glass (kaca transparan)</option>
       <option value="biasa">Biasa (kartu solid, tanpa efek kaca)</option>
+      <option value="berwarna">Berwarna (kartu putih, garis tepi warna per jenis)</option>
     </select>
     <span class="muted">Kualitas efek</span>
     <select id="sEfek">
@@ -877,11 +929,11 @@
 </main>
 
 <nav class="bottom">
-  <button class="tab" data-page="beranda">🏠 Beranda</button>
-  <button class="tab" data-page="riwayat">🧾 Riwayat</button>
-  <button class="tab" data-page="grafik">📊 Grafik</button>
-  <button class="tab" data-page="data">💾 Data</button>
-  <button class="tab" data-page="setelan">⚙️ Setelan</button>
+  <button class="tab" data-page="beranda"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Beranda</span></button>
+  <button class="tab" data-page="riwayat"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>Riwayat</span></button>
+  <button class="nav-plus" id="btnNavCatat" aria-label="Catat transaksi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+  <button class="tab" data-page="grafik"><svg viewBox="0 0 24 24"><path d="M4 20h16M7 16v-5M12 16V6M17 16v-8"/></svg><span>Grafik</span></button>
+  <button class="tab" data-page="setelan"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg><span>Setelan</span></button>
 </nav>
 
 <!-- DIALOG EDIT TRANSAKSI -->
@@ -2237,11 +2289,19 @@ function renderSemua() {
 
 function goto(p) {
   document.querySelectorAll('.page').forEach(s => s.style.display = s.id === p ? 'block' : 'none');
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('aktif', t.dataset.page === p));
+  const tabAktif = p === 'data' ? 'setelan' : p;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('aktif', t.dataset.page === tabAktif));
   window.scrollTo(0, 0);
   renderSemua();
 }
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => goto(t.dataset.page));
+
+// Tombol tengah Catat transaksi
+$('btnNavCatat').onclick = () => {
+  goto('beranda');
+  const k = document.getElementById('cardCatat');
+  if (k) k.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
 // Filter
 ['fDari','fSampai'].forEach(id => $(id).onchange = renderSemua);
@@ -2272,7 +2332,7 @@ $('btnExcel').onclick = () => {
 
 $('btnBackup').onclick = () => {
   const isi = JSON.stringify({
-    versi: 3, transaksi: db.transaksi, wishlist: db.wishlist, budgets: db.budgets, berulang: db.berulang, uangFisik: db.uangFisik, tampilan: tampilan
+    versi: 3, transaksi: db.transaksi, wishlist: db.wishlist, budgets: db.budgets, berulang: db.berulang, uangFisik: db.uangFisik, tampilan: tampilanBackup(), katKustom: katKustom()
   }, null, 2);
   unduh('backup-keuangan-' + hariIni() + '.json', isi, 'application/json');
   set.backupTerakhir = hariIni();
@@ -2308,9 +2368,22 @@ $('fileImport').onchange = async e => {
       if (!idB.has(r.id)) { db.berulang.push(r); idB.add(r.id); }
     });
     if (!Array.isArray(masuk) && masuk.tampilan && typeof masuk.tampilan === 'object') {
-      tampilan = { ...tampilan, ...masuk.tampilan };
+      const { bg, aksen, ...tanpaLatar } = masuk.tampilan;
+      tampilan = { ...tampilan, ...tanpaLatar };
       simpanTampilan();
       terapkanTampilan();
+    }
+    if (!Array.isArray(masuk) && masuk.katKustom) {
+      ['keluar', 'masuk'].forEach(t => {
+        (masuk.katKustom[t] || []).forEach(k => {
+          const nama = String(k).trim();
+          if (nama && !katKustom()[t].some(x => x.toLowerCase() === nama.toLowerCase())) katKustom()[t].push(nama);
+        });
+      });
+      simpanSet();
+      terapkanKatKustom();
+      refreshKategoriSelect();
+      renderKatKustom();
     }
     if (!Array.isArray(masuk) && masuk.uangFisik && masuk.uangFisik.stok) {
       db.uangFisik = { aktif: !!masuk.uangFisik.aktif, stok: { ...stokKosong(), ...masuk.uangFisik.stok } };
@@ -2349,7 +2422,7 @@ function simpanTampilan() {
 function terapkanTampilan() {
   const h = document.documentElement;
   h.dataset.tema = tampilan.tema;
-  h.dataset.gaya = tampilan.gaya === 'biasa' ? 'biasa' : 'glass';
+  h.dataset.gaya = ['biasa', 'berwarna'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
   h.dataset.efek = ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'hd';
   $('bgLayer').style.filter = tampilan.buram ? 'blur(' + tampilan.buram + 'px)' : 'none';
   $('buramLabel').textContent = (tampilan.buram || 0) + 'px';
@@ -2365,7 +2438,7 @@ function terapkanTampilan() {
   const kunciPalet = ['--ink','--muted','--ok','--bad','--glass','--glass-line','--navbg','--input',
     '--rowline','--track','--ghostbg','--ghostink','--pillbg','--pillink','--card-solid','--line-solid',
     '--delbg','--delink','--detline','--keranjangline','--keranjangbg','--banbg','--banink','--secbg','--sec2bg','--sec2ink'];
-  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false) {
+  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false && !['biasa', 'berwarna'].includes(tampilan.gaya)) {
     const terang = tampilan.aksen.terang === true;
     h.dataset.adaptif = terang ? 'terang' : 'gelap';
     paletAdaptif(tampilan.aksen, terang, tampilan.kaca / 100, kunciPalet, h);
@@ -2423,7 +2496,7 @@ $('sBuram').oninput = () => {
   terapkanTampilan();
 };
 $('sBuram').onchange = () => simpanTampilan();
-$('sGaya').value = tampilan.gaya === 'biasa' ? 'biasa' : 'glass';
+$('sGaya').value = ['biasa', 'berwarna'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
 $('sEfek').value = ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'hd';
 $('sEfek').onchange = () => {
   tampilan.efek = $('sEfek').value;
@@ -2470,7 +2543,7 @@ $('btnBgHapus').onclick = () => {
 terapkanTampilan();
 
 // ===== UANG TUNAI (PECAHAN, OPSIONAL) =====
-const DENOM = [1000, 2000, 5000, 10000, 20000, 50000, 100000];
+const DENOM = [500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
 
 function stokKosong() {
   const s = {};
@@ -2521,6 +2594,21 @@ function cariPecahan(total, stok) {
     sisa -= n * d;
   });
   return sisa === 0 ? res : null;
+}
+
+// Mencari cara bayar tunai: bayar dengan pecahan dari stok (boleh lebih), lalu kembalian diberikan penjual.
+// Kembalian dianggap tersedia tanpa batas, karena itu uang yang diterima dari penjual.
+function cariPembayaran(total, stok) {
+  if (total % 500 !== 0) return null; // pecahan terkecil Rp 500
+  const totalStok = DENOM.reduce((s, d) => s + d * (stok[d] || 0), 0);
+  for (let p = total; p <= Math.min(total + 200000, totalStok); p += 500) {
+    const bayar = cariPecahan(p, stok);
+    if (bayar) {
+      const kembali = cariPecahan(p - total, null);
+      if (kembali) return { bayar, kembali };
+    }
+  }
+  return null;
 }
 
 function totalForm() {
@@ -2618,17 +2706,26 @@ $('btnPecahOtomatis').onclick = () => {
   const total = totalForm();
   if (!total) { alert('Isi barang dulu supaya total diketahui.'); return; }
   if ($('tipe').value === 'masuk') {
-    isiPecahan('pb', cariPecahan(total, null));
+    const pecah = total % 500 === 0 ? cariPecahan(total, null) : null;
+    if (!pecah) {
+      alert('Nominal ini tidak bisa dipecah. Pemasukan tunai harus kelipatan Rp 500.');
+      return;
+    }
+    isiPecahan('pb', pecah);
     isiPecahan('pk', null);
     return;
   }
-  const hasil = cariPecahan(total, db.uangFisik.stok);
-  if (!hasil) {
-    alert('Tidak ada kombinasi pecahan yang pas dari stok. Isi manual, atau tambah stok dulu.');
+  if (total % 500 !== 0) {
+    alert('Pembayaran tunai hanya bisa dicatat dalam kelipatan Rp 500. Untuk nominal ini, pilih Non-tunai.');
     return;
   }
-  isiPecahan('pb', hasil);
-  isiPecahan('pk', null);
+  const hasil = cariPembayaran(total, db.uangFisik.stok);
+  if (!hasil) {
+    alert('Stok tunai belum cukup untuk nominal ini. Tambah stok di Beranda > Uang tunai, atau pilih Non-tunai.');
+    return;
+  }
+  isiPecahan('pb', hasil.bayar);
+  isiPecahan('pk', hasil.kembali);
 };
 
 // ===== KOMPRESI GAMBAR (ORIENTASI BENAR) =====
@@ -2902,7 +2999,8 @@ function buatBackupObjek() {
     budgets: db.budgets,
     berulang: db.berulang,
     uangFisik: db.uangFisik,
-    tampilan: tampilan
+    tampilan: tampilanBackup(),
+    katKustom: katKustom()
   };
 }
 
@@ -3037,7 +3135,7 @@ function katKustom() {
 function terapkanKatKustom() {
   ['keluar', 'masuk'].forEach(tipe => {
     katKustom()[tipe].forEach(k => {
-      if (!KAT[tipe].includes(k)) KAT[tipe].push(k);
+      sisipKat(tipe, k);
     });
   });
 }
@@ -3073,7 +3171,7 @@ $('btnKatTambah').onclick = () => {
   const sudahAda = KAT[tipe].some(k => k.toLowerCase() === nama.toLowerCase());
   if (sudahAda) { alert('Kategori "' + nama + '" sudah ada.'); return; }
   katKustom()[tipe].push(nama);
-  KAT[tipe].push(nama);
+  sisipKat(tipe, nama);
   localStorage.setItem(KEY_SET, JSON.stringify(set));
   $('kbBaru').value = '';
   refreshKategoriSelect();
@@ -3099,24 +3197,57 @@ function hapusKatKustom(tipe, nama) {
 
 terapkanKatKustom();
 
+// Menyisipkan kategori sendiri tepat di atas "Lainnya", supaya Lainnya tetap di paling bawah
+function sisipKat(tipe, nama) {
+  if (KAT[tipe].includes(nama)) return;
+  const i = KAT[tipe].indexOf('Lainnya');
+  if (i >= 0) KAT[tipe].splice(i, 0, nama);
+  else KAT[tipe].push(nama);
+}
+
+// Pengaturan tampilan untuk backup: tanpa foto latar, karena latar tidak perlu ikut dibackup
+function tampilanBackup() {
+  const { bg, aksen, ...t } = tampilan;
+  return t;
+}
+
 // ===== RINGKASAN MINGGUAN =====
+// Minggu kalender: Senin sampai Minggu
+const BULAN_S = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+const HARI_S = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+function tglObj(s) {
+  const [y, m, d] = s.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function seninMinggu(s) {
+  const idx = (tglObj(s).getDay() + 6) % 7;
+  return geser(s, -idx);
+}
+
+function rentangMinggu(a, b) {
+  const A = tglObj(a), B = tglObj(b);
+  return HARI_S[A.getDay()] + ' ' + A.getDate() + ' ' + BULAN_S[A.getMonth()] +
+    ' – ' + HARI_S[B.getDay()] + ' ' + B.getDate() + ' ' + BULAN_S[B.getMonth()] + ' ' + B.getFullYear();
+}
 // Tabungan tidak dihitung sebagai pengeluaran, karena itu uang yang disisihkan sendiri.
 function totalMinggu(dari, sampai, kategoriKeluar = true) {
   return db.transaksi
-    .filter(x => x.tipe === 'keluar' && x.kategori !== 'Tabungan' && x.tanggal >= dari && x.tanggal <= sampai)
+    .filter(x => x.tipe === 'keluar' && x.tanggal >= dari && x.tanggal <= sampai)
     .reduce((s, x) => s + x.total, 0);
 }
 
 function renderMingguan() {
-  const hari = hariIni();
-  const mingguIni = { dari: geser(hari, -6), sampai: hari };
-  const mingguLalu = { dari: geser(hari, -13), sampai: geser(hari, -7) };
+  const senin = seninMinggu(hariIni());
+  const mingguIni = { dari: senin, sampai: geser(senin, 6) };
+  const mingguLalu = { dari: geser(senin, -7), sampai: geser(senin, -1) };
   const ini = totalMinggu(mingguIni.dari, mingguIni.sampai);
   const lalu = totalMinggu(mingguLalu.dari, mingguLalu.sampai);
 
   const perKat = {};
   db.transaksi
-    .filter(x => x.tipe === 'keluar' && x.kategori !== 'Tabungan' && x.tanggal >= mingguIni.dari && x.tanggal <= mingguIni.sampai)
+    .filter(x => x.tipe === 'keluar' && x.tanggal >= mingguIni.dari && x.tanggal <= mingguIni.sampai)
     .forEach(x => perKat[x.kategori] = (perKat[x.kategori] || 0) + x.total);
   const terbesar = Object.entries(perKat).sort((a, b) => b[1] - a[1])[0];
   const infoKat = terbesar ? ' Kategori terbesar: ' + terbesar[0] + ' (' + rp(terbesar[1]) + ').' : '';
@@ -3133,7 +3264,8 @@ function renderMingguan() {
   } else {
     teks = 'Minggu ini naik ' + rp(ini - lalu) + ' dari minggu lalu. Yuk cek lagi pengeluaranmu.' + infoKat;
   }
-  $('teksMingguan').textContent = teks;
+  $('judulMingguan').textContent = 'Minggu ini: ' + rentangMinggu(mingguIni.dari, mingguIni.sampai);
+  $('teksMingguan').textContent = teks + '\nDibanding ' + rentangMinggu(mingguLalu.dari, mingguLalu.sampai) + '.';
 }
 
 // ===== INISIALISASI =====
