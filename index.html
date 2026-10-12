@@ -509,6 +509,11 @@
     padding:8px 12px;margin-right:10px;font:inherit;
   }
 
+  /* ===== NOMINAL SEJAJAR: nama dipotong, nominal tetap di kanan ===== */
+  .row > div:first-child{min-width:0;flex:1}
+  .row b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .amt{white-space:nowrap;flex-shrink:0;text-align:right}
+
   /* ===== FONT & TEKS ===== */
   body{font-family:var(--font,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif)}
   input,select{font-family:inherit}
@@ -531,9 +536,14 @@
 <section id="beranda" class="page">
 
   <div class="saldo-hero">
-    <span class="lbl">Saldo total</span>
+    <span class="lbl">Total saldo tunai</span>
     <b id="saldo"></b>
     <div class="mini"><span>Pemasukan total <span id="totMasuk"></span></span><span>Pengeluaran total <span id="totKeluar"></span></span></div>
+  </div>
+
+  <div class="card" id="cardMingguan">
+    <h2>Ringkasan minggu ini</h2>
+    <p id="teksMingguan" style="margin:0;font-size:15px;line-height:1.5"></p>
   </div>
 
   <div class="banner" id="bannerBackup" style="display:none">
@@ -833,6 +843,20 @@
     </div>
     <input type="range" id="sKaca" min="20" max="90" step="5">
     <p class="muted">Makin kecil angkanya, makin transparan kartu dan navigasi.</p>
+  </div>
+
+  <div class="card">
+    <h2>Kategori</h2>
+    <p class="sub">Tambahkan kategori sendiri. Kategori bawaan tidak bisa dihapus. Kalau kategori dihapus, transaksinya pindah ke Lainnya.</p>
+    <select id="sKatTipe">
+      <option value="keluar">Pengeluaran</option>
+      <option value="masuk">Pemasukan</option>
+    </select>
+    <div class="grid2">
+      <input type="text" id="kbBaru" placeholder="Nama kategori (contoh: Kopi)">
+      <button id="btnKatTambah" style="margin-bottom:10px">+ Tambah</button>
+    </div>
+    <div id="listKatKustom"></div>
   </div>
 
   <div class="card">
@@ -2196,6 +2220,8 @@ function renderCompare() {
 function renderSemua() {
   renderTempo();
   renderTunai();
+  renderMingguan();
+  renderKatKustom();
   renderBackupBanner();
   renderPengingat();
   renderBeranda();
@@ -3000,6 +3026,115 @@ function errorDrive(e) {
 $('btnDriveSimpan').onclick = () => simpanKeDrive().catch(errorDrive);
 $('btnDriveAmbil').onclick = () => ambilDariDrive().catch(errorDrive);
 renderDriveStatus();
+
+// ===== KATEGORI SENDIRI =====
+// Kategori tambahan disimpan di pengaturan, lalu dimasukkan ke daftar KAT.
+function katKustom() {
+  set.katKustom = set.katKustom || { keluar: [], masuk: [] };
+  return set.katKustom;
+}
+
+function terapkanKatKustom() {
+  ['keluar', 'masuk'].forEach(tipe => {
+    katKustom()[tipe].forEach(k => {
+      if (!KAT[tipe].includes(k)) KAT[tipe].push(k);
+    });
+  });
+}
+
+function renderKatKustom() {
+  const tipe = $('sKatTipe').value;
+  const box = $('listKatKustom');
+  box.innerHTML = '';
+  const daftar = katKustom()[tipe];
+  if (!daftar.length) box.appendChild(el('p', 'kosong', 'Belum ada kategori sendiri.'));
+  daftar.forEach(k => {
+    const row = el('div', 'row');
+    row.appendChild(el('span', null, k));
+    const hapus = el('button', 'kecil del', 'Hapus');
+    hapus.onclick = () => hapusKatKustom(tipe, k);
+    row.appendChild(hapus);
+    box.appendChild(row);
+  });
+}
+
+function refreshKategoriSelect() {
+  isiKategori();
+  isiKategoriBudget();
+  isiKategoriBerulang();
+}
+
+$('sKatTipe').onchange = renderKatKustom;
+
+$('btnKatTambah').onclick = () => {
+  const nama = $('kbBaru').value.trim();
+  const tipe = $('sKatTipe').value;
+  if (!nama) { alert('Isi nama kategori.'); return; }
+  const sudahAda = KAT[tipe].some(k => k.toLowerCase() === nama.toLowerCase());
+  if (sudahAda) { alert('Kategori "' + nama + '" sudah ada.'); return; }
+  katKustom()[tipe].push(nama);
+  KAT[tipe].push(nama);
+  localStorage.setItem(KEY_SET, JSON.stringify(set));
+  $('kbBaru').value = '';
+  refreshKategoriSelect();
+  renderKatKustom();
+};
+
+function hapusKatKustom(tipe, nama) {
+  const jumlah = db.transaksi.filter(x => x.tipe === tipe && x.kategori === nama).length;
+  const pesan = jumlah
+    ? 'Hapus kategori "' + nama + '"? ' + jumlah + ' transaksi akan pindah ke Lainnya.'
+    : 'Hapus kategori "' + nama + '"?';
+  if (!confirm(pesan)) return;
+  db.transaksi.forEach(x => { if (x.tipe === tipe && x.kategori === nama) x.kategori = 'Lainnya'; });
+  db.berulang.forEach(r => { if (r.tipe === tipe && r.kategori === nama) r.kategori = 'Lainnya'; });
+  if (tipe === 'keluar' && db.budgets[nama]) delete db.budgets[nama];
+  katKustom()[tipe] = katKustom()[tipe].filter(k => k !== nama);
+  KAT[tipe] = KAT[tipe].filter(k => k !== nama);
+  simpan();
+  localStorage.setItem(KEY_SET, JSON.stringify(set));
+  refreshKategoriSelect();
+  renderSemua();
+}
+
+terapkanKatKustom();
+
+// ===== RINGKASAN MINGGUAN =====
+// Tabungan tidak dihitung sebagai pengeluaran, karena itu uang yang disisihkan sendiri.
+function totalMinggu(dari, sampai, kategoriKeluar = true) {
+  return db.transaksi
+    .filter(x => x.tipe === 'keluar' && x.kategori !== 'Tabungan' && x.tanggal >= dari && x.tanggal <= sampai)
+    .reduce((s, x) => s + x.total, 0);
+}
+
+function renderMingguan() {
+  const hari = hariIni();
+  const mingguIni = { dari: geser(hari, -6), sampai: hari };
+  const mingguLalu = { dari: geser(hari, -13), sampai: geser(hari, -7) };
+  const ini = totalMinggu(mingguIni.dari, mingguIni.sampai);
+  const lalu = totalMinggu(mingguLalu.dari, mingguLalu.sampai);
+
+  const perKat = {};
+  db.transaksi
+    .filter(x => x.tipe === 'keluar' && x.kategori !== 'Tabungan' && x.tanggal >= mingguIni.dari && x.tanggal <= mingguIni.sampai)
+    .forEach(x => perKat[x.kategori] = (perKat[x.kategori] || 0) + x.total);
+  const terbesar = Object.entries(perKat).sort((a, b) => b[1] - a[1])[0];
+  const infoKat = terbesar ? ' Kategori terbesar: ' + terbesar[0] + ' (' + rp(terbesar[1]) + ').' : '';
+
+  let teks;
+  if (ini === 0 && lalu === 0) {
+    teks = 'Belum ada pengeluaran minggu ini. Yuk mulai catat supaya kamu tahu ke mana uangmu pergi.';
+  } else if (lalu === 0) {
+    teks = 'Pengeluaranmu minggu ini ' + rp(ini) + '.' + infoKat;
+  } else if (ini < lalu) {
+    teks = 'Minggu ini kamu mengeluarkan ' + rp(ini) + ', ' + rp(lalu - ini) + ' lebih hemat dari minggu lalu. Kerja bagus!' + infoKat;
+  } else if (ini === lalu) {
+    teks = 'Pengeluaran minggu ini sama dengan minggu lalu, ' + rp(ini) + '.' + infoKat;
+  } else {
+    teks = 'Minggu ini naik ' + rp(ini - lalu) + ' dari minggu lalu. Yuk cek lagi pengeluaranmu.' + infoKat;
+  }
+  $('teksMingguan').textContent = teks;
+}
 
 // ===== INISIALISASI =====
 $('hdr').textContent = 'Hari ini, ' + tglIndo(hariIni());
