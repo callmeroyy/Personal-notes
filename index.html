@@ -569,6 +569,161 @@
   html[data-gaya="berwarna"][data-tema="dark"] input,
   html[data-gaya="berwarna"][data-tema="dark"] select{background:#0f1a2e !important;border:1px solid rgba(235,235,245,.22) !important;color:#f5f5f7}
   html[data-gaya="berwarna"] .keranjang{background:var(--card-solid) !important;backdrop-filter:none}
+
+  /* ===== GAYA NEOBRUTAL: garis hitam tebal, bayangan keras, warna cerah ===== */
+  html[data-gaya="neo"]{--neo-line:#000;--neo-card:#ffffff;background:#fdf6d8 !important}
+  @media (prefers-color-scheme: dark){
+    html[data-gaya="neo"][data-tema="auto"]{--neo-line:#f5f5f7;--neo-card:#1f1f24;background:#121216 !important}
+  }
+  html[data-gaya="neo"][data-tema="dark"]{--neo-line:#f5f5f7;--neo-card:#1f1f24;background:#121216 !important}
+  html[data-gaya="neo"] body{color:var(--neo-line);font-weight:600}
+  html[data-gaya="neo"] body::before,
+  html[data-gaya="neo"] #bgLayer{display:none !important}
+  html[data-gaya="neo"] header.top h1{color:var(--neo-line);font-weight:900;letter-spacing:-.5px}
+  html[data-gaya="neo"] header.top p{color:var(--neo-line);opacity:.75}
+  html[data-gaya="neo"] h2{font-weight:900;color:var(--neo-line)}
+
+  html[data-gaya="neo"] .card,
+  html[data-gaya="neo"] .stat,
+  html[data-gaya="neo"] dialog{
+    background:var(--neo-card) !important;
+    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+    border:3px solid var(--neo-line) !important;
+    border-radius:16px !important;
+    box-shadow:5px 5px 0 var(--neo-line) !important;
+    color:var(--neo-line);
+  }
+  html[data-gaya="neo"] .card#cardMingguan{background:#c4b5fd !important;color:#000 !important}
+  html[data-gaya="neo"] .card#cardTempo{background:#fde68a !important;color:#000 !important}
+  html[data-gaya="neo"] .card#cardTunai{background:#67e8f9 !important;color:#000 !important}
+  html[data-gaya="neo"] .stat.s-masuk{background:#86efac !important;color:#000 !important}
+  html[data-gaya="neo"] .stat.s-keluar{background:#fda4af !important;color:#000 !important}
+  html[data-gaya="neo"] .stat .lbl{color:#000}
+  html[data-gaya="neo"] .stat b{color:#000 !important}
+
+  html[data-gaya="neo"] .saldo-hero{
+    background:#ffd60a !important;color:#000 !important;
+    border:3px solid #000 !important;border-radius:18px !important;
+    box-shadow:6px 6px 0 #000 !important;
+  }
+  html[data-gaya="neo"] .saldo-hero .lbl,
+  html[data-gaya="neo"] .saldo-hero .mini{color:#000 !important;opacity:.85}
+  html[data-gaya="neo"] .saldo-hero b{color:#000 !important;font-weight:900}
+
+  html[data-gaya="neo"] button{
+    background:#60a5fa !important;color:#000 !important;
+    border:3px solid #000 !important;border-radius:12px !important;
+    box-shadow:4px 4px 0 #000 !important;font-weight:800 !important;
+    transition:transform .05s,box-shadow .05s;
+  }
+  html[data-gaya="neo"] button:active{transform:translate(3px,3px);box-shadow:1px 1px 0 #000 !important}
+  html[data-gaya="neo"] button:disabled{background:#d1d5db !important;color:#374151 !important;box-shadow:none !important}
+  html[data-gaya="neo"] button.sec{background:#ffffff !important}
+  html[data-gaya="neo"] button.ghost{background:#fde68a !important}
+  html[data-gaya="neo"] button.beli{background:#86efac !important}
+  html[data-gaya="neo"] button.del{background:#fda4af !important}
+  html[data-gaya="neo"] button.kecil{box-shadow:2px 2px 0 #000 !important;font-size:13px !important}
+  html[data-gaya="neo"] button.kecil.sec{background:#ffffff !important}
+  html[data-gaya="neo"] .banner{background:#fde68a !important;color:#000 !important;border:3px solid #000 !important;border-radius:14px !important;box-shadow:4px 4px 0 #000 !important}
+
+  html[data-gaya="neo"] input,
+  html[data-gaya="neo"] select{
+    background:#ffffff !important;color:#000 !important;
+    border:3px solid #000 !important;border-radius:12px !important;font-weight:600;
+  }
+  html[data-gaya="neo"][data-tema="dark"] input,
+  html[data-gaya="neo"][data-tema="dark"] select{background:#2a2a31 !important;color:#f5f5f7 !important;border-color:#f5f5f7 !important}
+  html[data-gaya="neo"] input:focus,
+  html[data-gaya="neo"] select:focus{box-shadow:3px 3px 0 #000 !important;border-color:#000 !important;outline:none}
+  html[data-gaya="neo"] input::placeholder{color:#6b7280}
+
+  html[data-gaya="neo"] nav.bottom{
+    background:#ffffff !important;border:3px solid #000 !important;border-radius:20px !important;
+    box-shadow:5px 5px 0 #000 !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+  }
+  html[data-gaya="neo"][data-tema="dark"] nav.bottom{background:#1f1f24 !important;border-color:#f5f5f7 !important;box-shadow:5px 5px 0 #f5f5f7 !important}
+  html[data-gaya="neo"] nav.bottom .tab{color:#000;border:2px solid transparent;border-radius:12px;box-shadow:none !important;background:none !important}
+  html[data-gaya="neo"] nav.bottom .tab.aktif{background:#ffd60a !important;border-color:#000 !important;color:#000 !important}
+  html[data-gaya="neo"][data-tema="dark"] nav.bottom .tab{color:#f5f5f7}
+  html[data-gaya="neo"] .nav-plus{
+    background:#f472b6 !important;border:3px solid #000 !important;box-shadow:4px 4px 0 #000 !important;
+    width:60px;height:60px;margin:-30px 6px 6px;
+  }
+  html[data-gaya="neo"] .nav-plus svg{stroke:#000 !important;stroke-width:3}
+  html[data-gaya="neo"][data-tema="dark"] .nav-plus{border-color:#f5f5f7 !important;box-shadow:4px 4px 0 #f5f5f7 !important}
+
+  html[data-gaya="neo"] .pill{background:#fff;color:#000;border:2px solid #000;border-radius:8px;font-weight:800}
+  html[data-gaya="neo"] .track{background:#fff;border:2px solid #000;border-radius:8px;height:12px}
+  html[data-gaya="neo"] .bar{border-radius:6px}
+  html[data-gaya="neo"] .keranjang{background:#fff7d6 !important;border:2px dashed #000 !important;border-radius:14px;backdrop-filter:none}
+  html[data-gaya="neo"] .preview{background:#fff;border:3px solid #000;border-radius:12px}
+  html[data-gaya="neo"] details summary{color:#000;font-weight:800}
+  html[data-gaya="neo"] details .muted{border-left:3px solid #000;color:#000}
+  html[data-gaya="neo"] .muted{color:#374151}
+  html[data-gaya="neo"][data-tema="dark"] .muted{color:#cbd5e1}
+  html[data-gaya="neo"] .copy{color:#000;font-weight:800}
+  html[data-gaya="neo"] dialog::backdrop{background:rgba(0,0,0,.5)}
+  html[data-gaya="neo"] .legend,
+  html[data-gaya="neo"] .row{border-bottom:2px solid #000}
+  html[data-gaya="neo"][data-tema="dark"] .row{border-bottom-color:#f5f5f7}
+
+  /* ===== GAYA TAMBAHAN: Material You, Soft UI, Retro, Paper, Minimal flat ===== */
+html[data-gaya="material"]{--st-bg:hsl(var(--aksen-h,215) var(--aksen-s,90%) 96% / 1);--st-card:#ffffff;--st-ink:#1c1b1f;--st-muted:#49454f;--st-acc:hsl(var(--aksen-h,215) var(--aksen-s,90%) 42%);--st-on-acc:#ffffff;--st-acc-ink:hsl(var(--aksen-h,215) var(--aksen-s,90%) 30%);--st-soft:hsla(var(--aksen-h,215) var(--aksen-s,90%) 45% / .14);--st-border:none;--st-r:28px;--st-shadow:0 1px 2px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.06);--st-btn-r:999px;--st-btn-border:none;--st-btn-shadow:0 2px 6px rgba(0,0,0,.15);--st-input:#f3edf7;--st-inr:16px;--st-nav-r:32px;--st-line:rgba(0,0,0,.08);--st-track:#e7e0ec;--st-ok:#1b7f3b;--st-bad:#b3261e;--st-tab-r:20px;--st-tag-r:99px;--st-plus-r:50%}
+html[data-gaya="material"][data-tema="dark"]{--st-bg:hsl(var(--aksen-h,215) var(--aksen-s,90%) 15% / 1);--st-card:hsl(var(--aksen-h,215) var(--aksen-s,90%) 12% / 1);--st-ink:#e6e1e5;--st-muted:#cac4d0;--st-acc:hsl(var(--aksen-h,215) var(--aksen-s,90%) 72%);--st-on-acc:#1c1b1f;--st-acc-ink:hsl(var(--aksen-h,215) var(--aksen-s,90%) 82%);--st-soft:hsla(var(--aksen-h,215) var(--aksen-s,90%) 70% / .16);--st-border:none;--st-r:28px;--st-shadow:0 1px 2px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.06);--st-btn-r:999px;--st-btn-border:none;--st-btn-shadow:0 2px 6px rgba(0,0,0,.4);--st-input:hsl(var(--aksen-h,215) var(--aksen-s,90%) 12% / 1);--st-inr:16px;--st-nav-r:32px;--st-line:rgba(255,255,255,.08);--st-track:#3a3442;--st-ok:#8fd9a0;--st-bad:#ffb4ab;--st-tab-r:20px;--st-tag-r:99px;--st-plus-r:50%}
+@media (prefers-color-scheme: dark){
+  html[data-gaya="material"][data-tema="auto"]{--st-bg:hsl(var(--aksen-h,215) var(--aksen-s,90%) 15% / 1);--st-card:hsl(var(--aksen-h,215) var(--aksen-s,90%) 12% / 1);--st-ink:#e6e1e5;--st-muted:#cac4d0;--st-acc:hsl(var(--aksen-h,215) var(--aksen-s,90%) 72%);--st-on-acc:#1c1b1f;--st-acc-ink:hsl(var(--aksen-h,215) var(--aksen-s,90%) 82%);--st-soft:hsla(var(--aksen-h,215) var(--aksen-s,90%) 70% / .16);--st-border:none;--st-r:28px;--st-shadow:0 1px 2px rgba(0,0,0,.08),0 4px 12px rgba(0,0,0,.06);--st-btn-r:999px;--st-btn-border:none;--st-btn-shadow:0 2px 6px rgba(0,0,0,.4);--st-input:hsl(var(--aksen-h,215) var(--aksen-s,90%) 12% / 1);--st-inr:16px;--st-nav-r:32px;--st-line:rgba(255,255,255,.08);--st-track:#3a3442;--st-ok:#8fd9a0;--st-bad:#ffb4ab;--st-tab-r:20px;--st-tag-r:99px;--st-plus-r:50%}
+}
+html[data-gaya="soft"]{--st-bg:#e0e5ec;--st-card:#e0e5ec;--st-ink:#3d4a5c;--st-muted:#6b7a90;--st-acc:#6c8cff;--st-on-acc:#ffffff;--st-acc-ink:#3b5bdb;--st-soft:#e0e5ec;--st-border:none;--st-r:22px;--st-shadow:8px 8px 16px #b8bec7,-8px -8px 16px #ffffff;--st-btn-r:16px;--st-btn-border:none;--st-btn-shadow:4px 4px 8px #b8bec7,-4px -4px 8px #ffffff;--st-input:#e0e5ec;--st-inset:inset 3px 3px 6px #b8bec7,inset -3px -3px 6px #ffffff;--st-inr:16px;--st-nav-r:26px;--st-line:rgba(61,74,92,.12);--st-track:#d1d9e6;--st-ok:#2f9e5b;--st-bad:#d64545}
+html[data-gaya="soft"][data-tema="dark"]{--st-bg:#22262e;--st-card:#22262e;--st-ink:#d7dce5;--st-muted:#9aa5b8;--st-acc:#6c8cff;--st-on-acc:#ffffff;--st-acc-ink:#a5b8ff;--st-soft:#22262e;--st-border:none;--st-r:22px;--st-shadow:8px 8px 16px #15181e,-8px -8px 16px #2f3540;--st-btn-r:16px;--st-btn-border:none;--st-btn-shadow:4px 4px 8px #15181e,-4px -4px 8px #2f3540;--st-input:#22262e;--st-inset:inset 3px 3px 6px #15181e,inset -3px -3px 6px #2f3540;--st-inr:16px;--st-nav-r:26px;--st-line:rgba(215,220,229,.1);--st-track:#2a2f39;--st-ok:#6fd98f;--st-bad:#ff8a8a}
+@media (prefers-color-scheme: dark){
+  html[data-gaya="soft"][data-tema="auto"]{--st-bg:#22262e;--st-card:#22262e;--st-ink:#d7dce5;--st-muted:#9aa5b8;--st-acc:#6c8cff;--st-on-acc:#ffffff;--st-acc-ink:#a5b8ff;--st-soft:#22262e;--st-border:none;--st-r:22px;--st-shadow:8px 8px 16px #15181e,-8px -8px 16px #2f3540;--st-btn-r:16px;--st-btn-border:none;--st-btn-shadow:4px 4px 8px #15181e,-4px -4px 8px #2f3540;--st-input:#22262e;--st-inset:inset 3px 3px 6px #15181e,inset -3px -3px 6px #2f3540;--st-inr:16px;--st-nav-r:26px;--st-line:rgba(215,220,229,.1);--st-track:#2a2f39;--st-ok:#6fd98f;--st-bad:#ff8a8a}
+}
+html[data-gaya="retro"]{--st-bg:#050805;--st-card:#0a140a;--st-ink:#4dff7a;--st-muted:#2fbf56;--st-acc:#ffb000;--st-on-acc:#000000;--st-acc-ink:#ffb000;--st-soft:#0f220f;--st-border:1px solid #2f8f47;--st-r:0px;--st-shadow:inset 0 0 0 1px rgba(77,255,122,.06),0 0 14px rgba(77,255,122,.12);--st-btn-r:0px;--st-btn-border:1px solid #ffb000;--st-btn-shadow:none;--st-input:#061006;--st-inr:0px;--st-nav-r:0px;--st-line:rgba(77,255,122,.25);--st-track:#0f2a12;--st-ok:#4dff7a;--st-bad:#ff5c5c;--st-plus-r:0px;--st-tab-r:0px;--st-tag-r:0px;--st-bgimg:repeating-linear-gradient(0deg, rgba(0,0,0,.25) 0 1px, transparent 1px 3px);--st-font:"Roboto Mono", ui-monospace, Menlo, Consolas, monospace}
+html[data-gaya="retro"][data-tema="dark"]{--st-bg:#050805;--st-card:#0a140a;--st-ink:#4dff7a;--st-muted:#2fbf56;--st-acc:#ffb000;--st-on-acc:#000000;--st-acc-ink:#ffb000;--st-soft:#0f220f;--st-border:1px solid #2f8f47;--st-r:0px;--st-shadow:inset 0 0 0 1px rgba(77,255,122,.06),0 0 14px rgba(77,255,122,.12);--st-btn-r:0px;--st-btn-border:1px solid #ffb000;--st-btn-shadow:none;--st-input:#061006;--st-inr:0px;--st-nav-r:0px;--st-line:rgba(77,255,122,.25);--st-track:#0f2a12;--st-ok:#4dff7a;--st-bad:#ff5c5c;--st-plus-r:0px;--st-tab-r:0px;--st-tag-r:0px;--st-bgimg:repeating-linear-gradient(0deg, rgba(0,0,0,.25) 0 1px, transparent 1px 3px);--st-font:"Roboto Mono", ui-monospace, Menlo, Consolas, monospace}
+html[data-gaya="retro"][data-tema="auto"]{--st-bg:#050805;--st-card:#0a140a;--st-ink:#4dff7a;--st-muted:#2fbf56;--st-acc:#ffb000;--st-on-acc:#000000;--st-acc-ink:#ffb000;--st-soft:#0f220f;--st-border:1px solid #2f8f47;--st-r:0px;--st-shadow:inset 0 0 0 1px rgba(77,255,122,.06),0 0 14px rgba(77,255,122,.12);--st-btn-r:0px;--st-btn-border:1px solid #ffb000;--st-btn-shadow:none;--st-input:#061006;--st-inr:0px;--st-nav-r:0px;--st-line:rgba(77,255,122,.25);--st-track:#0f2a12;--st-ok:#4dff7a;--st-bad:#ff5c5c;--st-plus-r:0px;--st-tab-r:0px;--st-tag-r:0px;--st-bgimg:repeating-linear-gradient(0deg, rgba(0,0,0,.25) 0 1px, transparent 1px 3px);--st-font:"Roboto Mono", ui-monospace, Menlo, Consolas, monospace}
+html[data-gaya="retro"] h2{text-transform:uppercase;letter-spacing:1px}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .card{text-shadow:0 0 6px rgba(77,255,122,.35)}
+html[data-gaya="paper"]{--st-bg:#f7f1e1;--st-bgimg:repeating-linear-gradient(to bottom, transparent 0 27px, #dcd2b8 27px 28px);--st-card:#fffdf6;--st-ink:#3b3223;--st-muted:#6b5d45;--st-acc:#b45309;--st-on-acc:#ffffff;--st-acc-ink:#92400e;--st-soft:#f3e9cc;--st-border:1px solid #e3d7b8;--st-r:4px;--st-shadow:2px 3px 0 rgba(120,90,40,.18);--st-btn-r:4px;--st-btn-border:1px solid #92400e;--st-btn-shadow:2px 2px 0 rgba(120,90,40,.3);--st-input:#fffdf6;--st-inr:4px;--st-nav-r:4px;--st-line:#e3d7b8;--st-track:#e8dcc0;--st-ok:#3f7d20;--st-bad:#b91c1c;--st-font:Georgia, "Times New Roman", serif;--st-tab-r:4px;--st-tag-r:4px;--st-plus-r:50%}
+html[data-gaya="paper"][data-tema="dark"]{--st-bg:#1f1c15;--st-bgimg:repeating-linear-gradient(to bottom, transparent 0 27px, #36321f 27px 28px);--st-card:#2a261c;--st-ink:#f1e8d0;--st-muted:#c9bb99;--st-acc:#f59e0b;--st-on-acc:#1f1c15;--st-acc-ink:#fcd34d;--st-soft:#3a3425;--st-border:1px solid #4a422e;--st-r:4px;--st-shadow:2px 3px 0 rgba(0,0,0,.4);--st-btn-r:4px;--st-btn-border:1px solid #f59e0b;--st-btn-shadow:2px 2px 0 rgba(0,0,0,.5);--st-input:#2a261c;--st-inr:4px;--st-nav-r:4px;--st-line:#4a422e;--st-track:#3a3425;--st-ok:#86efac;--st-bad:#fca5a5;--st-font:Georgia, "Times New Roman", serif;--st-tab-r:4px;--st-tag-r:4px;--st-plus-r:50%}
+@media (prefers-color-scheme: dark){
+  html[data-gaya="paper"][data-tema="auto"]{--st-bg:#1f1c15;--st-bgimg:repeating-linear-gradient(to bottom, transparent 0 27px, #36321f 27px 28px);--st-card:#2a261c;--st-ink:#f1e8d0;--st-muted:#c9bb99;--st-acc:#f59e0b;--st-on-acc:#1f1c15;--st-acc-ink:#fcd34d;--st-soft:#3a3425;--st-border:1px solid #4a422e;--st-r:4px;--st-shadow:2px 3px 0 rgba(0,0,0,.4);--st-btn-r:4px;--st-btn-border:1px solid #f59e0b;--st-btn-shadow:2px 2px 0 rgba(0,0,0,.5);--st-input:#2a261c;--st-inr:4px;--st-nav-r:4px;--st-line:#4a422e;--st-track:#3a3425;--st-ok:#86efac;--st-bad:#fca5a5;--st-font:Georgia, "Times New Roman", serif;--st-tab-r:4px;--st-tag-r:4px;--st-plus-r:50%}
+}
+html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .card{border-left:4px solid #f87171 !important}
+html[data-gaya="flat"]{--st-bg:#ffffff;--st-card:#f4f4f5;--st-ink:#18181b;--st-muted:#52525b;--st-acc:hsl(var(--aksen-h,215) var(--aksen-s,90%) 50%);--st-on-acc:#ffffff;--st-acc-ink:hsl(var(--aksen-h,215) var(--aksen-s,90%) 36%);--st-soft:#e4e4e7;--st-border:none;--st-r:12px;--st-shadow:none;--st-btn-r:8px;--st-btn-border:none;--st-btn-shadow:none;--st-input:#ffffff;--st-inr:8px;--st-nav-r:0px;--st-line:#e4e4e7;--st-track:#e4e4e7;--st-ok:#15803d;--st-bad:#b91c1c;--st-plus-r:50%}
+html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-ink:#fafafa;--st-muted:#a1a1aa;--st-acc:hsl(var(--aksen-h,215) var(--aksen-s,90%) 58%);--st-on-acc:#ffffff;--st-acc-ink:hsl(var(--aksen-h,215) var(--aksen-s,90%) 75%);--st-soft:#27272a;--st-border:none;--st-r:12px;--st-shadow:none;--st-btn-r:8px;--st-btn-border:none;--st-btn-shadow:none;--st-input:#27272a;--st-inr:8px;--st-nav-r:0px;--st-line:#27272a;--st-track:#27272a;--st-ok:#4ade80;--st-bad:#f87171;--st-plus-r:50%}
+@media (prefers-color-scheme: dark){
+  html[data-gaya="flat"][data-tema="auto"]{--st-bg:#0e0e10;--st-card:#18181b;--st-ink:#fafafa;--st-muted:#a1a1aa;--st-acc:hsl(var(--aksen-h,215) var(--aksen-s,90%) 58%);--st-on-acc:#ffffff;--st-acc-ink:hsl(var(--aksen-h,215) var(--aksen-s,90%) 75%);--st-soft:#27272a;--st-border:none;--st-r:12px;--st-shadow:none;--st-btn-r:8px;--st-btn-border:none;--st-btn-shadow:none;--st-input:#27272a;--st-inr:8px;--st-nav-r:0px;--st-line:#27272a;--st-track:#27272a;--st-ok:#4ade80;--st-bad:#f87171;--st-plus-r:50%}
+}
+html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom{border-top:1px solid var(--st-line) !important}
+
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) {background-color:var(--st-bg) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) body{background-color:var(--st-bg);background-image:var(--st-bgimg,none);color:var(--st-ink);font-family:var(--st-font,inherit)}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) body::before, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) #bgLayer{display:none !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .card, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .stat, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) dialog{background:var(--st-card) !important;border:var(--st-border) !important;border-radius:var(--st-r) !important;box-shadow:var(--st-shadow) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;color:var(--st-ink)}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .saldo-hero{background:var(--st-acc) !important;color:var(--st-on-acc) !important;border:var(--st-border) !important;border-radius:var(--st-r) !important;box-shadow:var(--st-shadow) !important;backdrop-filter:none !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .saldo-hero .lbl, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .saldo-hero .mini, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .saldo-hero b{color:var(--st-on-acc) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) button{background:var(--st-acc) !important;color:var(--st-on-acc) !important;border:var(--st-btn-border) !important;border-radius:var(--st-btn-r) !important;box-shadow:var(--st-btn-shadow) !important;backdrop-filter:none !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) button.sec, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) button.kecil.sec{background:var(--st-soft) !important;color:var(--st-ink) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) button.ghost{background:var(--st-soft) !important;color:var(--st-acc-ink) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) button.del{background:var(--st-soft) !important;color:var(--st-bad) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) button.beli{background:var(--st-ok) !important;color:var(--st-on-acc) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) button:disabled{opacity:.45}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) input, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) select{background:var(--st-input) !important;color:var(--st-ink) !important;border:var(--st-border) !important;border-radius:var(--st-inr) !important;box-shadow:var(--st-inset,none) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom{background:var(--st-card) !important;border:var(--st-border) !important;border-radius:var(--st-nav-r) !important;box-shadow:var(--st-shadow) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom .tab{color:var(--st-muted);box-shadow:none;background:none;border-radius:var(--st-tab-r,16px)}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom .tab.aktif{background:var(--st-soft) !important;color:var(--st-acc-ink) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .nav-plus{background:var(--st-acc) !important;border:var(--st-btn-border) !important;border-radius:var(--st-plus-r,50%) !important;box-shadow:var(--st-btn-shadow) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .nav-plus svg{stroke:var(--st-on-acc) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) h2, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) header.top h1, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .stat b{color:var(--st-ink)}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) header.top p, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .muted, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .copy{color:var(--st-muted)}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .stat.s-masuk b{color:var(--st-ok) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .stat.s-keluar b{color:var(--st-bad) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .row{border-bottom:1px solid var(--st-line)}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .track{background:var(--st-track) !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .pill{background:var(--st-soft);color:var(--st-acc-ink);border-radius:var(--st-tag-r,99px)}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .banner{background:var(--st-soft) !important;color:var(--st-ink) !important;border:var(--st-border) !important;border-radius:var(--st-r) !important;backdrop-filter:none !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .keranjang{background:var(--st-soft) !important;border:1px dashed var(--st-line) !important;border-radius:var(--st-r) !important;backdrop-filter:none !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .merah{color:var(--st-bad)} html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .hijau{color:var(--st-ok)}
 </style>
 
 </head>
@@ -648,7 +803,7 @@
   </div>
 
   <div class="card" id="cardTunai">
-    <h2>Uang tunai (opsional)</h2>
+    <h2>Uang tunai (opsional)<button class="kecil ghost" onclick="bantuan('tunai')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
     <p class="sub">Isi jumlah lembar yang kamu pegang per pecahan. Kalau pengeluaran tunai melebihi stok, aplikasi akan menjelaskan kekurangannya dan tidak menyimpannya.</p>
     <div id="stokGrid" class="grid-denom"></div>
     <p class="muted" id="tunaiInfo"></p>
@@ -657,7 +812,7 @@
   </div>
 
   <div class="card" id="cardCatat">
-    <h2>Catat transaksi</h2>
+    <h2>Catat transaksi<button class="kecil ghost" onclick="bantuan('catat')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
     <div class="grid2">
       <select id="tipe">
         <option value="keluar">Pengeluaran</option>
@@ -709,7 +864,7 @@
   </div>
 
   <div class="card">
-    <h2>Transaksi berulang</h2>
+    <h2>Transaksi berulang<button class="kecil ghost" onclick="bantuan('berulang')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
     <p class="sub">Contoh: uang kos, kuota, atau uang saku. Muncul di "Perlu dicatat" saat tanggalnya tiba.</p>
     <input type="text" id="rbNama" placeholder="Nama (contoh: Uang kos)">
     <div class="grid2">
@@ -735,7 +890,7 @@
   </div>
 
   <div class="card">
-    <h2>Batas anggaran</h2>
+    <h2>Batas anggaran<button class="kecil ghost" onclick="bantuan('budget')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
     <div class="grid2">
       <select id="bKategori"></select>
       <select id="bPeriode">
@@ -749,7 +904,7 @@
   </div>
 
   <div class="card">
-    <h2>Target tabungan</h2>
+    <h2>Target tabungan<button class="kecil ghost" onclick="bantuan('target')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
     <input type="text" id="wNama" placeholder="Barang yang ingin dibeli">
     <div class="grid2">
       <input type="number" id="wTarget" placeholder="Target harga (Rp)" min="1" inputmode="numeric">
@@ -857,6 +1012,12 @@
       <option value="glass">Glass (kaca transparan)</option>
       <option value="biasa">Biasa (kartu solid, tanpa efek kaca)</option>
       <option value="berwarna">Berwarna (kartu putih, garis tepi warna per jenis)</option>
+      <option value="neo">Neobrutal (garis tebal, bayangan keras, warna cerah)</option>
+      <option value="material">Material You (sudut membulat, warna aksen)</option>
+      <option value="soft">Soft UI (timbul lembut)</option>
+      <option value="retro">Retro terminal (hijau di hitam)</option>
+      <option value="paper">Paper (buku catatan krem)</option>
+      <option value="flat">Minimal flat (tanpa bayangan)</option>
     </select>
     <span class="muted">Kualitas efek</span>
     <select id="sEfek">
@@ -911,7 +1072,7 @@
     <div id="listKatKustom"></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="cardLatar">
     <h2>Latar belakang</h2>
     <div class="setel-prev" id="bgPrev"></div>
     <input type="file" id="fBg" accept="image/*">
@@ -982,6 +1143,20 @@
   <p class="muted">Perubahan berlaku untuk tanggal berikutnya. Catatan yang sudah tercatat tidak ikut berubah.</p>
   <button id="btnEbSimpan">Simpan perubahan</button>
   <button class="sec" id="btnEbBatal">Batal</button>
+</dialog>
+
+<!-- DIALOG INFO GAYA (muncul sekali per gaya) -->
+<dialog id="dlgGaya">
+  <h2 id="dlgGayaJudul"></h2>
+  <p id="dlgGayaTeks" style="white-space:pre-line;margin:0 0 16px"></p>
+  <button id="btnGayaOk">Mengerti</button>
+</dialog>
+
+<!-- DIALOG CARA PAKAI -->
+<dialog id="dlgBantuan">
+  <h2 id="dlgBantuanJudul"></h2>
+  <p id="dlgBantuanTeks" style="white-space:pre-line;margin:0 0 16px"></p>
+  <button id="btnBantuanOk">Tutup</button>
 </dialog>
 
 <!-- DIALOG STRUK 1 TRANSAKSI -->
@@ -2422,7 +2597,7 @@ function simpanTampilan() {
 function terapkanTampilan() {
   const h = document.documentElement;
   h.dataset.tema = tampilan.tema;
-  h.dataset.gaya = ['biasa', 'berwarna'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
+  h.dataset.gaya = ['biasa', 'berwarna', 'neo', 'material', 'soft', 'retro', 'paper', 'flat'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
   h.dataset.efek = ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'hd';
   $('bgLayer').style.filter = tampilan.buram ? 'blur(' + tampilan.buram + 'px)' : 'none';
   $('buramLabel').textContent = (tampilan.buram || 0) + 'px';
@@ -2432,13 +2607,14 @@ function terapkanTampilan() {
   $('bgLayer').style.backgroundImage = url;
   $('bgPrev').style.backgroundImage = url;
   $('kacaLabel').textContent = tampilan.kaca + '%';
+  $('cardLatar').style.display = ['biasa','berwarna','neo','material','soft','retro','paper','flat'].includes(tampilan.gaya) ? 'none' : '';
   const aks = tampilan.aksen || { h: 215, s: 90 };
   h.style.setProperty('--aksen-h', aks.h);
   h.style.setProperty('--aksen-s', aks.s + '%');
   const kunciPalet = ['--ink','--muted','--ok','--bad','--glass','--glass-line','--navbg','--input',
     '--rowline','--track','--ghostbg','--ghostink','--pillbg','--pillink','--card-solid','--line-solid',
     '--delbg','--delink','--detline','--keranjangline','--keranjangbg','--banbg','--banink','--secbg','--sec2bg','--sec2ink'];
-  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false && !['biasa', 'berwarna'].includes(tampilan.gaya)) {
+  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false && !['biasa', 'berwarna', 'neo', 'material', 'soft', 'retro', 'paper', 'flat'].includes(tampilan.gaya)) {
     const terang = tampilan.aksen.terang === true;
     h.dataset.adaptif = terang ? 'terang' : 'gelap';
     paletAdaptif(tampilan.aksen, terang, tampilan.kaca / 100, kunciPalet, h);
@@ -2496,7 +2672,7 @@ $('sBuram').oninput = () => {
   terapkanTampilan();
 };
 $('sBuram').onchange = () => simpanTampilan();
-$('sGaya').value = ['biasa', 'berwarna'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
+$('sGaya').value = ['biasa', 'berwarna', 'neo', 'material', 'soft', 'retro', 'paper', 'flat'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
 $('sEfek').value = ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'hd';
 $('sEfek').onchange = () => {
   tampilan.efek = $('sEfek').value;
@@ -2506,6 +2682,7 @@ $('sEfek').onchange = () => {
 };
 $('sGaya').onchange = () => {
   tampilan.gaya = $('sGaya').value;
+  tampilkanPanduanGaya();
   simpanTampilan();
   terapkanTampilan();
 };
@@ -3267,6 +3444,64 @@ function renderMingguan() {
   $('judulMingguan').textContent = 'Minggu ini: ' + rentangMinggu(mingguIni.dari, mingguIni.sampai);
   $('teksMingguan').textContent = teks + '\nDibanding ' + rentangMinggu(mingguLalu.dari, mingguLalu.sampai) + '.';
 }
+
+
+// ===== PANDUAN GAYA (pop-up sekali per gaya) DAN CARA PAKAI FITUR =====
+const PANDUAN_GAYA = {
+  glass: { judul: 'Gaya Glass', teks:
+    'Kartu dan navigasi berupa kaca transparan.\nBisa memasang latar gambar dan mengatur buramnya.\nWarna teks dan tombol bisa mengikuti foto latar (mode Adaptif).\n\nCara pakai: pasang foto di Latar belakang, lalu atur Transparansi dan Kualitas efek sesuai HP kamu.' },
+  biasa: { judul: 'Gaya Biasa', teks:
+    'Kartu solid tanpa efek kaca.\nLatar gambar TIDAK tampil. Foto latar tetap tersimpan dan muncul lagi kalau kembali ke Glass.\nMode Adaptif tidak berlaku.\n\nCara pakai: cocok kalau HP terasa berat atau kamu ingin tampilan sederhana.' },
+  berwarna: { judul: 'Gaya Berwarna', teks:
+    'Kartu putih dengan garis tepi berwarna per jenis: saldo kuning, pemasukan hijau, pengeluaran merah.\nLatar gambar dan Mode Adaptif TIDAK tampil.\n\nCara pakai: langsung dipilih, tidak perlu pengaturan lain.' },
+  neo: { judul: 'Gaya Neobrutal', teks:
+    'Garis hitam tebal dan bayangan keras dengan warna cerah.\nLatar gambar dan Mode Adaptif TIDAK tampil.\n\nCara pakai: paling cocok dengan tema terang. Di tema gelap, garisnya berubah jadi putih.' },
+  material: { judul: 'Material You', teks:
+    'Kartu melengkung dengan warna aksen.\nLatar gambar TIDAK tampil, tetapi warna aksen dari foto latar tetap dipakai kalau fotonya pernah diupload.\n\nCara pakai: tombol dan tab aktif mengikuti warna aksen.' },
+  soft: { judul: 'Soft UI', teks:
+    'Kartu dan tombol terlihat timbul dari latar yang sama.\nLatar gambar dan Mode Adaptif TIDAK tampil.\n\nCara pakai: di tema gelap, bayangannya ikut menjadi gelap.' },
+  retro: { judul: 'Retro Terminal', teks:
+    'Tampilan terminal hijau di latar hitam, dengan garis pemindai.\nSelalu gelap, pilihan Tema tidak berpengaruh.\nLatar gambar TIDAK tampil.\n\nCara pakai: cocok untuk kesan catatan pribadi yang khas.' },
+  paper: { judul: 'Paper', teks:
+    'Latar kertas krem bergaris dengan kartu seperti buku catatan.\nLatar gambar dan Mode Adaptif TIDAK tampil.\n\nCara pakai: tulisan memakai font serif supaya terasa seperti buku.' },
+  flat: { judul: 'Minimal Flat', teks:
+    'Tanpa bayangan dan garis tepi, warna sederhana.\nLatar gambar TIDAK tampil. Warna aksen dari foto tetap dipakai untuk tombol kalau fotonya pernah diupload.\n\nCara pakai: paling ringan untuk HP yang lambat.' },
+};
+
+function tampilkanPanduanGaya() {
+  const g = tampilan.gaya || 'glass';
+  set.gayaDilihat = set.gayaDilihat || [];
+  if (set.gayaDilihat.includes(g)) return;
+  set.gayaDilihat.push(g);
+  simpanSet();
+  const pan = PANDUAN_GAYA[g] || PANDUAN_GAYA.glass;
+  $('dlgGayaJudul').textContent = pan.judul;
+  $('dlgGayaTeks').textContent = pan.teks;
+  $('dlgGaya').showModal();
+}
+$('btnGayaOk').onclick = () => $('dlgGaya').close();
+
+const BANTUAN = {
+  tunai: { judul: 'Cara pakai: Uang tunai', teks:
+    '1. Isi jumlah lembar per pecahan di kartu ini, lalu tekan Simpan stok.\n2. Saat mencatat transaksi, pilih Tunai di form.\n3. Isi pecahan yang dibayar, atau tekan Isi otomatis.\n4. Kembalian diisi di bagian Kembalian.\n\nPengeluaran yang melebihi stok tidak akan disimpan, dan aplikasi menjelaskan kekurangannya.' },
+  berulang: { judul: 'Cara pakai: Transaksi berulang', teks:
+    '1. Isi nama, jumlah, nominal, periode (bulan atau minggu), dan tanggal mulai.\n2. Saat jatuh tempo, muncul di kartu Perlu dicatat.\n3. Tekan Catat untuk mencatatnya, Lewati untuk melewatinya, atau Catat semua.\n\nEdit dan Hapus di sini hanya mengubah transaksi berulangnya, bukan catatan yang sudah tercatat.' },
+  target: { judul: 'Cara pakai: Target tabungan', teks:
+    '1. Isi barang yang ingin dibeli dan targetnya. Tenggat boleh dikosongkan.\n2. Tekan Setor, lalu isi jumlah yang sudah ditabung. Ini tercatat sebagai pengeluaran Tabungan.\n3. Kalau ada tenggat, aplikasi menghitung setoran per minggu yang dibutuhkan.' },
+  budget: { judul: 'Cara pakai: Batas anggaran', teks:
+    '1. Pilih kategori dan periode (minggu atau bulan), lalu isi batasnya.\n2. Bar berubah oranye di 80% dan merah di 100%.\n3. Saat menyimpan pengeluaran di kategori itu, aplikasi memberi peringatan.' },
+  catat: { judul: 'Cara pakai: Catat transaksi', teks:
+    '1. Pilih Pengeluaran atau Pemasukan, lalu isi tanggal dan kategori.\n2. Isi nama, jumlah, dan harga satuan, lalu tekan Simpan.\n3. Untuk beberapa barang, tekan + Ke keranjang setiap kali menambah barang.\n4. Tag dan foto struk bisa ditambahkan sebelum menyimpan.' },
+};
+
+function bantuan(k) {
+  const b = BANTUAN[k];
+  if (!b) return;
+  $('dlgBantuanJudul').textContent = b.judul;
+  $('dlgBantuanTeks').textContent = b.teks;
+  $('dlgBantuan').showModal();
+}
+$('btnBantuanOk').onclick = () => $('dlgBantuan').close();
 
 // ===== INISIALISASI =====
 $('hdr').textContent = 'Hari ini, ' + tglIndo(hariIni());
