@@ -1,22 +1,57 @@
-const CACHE = 'catatan-keuangan-v5';
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './index.html'])));
-  self.skipWaiting();
+const CACHE = 'catatan-keuangan-v7';
+const CACHE_PREFIX = 'catatan-keuangan-';
+const APP_PAGES = ['./', './index.html'];
+
+self.addEventListener('install', event => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    // Simpan halaman utama yang tersedia tanpa menggagalkan pemasangan.
+    await Promise.all(APP_PAGES.map(async path => {
+      try {
+        const request = new Request(new URL(path, self.registration.scope), { cache: 'reload' });
+        const response = await fetch(request);
+        if (response.ok && response.type === 'basic') await cache.put(request, response);
+      } catch (_) {
+        // Offline saat memasang: halaman akan dicache pada kunjungan berikutnya.
+      }
+    }));
+    await self.skipWaiting();
+  })());
 });
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
+
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys
+      .filter(key => key.startsWith(CACHE_PREFIX) && key !== CACHE)
+      .map(key => caches.delete(key)));
+    await self.clients.claim();
+  })());
 });
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    fetch(e.request).then(res => {
-      const copy = res.clone();
-      caches.open(CACHE).then(c => c.put(e.request, copy));
-      return res;
-    }).catch(() => caches.match(e.request).then(r => r || caches.match('./index.html')))
-  );
+
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  const url = new URL(request.url);
+  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
+
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE);
+    try {
+      const response = await fetch(request);
+      if (response.ok && response.type === 'basic') {
+        event.waitUntil(cache.put(request, response.clone()).catch(() => {}));
+      }
+      return response;
+    } catch (_) {
+      const exact = await cache.match(request);
+      if (exact) return exact;
+      if (request.mode === 'navigate') {
+        for (const path of APP_PAGES) {
+          const page = await cache.match(new URL(path, self.registration.scope));
+          if (page) return page;
+        }
+      }
+      return Response.error();
+    }
+  })());
 });
