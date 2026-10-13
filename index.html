@@ -106,6 +106,7 @@
   .itemrow{display:grid;grid-template-columns:1fr 1fr;gap:6px;align-items:center;margin-bottom:10px;padding:10px;border:1px solid var(--line);border-radius:14px}
   .itemrow input,.itemrow select{margin:0;padding:10px 9px;min-width:0}
   .itemrow .item-nama,.itemrow .item-satuan-lain{grid-column:1 / -1}
+  .itemrow .item-mode-harga{grid-column:1 / -1}
   .itemrow .field-wrap{margin:0}
   .itemrow button{width:100%;margin:0;padding:10px;box-shadow:none;align-self:end}
   .kosong{text-align:center;padding:18px 0;color:var(--muted);font-size:13px}
@@ -757,6 +758,87 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   .save-status button{width:auto;margin:0;padding:0;background:none;box-shadow:none;color:var(--ghostink);font-size:12px;text-decoration:underline}
   .form-error{color:var(--bad);font-size:13px;margin:0 0 10px;line-height:1.45}
   .toast-note{position:fixed;left:50%;bottom:calc(82px + env(safe-area-inset-bottom));transform:translateX(-50%);width:max-content;max-width:calc(100vw - 30px);background:var(--ink);color:var(--card);border-radius:12px;padding:11px 16px;z-index:20;box-shadow:var(--shadow);font-size:14px;text-align:center}
+
+  /* Sisakan ruang gulir di bawah kartu agar navbar melayang tidak menutupinya. */
+  body{padding-bottom:calc(230px + env(safe-area-inset-bottom))}
+  html{scroll-padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+  #cardCatat,.feature-group{scroll-margin-bottom:calc(150px + env(safe-area-inset-bottom))}
+
+  /* Gaya Blok Pixel: blok rumput, tanah, dan panel seperti inventori permainan. */
+  html[data-gaya="blok"]{
+    --px-bg:#d7e4b0;--px-card:#f7f0d6;--px-ink:#253521;--px-muted:#536344;
+    --px-edge:#405634;--px-soft:#e2d2a3;--px-input:#fff9df;--px-green:#477c2f;
+    --px-green-dark:#365d2a;--px-earth:#76553b;--px-shadow:#35472b;
+    --ink:var(--px-ink);--muted:var(--px-muted);--rowline:#b0bd85;
+    --ghostink:var(--px-green-dark);--ok:#32712e;--bad:#ad3e35;
+    background-color:var(--px-bg) !important;
+    background-image:linear-gradient(90deg,rgba(70,103,44,.08) 1px,transparent 1px),linear-gradient(rgba(70,103,44,.08) 1px,transparent 1px) !important;
+    background-size:24px 24px !important;
+  }
+  html[data-gaya="blok"][data-tema="dark"]{
+    --px-bg:#1e291f;--px-card:#30412e;--px-ink:#f2efdb;--px-muted:#c3d0ad;
+    --px-edge:#9bb76d;--px-soft:#3e5236;--px-input:#253323;--px-green:#477c2f;
+    --px-green-dark:#d4e9a8;--px-earth:#594632;--px-shadow:#0c170d;
+    --rowline:#526846;--ok:#a8d77f;--bad:#ffaaa0;
+  }
+  @media (prefers-color-scheme:dark){
+    html[data-gaya="blok"][data-tema="auto"]{
+      --px-bg:#1e291f;--px-card:#30412e;--px-ink:#f2efdb;--px-muted:#c3d0ad;
+      --px-edge:#9bb76d;--px-soft:#3e5236;--px-input:#253323;--px-green:#477c2f;
+      --px-green-dark:#d4e9a8;--px-earth:#594632;--px-shadow:#0c170d;
+      --rowline:#526846;--ok:#a8d77f;--bad:#ffaaa0;
+    }
+  }
+  html[data-gaya="blok"] body{color:var(--px-ink);font-family:ui-monospace,"Cascadia Code",Consolas,monospace !important}
+  html[data-gaya="blok"] body::before,html[data-gaya="blok"] #bgLayer{display:none !important}
+  html[data-gaya="blok"] header.top h1{color:var(--px-green-dark);font-weight:900;letter-spacing:-.7px;text-shadow:2px 2px 0 var(--px-soft)}
+  html[data-gaya="blok"] header.top p,html[data-gaya="blok"] .home-lead,
+  html[data-gaya="blok"] .muted,html[data-gaya="blok"] .sub,
+  html[data-gaya="blok"] .field-label,html[data-gaya="blok"] .copy{color:var(--px-muted)}
+  html[data-gaya="blok"] h2,html[data-gaya="blok"] .more-heading h2{color:var(--px-ink);text-shadow:none !important;font-weight:900}
+  html[data-gaya="blok"] .card,html[data-gaya="blok"] .stat,
+  html[data-gaya="blok"] dialog,html[data-gaya="blok"] nav.bottom{
+    background:var(--px-card) !important;background-image:none !important;color:var(--px-ink) !important;
+    border:3px solid var(--px-edge) !important;border-radius:4px !important;
+    box-shadow:inset 0 4px 0 rgba(255,255,255,.18),5px 5px 0 var(--px-shadow) !important;
+    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+  }
+  html[data-gaya="blok"] .saldo-hero{
+    background:linear-gradient(180deg,#86bc49 0 12px,#426c31 12px 18px,var(--px-earth) 18px 100%) !important;
+    color:#fff8da !important;border:3px solid var(--px-edge) !important;border-radius:4px !important;
+    box-shadow:5px 5px 0 var(--px-shadow) !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+  }
+  html[data-gaya="blok"] .saldo-hero :is(.lbl,.mini,b){color:#fff8da !important;text-shadow:1px 2px 0 #3f3025}
+  html[data-gaya="blok"] button{
+    background:var(--px-green) !important;color:#fffceb !important;border:2px solid var(--px-edge) !important;
+    border-radius:3px !important;box-shadow:inset 0 3px 0 rgba(255,255,255,.25),3px 3px 0 var(--px-shadow) !important;
+    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+  }
+  html[data-gaya="blok"] button:active{transform:translate(2px,2px);box-shadow:inset 0 2px 0 rgba(0,0,0,.15),1px 1px 0 var(--px-shadow) !important}
+  html[data-gaya="blok"] button:is(.ghost,.sec),html[data-gaya="blok"] button.kecil.sec{background:var(--px-soft) !important;color:var(--px-ink) !important}
+  html[data-gaya="blok"] button.del{background:var(--px-soft) !important;color:var(--bad) !important}
+  html[data-gaya="blok"] button.beli{background:var(--px-green) !important}
+  html[data-gaya="blok"] button:disabled{opacity:.5;box-shadow:none !important}
+  html[data-gaya="blok"] input,html[data-gaya="blok"] select{
+    background:var(--px-input) !important;color:var(--px-ink) !important;border:2px solid var(--px-edge) !important;
+    border-radius:3px !important;box-shadow:inset 2px 2px 0 rgba(0,0,0,.09) !important;
+    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+  }
+  html[data-gaya="blok"] input::placeholder{color:var(--px-muted);opacity:1}
+  html[data-gaya="blok"] input:focus,html[data-gaya="blok"] select:focus{outline:2px solid var(--px-green);outline-offset:1px;box-shadow:none !important}
+  html[data-gaya="blok"] input[type=range]{accent-color:var(--px-green);border:0 !important;background:transparent !important;box-shadow:none !important}
+  html[data-gaya="blok"] .nav-plus{background:var(--px-green) !important;border:3px solid var(--px-edge) !important;border-radius:4px !important;box-shadow:3px 3px 0 var(--px-shadow) !important}
+  html[data-gaya="blok"] nav.bottom .tab{background:transparent !important;border:0 !important;color:var(--px-muted) !important;box-shadow:none !important}
+  html[data-gaya="blok"] nav.bottom .tab.aktif{background:var(--px-soft) !important;color:var(--px-green-dark) !important}
+  html[data-gaya="blok"] .keranjang,html[data-gaya="blok"] .banner{
+    background:var(--px-soft) !important;color:var(--px-ink) !important;border:2px dashed var(--px-edge) !important;border-radius:3px !important;
+    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+  }
+  html[data-gaya="blok"] .pill{background:var(--px-green) !important;color:#fffceb !important;border:1px solid var(--px-edge);border-radius:2px}
+  html[data-gaya="blok"] .track{background:var(--px-soft) !important;border:1px solid var(--px-edge);border-radius:2px}
+  html[data-gaya="blok"] .bar{border-radius:0}
+  html[data-gaya="blok"] .row{border-bottom:1px dashed var(--px-edge)}
+  html[data-gaya="blok"] .feature-group > summary.card::after,html[data-gaya="blok"] details summary{color:var(--px-green-dark)}
 </style>
 
 </head>
@@ -782,7 +864,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <div class="card first-steps" id="panduanAwal" style="display:none">
     <h2>Mulai dari catatan pertama</h2>
     <ol>
-      <li>Isi barang di bawah, misalnya telur 0,5 kg dengan harga per kg.</li>
+      <li>Isi telur 0,5 kg dan harga total Rp12.000. Tidak perlu menghitung harga per kg.</li>
       <li>Tekan <b>Simpan transaksi</b>, lalu lihat hasilnya di Histori terbaru.</li>
       <li>Buat cadangan dari menu Data &amp; backup saat catatanmu mulai bertambah.</li>
     </ol>
@@ -889,17 +971,31 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <span class="muted">Barang</span>
       <input type="text" id="iNama" placeholder="Nama barang (contoh: Nasi goreng)">
       <div class="grid2">
-        <input type="number" id="iQty" placeholder="Jumlah (misal 0,5)" value="1" min="0.001" step="any" inputmode="decimal">
+      <input type="text" id="iQty" placeholder="Jumlah (misal 0,5)" value="1" inputmode="decimal">
         <select id="iSatuan" aria-label="Satuan barang"></select>
       </div>
       <input type="text" id="iSatuanLain" placeholder="Tulis satuan sendiri (contoh: dus)" maxlength="30" style="display:none">
-      <input type="number" id="iHarga" placeholder="Harga per satuan (Rp)" min="1" inputmode="numeric">
-      <div class="grid2">
-        <button class="sec" id="btnScan">📷 Scan struk</button>
-        <button class="ghost" id="btnTambahKrj">+ Tambah barang lain</button>
+      <select id="iModeHarga">
+        <option value="total">Harga total yang dibayar</option>
+        <option value="satuan">Harga per satuan (misalnya per kg)</option>
+      </select>
+      <input type="number" id="iHarga" placeholder="Contoh: 12000 untuk setengah kg" min="1" step="any" inputmode="decimal">
+      <p class="muted" id="iHargaInfo" style="margin:-4px 0 10px">Contoh: telur 0,5 kg, bayar Rp12.000 → isi 12000 tanpa titik. Tidak perlu menghitung harga per kg.</p>
+      <div class="grid2" id="pilihanScan">
+        <button class="sec" id="btnScan" type="button">📷 Kamera</button>
+        <button class="ghost" id="btnScanGaleri" type="button">🖼️ Galeri</button>
       </div>
+      <button class="ghost" id="btnTambahKrj">+ Tambah barang lain</button>
       <input type="file" id="fileScan" accept="image/*" capture="environment" style="display:none">
-      <p class="muted" id="statusScan" style="margin:0 0 8px"></p>
+      <input type="file" id="fileScanGaleri" accept="image/*" style="display:none">
+      <p class="muted" id="statusScan" role="status" aria-live="polite" style="margin:0 0 8px"></p>
+      <div id="scanPreviewWrap" style="display:none;margin:0 0 10px">
+        <img id="scanPreview" alt="Gambar struk yang dipilih" style="display:block;width:100%;max-height:240px;object-fit:contain;border:1px solid var(--line);border-radius:8px">
+      </div>
+      <details id="scanReview" style="display:none;margin:0 0 10px">
+        <summary>Teks yang terbaca (periksa hasilnya)</summary>
+        <pre id="scanTeks" style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:160px;overflow:auto;font-size:12px;color:var(--ink)"></pre>
+      </details>
       <p class="muted" id="previewItem" style="margin:0 0 8px"></p>
       <div id="listKrj"></div>
       <div class="row"><span>Total</span><b id="totKrj"></b></div>
@@ -1070,6 +1166,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="biasa">Biasa (kartu solid, tanpa efek kaca)</option>
       <option value="berwarna">Berwarna (kartu putih, garis tepi warna per jenis)</option>
       <option value="neo">Neobrutal (garis tebal, bayangan keras, warna cerah)</option>
+      <option value="blok">Blok Pixel (nuansa Minecraft)</option>
       <option value="material">Material You (sudut membulat, warna aksen)</option>
       <option value="soft">Soft UI (timbul lembut)</option>
       <option value="retro">Retro terminal (hijau di hitam)</option>
@@ -1272,9 +1369,15 @@ const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7
 const el = (tag, cls, teks) => { const e = document.createElement(tag); if (cls) e.className = cls; if (teks !== undefined) e.textContent = teks; return e; };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const SATUAN = ['buah','butir','kg','gram','liter','ml','botol','galon','bungkus','lembar','pcs','paket'];
+const angkaJumlah = v => Number(String(v).trim().replace(',', '.'));
 const jumlah = n => Number(n).toLocaleString('id-ID', { maximumFractionDigits: 6 });
 const jumlahSatuan = i => jumlah(i.qty) + (i.satuan ? ' ' + i.satuan : '');
 const hargaSatuan = i => rp(i.harga) + (i.satuan ? '/' + i.satuan : '');
+const subtotalItem = i => i.hargaTotal != null && Number.isFinite(Number(i.hargaTotal))
+  ? Number(i.hargaTotal) : Number(i.qty) * Number(i.harga);
+const rincianItem = i => i.hargaTotal != null
+  ? i.nama + ' · ' + jumlahSatuan(i) + ' = ' + rp(subtotalItem(i))
+  : i.nama + ' · ' + jumlahSatuan(i) + ' × ' + hargaSatuan(i) + ' = ' + rp(subtotalItem(i));
 const satuanDariForm = (pilihan, lainnya) => pilihan.value === '__custom__' ? lainnya.value.trim().slice(0, 30) : pilihan.value;
 function isiSatuanSelect(select, pilih = 'buah', bolehKosong = false) {
   select.innerHTML = '';
@@ -1296,7 +1399,7 @@ function pasangLabelForm() {
     tipe:'Jenis transaksi', tgl:'Tanggal transaksi', judul:'Nama transaksi (opsional)',
     kategori:'Kategori', iCara:'Cara pembayaran', tTag:'Tag (opsional)',
     iNama:'Nama barang', iQty:'Jumlah barang', iSatuan:'Satuan barang',
-    iSatuanLain:'Satuan sendiri', iHarga:'Harga per satuan (Rp)', fFoto:'Foto struk (opsional)',
+    iSatuanLain:'Satuan sendiri', iModeHarga:'Cara mengisi harga', iHarga:'Harga total (Rp)', fFoto:'Foto struk (opsional)',
     rbNama:'Nama transaksi berulang', rbTipe:'Jenis transaksi', rbKat:'Kategori',
     rbQty:'Jumlah', rbSatuan:'Satuan', rbSatuanLain:'Satuan sendiri',
     rbHarga:'Harga per satuan (Rp)', rbPeriode:'Diulang setiap', rbMulai:'Mulai tanggal',
@@ -1335,9 +1438,10 @@ const KAT = {
 
 function normal(x) {
   const items = Array.isArray(x.items)
-    ? x.items.map(i => ({ nama: String(i.nama), qty: Number(i.qty) || 1, satuan: String(i.satuan || '').trim(), harga: Number(i.harga) || 0 }))
+    ? x.items.map(i => ({ nama: String(i.nama), qty: Number(i.qty) || 1, satuan: String(i.satuan || '').trim(), harga: Number(i.harga) || 0,
+      ...(i.hargaTotal != null && Number.isFinite(Number(i.hargaTotal)) && Number(i.hargaTotal) > 0 ? { hargaTotal: Number(i.hargaTotal) } : {}) }))
     : [{ nama: String(x.nama || 'Barang'), qty: Number(x.qty) || 1, satuan: String(x.satuan || '').trim(), harga: Number(x.harga ?? x.jumlah) || 0 }];
-  const total = items.reduce((s, i) => s + i.qty * i.harga, 0);
+  const total = items.reduce((s, i) => s + subtotalItem(i), 0);
   const judul = x.judul || (items.length === 1 ? items[0].nama : (x.nama || 'Belanja ' + tglIndo(x.tanggal)));
   return {
     id: String(x.id || uid()),
@@ -1506,7 +1610,10 @@ function baris(x) {
   info.appendChild(el('b', x.tipe === 'masuk' ? 'hijau' : 'merah', (x.tipe === 'masuk' ? '+ ' : '− ') + x.judul));
   info.appendChild(el('div', 'muted', tglIndo(x.tanggal) + ' · ' + x.kategori + (x.items.length > 1 ? ' · ' + x.items.length + ' barang' : '')));
   if (x.items.length === 1 && x.items[0].satuan) {
-    info.appendChild(el('div', 'muted', jumlahSatuan(x.items[0]) + ' × ' + hargaSatuan(x.items[0])));
+    const satu = x.items[0];
+    info.appendChild(el('div', 'muted', satu.hargaTotal != null
+      ? jumlahSatuan(satu) + ' ' + satu.nama + ' · total ' + rp(subtotalItem(satu))
+      : jumlahSatuan(satu) + ' × ' + hargaSatuan(satu)));
   }
   if ((x.tags && x.tags.length) || x.tunai) {
     // lencana tunai ditampilkan di atas tag
@@ -1568,7 +1675,7 @@ function baris(x) {
   if (x.items.length > 1 || x.items[0].nama !== x.judul || x.tunai) {
     const det = document.createElement('details');
     det.appendChild(el('summary', null, 'Lihat rincian' + (x.tunai ? ' barang & pecahan' : '')));
-    x.items.forEach(i => det.appendChild(el('div', 'muted', jumlahSatuan(i) + ' × ' + i.nama + ' @ ' + hargaSatuan(i) + ' = ' + rp(i.qty * i.harga))));
+    x.items.forEach(i => det.appendChild(el('div', 'muted', rincianItem(i))));
     if (x.tunai) {
       const pecahan = (label, lembar) => {
         if (!lembar) return;
@@ -1672,11 +1779,11 @@ function gambarStruk(x) {
     g.fillStyle = '#0f172a';
     g.fillText(potongTeks(g, jumlahSatuan(it) + ' × ' + it.nama, W - pad * 2 - 170), pad, y);
     g.textAlign = 'right';
-    g.fillText(rp(it.qty * it.harga), W - pad, y);
+    g.fillText(rp(subtotalItem(it)), W - pad, y);
     g.textAlign = 'left';
     setFont(g, '', 13);
     g.fillStyle = '#64748b';
-    g.fillText('@ ' + hargaSatuan(it), pad, y + 20);
+    g.fillText(it.hargaTotal != null ? 'Harga total' : '@ ' + hargaSatuan(it), pad, y + 20);
     y += 52;
   });
 
@@ -1852,7 +1959,7 @@ function cetakPdf(d) {
     .map(([k, v]) => `<tr><td>${esc(k)}</td><td class="r">${esc(rp(v))}</td></tr>`).join('')
     || '<tr><td colspan="2">Tidak ada pengeluaran</td></tr>';
   const trRows = urutTerbaru(d.list)
-    .map(x => `<tr><td>${esc(tglIndo(x.tanggal))}</td><td>${esc(x.judul)}<div class="mini">${esc(x.items.map(i => jumlahSatuan(i) + ' × ' + i.nama + ' @ ' + hargaSatuan(i)).join('; '))}</div></td><td>${x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran'}</td><td class="r">${esc(rp(x.total))}</td></tr>`)
+    .map(x => `<tr><td>${esc(tglIndo(x.tanggal))}</td><td>${esc(x.judul)}<div class="mini">${esc(x.items.map(i => rincianItem(i)).join('; '))}</div></td><td>${x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran'}</td><td class="r">${esc(rp(x.total))}</td></tr>`)
     .join('') || '<tr><td colspan="4">Tidak ada transaksi</td></tr>';
   const html = `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Rekap keuangan</title>
 <style>
@@ -2019,7 +2126,11 @@ function renderEditItems() {
     const nama = el('input'); nama.type = 'text'; nama.placeholder = 'Nama barang'; nama.value = it.nama;
     nama.oninput = () => { editItems[i].nama = nama.value; hitungEdit(); };
     const qty = el('input'); qty.type = 'number'; qty.min = '0.001'; qty.step = 'any'; qty.inputMode = 'decimal'; qty.placeholder = 'Jumlah'; qty.value = it.qty;
-    qty.oninput = () => { editItems[i].qty = Number(qty.value) || 0; hitungEdit(); };
+    qty.oninput = () => {
+      it.qty = Number(qty.value) || 0;
+      if (it.hargaTotal != null && it.qty > 0) it.harga = it.hargaTotal / it.qty;
+      hitungEdit();
+    };
     const satuan = el('select'); satuan.setAttribute('aria-label', 'Satuan barang');
     isiSatuanSelect(satuan, it.satuan || '', !!it.satuanBolehKosong);
     const satuanLain = el('input'); satuanLain.type = 'text'; satuanLain.placeholder = 'Satuan sendiri'; satuanLain.maxLength = 30;
@@ -2032,21 +2143,45 @@ function renderEditItems() {
       hitungEdit();
     };
     satuanLain.oninput = () => { editItems[i].satuan = satuanLain.value.trim(); hitungEdit(); };
-    const harga = el('input'); harga.type = 'number'; harga.min = 1; harga.inputMode = 'numeric'; harga.placeholder = 'Harga per satuan'; harga.value = it.harga;
-    harga.oninput = () => { editItems[i].harga = Number(harga.value) || 0; hitungEdit(); };
+    const mode = el('select');
+    [['total','Harga total'],['satuan','Harga per satuan']].forEach(([nilai,teks]) => {
+      const opsi = el('option', null, teks); opsi.value = nilai; mode.appendChild(opsi);
+    });
+    mode.value = it.hargaTotal != null ? 'total' : 'satuan';
+    const harga = el('input'); harga.type = 'number'; harga.min = 1; harga.step = 'any'; harga.inputMode = 'decimal';
+    harga.value = it.hargaTotal != null ? it.hargaTotal : it.harga;
+    const hargaWrap = bidang(harga, mode.value === 'total' ? 'Harga total (Rp)' : 'Harga per satuan (Rp)', 'harga');
+    mode.onchange = () => {
+      if (mode.value === 'total') {
+        it.hargaTotal = it.qty * it.harga;
+        harga.value = it.hargaTotal;
+      } else {
+        it.harga = it.qty > 0 ? subtotalItem(it) / it.qty : 0;
+        delete it.hargaTotal;
+        harga.value = it.harga || '';
+      }
+      hargaWrap.querySelector('label').textContent = mode.value === 'total' ? 'Harga total (Rp)' : 'Harga per satuan (Rp)';
+      hitungEdit();
+    };
+    harga.oninput = () => {
+      const n = Number(harga.value) || 0;
+      if (mode.value === 'total') { it.hargaTotal = n; it.harga = it.qty > 0 ? n / it.qty : 0; }
+      else it.harga = n;
+      hitungEdit();
+    };
     const hap = el('button', 'del', '×');
     hap.setAttribute('aria-label', 'Hapus barang ' + (i + 1));
     hap.onclick = () => { editItems.splice(i, 1); renderEditItems(); };
     row.append(bidang(nama, 'Nama barang', 'nama', 'item-nama'),
       bidang(qty, 'Jumlah', 'qty'), bidang(satuan, 'Satuan', 'satuan'),
-      lainWrap, bidang(harga, 'Harga per satuan (Rp)', 'harga'), hap);
+      lainWrap, bidang(mode, 'Cara mengisi harga', 'mode-harga', 'item-mode-harga'), hargaWrap, hap);
     box.appendChild(row);
   });
   hitungEdit();
 }
 
 function hitungEdit() {
-  const t = editItems.reduce((s,i) => s + (Number(i.qty) || 0) * (Number(i.harga) || 0), 0);
+  const t = editItems.reduce((s,i) => s + subtotalItem(i), 0);
   $('eTotal').textContent = 'Total baru: ' + rp(t);
 }
 
@@ -2058,11 +2193,12 @@ $('btnESimpan').onclick = () => {
   const x = db.transaksi.find(d => d.id === editId);
   if (!x) { $('dlgEdit').close(); return; }
   const items = editItems
-    .map(i => ({ nama: String(i.nama || '').trim(), qty: Number(i.qty) || 0, satuan: String(i.satuan || '').trim().slice(0, 30), harga: Number(i.harga) || 0 }));
+    .map(i => ({ nama: String(i.nama || '').trim(), qty: Number(i.qty) || 0, satuan: String(i.satuan || '').trim().slice(0, 30),
+      harga: Number(i.harga) || 0, ...(i.hargaTotal != null ? { hargaTotal: Number(i.hargaTotal) || 0 } : {}) }));
   if (!items.length || items.some((i, index) => !i.nama || i.qty <= 0 || i.harga <= 0 || (!i.satuan && !editItems[index].satuanBolehKosong))) {
     alert('Isi nama, jumlah, harga, dan satuan sendiri jika memilih Lainnya. Sisakan minimal satu barang.'); return;
   }
-  const totalBaru = items.reduce((s, i) => s + i.qty * i.harga, 0);
+  const totalBaru = items.reduce((s, i) => s + subtotalItem(i), 0);
   if (x.tunai && (totalBaru !== x.total || $('eTipe').value !== x.tipe)) {
     alert('Transaksi tunai tidak bisa diubah nominal atau tipenya, karena stok pecahan ikut berubah. Hapus lalu catat ulang.');
     return;
@@ -2075,7 +2211,7 @@ $('btnESimpan').onclick = () => {
   x.kategori = $('eKategori').value;
   x.tags = parseTags($('eTag').value);
   x.items = items;
-  x.total = items.reduce((s,i) => s + i.qty * i.harga, 0);
+  x.total = totalBaru;
   simpan();
   $('dlgEdit').close();
   renderSemua();
@@ -2273,27 +2409,49 @@ function cekBudget(kat) {
 // ===== FORM TRANSAKSI =====
 function itemDariForm() {
   const nama = $('iNama').value.trim();
-  const qty = Number($('iQty').value) || 0;
-  const harga = Number($('iHarga').value) || 0;
+  const qty = angkaJumlah($('iQty').value) || 0;
+  const hargaInput = Number($('iHarga').value) || 0;
   const satuan = $('iSatuan').value === '__custom__' ? $('iSatuanLain').value.trim() : $('iSatuan').value;
-  if (!nama || qty <= 0 || harga <= 0 || !satuan) return null;
-  return { nama, qty, satuan: satuan.slice(0, 30), harga };
+  if (!nama || !Number.isFinite(qty) || qty <= 0 || !Number.isFinite(hargaInput) || hargaInput <= 0 || !satuan) return null;
+  return $('iModeHarga').value === 'total'
+    ? { nama, qty, satuan: satuan.slice(0, 30), harga: hargaInput / qty, hargaTotal: hargaInput }
+    : { nama, qty, satuan: satuan.slice(0, 30), harga: hargaInput };
+}
+
+let modeHargaSebelumnya = 'total';
+function tampilkanModeHarga() {
+  const total = $('iModeHarga').value === 'total';
+  const label = document.querySelector('label[for="iHarga"]');
+  if (label) label.textContent = total ? 'Harga total (Rp)' : 'Harga per satuan (Rp)';
+  $('iHarga').placeholder = total ? 'Contoh: 12000 untuk setengah kg' : 'Contoh: 24000 per kg';
+  $('iHargaInfo').textContent = total
+    ? 'Masukkan harga yang dibayar untuk jumlah barang di atas. Contoh: telur 0,5 kg, bayar Rp12.000 → isi 12000 tanpa titik.'
+    : 'Masukkan harga untuk 1 satuan. Contoh: telur Rp24.000 per kg, jumlah 0,5 kg → total Rp12.000.';
+  renderKeranjang();
 }
 
 function cekTombolSimpan() {
   const it = itemDariForm();
   $('btnSimpan').disabled = false;
-  $('previewItem').textContent = it ? 'Akan disimpan: ' + jumlahSatuan(it) + ' × ' + it.nama + ' @ ' + hargaSatuan(it) + ' = ' + rp(it.qty * it.harga) : '';
+  $('previewItem').textContent = it ? 'Akan disimpan: ' + rincianItem(it) : '';
 }
 
 function resetFormBarang() {
   $('iNama').value = '';
   $('iHarga').value = '';
   $('iQty').value = 1;
+  $('iModeHarga').value = 'total';
+  modeHargaSebelumnya = 'total';
   $('iSatuan').value = 'buah';
   $('iSatuanLain').value = '';
   tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
   $('statusScan').textContent = '';
+  $('scanPreviewWrap').style.display = 'none';
+  $('scanPreview').removeAttribute('src');
+  $('scanReview').style.display = 'none';
+  $('scanReview').open = false;
+  $('scanTeks').textContent = '';
+  tampilkanModeHarga();
   cekTombolSimpan();
 }
 
@@ -2304,9 +2462,11 @@ function renderKeranjang() {
     const row = el('div', 'row');
     const info = el('div');
     info.appendChild(el('b', null, it.nama));
-    info.appendChild(el('div', 'muted', jumlahSatuan(it) + ' × ' + hargaSatuan(it)));
+    info.appendChild(el('div', 'muted', it.hargaTotal != null
+      ? jumlahSatuan(it) + ' · harga total ' + rp(subtotalItem(it))
+      : jumlahSatuan(it) + ' × ' + hargaSatuan(it)));
     const aksi = el('div', 'aksi');
-    aksi.appendChild(el('span', null, rp(it.qty * it.harga)));
+    aksi.appendChild(el('span', null, rp(subtotalItem(it))));
     const hap = el('button', 'kecil del', '×');
     hap.onclick = () => { keranjang.splice(i, 1); simpanKrj(); renderKeranjang(); };
     aksi.appendChild(hap);
@@ -2314,7 +2474,7 @@ function renderKeranjang() {
     box.appendChild(row);
   });
   const it = itemDariForm();
-  const total = keranjang.reduce((s,i) => s + i.qty * i.harga, 0) + (it ? it.qty * it.harga : 0);
+  const total = keranjang.reduce((s,i) => s + subtotalItem(i), 0) + (it ? subtotalItem(it) : 0);
   $('totKrj').textContent = rp(total);
   cekTombolSimpan();
 }
@@ -2326,10 +2486,20 @@ $('iSatuan').onchange = () => {
   renderKeranjang();
 };
 $('iSatuanLain').oninput = renderKeranjang;
+$('iModeHarga').onchange = () => {
+  const raw = Number($('iHarga').value);
+  const qty = angkaJumlah($('iQty').value);
+  if (raw > 0 && qty > 0) {
+    $('iHarga').value = modeHargaSebelumnya === 'total' ? raw / qty : raw * qty;
+  }
+  modeHargaSebelumnya = $('iModeHarga').value;
+  pesanForm('');
+  tampilkanModeHarga();
+};
 
 $('btnTambahKrj').onclick = () => {
   const it = itemDariForm();
-  if (!it) { alert('Isi nama barang, jumlah, satuan, dan harga per satuan dengan benar.'); return; }
+  if (!it) { pesanForm('Isi nama barang, jumlah, satuan, dan harga dengan benar.', !$('iNama').value.trim() ? 'iNama' : 'iHarga'); return; }
   keranjang.push(it);
   simpanKrj();
   resetFormBarang();
@@ -2348,15 +2518,15 @@ $('btnSimpan').onclick = () => {
   let items = keranjang.map(i => ({ ...i }));
   if (cur) items.push(cur);
   if (!items.length) {
-    const fokus = !$('iNama').value.trim() ? 'iNama' : !(Number($('iQty').value) > 0) ? 'iQty' : !$('iSatuan').value || ($('iSatuan').value === '__custom__' && !$('iSatuanLain').value.trim()) ? 'iSatuanLain' : 'iHarga';
-    pesanForm('Isi nama barang, jumlah, satuan, dan harga per satuan sebelum menyimpan.', fokus);
+    const fokus = !$('iNama').value.trim() ? 'iNama' : !(angkaJumlah($('iQty').value) > 0) ? 'iQty' : !$('iSatuan').value || ($('iSatuan').value === '__custom__' && !$('iSatuanLain').value.trim()) ? 'iSatuanLain' : 'iHarga';
+    pesanForm('Isi nama barang, jumlah, satuan, dan harga sebelum menyimpan.', fokus);
     return;
   }
   if (!cur && ($('iNama').value.trim() || $('iHarga').value.trim())) {
     pesanForm('Barang yang sedang diisi belum lengkap. Lengkapi atau kosongkan sebelum menyimpan.', !$('iNama').value.trim() ? 'iNama' : 'iHarga');
     return;
   }
-  const total = items.reduce((s,i) => s + i.qty * i.harga, 0);
+  const total = items.reduce((s,i) => s + subtotalItem(i), 0);
   const judul = $('judul').value.trim() || (items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
   const kat = $('kategori').value;
   const tunai = ambilTunaiForm(tipe, total);
@@ -2400,43 +2570,122 @@ function muatTesseract() {
 }
 
 function bacaStruk(teks) {
-  const baris = teks.split('\n').map(s => s.trim()).filter(Boolean);
-  const angka = s => [...s.matchAll(/\d{1,3}(?:[.,]\d{3})+|\d{3,}/g)].map(m => Number(m[0].replace(/[.,]/g, ''))).filter(n => n > 0);
-  let total = 0;
-  const kunci = baris.filter(b => /total|grand|bayar/i.test(b) && !/sub/i.test(b));
-  for (let i = kunci.length - 1; i >= 0 && !total; i--) {
-    const a = angka(kunci[i]);
-    if (a.length) total = Math.max(...a);
+  const baris = teks.split(/\r?\n/).map(s => s.trim().replace(/(\d)\s+(?=\d{3}\b)/g, '$1.')).filter(Boolean);
+  const nominal = s => [...s.matchAll(/(?:^|[^\d])(?:Rp\.?\s*)?(\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{2})?|\d{1,8}(?:[.,]\d{2})?)(?!\d)/gi)]
+    .map(m => {
+      const raw = m[1];
+      const desimal = /[.,]\d{2}$/.test(raw);
+      return Number(raw.replace(/\D/g, '')) / (desimal ? 100 : 1);
+    }).filter(n => Number.isFinite(n) && n >= 100 && n <= 100000000);
+  let total = 0, nilai = 0;
+  baris.forEach((line, i) => {
+    const b = line.replace(/t0tal/ig, 'total');
+    if (/sub\s*total|total\s*(?:item|barang|qty)|diskon|potongan|kembali/i.test(b)) return;
+    const label = /grand\s*total|total(?:\s*(?:belanja|bayar|tagihan|harga))?|jumlah\s*(?:bayar|tagihan)|harus\s*dibayar/i.exec(b);
+    if (!label) return;
+    const sesudah = b.slice(label.index + label[0].length);
+    let angka = nominal(sesudah);
+    if (!angka.length && i + 1 < baris.length && !/[a-z]{3,}/i.test(baris[i + 1].replace(/rp/ig, ''))) {
+      angka = nominal(baris[i + 1]);
+    }
+    const skor = /grand\s*total|total\s*(?:bayar|belanja|tagihan)|harus\s*dibayar/i.test(label[0]) ? 3 : 2;
+    if (angka.length && skor >= nilai) { total = angka[0]; nilai = skor; }
+  });
+  const produk = baris.filter(b => /[a-z]{3,}/i.test(b) && nominal(b).length &&
+    !/total|bayar|tunai|kembali|diskon|pajak|ppn|kasir|telp|alamat|struk|jumlah/i.test(b));
+  const nama = produk.length === 1 ? produk[0].replace(/(?:Rp\.?\s*)?\d[\d.,]*\s*$/i, '').trim().slice(0, 40) : '';
+  return { nama, total, teks: baris.join('\n') };
+}
+
+async function siapkanGambarScan(file) {
+  let sumber;
+  try { sumber = await createImageBitmap(file, { imageOrientation: 'from-image' }); }
+  catch (e) {
+    sumber = await new Promise((ok, gagal) => {
+      const url = URL.createObjectURL(file), img = new Image();
+      img.onload = () => { URL.revokeObjectURL(url); ok(img); };
+      img.onerror = () => { URL.revokeObjectURL(url); gagal(new Error('gambar tidak terbaca')); };
+      img.src = url;
+    });
   }
-  if (!total) {
-    const semua = baris.flatMap(angka);
-    if (semua.length) total = Math.max(...semua);
+  const w = sumber.naturalWidth || sumber.width, h = sumber.naturalHeight || sumber.height;
+  if (!w || !h) throw new Error('ukuran gambar tidak valid');
+  const skala = Math.min(3, 2200 / Math.max(w, h), Math.max(1, 1500 / Math.max(w, h)));
+  const asli = document.createElement('canvas');
+  asli.width = Math.max(1, Math.round(w * skala));
+  asli.height = Math.max(1, Math.round(h * skala));
+  asli.getContext('2d').drawImage(sumber, 0, 0, asli.width, asli.height);
+  const olah = document.createElement('canvas');
+  olah.width = asli.width; olah.height = asli.height;
+  const ctx = olah.getContext('2d');
+  ctx.filter = 'grayscale(1) contrast(1.5)';
+  ctx.drawImage(asli, 0, 0);
+  if (sumber.close) sumber.close();
+  return { asli, olah };
+}
+
+let scanBerjalan = false;
+async function prosesScan(file) {
+  if (!file || scanBerjalan) return;
+  scanBerjalan = true;
+  const st = $('statusScan');
+  $('btnScan').disabled = $('btnScanGaleri').disabled = true;
+  st.textContent = 'Menyiapkan gambar...';
+  const previewUrl = URL.createObjectURL(file);
+  $('scanPreview').onload = () => URL.revokeObjectURL(previewUrl);
+  $('scanPreview').onerror = () => URL.revokeObjectURL(previewUrl);
+  $('scanPreview').src = previewUrl;
+  $('scanPreviewWrap').style.display = 'block';
+  $('scanReview').style.display = 'none';
+  let worker;
+  try {
+    await muatTesseract();
+    const { asli, olah } = await siapkanGambarScan(file);
+    st.textContent = 'Memuat pembaca teks...';
+    worker = await Tesseract.createWorker(['ind', 'eng'], 1, {
+      logger: m => {
+        if (m.status && m.progress > 0) st.textContent = 'Membaca gambar... ' + Math.round(m.progress * 100) + '%';
+      }
+    });
+    st.textContent = 'Mencari total pada struk...';
+    const pertama = bacaStruk((await worker.recognize(olah, { rotateAuto: true })).data.text || '');
+    let hasil = pertama, teksLain = '';
+    if (!pertama.total) {
+      st.textContent = 'Mencoba gambar asli untuk membaca ulang...';
+      const kedua = bacaStruk((await worker.recognize(asli, { rotateAuto: true })).data.text || '');
+      if (kedua.total || kedua.teks.length > pertama.teks.length) hasil = kedua;
+      teksLain = hasil === pertama ? kedua.teks : pertama.teks;
+    }
+    $('scanTeks').textContent = hasil.teks + (teksLain ? '\n\n--- Pembacaan alternatif ---\n' + teksLain : '');
+    $('scanReview').style.display = hasil.teks || teksLain ? 'block' : 'none';
+    if (hasil.nama && !$('iNama').value.trim()) $('iNama').value = hasil.nama;
+    if (hasil.total && !keranjang.length && !$('iHarga').value.trim()) {
+      $('iModeHarga').value = 'total'; modeHargaSebelumnya = 'total';
+      $('iHarga').value = hasil.total;
+      tampilkanModeHarga();
+      st.textContent = 'Total terdeteksi ' + rp(hasil.total) + '. Periksa nama, jumlah, satuan, dan harga sebelum menyimpan.';
+    } else if (hasil.total) {
+      st.textContent = 'Total struk terdeteksi ' + rp(hasil.total) + '. Harga yang sudah diisi atau barang di keranjang tidak diganti. Periksa manual.';
+    } else {
+      st.textContent = 'Baris total belum terbaca dengan yakin. Lihat gambar/teks di bawah, lalu isi harga secara manual.';
+    }
+  } catch (err) {
+    st.textContent = 'Gagal membaca gambar. Coba foto lebih terang dan lurus, atau pilih gambar lain. Scan memerlukan internet saat memuat pembaca teks.';
+  } finally {
+    if (worker) await worker.terminate().catch(() => {});
+    scanBerjalan = false;
+    $('btnScan').disabled = $('btnScanGaleri').disabled = false;
+    renderKeranjang();
   }
-  const nama = baris.find(b => /[a-zA-Z]{3,}/.test(b) && !/total|struk|tanggal|kasir|alamat|telp|pajak|terima kasih/i.test(b)) || '';
-  return { nama: nama.slice(0, 40), total };
 }
 
 $('btnScan').onclick = () => $('fileScan').click();
-$('fileScan').onchange = async e => {
+$('btnScanGaleri').onclick = () => $('fileScanGaleri').click();
+['fileScan', 'fileScanGaleri'].forEach(id => $(id).onchange = async e => {
   const f = e.target.files[0];
-  if (!f) return;
-  const st = $('statusScan');
-  st.textContent = 'Membaca struk... (proses bisa agak lama)';
-  try {
-    await muatTesseract();
-    const hasil = await Tesseract.recognize(f, 'ind+eng');
-    const { nama, total } = bacaStruk(hasil.data.text);
-    if (nama) $('iNama').value = nama;
-    if (total) { $('iQty').value = 1; $('iHarga').value = total; }
-    st.textContent = total
-      ? 'Terisi otomatis. Periksa dulu, lalu tekan Simpan transaksi atau Tambah barang lain.'
-      : 'Total tidak terbaca. Isi manual.';
-  } catch (err) {
-    st.textContent = 'Gagal membaca struk. Coba foto yang lebih terang dan lurus, atau isi manual.';
-  }
-  cekTombolSimpan();
   e.target.value = '';
-};
+  await prosesScan(f);
+});
 
 // ===== TARGET TABUNGAN =====
 function renderWish() {
@@ -2746,10 +2995,13 @@ function catatLagi(id) {
   $('tTag').value = (lama.tags || []).join(', ');
   $('iNama').value = pertama.nama;
   $('iQty').value = pertama.qty;
-  $('iHarga').value = pertama.harga;
+  $('iModeHarga').value = 'total';
+  modeHargaSebelumnya = 'total';
+  $('iHarga').value = subtotalItem(pertama);
   isiSatuanSelect($('iSatuan'), pertama.satuan || 'buah');
   $('iSatuanLain').value = SATUAN.includes(pertama.satuan) ? '' : (pertama.satuan || '');
   tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
+  tampilkanModeHarga();
   fotoForm = null;
   $('fFoto').value = '';
   $('fotoStatus').textContent = 'Foto struk (opsional) disimpan di HP, dikecilkan otomatis.';
@@ -2787,7 +3039,7 @@ $('btnExcel').onclick = () => {
   const baris = [['Tanggal','Tipe','Transaksi','Kategori','Barang','Jumlah','Satuan','Harga per Satuan','Subtotal','Tag']];
   [...db.transaksi].sort((x,y) => x.tanggal.localeCompare(y.tanggal)).forEach(x => {
     x.items.forEach(i => baris.push([tglIndo(x.tanggal), x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran',
-      x.judul, x.kategori, i.nama, i.qty, i.satuan || '', i.harga, i.qty * i.harga, (x.tags || []).join(' ')]));
+      x.judul, x.kategori, i.nama, i.qty, i.satuan || '', i.harga, subtotalItem(i), (x.tags || []).join(' ')]));
   });
   baris.push([]);
   baris.push(['', '', '', '', '', '', '', 'Saldo total', saldoTotal(), '']);
@@ -2890,7 +3142,7 @@ function simpanTampilan() {
 function terapkanTampilan() {
   const h = document.documentElement;
   h.dataset.tema = tampilan.tema;
-  h.dataset.gaya = ['biasa', 'berwarna', 'neo', 'material', 'soft', 'retro', 'paper', 'flat'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
+  h.dataset.gaya = ['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
   h.dataset.efek = ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'hd';
   $('bgLayer').style.filter = tampilan.buram ? 'blur(' + tampilan.buram + 'px)' : 'none';
   $('buramLabel').textContent = (tampilan.buram || 0) + 'px';
@@ -2900,14 +3152,14 @@ function terapkanTampilan() {
   $('bgLayer').style.backgroundImage = url;
   $('bgPrev').style.backgroundImage = url;
   $('kacaLabel').textContent = tampilan.kaca + '%';
-  $('cardLatar').style.display = ['biasa','berwarna','neo','material','soft','retro','paper','flat'].includes(tampilan.gaya) ? 'none' : '';
+  $('cardLatar').style.display = ['biasa','berwarna','neo','blok','material','soft','retro','paper','flat'].includes(tampilan.gaya) ? 'none' : '';
   const aks = tampilan.aksen || { h: 215, s: 90 };
   h.style.setProperty('--aksen-h', aks.h);
   h.style.setProperty('--aksen-s', aks.s + '%');
   const kunciPalet = ['--ink','--muted','--ok','--bad','--glass','--glass-line','--navbg','--input',
     '--rowline','--track','--ghostbg','--ghostink','--pillbg','--pillink','--card-solid','--line-solid',
     '--delbg','--delink','--detline','--keranjangline','--keranjangbg','--banbg','--banink','--secbg','--sec2bg','--sec2ink'];
-  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false && !['biasa', 'berwarna', 'neo', 'material', 'soft', 'retro', 'paper', 'flat'].includes(tampilan.gaya)) {
+  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false && !['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat'].includes(tampilan.gaya)) {
     const terang = tampilan.aksen.terang === true;
     h.dataset.adaptif = terang ? 'terang' : 'gelap';
     paletAdaptif(tampilan.aksen, terang, tampilan.kaca / 100, kunciPalet, h);
@@ -2965,7 +3217,7 @@ $('sBuram').oninput = () => {
   terapkanTampilan();
 };
 $('sBuram').onchange = () => simpanTampilan();
-$('sGaya').value = ['biasa', 'berwarna', 'neo', 'material', 'soft', 'retro', 'paper', 'flat'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
+$('sGaya').value = ['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
 $('sEfek').value = ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'hd';
 $('sEfek').onchange = () => {
   tampilan.efek = $('sEfek').value;
@@ -3083,7 +3335,7 @@ function cariPembayaran(total, stok) {
 
 function totalForm() {
   const it = itemDariForm();
-  return keranjang.reduce((s, i) => s + i.qty * i.harga, 0) + (it ? it.qty * it.harga : 0);
+  return keranjang.reduce((s, i) => s + subtotalItem(i), 0) + (it ? subtotalItem(it) : 0);
 }
 
 // Membaca pecahan dari form dan memeriksa stok. Mengembalikan null jika bukan tunai.
@@ -3762,6 +4014,8 @@ const PANDUAN_GAYA = {
     'Kartu putih dengan garis tepi berwarna per jenis: saldo kuning, pemasukan hijau, pengeluaran merah.\nLatar gambar dan Mode Adaptif TIDAK tampil.\n\nCara pakai: langsung dipilih, tidak perlu pengaturan lain.' },
   neo: { judul: 'Gaya Neobrutal', teks:
     'Garis hitam tebal dan bayangan keras dengan warna cerah.\nLatar gambar dan Mode Adaptif TIDAK tampil.\n\nCara pakai: paling cocok dengan tema terang. Di tema gelap, garisnya berubah jadi putih.' },
+  blok: { judul: 'Gaya Blok Pixel', teks:
+    'Tampilan kotak seperti menu game dengan warna rumput, tanah, dan panel inventori.\nTema Terang dan Gelap tetap bisa dipilih. Latar foto dan warna Adaptif tidak tampil.\n\nCara pakai: pilih gaya ini di Setelan. Catatan dan perhitunganmu tidak berubah.' },
   material: { judul: 'Material You', teks:
     'Kartu melengkung dengan warna aksen.\nLatar gambar TIDAK tampil, tetapi warna aksen dari foto latar tetap dipakai kalau fotonya pernah diupload.\n\nCara pakai: tombol dan tab aktif mengikuti warna aksen.' },
   soft: { judul: 'Soft UI', teks:
@@ -3797,7 +4051,7 @@ const BANTUAN = {
   budget: { judul: 'Cara pakai: Batas anggaran', teks:
     '1. Pilih kategori dan periode (minggu atau bulan), lalu isi batasnya.\n2. Bar berubah oranye di 80% dan merah di 100%.\n3. Saat menyimpan pengeluaran di kategori itu, aplikasi memberi peringatan.' },
   catat: { judul: 'Cara pakai: Catat transaksi', teks:
-    '1. Pilih Pengeluaran atau Pemasukan, lalu isi tanggal dan kategori.\n2. Isi nama, jumlah (boleh pecahan seperti 0,5), satuan, dan harga per satuan.\n3. Untuk satu barang, langsung tekan Simpan transaksi. Untuk beberapa barang, tekan + Tambah barang lain.\n4. Buka Detail lain untuk nama transaksi, scan struk, tag, atau foto.' },
+    '1. Pilih Pengeluaran atau Pemasukan, lalu isi tanggal dan kategori.\n2. Isi nama, jumlah (boleh 0,5), dan satuan seperti kg. Pilih Harga total untuk mengetik uang yang benar-benar dibayar: telur 0,5 kg seharga Rp12.000 cukup isi 12000.\n3. Kalau yang diketahui harga per kg, pilih Harga per satuan.\n4. Untuk satu barang, langsung tekan Simpan transaksi. Untuk beberapa barang, tekan + Tambah barang lain.\n5. Buka Detail lain untuk scan struk lewat Kamera atau Galeri. Periksa hasilnya sebelum menyimpan.' },
 };
 
 function bantuan(k) {
@@ -3821,10 +4075,10 @@ function susunBeranda() {
   tambahan.appendChild(el('p', 'muted', 'Buka jika ingin menambahkan informasi pada transaksi ini.'));
   tambahan.appendChild($('judul').parentElement);
   tambahan.appendChild($('tTag').parentElement);
-  const barisTombol = $('btnScan').parentElement;
-  tambahan.appendChild($('btnScan'));
-  barisTombol.classList.remove('grid2');
+  tambahan.appendChild($('pilihanScan'));
   tambahan.appendChild($('statusScan'));
+  tambahan.appendChild($('scanPreviewWrap'));
+  tambahan.appendChild($('scanReview'));
   tambahan.appendChild($('fFoto').parentElement);
   tambahan.appendChild($('fotoStatus'));
   tambahan.appendChild($('btnKosongkan'));
@@ -3888,6 +4142,8 @@ if (sudahAdaSaldo) {
 }
 isiKategori();
 isiSatuanSelect($('iSatuan'));
+modeHargaSebelumnya = $('iModeHarga').value;
+tampilkanModeHarga();
 isiSatuanSelect($('rbSatuan'));
 isiKategoriBudget();
 isiKategoriBerulang();
