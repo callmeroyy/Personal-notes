@@ -38,6 +38,11 @@
   select{background-image:linear-gradient(45deg,transparent 50%,#64748b 50%),linear-gradient(135deg,#64748b 50%,transparent 50%);background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:32px}
   input[type=file]{padding:9px}
   input:focus,select:focus{border-color:var(--pri2);box-shadow:0 0 0 4px rgba(99,102,241,.15)}
+  .field-wrap{min-width:0;margin:0 0 11px}
+  .field-label{display:block;margin:0 0 6px;color:var(--muted);font-size:12.5px;font-weight:700;line-height:1.35}
+  .field-wrap > input,.field-wrap > select{margin-bottom:0}
+  .grid2 > .field-wrap,.grid2 > div > .field-wrap{margin-bottom:10px}
+  .field-wrap:focus-within .field-label{color:var(--ghostink)}
 
   button{font-size:15px;padding:12px 14px;border-radius:12px;border:none;width:100%;margin-bottom:10px;background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;font-weight:600;cursor:pointer;box-shadow:0 3px 10px rgba(79,70,229,.25);transition:transform .08s,opacity .15s;font-family:inherit}
   button:active{transform:scale(.98)}
@@ -98,9 +103,11 @@
   dialog{width:92%;max-width:520px;border:none;border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(15,23,42,.3);background:var(--card);color:var(--ink)}
   dialog::backdrop{background:rgba(15,23,42,.45)}
   dialog h2{font-size:17px;margin-bottom:14px}
-  .itemrow{display:grid;grid-template-columns:2fr 1fr 1.3fr auto;gap:6px;align-items:center;margin-bottom:6px}
-  .itemrow input{margin:0;padding:10px 9px}
-  .itemrow button{width:auto;margin:0;padding:8px 11px;box-shadow:none}
+  .itemrow{display:grid;grid-template-columns:1fr 1fr;gap:6px;align-items:center;margin-bottom:10px;padding:10px;border:1px solid var(--line);border-radius:14px}
+  .itemrow input,.itemrow select{margin:0;padding:10px 9px;min-width:0}
+  .itemrow .item-nama,.itemrow .item-satuan-lain{grid-column:1 / -1}
+  .itemrow .field-wrap{margin:0}
+  .itemrow button{width:100%;margin:0;padding:10px;box-shadow:none;align-self:end}
   .kosong{text-align:center;padding:18px 0;color:var(--muted);font-size:13px}
   .preview{background:var(--track);border-radius:12px;padding:8px;margin-bottom:12px;max-height:60vh;overflow:auto}
   .preview canvas,.preview img{width:100%;height:auto;display:block;border-radius:8px;background:#fff}
@@ -724,6 +731,32 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .banner{background:var(--st-soft) !important;color:var(--st-ink) !important;border:var(--st-border) !important;border-radius:var(--st-r) !important;backdrop-filter:none !important}
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .keranjang{background:var(--st-soft) !important;border:1px dashed var(--st-line) !important;border-radius:var(--st-r) !important;backdrop-filter:none !important}
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .merah{color:var(--st-bad)} html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .hijau{color:var(--st-ok)}
+
+  .home-lead{margin:-4px 4px 16px;color:var(--muted);font-size:13px;line-height:1.5}
+  .more-heading{margin:24px 4px 10px}
+  .more-heading h2{margin:0 0 4px;font-size:17px}
+  .more-heading p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+  .feature-group{margin-bottom:10px}
+  .feature-group > summary.card{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;margin-bottom:10px;color:var(--ink);font-size:15px;font-weight:700}
+  .feature-group > summary.card::-webkit-details-marker{display:none}
+  .feature-group > summary.card::after{content:'⌄';font-size:24px;line-height:1;color:var(--ghostink);transition:transform .2s}
+  .feature-group[open] > summary.card::after{transform:rotate(180deg)}
+  .feature-group .feature-desc{display:block;margin-top:3px;color:var(--muted);font-size:12.5px;font-weight:400;line-height:1.4}
+  .feature-group > .card{margin:0 0 10px}
+  .quick-extra{border-top:1px solid var(--line);margin:12px 0;padding-top:12px}
+  .quick-extra > summary{font-size:14px;color:var(--ghostink);font-weight:700;padding:4px 0 10px;list-style:none}
+  .quick-extra > summary::-webkit-details-marker{display:none}
+  .quick-extra > summary::before{content:'＋';margin-right:7px}
+  .quick-extra[open] > summary::before{content:'−'}
+  .quick-extra > .muted{margin:0 0 12px}
+  .first-steps{line-height:1.5}
+  .first-steps ol{margin:4px 0 14px;padding-left:22px;font-size:14px}
+  .first-steps li{margin:5px 0}
+  .first-steps .aksi button{flex:1;min-width:125px;margin:0}
+  .save-status{margin:-6px 4px 16px;font-size:12px;color:var(--muted);line-height:1.5}
+  .save-status button{width:auto;margin:0;padding:0;background:none;box-shadow:none;color:var(--ghostink);font-size:12px;text-decoration:underline}
+  .form-error{color:var(--bad);font-size:13px;margin:0 0 10px;line-height:1.45}
+  .toast-note{position:fixed;left:50%;bottom:calc(82px + env(safe-area-inset-bottom));transform:translateX(-50%);width:max-content;max-width:calc(100vw - 30px);background:var(--ink);color:var(--card);border-radius:12px;padding:11px 16px;z-index:20;box-shadow:var(--shadow);font-size:14px;text-align:center}
 </style>
 
 </head>
@@ -745,6 +778,20 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <b id="saldo"></b>
     <div class="mini"><span>Pemasukan total <span id="totMasuk"></span></span><span>Pengeluaran total <span id="totKeluar"></span></span></div>
   </div>
+  <p class="home-lead">Catat transaksi harian di bawah ini. Fitur lainnya bisa dibuka kapan saja.</p>
+  <div class="card first-steps" id="panduanAwal" style="display:none">
+    <h2>Mulai dari catatan pertama</h2>
+    <ol>
+      <li>Isi barang di bawah, misalnya telur 0,5 kg dengan harga per kg.</li>
+      <li>Tekan <b>Simpan transaksi</b>, lalu lihat hasilnya di Histori terbaru.</li>
+      <li>Buat cadangan dari menu Data &amp; backup saat catatanmu mulai bertambah.</li>
+    </ol>
+    <div class="aksi">
+      <button id="btnMulaiCatat">Catat sekarang</button>
+      <button class="ghost" id="btnLewatiPanduan">Lewati panduan</button>
+    </div>
+  </div>
+  <p class="save-status" id="statusSimpan" aria-live="polite"></p>
 
   <div class="card" id="cardMingguan">
     <h2 id="judulMingguan">Ringkasan minggu ini</h2>
@@ -770,7 +817,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <button id="btnCatatSemua">Catat semua</button>
   </div>
 
-  <div class="card">
+  <div class="card" id="cardPeriode">
     <h2>Periode</h2>
     <div class="grid2">
       <div><span class="muted">Dari</span><input type="date" id="fDari"></div>
@@ -784,14 +831,14 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <button class="sec" id="btnRekap" style="margin-top:12px">🖼️ Cetak rekap periode ini (gambar)</button>
   </div>
 
-  <div class="card">
+  <div class="card" id="cardHistori">
     <h2 id="judulHistori">Histori terbaru</h2>
     <input type="text" id="bCari" placeholder="Cari nama, kategori, atau tag">
     <div id="histori5"></div>
     <button class="ghost" onclick="goto('riwayat')">Lihat semua riwayat</button>
   </div>
 
-  <div class="card">
+  <div class="card" id="cardSaldoAwal">
     <h2>Saldo awal</h2>
     <p class="sub" id="saldoAwalInfo"></p>
     <div class="grid2">
@@ -826,6 +873,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="nontunai">Non-tunai (transfer / e-wallet)</option>
       <option value="tunai">Tunai (pakai pecahan)</option>
     </select>
+    <p class="muted" id="iCaraInfo" style="display:none;margin:-3px 0 10px">Pilih Tunai agar stok uang fisik otomatis berkurang sesuai pecahan yang dibayar dan bertambah sesuai kembalian.</p>
     <div id="pfWrap" style="display:none">
       <span class="muted" id="pfLabel">Dibayar pakai pecahan (lembar)</span>
       <div id="pbGrid" class="grid-denom"></div>
@@ -841,12 +889,14 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <span class="muted">Barang</span>
       <input type="text" id="iNama" placeholder="Nama barang (contoh: Nasi goreng)">
       <div class="grid2">
-        <input type="number" id="iQty" placeholder="Jumlah" value="1" min="1" inputmode="numeric">
-        <input type="number" id="iHarga" placeholder="Harga satuan (Rp)" min="1" inputmode="numeric">
+        <input type="number" id="iQty" placeholder="Jumlah (misal 0,5)" value="1" min="0.001" step="any" inputmode="decimal">
+        <select id="iSatuan" aria-label="Satuan barang"></select>
       </div>
+      <input type="text" id="iSatuanLain" placeholder="Tulis satuan sendiri (contoh: dus)" maxlength="30" style="display:none">
+      <input type="number" id="iHarga" placeholder="Harga per satuan (Rp)" min="1" inputmode="numeric">
       <div class="grid2">
         <button class="sec" id="btnScan">📷 Scan struk</button>
-        <button class="ghost" id="btnTambahKrj">+ Ke keranjang</button>
+        <button class="ghost" id="btnTambahKrj">+ Tambah barang lain</button>
       </div>
       <input type="file" id="fileScan" accept="image/*" capture="environment" style="display:none">
       <p class="muted" id="statusScan" style="margin:0 0 8px"></p>
@@ -859,11 +909,12 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <p class="muted" id="fotoStatus" style="margin:0 0 10px">Foto struk (opsional) disimpan di HP, dikecilkan otomatis.</p>
 
     <button id="btnSimpan" disabled>Simpan transaksi</button>
+    <p class="form-error" id="pesanForm" role="alert" style="display:none"></p>
     <button class="sec" id="btnKosongkan">Kosongkan keranjang</button>
-    <p class="muted" style="margin:6px 0 0">Cukup isi nama, jumlah, dan harga, lalu tekan Simpan. Pakai keranjang kalau mau beberapa barang sekaligus.</p>
+    <p class="muted" style="margin:6px 0 0">Satu barang? Langsung simpan. Beberapa barang? Tekan “Tambah barang lain” setiap selesai mengisi satu barang.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="cardBerulang">
     <h2>Transaksi berulang<button class="kecil ghost" onclick="bantuan('berulang')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
     <p class="sub">Contoh: uang kos, kuota, atau uang saku. Muncul di "Perlu dicatat" saat tanggalnya tiba.</p>
     <input type="text" id="rbNama" placeholder="Nama (contoh: Uang kos)">
@@ -875,9 +926,11 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <select id="rbKat"></select>
     </div>
     <div class="grid2">
-      <input type="number" id="rbQty" placeholder="Jumlah" value="1" min="1" inputmode="numeric">
-      <input type="number" id="rbHarga" placeholder="Nominal (Rp)" min="1" inputmode="numeric">
+      <input type="number" id="rbQty" placeholder="Jumlah" value="1" min="0.001" step="any" inputmode="decimal">
+      <select id="rbSatuan" aria-label="Satuan transaksi berulang"></select>
     </div>
+    <input type="text" id="rbSatuanLain" placeholder="Satuan sendiri" maxlength="30" style="display:none">
+    <input type="number" id="rbHarga" placeholder="Harga per satuan (Rp)" min="1" inputmode="numeric">
     <div class="grid2">
       <select id="rbPeriode">
         <option value="bulan">Setiap bulan</option>
@@ -889,7 +942,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <div id="listBerulang"></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="cardBudget">
     <h2>Batas anggaran<button class="kecil ghost" onclick="bantuan('budget')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
     <div class="grid2">
       <select id="bKategori"></select>
@@ -903,7 +956,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <div id="listBudget"></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="cardWish">
     <h2>Target tabungan<button class="kecil ghost" onclick="bantuan('target')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
     <input type="text" id="wNama" placeholder="Barang yang ingin dibeli">
     <div class="grid2">
@@ -1007,6 +1060,10 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <button class="ghost" onclick="goto('data')" style="margin-top:4px">💾 Buka Data &amp; backup</button>
   <div class="card">
     <h2>Tampilan</h2>
+    <select id="sBeranda">
+      <option value="ringkas">Ringkas (mudah untuk mulai)</option>
+      <option value="lengkap">Lengkap (semua fitur terbuka)</option>
+    </select>
     <span class="muted">Gaya tampilan</span>
     <select id="sGaya">
       <option value="glass">Glass (kaca transparan)</option>
@@ -1039,7 +1096,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="mono">Rapi (angka monospace)</option>
       <option value="tegas">Tegas (tebal)</option>
     </select>
-    <span class="muted">Warna teks</span>
+    <label class="field-label" for="sTeks">Warna teks</label>
     <div class="setel-row">
       <input type="color" id="sTeks" style="width:72px;height:44px;padding:4px;margin:0">
       <button class="ghost kecil" id="btnTeksReset">Otomatis</button>
@@ -1051,7 +1108,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="dark">Gelap</option>
     </select>
     <div class="setel-row">
-      <span class="muted">Transparansi kaca</span>
+      <label class="field-label" for="sKaca">Transparansi kaca</label>
       <b id="kacaLabel"></b>
     </div>
     <input type="range" id="sKaca" min="20" max="90" step="5">
@@ -1078,7 +1135,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <input type="file" id="fBg" accept="image/*">
     <p class="muted" id="bgStatus">Pilih foto dari galeri sebagai latar. Foto dikecilkan otomatis dan disimpan di HP ini.</p>
     <div class="setel-row">
-      <span class="muted">Buram latar</span>
+      <label class="field-label" for="sBuram">Buram latar</label>
       <b id="buramLabel">0px</b>
     </div>
     <input type="range" id="sBuram" min="0" max="20" step="1">
@@ -1130,9 +1187,11 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <select id="ebKat"></select>
   </div>
   <div class="grid2">
-    <input type="number" id="ebQty" placeholder="Jumlah" min="1" inputmode="numeric">
-    <input type="number" id="ebHarga" placeholder="Nominal (Rp)" min="1" inputmode="numeric">
+    <input type="number" id="ebQty" placeholder="Jumlah" min="0.001" step="any" inputmode="decimal">
+    <select id="ebSatuan" aria-label="Satuan transaksi berulang"></select>
   </div>
+  <input type="text" id="ebSatuanLain" placeholder="Satuan sendiri" maxlength="30" style="display:none">
+  <input type="number" id="ebHarga" placeholder="Harga per satuan (Rp)" min="1" inputmode="numeric">
   <div class="grid2">
     <select id="ebPeriode">
       <option value="bulan">Setiap bulan</option>
@@ -1212,6 +1271,60 @@ const parseTags = s => [...new Set(String(s || '').split(',').map(t => t.trim())
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
 const el = (tag, cls, teks) => { const e = document.createElement(tag); if (cls) e.className = cls; if (teks !== undefined) e.textContent = teks; return e; };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SATUAN = ['buah','butir','kg','gram','liter','ml','botol','galon','bungkus','lembar','pcs','paket'];
+const jumlah = n => Number(n).toLocaleString('id-ID', { maximumFractionDigits: 6 });
+const jumlahSatuan = i => jumlah(i.qty) + (i.satuan ? ' ' + i.satuan : '');
+const hargaSatuan = i => rp(i.harga) + (i.satuan ? '/' + i.satuan : '');
+const satuanDariForm = (pilihan, lainnya) => pilihan.value === '__custom__' ? lainnya.value.trim().slice(0, 30) : pilihan.value;
+function isiSatuanSelect(select, pilih = 'buah', bolehKosong = false) {
+  select.innerHTML = '';
+  const tambah = (nilai, teks) => { const o = document.createElement('option'); o.value = nilai; o.textContent = teks; select.appendChild(o); };
+  if (bolehKosong) tambah('', 'Tanpa satuan (catatan lama)');
+  SATUAN.forEach(s => tambah(s, s));
+  tambah('__custom__', 'Lainnya (isi sendiri)');
+  select.value = SATUAN.includes(pilih) || (bolehKosong && !pilih) ? pilih : '__custom__';
+}
+function tampilkanSatuanLain(pilihan, lainnya) {
+  const tampil = pilihan.value === '__custom__';
+  lainnya.style.display = tampil ? '' : 'none';
+  if (lainnya.parentElement.classList.contains('field-wrap')) lainnya.parentElement.style.display = tampil ? '' : 'none';
+}
+function pasangLabelForm() {
+  const label = {
+    fDari:'Dari tanggal', fSampai:'Sampai tanggal', bCari:'Cari histori',
+    bSaldoAwal:'Jumlah saldo awal (Rp)', bSaldoTgl:'Tanggal saldo awal',
+    tipe:'Jenis transaksi', tgl:'Tanggal transaksi', judul:'Nama transaksi (opsional)',
+    kategori:'Kategori', iCara:'Cara pembayaran', tTag:'Tag (opsional)',
+    iNama:'Nama barang', iQty:'Jumlah barang', iSatuan:'Satuan barang',
+    iSatuanLain:'Satuan sendiri', iHarga:'Harga per satuan (Rp)', fFoto:'Foto struk (opsional)',
+    rbNama:'Nama transaksi berulang', rbTipe:'Jenis transaksi', rbKat:'Kategori',
+    rbQty:'Jumlah', rbSatuan:'Satuan', rbSatuanLain:'Satuan sendiri',
+    rbHarga:'Harga per satuan (Rp)', rbPeriode:'Diulang setiap', rbMulai:'Mulai tanggal',
+    bKategori:'Kategori anggaran', bPeriode:'Periode anggaran', bLimit:'Batas anggaran (Rp)',
+    wNama:'Nama target tabungan', wTarget:'Target harga (Rp)', wTgl:'Tenggat (opsional)',
+    rDari:'Dari tanggal', rSampai:'Sampai tanggal', rTipe:'Jenis transaksi', rCari:'Cari transaksi',
+    gDari:'Dari tanggal', gSampai:'Sampai tanggal', cmpA:'Hari pertama', cmpB:'Hari pembanding',
+    sPengingat:'Jam pengingat', sBackupIngat:'Ingatkan backup',
+    sBeranda:'Tampilan Beranda', sGaya:'Gaya tampilan', sEfek:'Kualitas efek', sAdaptif:'Warna mengikuti foto',
+    sFont:'Font', sTema:'Tema', sKatTipe:'Jenis kategori', kbBaru:'Nama kategori baru', fBg:'Pilih foto latar',
+    eTipe:'Jenis transaksi', eTgl:'Tanggal transaksi', eJudul:'Nama transaksi',
+    eKategori:'Kategori', eTag:'Tag (opsional)',
+    ebNama:'Nama transaksi berulang', ebTipe:'Jenis transaksi', ebKat:'Kategori',
+    ebQty:'Jumlah', ebSatuan:'Satuan', ebSatuanLain:'Satuan sendiri',
+    ebHarga:'Harga per satuan (Rp)', ebPeriode:'Diulang setiap', ebMulai:'Mulai tanggal'
+  };
+  Object.entries(label).forEach(([id, teks]) => {
+    const input = $(id);
+    const lama = input.previousElementSibling;
+    if (lama && lama.tagName === 'SPAN' && lama.classList.contains('muted')) lama.remove();
+    const wrap = el('div', 'field-wrap');
+    input.before(wrap);
+    wrap.appendChild(input);
+    const judul = el('label', 'field-label', teks);
+    judul.htmlFor = id;
+    wrap.insertBefore(judul, input);
+  });
+}
 const svg = (w, h, inner) => `<svg viewBox="0 0 ${w} ${h}" width="100%" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
 const PAL = ['#4f46e5','#16a34a','#e11d48','#f59e0b','#9333ea','#0891b2','#64748b','#ec4899'];
 
@@ -1222,8 +1335,8 @@ const KAT = {
 
 function normal(x) {
   const items = Array.isArray(x.items)
-    ? x.items.map(i => ({ nama: String(i.nama), qty: Number(i.qty) || 1, harga: Number(i.harga) || 0 }))
-    : [{ nama: String(x.nama || 'Barang'), qty: Number(x.qty) || 1, harga: Number(x.harga ?? x.jumlah) || 0 }];
+    ? x.items.map(i => ({ nama: String(i.nama), qty: Number(i.qty) || 1, satuan: String(i.satuan || '').trim(), harga: Number(i.harga) || 0 }))
+    : [{ nama: String(x.nama || 'Barang'), qty: Number(x.qty) || 1, satuan: String(x.satuan || '').trim(), harga: Number(x.harga ?? x.jumlah) || 0 }];
   const total = items.reduce((s, i) => s + i.qty * i.harga, 0);
   const judul = x.judul || (items.length === 1 ? items[0].nama : (x.nama || 'Belanja ' + tglIndo(x.tanggal)));
   return {
@@ -1256,6 +1369,7 @@ const normalBerulang = list => (list || []).filter(r => r && r.mulai).map(r => (
   tipe: r.tipe === 'masuk' ? 'masuk' : 'keluar',
   kategori: r.kategori || 'Lainnya',
   qty: Number(r.qty) || 1,
+  satuan: String(r.satuan || '').trim(),
   harga: Number(r.harga) || 0,
   periode: r.periode === 'minggu' ? 'minggu' : 'bulan',
   mulai: String(r.mulai),
@@ -1269,7 +1383,8 @@ function muat() {
       transaksi: (v3.transaksi || []).map(normal),
       wishlist: normalWish(v3.wishlist || []),
       budgets: v3.budgets || {},
-      berulang: normalBerulang(v3.berulang)
+      berulang: normalBerulang(v3.berulang),
+      uangFisik: v3.uangFisik && typeof v3.uangFisik === 'object' ? v3.uangFisik : null
     };
     const v2 = JSON.parse(localStorage.getItem(KEY_V2) || 'null');
     if (v2) return { transaksi: (v2.transaksi || []).map(normal), wishlist: normalWish(v2.wishlist || []), budgets: {}, berulang: [] };
@@ -1297,12 +1412,49 @@ let strukAktif = null;
 let rekapData = null;
 let fotoForm = null;
 let fotoAktifId = null;
+let timerPesan = null;
+let penyimpananBerhasil = true;
+
+function beriPesan(teks) {
+  let box = $('pesanSingkat');
+  if (!box) {
+    box = el('div', 'toast-note');
+    box.id = 'pesanSingkat';
+    box.setAttribute('role', 'status');
+    document.body.appendChild(box);
+  }
+  box.textContent = teks;
+  box.style.display = 'block';
+  clearTimeout(timerPesan);
+  timerPesan = setTimeout(() => { box.style.display = 'none'; }, 4500);
+}
+
+function pesanForm(teks, fokus) {
+  const box = $('pesanForm');
+  box.textContent = teks;
+  box.style.display = teks ? 'block' : 'none';
+  if (fokus) $(fokus).focus();
+}
+
+function renderPanduanStatus() {
+  const adaCatatan = db.transaksi.some(x => !x.saldoAwal);
+  $('panduanAwal').style.display = !adaCatatan && !set.panduanDilewati ? '' : 'none';
+  const terakhir = set.backupTerakhir ? 'File backup disiapkan ' + tglIndo(set.backupTerakhir) : 'Belum ada backup file';
+  const drive = set.driveSimpan ? ' · Drive: ' + tglIndo(set.driveSimpan) : '';
+  const box = $('statusSimpan');
+  box.textContent = (penyimpananBerhasil ? 'Catatan tersimpan di browser perangkat ini · ' : 'Penyimpanan perangkat gagal · ') + terakhir + drive + ' · ';
+  const tombol = el('button', null, 'Data & backup');
+  tombol.onclick = () => goto('data');
+  box.appendChild(tombol);
+}
 
 function simpan() {
   try {
     localStorage.setItem(KEY, JSON.stringify(db));
+    penyimpananBerhasil = true;
     return true;
   } catch (e) {
+    penyimpananBerhasil = false;
     alert('Penyimpanan HP penuh. Hapus beberapa foto struk, atau export backup lalu bersihkan data.');
     return false;
   }
@@ -1353,6 +1505,9 @@ function baris(x) {
   const info = el('div');
   info.appendChild(el('b', x.tipe === 'masuk' ? 'hijau' : 'merah', (x.tipe === 'masuk' ? '+ ' : '− ') + x.judul));
   info.appendChild(el('div', 'muted', tglIndo(x.tanggal) + ' · ' + x.kategori + (x.items.length > 1 ? ' · ' + x.items.length + ' barang' : '')));
+  if (x.items.length === 1 && x.items[0].satuan) {
+    info.appendChild(el('div', 'muted', jumlahSatuan(x.items[0]) + ' × ' + hargaSatuan(x.items[0])));
+  }
   if ((x.tags && x.tags.length) || x.tunai) {
     // lencana tunai ditampilkan di atas tag
 
@@ -1361,11 +1516,27 @@ function baris(x) {
     (x.tags || []).forEach(t => tg.appendChild(el('span', 'pill', t)));
     info.appendChild(tg);
   }
+  if (x.tunai) {
+    const tunai = x.tunai;
+    const dibayar = tunai.bayar ? sumPecahan(tunai.bayar) : 0;
+    const kembali = tunai.kembali ? sumPecahan(tunai.kembali) : 0;
+    const diterima = tunai.diterima ? sumPecahan(tunai.diterima) : 0;
+    const rincian = el('div', 'muted', tunai.diterima
+      ? 'Uang fisik diterima: ' + rp(diterima)
+      : 'Uang fisik dipakai: ' + rp(dibayar) + ' · Kembalian: ' + rp(kembali));
+    rincian.style.marginTop = '5px';
+    info.appendChild(rincian);
+  }
   top.append(info, el('span', 'amt', rp(x.total)));
   wrap.appendChild(top);
 
   const aksi = el('div', 'aksi');
   aksi.style.marginTop = '8px';
+  if (!x.saldoAwal) {
+    const ulang = el('button', 'kecil ghost', '↻ Catat lagi');
+    ulang.onclick = () => catatLagi(x.id);
+    aksi.appendChild(ulang);
+  }
   const struk = el('button', 'kecil ghost', '🧾 Struk');
   struk.onclick = () => bukaStruk(x.id);
   aksi.appendChild(struk);
@@ -1379,18 +1550,36 @@ function baris(x) {
   const hapus = el('button', 'kecil del', 'Hapus');
   hapus.onclick = () => {
     if (confirm('Hapus transaksi ini?')) {
+      const stokLama = { ...db.uangFisik.stok };
       balikStokTunai(x);
       db.transaksi = db.transaksi.filter(d => d.id !== x.id);
-      simpan(); renderSemua();
+      if (!simpan()) {
+        db.transaksi.push(x);
+        db.uangFisik.stok = stokLama;
+        return;
+      }
+      isiPecahan('st', db.uangFisik.stok);
+      renderSemua();
     }
   };
   aksi.append(edit, hapus);
   wrap.appendChild(aksi);
 
-  if (x.items.length > 1 || x.items[0].nama !== x.judul) {
+  if (x.items.length > 1 || x.items[0].nama !== x.judul || x.tunai) {
     const det = document.createElement('details');
-    det.appendChild(el('summary', null, 'Lihat rincian'));
-    x.items.forEach(i => det.appendChild(el('div', 'muted', i.qty + ' x ' + i.nama + ' @ ' + rp(i.harga) + ' = ' + rp(i.qty * i.harga))));
+    det.appendChild(el('summary', null, 'Lihat rincian' + (x.tunai ? ' barang & pecahan' : '')));
+    x.items.forEach(i => det.appendChild(el('div', 'muted', jumlahSatuan(i) + ' × ' + i.nama + ' @ ' + hargaSatuan(i) + ' = ' + rp(i.qty * i.harga))));
+    if (x.tunai) {
+      const pecahan = (label, lembar) => {
+        if (!lembar) return;
+        const isi = DENOM.filter(d => Number(lembar[d]) > 0)
+          .map(d => Number(lembar[d]) + ' lembar ' + rp(d)).join(', ');
+        det.appendChild(el('div', 'muted', label + ': ' + (isi || 'Tidak ada')));
+      };
+      pecahan('Dibayar', x.tunai.bayar);
+      pecahan('Kembalian', x.tunai.kembali);
+      pecahan('Diterima', x.tunai.diterima);
+    }
     wrap.appendChild(det);
   }
   return wrap;
@@ -1481,13 +1670,13 @@ function gambarStruk(x) {
   x.items.forEach(it => {
     setFont(g, 'bold', 16);
     g.fillStyle = '#0f172a';
-    g.fillText(potongTeks(g, it.qty + ' x ' + it.nama, W - pad * 2 - 170), pad, y);
+    g.fillText(potongTeks(g, jumlahSatuan(it) + ' × ' + it.nama, W - pad * 2 - 170), pad, y);
     g.textAlign = 'right';
     g.fillText(rp(it.qty * it.harga), W - pad, y);
     g.textAlign = 'left';
     setFont(g, '', 13);
     g.fillStyle = '#64748b';
-    g.fillText('@ ' + rp(it.harga), pad, y + 20);
+    g.fillText('@ ' + hargaSatuan(it), pad, y + 20);
     y += 52;
   });
 
@@ -1597,7 +1786,8 @@ function gambarRekap(list, dari, sampai) {
     g.fillText(tglIndo(x.tanggal).slice(0, 5), pad, y + 16);
     setFont(g, '', 15);
     g.fillStyle = '#0f172a';
-    g.fillText(potongTeks(g, x.judul, W - pad * 2 - 170), pad + 58, y + 16);
+    const label = x.items.length === 1 && x.items[0].satuan ? x.judul + ' (' + jumlahSatuan(x.items[0]) + ')' : x.judul;
+    g.fillText(potongTeks(g, label, W - pad * 2 - 170), pad + 58, y + 16);
     g.textAlign = 'right';
     g.fillStyle = x.tipe === 'masuk' ? '#16a34a' : '#e11d48';
     setFont(g, 'bold', 14);
@@ -1662,7 +1852,7 @@ function cetakPdf(d) {
     .map(([k, v]) => `<tr><td>${esc(k)}</td><td class="r">${esc(rp(v))}</td></tr>`).join('')
     || '<tr><td colspan="2">Tidak ada pengeluaran</td></tr>';
   const trRows = urutTerbaru(d.list)
-    .map(x => `<tr><td>${esc(tglIndo(x.tanggal))}</td><td>${esc(x.judul)}</td><td>${x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran'}</td><td class="r">${esc(rp(x.total))}</td></tr>`)
+    .map(x => `<tr><td>${esc(tglIndo(x.tanggal))}</td><td>${esc(x.judul)}<div class="mini">${esc(x.items.map(i => jumlahSatuan(i) + ' × ' + i.nama + ' @ ' + hargaSatuan(i)).join('; '))}</div></td><td>${x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran'}</td><td class="r">${esc(rp(x.total))}</td></tr>`)
     .join('') || '<tr><td colspan="4">Tidak ada transaksi</td></tr>';
   const html = `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Rekap keuangan</title>
 <style>
@@ -1674,6 +1864,7 @@ th,td{border-bottom:1px solid #ddd;padding:6px;text-align:left}
 th{background:${warnaHead}}
 .r{text-align:right}
 h2{font-size:15px;margin:16px 0 6px}
+.mini{font-size:11px;color:#666;margin-top:3px}
 </style></head><body>
 <h1>Rekap Keuangan</h1>
 <p>Periode: ${esc(label)}</p>
@@ -1802,7 +1993,7 @@ function bukaEdit(id) {
   const x = db.transaksi.find(d => d.id === id);
   if (!x) return;
   editId = id;
-  editItems = x.items.map(i => ({ ...i }));
+  editItems = x.items.map(i => ({ ...i, satuanBolehKosong: !i.satuan }));
   $('eTipe').value = x.tipe;
   isiKategoriSelect($('eKategori'), x.tipe, x.kategori);
   $('eTgl').value = x.tanggal;
@@ -1817,15 +2008,38 @@ function renderEditItems() {
   box.innerHTML = '';
   editItems.forEach((it, i) => {
     const row = el('div', 'itemrow');
+    const bidang = (control, teks, key, kelas = '') => {
+      control.id = 'eItem-' + i + '-' + key;
+      const wrap = el('div', 'field-wrap ' + kelas);
+      const label = el('label', 'field-label', teks);
+      label.htmlFor = control.id;
+      wrap.append(label, control);
+      return wrap;
+    };
     const nama = el('input'); nama.type = 'text'; nama.placeholder = 'Nama barang'; nama.value = it.nama;
     nama.oninput = () => { editItems[i].nama = nama.value; hitungEdit(); };
-    const qty = el('input'); qty.type = 'number'; qty.min = 1; qty.inputMode = 'numeric'; qty.value = it.qty;
+    const qty = el('input'); qty.type = 'number'; qty.min = '0.001'; qty.step = 'any'; qty.inputMode = 'decimal'; qty.placeholder = 'Jumlah'; qty.value = it.qty;
     qty.oninput = () => { editItems[i].qty = Number(qty.value) || 0; hitungEdit(); };
-    const harga = el('input'); harga.type = 'number'; harga.min = 1; harga.inputMode = 'numeric'; harga.value = it.harga;
+    const satuan = el('select'); satuan.setAttribute('aria-label', 'Satuan barang');
+    isiSatuanSelect(satuan, it.satuan || '', !!it.satuanBolehKosong);
+    const satuanLain = el('input'); satuanLain.type = 'text'; satuanLain.placeholder = 'Satuan sendiri'; satuanLain.maxLength = 30;
+    satuanLain.value = satuan.value === '__custom__' ? it.satuan : '';
+    const lainWrap = bidang(satuanLain, 'Satuan sendiri', 'satuan-lain', 'item-satuan-lain');
+    lainWrap.style.display = satuan.value === '__custom__' ? '' : 'none';
+    satuan.onchange = () => {
+      lainWrap.style.display = satuan.value === '__custom__' ? '' : 'none';
+      editItems[i].satuan = satuan.value === '__custom__' ? satuanLain.value.trim() : satuan.value;
+      hitungEdit();
+    };
+    satuanLain.oninput = () => { editItems[i].satuan = satuanLain.value.trim(); hitungEdit(); };
+    const harga = el('input'); harga.type = 'number'; harga.min = 1; harga.inputMode = 'numeric'; harga.placeholder = 'Harga per satuan'; harga.value = it.harga;
     harga.oninput = () => { editItems[i].harga = Number(harga.value) || 0; hitungEdit(); };
     const hap = el('button', 'del', '×');
+    hap.setAttribute('aria-label', 'Hapus barang ' + (i + 1));
     hap.onclick = () => { editItems.splice(i, 1); renderEditItems(); };
-    row.append(nama, qty, harga, hap);
+    row.append(bidang(nama, 'Nama barang', 'nama', 'item-nama'),
+      bidang(qty, 'Jumlah', 'qty'), bidang(satuan, 'Satuan', 'satuan'),
+      lainWrap, bidang(harga, 'Harga per satuan (Rp)', 'harga'), hap);
     box.appendChild(row);
   });
   hitungEdit();
@@ -1837,16 +2051,17 @@ function hitungEdit() {
 }
 
 $('eTipe').onchange = () => isiKategoriSelect($('eKategori'), $('eTipe').value);
-$('btnEItem').onclick = () => { editItems.push({ nama: '', qty: 1, harga: 0 }); renderEditItems(); };
+$('btnEItem').onclick = () => { editItems.push({ nama: '', qty: 1, satuan: 'buah', satuanBolehKosong: false, harga: 0 }); renderEditItems(); };
 $('btnEBatal').onclick = () => $('dlgEdit').close();
 
 $('btnESimpan').onclick = () => {
   const x = db.transaksi.find(d => d.id === editId);
   if (!x) { $('dlgEdit').close(); return; }
   const items = editItems
-    .map(i => ({ nama: String(i.nama || '').trim(), qty: Number(i.qty) || 0, harga: Number(i.harga) || 0 }))
-    .filter(i => i.nama && i.qty > 0 && i.harga > 0);
-  if (!items.length) { alert('Sisakan minimal satu barang yang nama, jumlah, dan harganya terisi.'); return; }
+    .map(i => ({ nama: String(i.nama || '').trim(), qty: Number(i.qty) || 0, satuan: String(i.satuan || '').trim().slice(0, 30), harga: Number(i.harga) || 0 }));
+  if (!items.length || items.some((i, index) => !i.nama || i.qty <= 0 || i.harga <= 0 || (!i.satuan && !editItems[index].satuanBolehKosong))) {
+    alert('Isi nama, jumlah, harga, dan satuan sendiri jika memilih Lainnya. Sisakan minimal satu barang.'); return;
+  }
   const totalBaru = items.reduce((s, i) => s + i.qty * i.harga, 0);
   if (x.tunai && (totalBaru !== x.total || $('eTipe').value !== x.tipe)) {
     alert('Transaksi tunai tidak bisa diubah nominal atau tipenya, karena stok pecahan ikut berubah. Hapus lalu catat ulang.');
@@ -1926,7 +2141,7 @@ function pendingBerulang() {
 function catatBerulang(r, tgl) {
   db.transaksi.push({
     id: uid(), ts: Date.now(), tanggal: tgl, tipe: r.tipe, judul: r.nama, kategori: r.kategori,
-    items: [{ nama: r.nama, qty: r.qty, harga: r.harga }], total: r.qty * r.harga,
+    items: [{ nama: r.nama, qty: r.qty, satuan: r.satuan || '', harga: r.harga }], total: r.qty * r.harga,
     berulangId: r.id, tags: ['berulang'], foto: null, wishId: null, saldoAwal: false
   });
   r.terakhir = tgl;
@@ -1941,7 +2156,7 @@ function renderTempo() {
     const row = el('div', 'row');
     const info = el('div');
     info.appendChild(el('b', null, r.nama));
-    info.appendChild(el('div', 'muted', tglIndo(tgl) + ' · ' + rp(r.qty * r.harga) + ' · ' + r.kategori));
+    info.appendChild(el('div', 'muted', tglIndo(tgl) + ' · ' + jumlahSatuan(r) + ' × ' + hargaSatuan(r) + ' = ' + rp(r.qty * r.harga) + ' · ' + r.kategori));
     const aksi = el('div', 'aksi');
     const catat = el('button', 'kecil beli', 'Catat');
     catat.onclick = () => { catatBerulang(r, tgl); simpan(); renderSemua(); };
@@ -1968,7 +2183,7 @@ function renderBerulang() {
     const row = el('div', 'row');
     const info = el('div');
     info.appendChild(el('b', r.tipe === 'masuk' ? 'hijau' : 'merah', r.nama));
-    info.appendChild(el('div', 'muted', (r.periode === 'bulan' ? 'Setiap bulan' : 'Setiap minggu') + ' · mulai ' + tglIndo(r.mulai) + ' · ' + rp(r.qty * r.harga)));
+    info.appendChild(el('div', 'muted', (r.periode === 'bulan' ? 'Setiap bulan' : 'Setiap minggu') + ' · mulai ' + tglIndo(r.mulai) + ' · ' + jumlahSatuan(r) + ' × ' + hargaSatuan(r) + ' = ' + rp(r.qty * r.harga)));
     const hapus = el('button', 'kecil del', 'Hapus');
     hapus.onclick = () => {
       if (!confirm('Hapus transaksi berulang ini? Catatan yang sudah tercatat tetap ada.')) return;
@@ -1985,17 +2200,20 @@ function renderBerulang() {
 }
 
 $('rbTipe').onchange = isiKategoriBerulang;
+$('rbSatuan').onchange = () => tampilkanSatuanLain($('rbSatuan'), $('rbSatuanLain'));
 $('btnBerulang').onclick = () => {
   const nama = $('rbNama').value.trim();
   const qty = Number($('rbQty').value) || 0;
   const harga = Number($('rbHarga').value) || 0;
-  if (!nama || qty <= 0 || harga <= 0) { alert('Isi nama, jumlah, dan nominal transaksi berulang.'); return; }
+  const satuan = satuanDariForm($('rbSatuan'), $('rbSatuanLain'));
+  if (!nama || qty <= 0 || harga <= 0 || !satuan) { alert('Isi nama, jumlah, satuan, dan harga per satuan transaksi berulang.'); return; }
   db.berulang.push({
     id: uid(), nama, tipe: $('rbTipe').value, kategori: $('rbKat').value,
-    qty, harga, periode: $('rbPeriode').value, mulai: $('rbMulai').value || hariIni(), terakhir: null
+    qty, satuan, harga, periode: $('rbPeriode').value, mulai: $('rbMulai').value || hariIni(), terakhir: null
   });
   simpan();
   $('rbNama').value = ''; $('rbHarga').value = ''; $('rbQty').value = 1;
+  $('rbSatuan').value = 'buah'; $('rbSatuanLain').value = ''; tampilkanSatuanLain($('rbSatuan'), $('rbSatuanLain'));
   renderSemua();
 };
 
@@ -2057,20 +2275,24 @@ function itemDariForm() {
   const nama = $('iNama').value.trim();
   const qty = Number($('iQty').value) || 0;
   const harga = Number($('iHarga').value) || 0;
-  if (!nama || qty <= 0 || harga <= 0) return null;
-  return { nama, qty, harga };
+  const satuan = $('iSatuan').value === '__custom__' ? $('iSatuanLain').value.trim() : $('iSatuan').value;
+  if (!nama || qty <= 0 || harga <= 0 || !satuan) return null;
+  return { nama, qty, satuan: satuan.slice(0, 30), harga };
 }
 
 function cekTombolSimpan() {
   const it = itemDariForm();
-  $('btnSimpan').disabled = !(keranjang.length > 0 || it !== null);
-  $('previewItem').textContent = it ? 'Akan disimpan: ' + it.qty + ' x ' + it.nama + ' = ' + rp(it.qty * it.harga) : '';
+  $('btnSimpan').disabled = false;
+  $('previewItem').textContent = it ? 'Akan disimpan: ' + jumlahSatuan(it) + ' × ' + it.nama + ' @ ' + hargaSatuan(it) + ' = ' + rp(it.qty * it.harga) : '';
 }
 
 function resetFormBarang() {
   $('iNama').value = '';
   $('iHarga').value = '';
   $('iQty').value = 1;
+  $('iSatuan').value = 'buah';
+  $('iSatuanLain').value = '';
+  tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
   $('statusScan').textContent = '';
   cekTombolSimpan();
 }
@@ -2078,12 +2300,11 @@ function resetFormBarang() {
 function renderKeranjang() {
   const box = $('listKrj');
   box.innerHTML = '';
-  if (!keranjang.length) box.appendChild(el('p', 'muted', 'Keranjang kosong.'));
   keranjang.forEach((it, i) => {
     const row = el('div', 'row');
     const info = el('div');
     info.appendChild(el('b', null, it.nama));
-    info.appendChild(el('div', 'muted', it.qty + ' x ' + rp(it.harga)));
+    info.appendChild(el('div', 'muted', jumlahSatuan(it) + ' × ' + hargaSatuan(it)));
     const aksi = el('div', 'aksi');
     aksi.appendChild(el('span', null, rp(it.qty * it.harga)));
     const hap = el('button', 'kecil del', '×');
@@ -2099,11 +2320,16 @@ function renderKeranjang() {
 }
 
 $('tipe').onchange = isiKategori;
-['iNama','iQty','iHarga'].forEach(id => $(id).addEventListener('input', () => renderKeranjang()));
+['iNama','iQty','iHarga'].forEach(id => $(id).addEventListener('input', () => { pesanForm(''); renderKeranjang(); }));
+$('iSatuan').onchange = () => {
+  tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
+  renderKeranjang();
+};
+$('iSatuanLain').oninput = renderKeranjang;
 
 $('btnTambahKrj').onclick = () => {
   const it = itemDariForm();
-  if (!it) { alert('Isi nama barang, jumlah, dan harga satuan dengan benar.'); return; }
+  if (!it) { alert('Isi nama barang, jumlah, satuan, dan harga per satuan dengan benar.'); return; }
   keranjang.push(it);
   simpanKrj();
   resetFormBarang();
@@ -2121,12 +2347,20 @@ $('btnSimpan').onclick = () => {
   const cur = itemDariForm();
   let items = keranjang.map(i => ({ ...i }));
   if (cur) items.push(cur);
-  if (!items.length) { alert('Isi nama barang, jumlah, dan harga satuan dulu.'); return; }
+  if (!items.length) {
+    const fokus = !$('iNama').value.trim() ? 'iNama' : !(Number($('iQty').value) > 0) ? 'iQty' : !$('iSatuan').value || ($('iSatuan').value === '__custom__' && !$('iSatuanLain').value.trim()) ? 'iSatuanLain' : 'iHarga';
+    pesanForm('Isi nama barang, jumlah, satuan, dan harga per satuan sebelum menyimpan.', fokus);
+    return;
+  }
+  if (!cur && ($('iNama').value.trim() || $('iHarga').value.trim())) {
+    pesanForm('Barang yang sedang diisi belum lengkap. Lengkapi atau kosongkan sebelum menyimpan.', !$('iNama').value.trim() ? 'iNama' : 'iHarga');
+    return;
+  }
   const total = items.reduce((s,i) => s + i.qty * i.harga, 0);
   const judul = $('judul').value.trim() || (items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
   const kat = $('kategori').value;
   const tunai = ambilTunaiForm(tipe, total);
-  if (tunai && tunai.error) { alert(tunai.error); return; }
+  if (tunai && tunai.error) { pesanForm(tunai.error); $('pfWrap').scrollIntoView({ block: 'center' }); return; }
   db.transaksi.push({
     id: uid(), ts: Date.now(), tanggal: tgl, tipe, judul, kategori: kat, items, total,
     tags: parseTags($('tTag').value), foto: fotoForm, wishId: null, berulangId: null, saldoAwal: false,
@@ -2139,6 +2373,7 @@ $('btnSimpan').onclick = () => {
     return;
   }
   keranjang = []; simpanKrj();
+  if (tunai) isiPecahan('st', db.uangFisik.stok);
   $('judul').value = '';
   $('tTag').value = '';
   fotoForm = null;
@@ -2147,6 +2382,8 @@ $('btnSimpan').onclick = () => {
   resetFormBarang();
   renderSemua();
   resetPecahan();
+  pesanForm('');
+  beriPesan('Transaksi tersimpan. Lihat hasilnya di Histori terbaru.');
   if (tipe === 'keluar') cekBudget(kat);
 };
 
@@ -2192,7 +2429,7 @@ $('fileScan').onchange = async e => {
     if (nama) $('iNama').value = nama;
     if (total) { $('iQty').value = 1; $('iHarga').value = total; }
     st.textContent = total
-      ? 'Terisi otomatis. Cek dulu, lalu tekan Simpan atau + Ke keranjang.'
+      ? 'Terisi otomatis. Periksa dulu, lalu tekan Simpan transaksi atau Tambah barang lain.'
       : 'Total tidak terbaca. Isi manual.';
   } catch (err) {
     st.textContent = 'Gagal membaca struk. Coba foto yang lebih terang dan lurus, atau isi manual.';
@@ -2237,7 +2474,13 @@ function renderWish() {
     const aksi = el('div', 'aksi');
     const inp = document.createElement('input');
     inp.type = 'number'; inp.placeholder = 'Setor (Rp)'; inp.min = 1; inp.inputMode = 'numeric';
+    inp.id = 'setor-' + w.id;
     inp.style.margin = '0';
+    const bidangSetor = el('div', 'field-wrap');
+    bidangSetor.style.flex = '1 1 150px';
+    const labelSetor = el('label', 'field-label', 'Jumlah setoran (Rp)');
+    labelSetor.htmlFor = inp.id;
+    bidangSetor.append(labelSetor, inp);
     const setor = el('button', 'kecil beli', 'Setor');
     setor.onclick = () => {
       const n = Number(inp.value) || 0;
@@ -2254,7 +2497,7 @@ function renderWish() {
       db.wishlist = db.wishlist.filter(d => d.id !== w.id);
       simpan(); renderSemua();
     };
-    aksi.append(inp, setor, selesai);
+    aksi.append(bidangSetor, setor, selesai);
     wrap.appendChild(aksi);
     box.appendChild(wrap);
   });
@@ -2445,6 +2688,7 @@ function renderCompare() {
 }
 
 function renderSemua() {
+  renderPanduanStatus();
   renderTempo();
   renderTunai();
   renderMingguan();
@@ -2478,6 +2722,52 @@ $('btnNavCatat').onclick = () => {
   if (k) k.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
+$('btnMulaiCatat').onclick = () => $('btnNavCatat').click();
+$('btnLewatiPanduan').onclick = () => {
+  set.panduanDilewati = true;
+  simpanSet();
+  renderPanduanStatus();
+};
+
+function catatLagi(id) {
+  const lama = db.transaksi.find(x => x.id === id);
+  if (!lama || lama.saldoAwal || !lama.items.length) return;
+  if ((keranjang.length || $('iNama').value.trim() || $('iHarga').value.trim() ||
+       $('iQty').value !== '1' || $('iSatuan').value !== 'buah' || $('judul').value.trim() ||
+       $('tTag').value.trim() || fotoForm || $('iCara').value === 'tunai') &&
+      !confirm('Form transaksi saat ini akan diganti dengan catatan ini. Lanjutkan?')) return;
+  keranjang = lama.items.slice(1).map(i => ({ ...i }));
+  simpanKrj();
+  const pertama = lama.items[0];
+  $('tipe').value = lama.tipe;
+  isiKategoriSelect($('kategori'), lama.tipe, lama.kategori);
+  $('tgl').value = hariIni();
+  $('judul').value = lama.items.length > 1 ? lama.judul : '';
+  $('tTag').value = (lama.tags || []).join(', ');
+  $('iNama').value = pertama.nama;
+  $('iQty').value = pertama.qty;
+  $('iHarga').value = pertama.harga;
+  isiSatuanSelect($('iSatuan'), pertama.satuan || 'buah');
+  $('iSatuanLain').value = SATUAN.includes(pertama.satuan) ? '' : (pertama.satuan || '');
+  tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
+  fotoForm = null;
+  $('fFoto').value = '';
+  $('fotoStatus').textContent = 'Foto struk (opsional) disimpan di HP, dikecilkan otomatis.';
+  resetPecahan();
+  if (lama.tunai && tunaiAktif()) {
+    $('iCara').value = 'tunai';
+    updateFormPecahan();
+  }
+  $('catatExtra').open = !!$('judul').value || !!$('tTag').value;
+  pesanForm('');
+  goto('beranda');
+  $('cardCatat').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('iHarga').focus({ preventScroll: true });
+  beriPesan(lama.tunai && tunaiAktif()
+    ? 'Periksa harga baru dan isi ulang pecahan pembayaran tunai.'
+    : 'Periksa harga sebelum menyimpan transaksi baru.');
+}
+
 // Filter
 ['fDari','fSampai'].forEach(id => $(id).onchange = renderSemua);
 $('btnHariIni').onclick = () => { $('fDari').value = hariIni(); $('fSampai').value = hariIni(); renderSemua(); };
@@ -2494,13 +2784,13 @@ function unduh(nama, isi, tipe) {
 
 $('btnExcel').onclick = () => {
   const esc2 = v => '"' + String(v).replace(/"/g, '""') + '"';
-  const baris = [['Tanggal','Tipe','Transaksi','Kategori','Barang','Jumlah','Harga Satuan','Subtotal','Tag']];
+  const baris = [['Tanggal','Tipe','Transaksi','Kategori','Barang','Jumlah','Satuan','Harga per Satuan','Subtotal','Tag']];
   [...db.transaksi].sort((x,y) => x.tanggal.localeCompare(y.tanggal)).forEach(x => {
     x.items.forEach(i => baris.push([tglIndo(x.tanggal), x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran',
-      x.judul, x.kategori, i.nama, i.qty, i.harga, i.qty * i.harga, (x.tags || []).join(' ')]));
+      x.judul, x.kategori, i.nama, i.qty, i.satuan || '', i.harga, i.qty * i.harga, (x.tags || []).join(' ')]));
   });
   baris.push([]);
-  baris.push(['', '', '', '', '', '', 'Saldo total', saldoTotal()]);
+  baris.push(['', '', '', '', '', '', '', 'Saldo total', saldoTotal(), '']);
   const isi = '\uFEFF' + baris.map(r => r.map(esc2).join(';')).join('\r\n');
   unduh('catatan-keuangan.csv', isi, 'text/csv;charset=utf-8');
 };
@@ -2547,6 +2837,7 @@ $('fileImport').onchange = async e => {
       tampilan = { ...tampilan, ...tanpaLatar };
       simpanTampilan();
       terapkanTampilan();
+      terapkanModeBeranda();
     }
     if (!Array.isArray(masuk) && masuk.katKustom) {
       ['keluar', 'masuk'].forEach(t => {
@@ -2566,7 +2857,9 @@ $('fileImport').onchange = async e => {
     Object.entries(budgetMasuk).forEach(([k, b]) => {
       if (!db.budgets[k] && b && b.limit) db.budgets[k] = { limit: Number(b.limit), periode: b.periode === 'bulan' ? 'bulan' : 'minggu' };
     });
-    simpan(); renderSemua();
+    simpan();
+    isiPecahan('st', db.uangFisik.stok);
+    renderSemua();
     alert('Import selesai. ' + tambah + ' transaksi baru ditambahkan (duplikat dilewati).');
   } catch (err) {
     alert('File backup tidak valid.');
@@ -2578,9 +2871,9 @@ $('fileImport').onchange = async e => {
 const KEY_TAMPILAN = 'catatan-tampilan-v1';
 let tampilan = (() => {
   try {
-    return { tema: 'auto', kaca: 55, bg: '', ...JSON.parse(localStorage.getItem(KEY_TAMPILAN) || '{}') };
+    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', beranda: 'ringkas', ...JSON.parse(localStorage.getItem(KEY_TAMPILAN) || '{}') };
   } catch (e) {
-    return { tema: 'auto', kaca: 55, bg: '' };
+    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', beranda: 'ringkas' };
   }
 })();
 
@@ -2842,7 +3135,7 @@ function renderTunai() {
     $('tunaiInfo').textContent = 'Uang fisik tercatat: ' + rp(fisik) + '. Saldo catatan: ' + rp(saldoTotal()) +
       (selisih === 0 ? ' (sama).' : ' (selisih ' + rp(Math.abs(selisih)) + (selisih > 0 ? ' lebih banyak di fisik).' : ' lebih sedikit di fisik).'));
   } else {
-    $('tunaiInfo').textContent = 'Fitur nonaktif. Isi stok lalu tekan simpan untuk mengaktifkan.';
+    $('tunaiInfo').textContent = 'Fitur nonaktif. Stok tersimpan: ' + rp(sumPecahan(db.uangFisik.stok)) + '. Aktifkan fitur untuk mencatat transaksi tunai.';
   }
   updateFormPecahan();
 }
@@ -2850,7 +3143,9 @@ function renderTunai() {
 function updateFormPecahan() {
   const aktif = tunaiAktif();
   const tipe = $('tipe').value;
+  $('iCara').parentElement.style.display = aktif ? '' : 'none';
   $('iCara').style.display = aktif ? '' : 'none';
+  $('iCaraInfo').style.display = aktif ? '' : 'none';
   if (!aktif) $('iCara').value = 'nontunai';
   const tampilPecah = aktif && $('iCara').value === 'tunai';
   $('pfWrap').style.display = tampilPecah ? 'block' : 'none';
@@ -2870,12 +3165,16 @@ buatGridDenom('pkGrid', 'pk');
 isiPecahan('st', db.uangFisik.stok);
 
 $('btnStokSimpan').onclick = () => {
+  const sebelumnya = db.uangFisik;
   db.uangFisik = { aktif: true, stok: bacaPecahan('st') };
-  simpan(); renderSemua();
+  if (!simpan()) { db.uangFisik = sebelumnya; return; }
+  renderSemua();
 };
 $('btnTunaiToggle').onclick = () => {
-  db.uangFisik.aktif = !tunaiAktif();
-  simpan(); renderSemua();
+  const aktifLama = tunaiAktif();
+  db.uangFisik.aktif = !aktifLama;
+  if (!simpan()) { db.uangFisik.aktif = aktifLama; return; }
+  renderSemua();
 };
 $('iCara').onchange = updateFormPecahan;
 $('tipe').addEventListener('change', updateFormPecahan);
@@ -2947,6 +3246,9 @@ function bukaEditBerulang(id) {
   $('ebTipe').value = r.tipe;
   isiKategoriSelect($('ebKat'), r.tipe, r.kategori);
   $('ebQty').value = r.qty;
+  isiSatuanSelect($('ebSatuan'), r.satuan || '', true);
+  $('ebSatuanLain').value = $('ebSatuan').value === '__custom__' ? r.satuan : '';
+  tampilkanSatuanLain($('ebSatuan'), $('ebSatuanLain'));
   $('ebHarga').value = r.harga;
   $('ebPeriode').value = r.periode;
   $('ebMulai').value = r.mulai;
@@ -2954,6 +3256,7 @@ function bukaEditBerulang(id) {
 }
 
 $('ebTipe').onchange = () => isiKategoriSelect($('ebKat'), $('ebTipe').value);
+$('ebSatuan').onchange = () => tampilkanSatuanLain($('ebSatuan'), $('ebSatuanLain'));
 $('btnEbBatal').onclick = () => $('dlgBerulang').close();
 $('btnEbSimpan').onclick = () => {
   const r = db.berulang.find(d => d.id === editBerulangId);
@@ -2961,15 +3264,17 @@ $('btnEbSimpan').onclick = () => {
   const nama = $('ebNama').value.trim();
   const qty = Number($('ebQty').value) || 0;
   const harga = Number($('ebHarga').value) || 0;
+  const satuan = satuanDariForm($('ebSatuan'), $('ebSatuanLain'));
   const mulai = $('ebMulai').value;
-  if (!nama || qty <= 0 || harga <= 0 || !mulai) {
-    alert('Lengkapi nama, jumlah, nominal, dan tanggal mulai.');
+  if (!nama || qty <= 0 || harga <= 0 || !mulai || ($('ebSatuan').value === '__custom__' && !satuan)) {
+    alert('Lengkapi nama, jumlah, satuan sendiri jika dipilih, harga per satuan, dan tanggal mulai.');
     return;
   }
   r.nama = nama;
   r.tipe = $('ebTipe').value;
   r.kategori = $('ebKat').value;
   r.qty = qty;
+  r.satuan = satuan;
   r.harga = harga;
   r.periode = $('ebPeriode').value;
   r.mulai = mulai;
@@ -3254,6 +3559,7 @@ async function simpanKeDrive(sudahCoba = false) {
     set.driveSimpan = hariIni();
     simpanSet();
     renderDriveStatus();
+    renderPanduanStatus();
     alert('Backup tersimpan di Google Drive.');
   } catch (e) {
     // File di Drive sudah terhapus: buat file baru
@@ -3485,13 +3791,13 @@ const BANTUAN = {
   tunai: { judul: 'Cara pakai: Uang tunai', teks:
     '1. Isi jumlah lembar per pecahan di kartu ini, lalu tekan Simpan stok.\n2. Saat mencatat transaksi, pilih Tunai di form.\n3. Isi pecahan yang dibayar, atau tekan Isi otomatis.\n4. Kembalian diisi di bagian Kembalian.\n\nPengeluaran yang melebihi stok tidak akan disimpan, dan aplikasi menjelaskan kekurangannya.' },
   berulang: { judul: 'Cara pakai: Transaksi berulang', teks:
-    '1. Isi nama, jumlah, nominal, periode (bulan atau minggu), dan tanggal mulai.\n2. Saat jatuh tempo, muncul di kartu Perlu dicatat.\n3. Tekan Catat untuk mencatatnya, Lewati untuk melewatinya, atau Catat semua.\n\nEdit dan Hapus di sini hanya mengubah transaksi berulangnya, bukan catatan yang sudah tercatat.' },
+    '1. Isi nama, jumlah, satuan, harga per satuan, periode (bulan atau minggu), dan tanggal mulai.\n2. Saat jatuh tempo, muncul di kartu Perlu dicatat.\n3. Tekan Catat untuk mencatatnya, Lewati untuk melewatinya, atau Catat semua.\n\nEdit dan Hapus di sini hanya mengubah transaksi berulangnya, bukan catatan yang sudah tercatat.' },
   target: { judul: 'Cara pakai: Target tabungan', teks:
     '1. Isi barang yang ingin dibeli dan targetnya. Tenggat boleh dikosongkan.\n2. Tekan Setor, lalu isi jumlah yang sudah ditabung. Ini tercatat sebagai pengeluaran Tabungan.\n3. Kalau ada tenggat, aplikasi menghitung setoran per minggu yang dibutuhkan.' },
   budget: { judul: 'Cara pakai: Batas anggaran', teks:
     '1. Pilih kategori dan periode (minggu atau bulan), lalu isi batasnya.\n2. Bar berubah oranye di 80% dan merah di 100%.\n3. Saat menyimpan pengeluaran di kategori itu, aplikasi memberi peringatan.' },
   catat: { judul: 'Cara pakai: Catat transaksi', teks:
-    '1. Pilih Pengeluaran atau Pemasukan, lalu isi tanggal dan kategori.\n2. Isi nama, jumlah, dan harga satuan, lalu tekan Simpan.\n3. Untuk beberapa barang, tekan + Ke keranjang setiap kali menambah barang.\n4. Tag dan foto struk bisa ditambahkan sebelum menyimpan.' },
+    '1. Pilih Pengeluaran atau Pemasukan, lalu isi tanggal dan kategori.\n2. Isi nama, jumlah (boleh pecahan seperti 0,5), satuan, dan harga per satuan.\n3. Untuk satu barang, langsung tekan Simpan transaksi. Untuk beberapa barang, tekan + Tambah barang lain.\n4. Buka Detail lain untuk nama transaksi, scan struk, tag, atau foto.' },
 };
 
 function bantuan(k) {
@@ -3503,7 +3809,69 @@ function bantuan(k) {
 }
 $('btnBantuanOk').onclick = () => $('dlgBantuan').close();
 
+// Beranda ringkas: fitur tetap lengkap, tetapi hanya inti yang langsung terlihat.
+function susunBeranda() {
+  const catat = $('cardCatat');
+  $('cardTempo').after(catat);
+  catat.after($('cardHistori'));
+
+  const tambahan = el('details', 'quick-extra');
+  tambahan.id = 'catatExtra';
+  tambahan.appendChild(el('summary', null, 'Detail lain (nama transaksi, scan, tag, foto)'));
+  tambahan.appendChild(el('p', 'muted', 'Buka jika ingin menambahkan informasi pada transaksi ini.'));
+  tambahan.appendChild($('judul').parentElement);
+  tambahan.appendChild($('tTag').parentElement);
+  const barisTombol = $('btnScan').parentElement;
+  tambahan.appendChild($('btnScan'));
+  barisTombol.classList.remove('grid2');
+  tambahan.appendChild($('statusScan'));
+  tambahan.appendChild($('fFoto').parentElement);
+  tambahan.appendChild($('fotoStatus'));
+  tambahan.appendChild($('btnKosongkan'));
+  catat.insertBefore(tambahan, $('btnSimpan'));
+
+  const fitur = el('section', 'more-features');
+  fitur.id = 'fiturLain';
+  const kepala = el('div', 'more-heading');
+  kepala.appendChild(el('h2', null, 'Fitur lain'));
+  kepala.appendChild(el('p', null, 'Buka hanya saat kamu membutuhkannya.'));
+  fitur.appendChild(kepala);
+  $('cardHistori').after(fitur);
+  const grup = (judul, deskripsi, daftar) => {
+    const detail = el('details', 'feature-group');
+    const ringkas = el('summary', 'card');
+    const teks = el('span');
+    teks.appendChild(el('span', null, judul));
+    teks.appendChild(el('span', 'feature-desc', deskripsi));
+    ringkas.appendChild(teks);
+    detail.appendChild(ringkas);
+    daftar.forEach(id => detail.appendChild($(id)));
+    fitur.appendChild(detail);
+  };
+  grup('Ringkasan & rekap', 'Lihat minggu ini dan pilih periode laporan.', ['cardMingguan','cardPeriode']);
+  grup('Uang fisik & saldo awal', 'Atur pecahan uang dan saldo yang sudah ada.', ['cardSaldoAwal','cardTunai']);
+  grup('Rencana keuangan', 'Transaksi berulang, anggaran, dan target tabungan.', ['cardBerulang','cardBudget','cardWish']);
+}
+
+function terapkanModeBeranda() {
+  const lengkap = tampilan.beranda === 'lengkap';
+  $('sBeranda').value = lengkap ? 'lengkap' : 'ringkas';
+  document.querySelectorAll('#fiturLain .feature-group').forEach(d => d.open = lengkap);
+  $('catatExtra').open = lengkap;
+}
+$('sBeranda').onchange = () => {
+  tampilan.beranda = $('sBeranda').value;
+  simpanTampilan();
+  terapkanModeBeranda();
+};
+
 // ===== INISIALISASI =====
+pasangLabelForm();
+susunBeranda();
+terapkanModeBeranda();
+$('iCara').parentElement.style.display = 'none';
+tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
+tampilkanSatuanLain($('rbSatuan'), $('rbSatuanLain'));
 $('hdr').textContent = 'Hari ini, ' + tglIndo(hariIni());
 $('tgl').value = hariIni();
 $('fDari').value = '';
@@ -3519,6 +3887,8 @@ if (sudahAdaSaldo) {
   $('bSaldoTgl').value = sudahAdaSaldo.tanggal;
 }
 isiKategori();
+isiSatuanSelect($('iSatuan'));
+isiSatuanSelect($('rbSatuan'));
 isiKategoriBudget();
 isiKategoriBerulang();
 renderNotifStatus();
