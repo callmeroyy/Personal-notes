@@ -758,6 +758,8 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   .save-status{margin:-6px 4px 16px;font-size:12px;color:var(--muted);line-height:1.5}
   .save-status button{width:auto;margin:0;padding:0;background:none;box-shadow:none;color:var(--ghostink);font-size:12px;text-decoration:underline}
   .form-error{color:var(--bad);font-size:13px;margin:0 0 10px;line-height:1.45}
+  dialog .dialog-error{position:sticky;top:0;z-index:2;background:var(--card);padding:8px 10px;border:1px solid var(--bad);border-radius:8px}
+  :is(input,select)[aria-invalid="true"]{outline:2px solid var(--bad) !important;outline-offset:2px}
   #setelan :is(input,select,button):disabled{opacity:.48 !important;cursor:not-allowed !important;box-shadow:none !important}
   .setting-help{margin:-3px 0 12px;line-height:1.45}
   .toast-note{position:fixed;left:50%;bottom:calc(104px + env(safe-area-inset-bottom));transform:translateX(-50%);width:max-content;max-width:calc(100vw - 30px);background:#fff;color:#172033;border:1px solid rgba(15,23,42,.18);border-radius:12px;padding:11px 16px;z-index:20;box-shadow:0 10px 28px rgba(15,23,42,.2);font-size:14px;text-align:center;line-height:1.4}
@@ -1018,11 +1020,185 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html[data-font="bulat"] :is(h1,h2,button){letter-spacing:.02em}
   html[data-font="tegas"] body{font-weight:700}
   html[data-font="tegas"] :is(h1,h2,button){font-weight:900 !important}
+  /* Tata letak beranda terpisah dari gaya, tema, dan warna yang dipilih. */
+  .layout-intro{margin:2px 4px 14px;color:var(--ink);line-height:1.35}
+  .layout-intro strong{display:block;font-size:19px;margin-bottom:3px}
+  .layout-intro span{display:block;color:var(--muted);font-size:13px}
+  .home-catat-title{display:block}
+  .home-catat-sub{display:none}
+  html:is([data-layout="2"],[data-layout="3"]) #beranda{flex-direction:column}
+  html:is([data-layout="2"],[data-layout="3"]) #beranda > *{flex-shrink:0}
+  html[data-layout="2"] #layoutIntro,
+  html[data-layout="3"] #layoutIntro{order:-20}
+  html[data-layout="2"] #cardMingguan{order:-19}
+  html[data-layout="2"] #beranda > .saldo-hero{order:-18;padding:16px 18px;margin-bottom:12px}
+  html[data-layout="2"] #beranda > .saldo-hero b{font-size:clamp(24px,7vw,30px);overflow-wrap:anywhere}
+  html[data-layout="2"] #beranda > .saldo-hero .mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+  html[data-layout="2"] #beranda > .saldo-hero .mini > span{white-space:normal;overflow-wrap:anywhere;line-height:1.3}
+  html[data-layout="2"] #beranda > .saldo-hero .mini > span > span{display:block;font-weight:700;margin-top:3px}
+  html[data-layout="2"] #beranda > .pixel-mobs{order:-17}
+  html[data-layout="2"] #btnBerandaCatat{order:-16}
+  html[data-layout="3"] #btnBerandaCatat{order:-19;min-height:100px;padding:18px 20px;text-align:left;line-height:1.3}
+  html[data-layout="3"] #btnBerandaCatat .home-catat-title{font-size:20px;font-weight:800}
+  html[data-layout="3"] #btnBerandaCatat .home-catat-sub{display:block;font-size:12px;opacity:.85;margin-top:5px;font-weight:500}
+  html[data-layout="3"] #beranda > .saldo-hero{order:-18;margin-bottom:12px}
+  html[data-layout="3"] #beranda > .pixel-mobs{order:-17}
+  html[data-layout="3"] #cardMingguan{order:-10}
+  html:is([data-layout="2"],[data-layout="3"]) #panduanAwal{order:-9}
+  html:is([data-layout="2"],[data-layout="3"]) #statusSimpan{order:-8}
+  html:is([data-layout="2"],[data-layout="3"]) #bannerBackup{order:-7}
+  html:is([data-layout="2"],[data-layout="3"]) #bannerPengingat{order:-6}
+  html:is([data-layout="2"],[data-layout="3"]) #cardTempo{order:-5}
+
+  /* Wallpaper ringan per gaya; berada di belakang halaman dan tidak menangkap sentuhan. */
+  #styleDecor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  #styleDecor::before,#styleDecor::after{content:"";position:absolute;pointer-events:none}
+  header.top,main{z-index:1}
+  html[data-gaya="glass"] #styleDecor{
+    background:radial-gradient(circle at 92% 6%,rgba(255,255,255,.35),transparent 25%),
+      radial-gradient(circle at 5% 68%,rgba(133,186,255,.18),transparent 27%);
+  }
+  html[data-gaya="glass"] #styleDecor::before{
+    width:176px;height:176px;right:-77px;top:115px;border:1px solid rgba(255,255,255,.65);
+    border-radius:50%;box-shadow:0 0 0 22px rgba(255,255,255,.1),inset 0 0 34px rgba(255,255,255,.13);
+  }
+  html[data-gaya="glass"] #styleDecor::after{
+    width:115px;height:115px;left:-59px;bottom:17%;border:1px solid rgba(135,191,255,.52);
+    border-radius:50%;box-shadow:0 0 0 13px rgba(135,191,255,.08);
+  }
+  html.ada-bg[data-gaya="glass"] #styleDecor{opacity:.3}
+  html[data-gaya="biasa"] #styleDecor{
+    background:radial-gradient(circle,rgba(99,102,241,.11) 1px,transparent 1.5px) 0 0/28px 28px;
+    mask-image:linear-gradient(to bottom,#000 0%,transparent 75%);
+  }
+  html[data-gaya="biasa"] #styleDecor::before{
+    width:168px;height:168px;right:-95px;top:135px;border:2px solid rgba(99,102,241,.12);border-radius:38px;transform:rotate(19deg);
+  }
+  html[data-gaya="biasa"][data-tema="dark"] #styleDecor,
+  html[data-gaya="berwarna"][data-tema="dark"] #styleDecor{opacity:.72}
+  html[data-gaya="berwarna"] #styleDecor{
+    background:radial-gradient(circle at 96% 10%,rgba(139,92,246,.13),transparent 27%),
+      radial-gradient(circle at 1% 62%,rgba(14,165,233,.1),transparent 24%);
+  }
+  html[data-gaya="berwarna"] #styleDecor::before{
+    width:112px;height:110px;top:132px;right:-40px;
+    background:radial-gradient(circle,#f59e0b 0 5px,transparent 6px) 0 0/37px 37px,
+      radial-gradient(circle,#22c55e 0 4px,transparent 5px) 16px 18px/37px 37px;
+    opacity:.4;transform:rotate(17deg);
+  }
+  html[data-gaya="berwarna"] #styleDecor::after{
+    width:94px;height:94px;left:-50px;bottom:19%;border:11px solid rgba(59,130,246,.12);border-radius:50%;
+  }
+  html[data-gaya="neo"] #styleDecor::before{
+    width:116px;height:116px;right:-62px;top:120px;background:#ffd60a;border:3px solid #000;
+    box-shadow:7px 7px 0 #000;transform:rotate(16deg);opacity:.8;
+  }
+  html[data-gaya="neo"] #styleDecor::after{
+    width:102px;height:102px;left:-57px;bottom:17%;background:#ff7aa2;border:3px solid #000;
+    border-radius:50%;box-shadow:6px 6px 0 #000;opacity:.8;
+  }
+  html[data-gaya="neo"][data-tema="dark"] #styleDecor{opacity:.42}
+  html[data-gaya="material"] #styleDecor{
+    background:radial-gradient(circle at 98% 4%,hsla(var(--aksen-h,215) var(--aksen-s,90%) 65% / .16),transparent 30%),
+      radial-gradient(circle at 0% 78%,hsla(var(--aksen-h,215) var(--aksen-s,90%) 60% / .1),transparent 26%);
+  }
+  html[data-gaya="material"] #styleDecor::before{
+    width:210px;height:160px;right:-119px;top:124px;border-radius:99px;
+    background:hsla(var(--aksen-h,215) var(--aksen-s,90%) 65% / .13);transform:rotate(-25deg);
+  }
+  html[data-gaya="material"] #styleDecor::after{
+    width:120px;height:120px;left:-74px;bottom:11%;border-radius:50%;
+    background:hsla(var(--aksen-h,215) var(--aksen-s,90%) 65% / .1);
+  }
+  html[data-gaya="soft"] #styleDecor{
+    background:radial-gradient(circle at 90% 9%,rgba(255,255,255,.43),transparent 31%),
+      radial-gradient(circle at 3% 75%,rgba(111,134,178,.13),transparent 31%);
+  }
+  html[data-gaya="soft"] #styleDecor::before{
+    width:174px;height:174px;right:-102px;top:120px;border-radius:50%;
+    box-shadow:inset 10px 10px 19px rgba(81,96,124,.12),inset -10px -10px 19px rgba(255,255,255,.6);
+  }
+  html[data-gaya="soft"] #styleDecor::after{
+    width:110px;height:110px;left:-64px;bottom:18%;border-radius:50%;
+    box-shadow:8px 8px 18px rgba(81,96,124,.14),-8px -8px 18px rgba(255,255,255,.45);
+  }
+  html[data-gaya="soft"][data-tema="dark"] #styleDecor{opacity:.48}
+  html[data-gaya="retro"] #styleDecor{
+    background:linear-gradient(rgba(66,211,115,.055) 1px,transparent 1px) 0 0/38px 38px,
+      linear-gradient(90deg,rgba(66,211,115,.055) 1px,transparent 1px) 0 0/38px 38px;
+  }
+  html[data-gaya="retro"] #styleDecor::before{
+    content:">_";right:13px;top:119px;color:rgba(110,231,145,.18);
+    font:700 76px/1 ui-monospace,monospace;letter-spacing:-13px;transform:rotate(-7deg);
+  }
+  html[data-gaya="retro"] #styleDecor::after{
+    width:106px;height:106px;left:-57px;bottom:17%;border:1px dashed rgba(110,231,145,.22);border-radius:4px;
+  }
+  html[data-gaya="paper"] #styleDecor::before{
+    top:0;bottom:0;left:max(32px,calc(50% - 280px));width:2px;background:rgba(186,90,82,.25);
+  }
+  html[data-gaya="paper"] #styleDecor::after{
+    top:14px;bottom:0;left:max(1px,calc(50% - 312px));width:21px;
+    background:radial-gradient(circle,rgba(110,85,52,.19) 0 4px,transparent 5px) center top/21px 84px repeat-y;
+  }
+  html[data-gaya="paper"][data-tema="dark"] #styleDecor{opacity:.46}
+  html[data-gaya="flat"] #styleDecor{
+    background:linear-gradient(to right,hsla(var(--aksen-h,215) var(--aksen-s,90%) 50% / .09) 0 3px,transparent 3px)
+      max(10px,calc(50% - 300px)) 0/100% 100% no-repeat;
+  }
+  html[data-gaya="flat"] #styleDecor::before{
+    width:155px;height:155px;right:-97px;top:126px;border-radius:50%;
+    background:hsla(var(--aksen-h,215) var(--aksen-s,90%) 50% / .095);
+  }
+  html[data-gaya="flat"] #styleDecor::after{
+    width:80px;height:3px;left:0;bottom:19%;background:hsla(var(--aksen-h,215) var(--aksen-s,90%) 50% / .2);
+  }
+  html[data-gaya="pop"] #styleDecor::before{
+    width:161px;height:161px;right:-89px;top:124px;border:24px solid rgba(255,145,107,.25);
+    border-radius:50%;transform:rotate(-18deg);
+  }
+  html[data-gaya="pop"] #styleDecor::after{
+    content:"✦";left:-14px;bottom:18%;color:rgba(168,119,211,.25);
+    font:700 91px/1 system-ui;transform:rotate(-17deg);
+  }
+  html[data-gaya="blok"] #styleDecor{
+    background:linear-gradient(90deg,rgba(255,255,255,.26) 20%,transparent 20% 80%,rgba(255,255,255,.26) 80%)
+      right 32px top 108px/75px 18px no-repeat,
+      linear-gradient(90deg,transparent 20%,rgba(255,255,255,.26) 20% 80%,transparent 80%)
+      right 32px top 126px/75px 18px no-repeat;
+  }
+  html[data-gaya="blok"] #styleDecor::before{
+    width:100px;height:100px;right:-53px;top:173px;opacity:.24;
+    background:linear-gradient(90deg,#78a86a 50%,#578351 50%) 0 0/20px 20px;
+    clip-path:polygon(20% 0,80% 0,80% 20%,100% 20%,100% 80%,80% 80%,80% 100%,20% 100%,20% 80%,0 80%,0 20%,20% 20%);
+  }
+  html[data-gaya="blok"] #styleDecor::after{
+    width:60px;height:80px;left:-28px;bottom:17%;opacity:.22;
+    background:linear-gradient(#83aa56 0 20%,#806348 20% 100%);
+    box-shadow:19px 18px 0 rgba(101,138,68,.23);transform:rotate(-8deg);
+  }
+  html[data-gaya="blok"][data-tema="dark"] #styleDecor{opacity:.48}
+  @media (prefers-color-scheme:dark){
+    html[data-gaya="neo"][data-tema="auto"] #styleDecor,
+    html[data-gaya="soft"][data-tema="auto"] #styleDecor,
+    html[data-gaya="paper"][data-tema="auto"] #styleDecor,
+    html[data-gaya="blok"][data-tema="auto"] #styleDecor{opacity:.48}
+    html[data-gaya="biasa"][data-tema="auto"] #styleDecor,
+    html[data-gaya="berwarna"][data-tema="auto"] #styleDecor{opacity:.72}
+  }
+  /* Riwayat: pemasukan dan pengeluaran mendapat ruang sama besar. */
+  #riwayat .history-stats{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+  #riwayat .history-stats .stat{min-width:0}
+  #riwayat .history-stats .stat b{
+    white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;
+    font-size:clamp(12px,3.5vw,15px);line-height:1.4;font-variant-numeric:tabular-nums;
+  }
 </style>
 
 </head>
 <body>
 <div id="bgLayer"></div>
+<div id="styleDecor" aria-hidden="true"></div>
 
 <header class="top">
   <h1>💰 Catatan Keuangan</h1>
@@ -1033,6 +1209,10 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 
 <!-- BERANDA -->
 <section id="beranda" class="page">
+  <div class="layout-intro" id="layoutIntro" hidden>
+    <strong id="layoutIntroTitle"></strong>
+    <span id="layoutIntroText"></span>
+  </div>
 
   <div class="saldo-hero">
     <span class="lbl">Total saldo</span>
@@ -1074,7 +1254,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <h2 id="judulMingguan">Ringkasan minggu ini</h2>
     <p id="teksMingguan" style="margin:0;font-size:15px;line-height:1.5;white-space:pre-line"></p>
   </div>
-  <button class="home-catat" id="btnBerandaCatat" type="button">＋ Catat transaksi</button>
+  <button class="home-catat" id="btnBerandaCatat" type="button"><span class="home-catat-title">＋ Catat transaksi</span><span class="home-catat-sub">Pengeluaran · Pemasukan · Scan struk</span></button>
 
   <div class="banner" id="bannerBackup" style="display:none">
     <span id="bannerBackupTeks"></span>
@@ -1104,7 +1284,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       </select>
       <input type="date" id="tgl">
     </div>
-    <input type="text" id="judul" placeholder="Nama transaksi (opsional, contoh: Belanja warung)">
+    <input type="text" id="judul" placeholder="Contoh: Belanja warung">
     <select id="kategori"></select>
     <p class="muted" id="saldoAwalHint" style="display:none;margin:-4px 0 10px">Saldo awal cukup dicatat sekali untuk uang yang sudah kamu miliki sebelum mulai mencatat, agar tidak terhitung dua kali.</p>
     <input type="text" id="iNominalMasuk" data-uang placeholder="Contoh: 50.000" inputmode="decimal">
@@ -1129,21 +1309,21 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <p class="muted" id="tunaiInfo"></p>
       <button type="button" id="btnStokSimpan">Simpan stok uang fisik</button>
     </details>
-    <input type="text" id="tTag" placeholder="Tag (opsional, pisah koma: kantor, kuliah)">
+    <input type="text" id="tTag" placeholder="Contoh: kantor, kuliah">
 
     <div class="keranjang" id="formKeranjang">
       <span class="muted">Barang</span>
-      <input type="text" id="iNama" placeholder="Nama barang (contoh: Nasi goreng)">
+      <input type="text" id="iNama" placeholder="Contoh: Nasi goreng">
       <div class="grid2">
-      <input type="text" id="iQty" placeholder="Jumlah (misal 0,5)" value="1" inputmode="decimal">
+      <input type="text" id="iQty" placeholder="Contoh: 0,5" value="1" inputmode="decimal">
         <select id="iSatuan" aria-label="Satuan barang"></select>
       </div>
-      <input type="text" id="iSatuanLain" placeholder="Tulis satuan sendiri (contoh: dus)" maxlength="30" style="display:none">
+      <input type="text" id="iSatuanLain" placeholder="Contoh: dus" maxlength="30" style="display:none">
       <select id="iModeHarga">
         <option value="total">Harga total yang dibayar</option>
         <option value="satuan">Harga per satuan (misalnya per kg)</option>
       </select>
-      <input type="text" id="iHarga" data-uang placeholder="Contoh: 12.000 untuk setengah kg" inputmode="decimal">
+      <input type="text" id="iHarga" data-uang placeholder="Contoh: 12.000" inputmode="decimal">
       <p class="muted" id="iHargaInfo" style="margin:-4px 0 10px">Contoh: telur 0,5 kg, bayar Rp12.000 → ketik 12000, titik muncul otomatis. Tidak perlu menghitung harga per kg.</p>
       <div class="grid2" id="pilihanScan">
         <button class="sec" id="btnScan" type="button">📷 Kamera</button>
@@ -1160,6 +1340,14 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
         <summary>Teks yang terbaca (periksa hasilnya)</summary>
         <pre id="scanTeks" style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:160px;overflow:auto;font-size:12px;color:var(--ink)"></pre>
       </details>
+      <div id="scanDraft" class="keranjang" hidden>
+        <strong>Periksa hasil scan</strong>
+        <p class="muted" style="margin:6px 0 10px">Ubah nama, jumlah, satuan, atau harga total yang keliru. Tekan Hapus barang ini jika hasilnya salah.</p>
+        <div id="scanDraftList"></div>
+        <p class="muted" id="scanDraftTotal" role="status"></p>
+        <button type="button" id="btnPakaiScan">Gunakan hasil scan</button>
+        <button type="button" class="ghost" id="btnBatalScan">Batalkan hasil scan</button>
+      </div>
       <p class="muted" id="previewItem" style="margin:0 0 8px"></p>
       <div id="listKrj"></div>
       <div class="row"><span>Total</span><b id="totKrj"></b></div>
@@ -1177,7 +1365,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <div class="card" id="cardBerulang">
     <h2>Transaksi berulang<button class="kecil ghost" onclick="bantuan('berulang')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
     <p class="sub">Contoh: uang kos, kuota, atau uang saku. Muncul di "Perlu dicatat" saat tanggalnya tiba.</p>
-    <input type="text" id="rbNama" placeholder="Nama (contoh: Uang kos)">
+    <input type="text" id="rbNama" placeholder="Contoh: Uang kos">
     <div class="grid2">
       <select id="rbTipe">
         <option value="keluar">Pengeluaran</option>
@@ -1186,11 +1374,11 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <select id="rbKat"></select>
     </div>
     <div class="grid2">
-      <input type="number" id="rbQty" placeholder="Jumlah" value="1" min="0.001" step="any" inputmode="decimal">
+      <input type="number" id="rbQty" placeholder="Contoh: 1" value="1" min="0.001" step="any" inputmode="decimal">
       <select id="rbSatuan" aria-label="Satuan transaksi berulang"></select>
     </div>
-    <input type="text" id="rbSatuanLain" placeholder="Satuan sendiri" maxlength="30" style="display:none">
-    <input type="text" id="rbHarga" data-uang placeholder="Harga per satuan (Rp)" inputmode="decimal">
+    <input type="text" id="rbSatuanLain" placeholder="Contoh: dus" maxlength="30" style="display:none">
+    <input type="text" id="rbHarga" data-uang placeholder="Contoh: 250.000" inputmode="decimal">
     <div class="grid2">
       <select id="rbPeriode">
         <option value="bulan">Setiap bulan</option>
@@ -1211,16 +1399,16 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
         <option value="bulan">Per bulan</option>
       </select>
     </div>
-    <input type="text" id="bLimit" data-uang placeholder="Batas (Rp)" inputmode="decimal">
+    <input type="text" id="bLimit" data-uang placeholder="Contoh: 500.000" inputmode="decimal">
     <button id="btnBudget">Simpan batas</button>
     <div id="listBudget"></div>
   </div>
 
   <div class="card" id="cardWish">
     <h2>Target tabungan<button class="kecil ghost" onclick="bantuan('target')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
-    <input type="text" id="wNama" placeholder="Barang yang ingin dibeli">
+    <input type="text" id="wNama" placeholder="Contoh: Laptop">
     <div class="grid2">
-      <input type="text" id="wTarget" data-uang placeholder="Target harga (Rp)" inputmode="decimal">
+      <input type="text" id="wTarget" data-uang placeholder="Contoh: 5.000.000" inputmode="decimal">
       <div><input type="date" id="wTgl" title="Tenggat (opsional)"></div>
     </div>
     <p class="muted" style="margin:-4px 0 8px">Tenggat opsional. Kalau diisi, aplikasi menghitung setoran per minggu.</p>
@@ -1252,11 +1440,11 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="masuk">Pemasukan saja</option>
       <option value="keluar">Pengeluaran saja</option>
     </select>
-    <input type="text" id="rCari" placeholder="Cari nama barang, transaksi, kategori, atau tag">
+    <input type="text" id="rCari" placeholder="Contoh: telur, belanja, atau kantor">
     <p class="muted" id="rRingkas"></p>
-    <div class="stats" style="margin:0 0 12px">
+    <div class="stats history-stats" style="margin:0 0 12px">
       <div class="stat s-masuk"><span class="lbl">Pemasukan</span><b class="hijau" id="masuk"></b></div>
-      <div class="stat s-keluar" style="grid-column:span 2"><span class="lbl">Pengeluaran</span><b class="merah" id="keluar"></b></div>
+      <div class="stat s-keluar"><span class="lbl">Pengeluaran</span><b class="merah" id="keluar"></b></div>
     </div>
     <button class="sec" id="btnRekapRiwayat">🖼️ Cetak rekap sesuai filter (gambar)</button>
   </div>
@@ -1294,27 +1482,20 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 <section id="data" class="page">
   <div class="card">
     <h2>Pengingat harian</h2>
-    <select id="sPengingat">
-      <option value="">Mati</option>
-      <option value="17">Jam 17.00</option>
-      <option value="18">Jam 18.00</option>
-      <option value="19">Jam 19.00</option>
-      <option value="20">Jam 20.00</option>
-      <option value="21">Jam 21.00</option>
-    </select>
+    <label class="field-label" for="sPengingat">Jam pengingat</label>
+    <input type="time" id="sPengingat" aria-describedby="infoJamPengingat">
+    <p class="muted setting-help" id="infoJamPengingat">Pilih jam dan menit bebas. Kosongkan atau tekan Matikan jika tidak ingin diingatkan.</p>
+    <button class="ghost kecil" id="btnPengingatMati" type="button">Matikan pengingat</button>
     <button class="ghost" id="btnNotif">Izinkan notifikasi HP</button>
     <p class="muted" id="notifStatus"></p>
-    <p class="muted">Pengingat muncul saat aplikasi dibuka. Tanpa server, notifikasi tidak bisa dikirim saat aplikasi tertutup.</p>
+    <p class="muted">Pengingat diperiksa saat web terbuka. Tanpa server, notifikasi tidak dikirim ketika web tertutup.</p>
   </div>
   <div class="card">
     <h2>Data & backup</h2>
-    <span class="muted">Ingatkan backup</span>
-    <select id="sBackupIngat">
-      <option value="">Mati</option>
-      <option value="7">Tiap 7 hari</option>
-      <option value="14">Tiap 14 hari</option>
-      <option value="30">Tiap 30 hari</option>
-    </select>
+    <label class="field-label" for="sBackupIngat">Ingatkan backup tiap berapa hari?</label>
+    <input type="number" id="sBackupIngat" min="1" max="3650" step="1" inputmode="numeric" placeholder="Contoh: 7" aria-describedby="infoBackupIngat">
+    <p class="muted setting-help" id="infoBackupIngat">Isi jumlah hari sendiri, misalnya 3 atau 14. Kosongkan untuk mematikan.</p>
+    <button class="ghost kecil" id="btnBackupMati" type="button">Matikan pengingat backup</button>
     <button id="btnExcel">Export ke Excel (CSV)</button>
     <button class="sec" id="btnBackup">Export backup (JSON)</button>
     <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
@@ -1323,6 +1504,12 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <h2 style="margin-top:14px">Google Drive</h2>
     <button id="btnDriveSimpan">☁️ Simpan ke Drive</button>
     <button class="ghost" id="btnDriveAmbil">⬇️ Ambil dari Drive</button>
+    <label class="field-label" for="sDriveAuto">Simpan otomatis ke Drive</label>
+    <select id="sDriveAuto">
+      <option value="off">Mati</option>
+      <option value="on">Aktif saat web terbuka</option>
+    </select>
+    <p class="muted setting-help" id="driveAutoInfo" role="status"></p>
     <p class="muted" id="driveStatus">Belum pernah disimpan ke Drive.</p>
     <p class="muted">File disimpan sebagai <b>catatan-keuangan-backup.json</b> di Drive kamu. Aplikasi hanya bisa mengakses file yang dibuatnya sendiri.</p>
   </div>
@@ -1334,6 +1521,13 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <button class="ghost" onclick="goto('data')" style="margin-top:4px">💾 Buka Data &amp; backup</button>
   <div class="card">
     <h2>Tampilan</h2>
+    <label class="field-label" for="sLayout">Tata letak beranda</label>
+    <select id="sLayout">
+      <option value="1">Layout 1 · Klasik</option>
+      <option value="2">Layout 2 · Ringkasan dulu</option>
+      <option value="3">Layout 3 · Catat dulu</option>
+    </select>
+    <p class="muted setting-help" id="infoLayout" aria-live="polite"></p>
     <span class="muted">Gaya tampilan</span>
     <select id="sGaya">
       <option value="glass">Glass (kaca transparan)</option>
@@ -1400,7 +1594,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="masuk">Pemasukan</option>
     </select>
     <div class="grid2">
-      <input type="text" id="kbBaru" placeholder="Nama kategori (contoh: Kopi)">
+    <input type="text" id="kbBaru" placeholder="Contoh: Kopi">
       <button id="btnKatTambah" style="margin-bottom:10px">+ Tambah</button>
     </div>
     <div id="listKatKustom"></div>
@@ -1443,10 +1637,10 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     </select>
     <input type="date" id="eTgl">
   </div>
-  <input type="text" id="eJudul" placeholder="Nama transaksi">
+  <input type="text" id="eJudul" placeholder="Contoh: Belanja warung">
   <select id="eKategori"></select>
-  <input type="text" id="eTag" placeholder="Tag, pisah koma">
-  <input type="text" id="eNominalMasuk" data-uang inputmode="decimal">
+  <input type="text" id="eTag" placeholder="Contoh: kantor, kuliah">
+  <input type="text" id="eNominalMasuk" data-uang placeholder="Contoh: 50.000" inputmode="decimal">
   <p class="muted" id="eBarangJudul">Barang di transaksi ini:</p>
   <div id="eItems"></div>
   <p class="muted" id="eTotal"></p>
@@ -1457,7 +1651,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 <!-- DIALOG EDIT BERULANG -->
 <dialog id="dlgBerulang">
   <h2>Edit transaksi berulang</h2>
-  <input type="text" id="ebNama" placeholder="Nama">
+  <input type="text" id="ebNama" placeholder="Contoh: Uang kos">
   <div class="grid2">
     <select id="ebTipe">
       <option value="keluar">Pengeluaran</option>
@@ -1466,11 +1660,11 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <select id="ebKat"></select>
   </div>
   <div class="grid2">
-    <input type="number" id="ebQty" placeholder="Jumlah" min="0.001" step="any" inputmode="decimal">
+    <input type="number" id="ebQty" placeholder="Contoh: 1" min="0.001" step="any" inputmode="decimal">
     <select id="ebSatuan" aria-label="Satuan transaksi berulang"></select>
   </div>
-  <input type="text" id="ebSatuanLain" placeholder="Satuan sendiri" maxlength="30" style="display:none">
-  <input type="text" id="ebHarga" data-uang placeholder="Harga per satuan (Rp)" inputmode="decimal">
+  <input type="text" id="ebSatuanLain" placeholder="Contoh: dus" maxlength="30" style="display:none">
+  <input type="text" id="ebHarga" data-uang placeholder="Contoh: 250.000" inputmode="decimal">
   <div class="grid2">
     <select id="ebPeriode">
       <option value="bulan">Setiap bulan</option>
@@ -1622,7 +1816,6 @@ function pasangLabelForm() {
     wNama:'Nama target tabungan', wTarget:'Target harga (Rp)', wTgl:'Tenggat (opsional)',
     rDari:'Dari tanggal', rSampai:'Sampai tanggal', rTipe:'Jenis transaksi', rCari:'Cari transaksi',
     gDari:'Dari tanggal', gSampai:'Sampai tanggal', cmpA:'Hari pertama', cmpB:'Hari pembanding',
-    sPengingat:'Jam pengingat', sBackupIngat:'Ingatkan backup',
     sGaya:'Gaya tampilan', sEfek:'Kualitas efek', sAdaptif:'Warna mengikuti foto',
     sFont:'Font', sTema:'Tema', sKatTipe:'Jenis kategori', kbBaru:'Nama kategori baru', fBg:'Pilih foto latar',
     eTipe:'Jenis transaksi', eTgl:'Tanggal transaksi', eJudul:'Nama transaksi',
@@ -1715,11 +1908,19 @@ function muat() {
   }
 }
 
+function normalJamPengingat(nilai) {
+  const teks = String(nilai ?? '');
+  if (/^\d{1,2}$/.test(teks) && Number(teks) < 24) return teks.padStart(2, '0') + ':00';
+  return /^([01]\d|2[0-3]):[0-5]\d$/.test(teks) ? teks : '';
+}
+
 function muatSet() {
   try {
-    return { pengingat: '', ditutup: '', notifHari: '', ...JSON.parse(localStorage.getItem(KEY_SET) || '{}') };
+    const tersimpan = JSON.parse(localStorage.getItem(KEY_SET) || '{}');
+    return { pengingat: '', ditutup: '', notifHari: '', driveAuto: false, drivePending: false,
+      ...tersimpan, pengingat: normalJamPengingat(tersimpan.pengingat) };
   } catch (e) {
-    return { pengingat: '', ditutup: '', notifHari: '' };
+    return { pengingat: '', ditutup: '', notifHari: '', driveAuto: false, drivePending: false };
   }
 }
 
@@ -1735,7 +1936,7 @@ let fotoAktifId = null;
 let timerPesan = null;
 let penyimpananBerhasil = true;
 
-function beriPesan(teks) {
+function beriPesan(teks, kesalahan = false) {
   let box = $('pesanSingkat');
   if (!box) {
     box = el('div', 'toast-note');
@@ -1744,6 +1945,7 @@ function beriPesan(teks) {
     document.body.appendChild(box);
   }
   box.textContent = teks;
+  box.setAttribute('role', kesalahan ? 'alert' : 'status');
   box.style.display = 'block';
   clearTimeout(timerPesan);
   timerPesan = setTimeout(() => { box.style.display = 'none'; }, 4500);
@@ -1753,8 +1955,40 @@ function pesanForm(teks, fokus) {
   const box = $('pesanForm');
   box.textContent = teks;
   box.style.display = teks ? 'block' : 'none';
-  if (fokus) $(fokus).focus();
+  if (teks) beriPesan(teks, true);
+  else $('cardCatat').querySelectorAll('[aria-invalid="true"]').forEach(input => input.removeAttribute('aria-invalid'));
+  if (fokus) {
+    const input = typeof fokus === 'string' ? $(fokus) : fokus;
+    if (input) { input.setAttribute('aria-invalid', 'true'); input.focus(); }
+  }
 }
+function gagalIsi(teks, fokus) {
+  const input = typeof fokus === 'string' ? $(fokus) : fokus;
+  const dialog = input?.closest('dialog');
+  if (dialog) {
+    let pesan = dialog.querySelector('.dialog-error');
+    if (!pesan) {
+      pesan = el('p', 'form-error dialog-error');
+      pesan.setAttribute('role', 'alert');
+      dialog.querySelector('h2').after(pesan);
+    }
+    pesan.textContent = teks;
+  } else beriPesan(teks, true);
+  if (input) { input.setAttribute('aria-invalid', 'true'); input.focus(); }
+  return false;
+}
+document.addEventListener('input', e => {
+  if (e.target.matches('[aria-invalid="true"]')) e.target.removeAttribute('aria-invalid');
+  e.target.closest('dialog')?.querySelector('.dialog-error')?.remove();
+});
+document.addEventListener('change', e => {
+  if (e.target.matches('[aria-invalid="true"]')) e.target.removeAttribute('aria-invalid');
+  e.target.closest('dialog')?.querySelector('.dialog-error')?.remove();
+});
+document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('close', () => {
+  dialog.querySelector('.dialog-error')?.remove();
+  dialog.querySelectorAll('[aria-invalid="true"]').forEach(input => input.removeAttribute('aria-invalid'));
+}));
 
 function renderPanduanStatus() {
   const adaCatatan = db.transaksi.some(x => !x.saldoAwal);
@@ -1772,6 +2006,7 @@ function simpan() {
   try {
     localStorage.setItem(KEY, JSON.stringify(db));
     penyimpananBerhasil = true;
+    tandaiPerubahanDrive();
     return true;
   } catch (e) {
     penyimpananBerhasil = false;
@@ -2343,9 +2578,9 @@ function renderEditItems() {
       wrap.append(label, control);
       return wrap;
     };
-    const nama = el('input'); nama.type = 'text'; nama.placeholder = 'Nama barang'; nama.value = it.nama;
+    const nama = el('input'); nama.type = 'text'; nama.placeholder = 'Contoh: Nasi goreng'; nama.value = it.nama;
     nama.oninput = () => { editItems[i].nama = nama.value; hitungEdit(); };
-    const qty = el('input'); qty.type = 'number'; qty.min = '0.001'; qty.step = 'any'; qty.inputMode = 'decimal'; qty.placeholder = 'Jumlah'; qty.value = it.qty;
+    const qty = el('input'); qty.type = 'number'; qty.min = '0.001'; qty.step = 'any'; qty.inputMode = 'decimal'; qty.placeholder = 'Contoh: 0,5'; qty.value = it.qty;
     qty.oninput = () => {
       it.qty = Number(qty.value) || 0;
       if (it.hargaTotal != null && it.qty > 0) it.harga = it.hargaTotal / it.qty;
@@ -2353,7 +2588,7 @@ function renderEditItems() {
     };
     const satuan = el('select'); satuan.setAttribute('aria-label', 'Satuan barang');
     isiSatuanSelect(satuan, it.satuan || '', !!it.satuanBolehKosong);
-    const satuanLain = el('input'); satuanLain.type = 'text'; satuanLain.placeholder = 'Satuan sendiri'; satuanLain.maxLength = 30;
+    const satuanLain = el('input'); satuanLain.type = 'text'; satuanLain.placeholder = 'Contoh: dus'; satuanLain.maxLength = 30;
     satuanLain.value = satuan.value === '__custom__' ? it.satuan : '';
     const lainWrap = bidang(satuanLain, 'Satuan sendiri', 'satuan-lain', 'item-satuan-lain');
     lainWrap.style.display = satuan.value === '__custom__' ? '' : 'none';
@@ -2418,6 +2653,8 @@ $('btnESimpan').onclick = () => {
   const x = db.transaksi.find(d => d.id === editId);
   if (!x) { $('dlgEdit').close(); return; }
   const tipeBaru = $('eTipe').value;
+  if (!$('eTgl').value) return gagalIsi('Tanggal transaksi wajib diisi.', 'eTgl');
+  if (!$('eKategori').value) return gagalIsi('Pilih kategori transaksi.', 'eKategori');
   const nominalMasuk = angkaUang($('eNominalMasuk').value);
   const items = tipeBaru === 'masuk'
     ? [{ nama: $('eJudul').value.trim() || $('eKategori').value || 'Pemasukan', qty: 1, satuan: '', harga: nominalMasuk, hargaTotal: nominalMasuk }]
@@ -2425,17 +2662,25 @@ $('btnESimpan').onclick = () => {
     .map(i => ({ nama: String(i.nama || '').trim(), qty: Number(i.qty) || 0, satuan: String(i.satuan || '').trim().slice(0, 30),
       harga: Number(i.harga) || 0, ...(i.hargaTotal != null ? { hargaTotal: Number(i.hargaTotal) || 0 } : {}) }));
   if (tipeBaru === 'masuk' && (!Number.isFinite(nominalMasuk) || nominalMasuk <= 0)) {
-    alert('Isi jumlah uang masuk lebih dari 0.'); $('eNominalMasuk').focus(); return;
+    return gagalIsi('Jumlah uang masuk harus lebih dari 0.', 'eNominalMasuk');
   }
-  if (tipeBaru === 'keluar' && (!items.length || items.some((i, index) => !i.nama || i.qty <= 0 || i.harga <= 0 || (!i.satuan && !editItems[index]?.satuanBolehKosong)))) {
-    alert('Isi nama, jumlah, harga, dan satuan sendiri jika memilih Lainnya. Sisakan minimal satu barang.'); return;
+  if (tipeBaru === 'keluar' && !items.length) return gagalIsi('Transaksi pengeluaran harus punya minimal satu barang.', 'eTipe');
+  if (tipeBaru === 'keluar') {
+    for (let i = 0; i < items.length; i++) {
+      if (!items[i].nama) return gagalIsi('Nama barang wajib diisi.', 'eItem-' + i + '-nama');
+      if (!Number.isFinite(items[i].qty) || items[i].qty <= 0) return gagalIsi('Jumlah barang harus lebih dari 0.', 'eItem-' + i + '-qty');
+      if (!items[i].satuan && !editItems[i]?.satuanBolehKosong)
+        return gagalIsi('Satuan sendiri wajib diisi.', 'eItem-' + i + '-satuan-lain');
+      if (!Number.isFinite(subtotalItem(items[i])) || subtotalItem(items[i]) <= 0)
+        return gagalIsi('Harga barang harus lebih dari 0.', 'eItem-' + i + '-harga');
+    }
   }
   const totalBaru = items.reduce((s, i) => s + subtotalItem(i), 0);
   if (x.tunai && (totalBaru !== x.total || $('eTipe').value !== x.tipe)) {
     alert('Transaksi tunai tidak bisa diubah nominal atau tipenya, karena stok pecahan ikut berubah. Hapus lalu catat ulang.');
     return;
   }
-  const tgl = $('eTgl').value || x.tanggal;
+  const tgl = $('eTgl').value;
   const judul = $('eJudul').value.trim() || (tipeBaru === 'masuk' ? $('eKategori').value : items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
   const sebelumnya = { ...x };
   x.tipe = $('eTipe').value;
@@ -2448,6 +2693,7 @@ $('btnESimpan').onclick = () => {
   if (!simpan()) { Object.assign(x, sebelumnya); return; }
   $('dlgEdit').close();
   renderSemua();
+  beriPesan('Perubahan transaksi tersimpan.');
 };
 
 // ===== TRANSAKSI BERULANG =====
@@ -2540,15 +2786,21 @@ $('btnBerulang').onclick = () => {
   const qty = Number($('rbQty').value) || 0;
   const harga = angkaUang($('rbHarga').value) || 0;
   const satuan = satuanDariForm($('rbSatuan'), $('rbSatuanLain'));
-  if (!nama || qty <= 0 || harga <= 0 || !satuan) { alert('Isi nama, jumlah, satuan, dan harga per satuan transaksi berulang.'); return; }
+  if (!nama) return gagalIsi('Nama transaksi berulang wajib diisi.', 'rbNama');
+  if (!Number.isFinite(qty) || qty <= 0) return gagalIsi('Jumlah harus lebih dari 0.', 'rbQty');
+  if (!satuan) return gagalIsi('Isi satuan sendiri atau pilih satuan lain.', $('rbSatuan').value === '__custom__' ? 'rbSatuanLain' : 'rbSatuan');
+  if (!Number.isFinite(harga) || harga <= 0) return gagalIsi('Harga per satuan harus lebih dari 0.', 'rbHarga');
+  if (!$('rbMulai').value) return gagalIsi('Tanggal mulai wajib diisi.', 'rbMulai');
+  if (!$('rbKat').value) return gagalIsi('Pilih kategori transaksi berulang.', 'rbKat');
   db.berulang.push({
     id: uid(), nama, tipe: $('rbTipe').value, kategori: $('rbKat').value,
-    qty, satuan, harga, periode: $('rbPeriode').value, mulai: $('rbMulai').value || hariIni(), terakhir: null
+    qty, satuan, harga, periode: $('rbPeriode').value, mulai: $('rbMulai').value, terakhir: null
   });
-  simpan();
+  if (!simpan()) { db.berulang.pop(); return; }
   $('rbNama').value = ''; $('rbHarga').value = ''; $('rbQty').value = 1;
   $('rbSatuan').value = 'buah'; $('rbSatuanLain').value = ''; tampilkanSatuanLain($('rbSatuan'), $('rbSatuanLain'));
   renderSemua();
+  beriPesan('Transaksi berulang tersimpan.');
 };
 
 // ===== BATAS ANGGARAN =====
@@ -2586,11 +2838,18 @@ function renderBudget() {
 $('btnBudget').onclick = () => {
   const kat = $('bKategori').value;
   const limit = angkaUang($('bLimit').value) || 0;
-  if (limit <= 0) { alert('Isi batas anggaran dengan benar.'); return; }
+  if (!kat) return gagalIsi('Pilih kategori anggaran.', 'bKategori');
+  if (!Number.isFinite(limit) || limit <= 0) return gagalIsi('Batas anggaran harus lebih dari 0.', 'bLimit');
+  const sebelumnya = db.budgets[kat];
   db.budgets[kat] = { limit, periode: $('bPeriode').value };
-  simpan();
+  if (!simpan()) {
+    if (sebelumnya) db.budgets[kat] = sebelumnya;
+    else delete db.budgets[kat];
+    return;
+  }
   $('bLimit').value = '';
   renderSemua();
+  beriPesan('Batas anggaran tersimpan.');
 };
 
 function cekBudget(kat) {
@@ -2616,12 +2875,21 @@ function itemDariForm() {
     : { nama, qty, satuan: satuan.slice(0, 30), harga: hargaInput };
 }
 
+function pesanBarang() {
+  if (!$('iNama').value.trim()) return pesanForm('Nama barang wajib diisi.', 'iNama');
+  if (!(angkaJumlah($('iQty').value) > 0)) return pesanForm('Jumlah barang harus lebih dari 0.', 'iQty');
+  if (!$('iSatuan').value) return pesanForm('Pilih satuan barang.', 'iSatuan');
+  if ($('iSatuan').value === '__custom__' && !$('iSatuanLain').value.trim())
+    return pesanForm('Satuan sendiri wajib diisi.', 'iSatuanLain');
+  return pesanForm('Harga barang harus lebih dari 0.', 'iHarga');
+}
+
 let modeHargaSebelumnya = 'total';
 function tampilkanModeHarga() {
   const total = $('iModeHarga').value === 'total';
   const label = document.querySelector('label[for="iHarga"]');
   if (label) label.textContent = total ? 'Harga total (Rp)' : 'Harga per satuan (Rp)';
-  $('iHarga').placeholder = total ? 'Contoh: 12.000 untuk setengah kg' : 'Contoh: 24.000 per kg';
+  $('iHarga').placeholder = total ? 'Contoh: 12.000' : 'Contoh: 24.000';
   $('iHargaInfo').textContent = total
     ? 'Masukkan harga yang dibayar untuk jumlah barang di atas. Contoh: telur 0,5 kg, bayar Rp12.000 → ketik 12000, titik muncul otomatis.'
     : 'Masukkan harga untuk 1 satuan. Contoh: telur Rp24.000 per kg, jumlah 0,5 kg → total Rp12.000.';
@@ -2654,6 +2922,7 @@ function resetFormBarang() {
   $('scanReview').style.display = 'none';
   $('scanReview').open = false;
   $('scanTeks').textContent = '';
+  hapusDraftScan();
   tampilkanModeHarga();
   cekTombolSimpan();
 }
@@ -2682,7 +2951,7 @@ function renderKeranjang() {
   cekTombolSimpan();
 }
 
-$('tipe').onchange = () => { isiKategori(); updateFormJenis(); updateFormPecahan(); pesanForm(''); };
+$('tipe').onchange = () => { if ($('tipe').value === 'masuk') hapusDraftScan(); isiKategori(); updateFormJenis(); updateFormPecahan(); pesanForm(''); };
 $('iNominalMasuk').oninput = () => pesanForm('');
 ['iNama','iQty','iHarga'].forEach(id => $(id).addEventListener('input', () => { pesanForm(''); renderKeranjang(); }));
 $('iSatuan').onchange = () => {
@@ -2703,11 +2972,13 @@ $('iModeHarga').onchange = () => {
 
 $('btnTambahKrj').onclick = () => {
   const it = itemDariForm();
-  if (!it) { pesanForm('Isi nama barang, jumlah, satuan, dan harga dengan benar.', !$('iNama').value.trim() ? 'iNama' : 'iHarga'); return; }
+  if (!it) { pesanBarang(); return; }
   keranjang.push(it);
-  simpanKrj();
+  try { simpanKrj(); }
+  catch (_) { keranjang.pop(); return gagalIsi('Penyimpanan HP penuh. Barang belum ditambahkan.', 'iNama'); }
   resetFormBarang();
   renderKeranjang();
+  beriPesan('Barang ditambahkan ke daftar transaksi.');
 };
 
 $('btnKosongkan').onclick = () => {
@@ -2716,8 +2987,15 @@ $('btnKosongkan').onclick = () => {
 };
 
 $('btnSimpan').onclick = () => {
+  if (!$('scanDraft').hidden) {
+    pesanForm('Periksa hasil scan, lalu pilih Gunakan hasil scan atau Batalkan hasil scan sebelum menyimpan.');
+    $('scanDraft').scrollIntoView({ block: 'center' });
+    return;
+  }
   const tipe = $('tipe').value;
-  const tgl = $('tgl').value || hariIni();
+  if (!$('tgl').value) return pesanForm('Tanggal transaksi wajib diisi.', 'tgl');
+  if (!$('kategori').value) return pesanForm('Pilih kategori transaksi.', 'kategori');
+  const tgl = $('tgl').value;
   const cur = tipe === 'keluar' ? itemDariForm() : null;
   let items = tipe === 'keluar' ? keranjang.map(i => ({ ...i })) : [];
   if (tipe === 'masuk') {
@@ -2728,12 +3006,11 @@ $('btnSimpan').onclick = () => {
     items = [{ nama: $('judul').value.trim() || $('kategori').value || 'Pemasukan', qty: 1, satuan: '', harga: jumlah, hargaTotal: jumlah }];
   } else if (cur) items.push(cur);
   if (!items.length) {
-    const fokus = !$('iNama').value.trim() ? 'iNama' : !(angkaJumlah($('iQty').value) > 0) ? 'iQty' : !$('iSatuan').value || ($('iSatuan').value === '__custom__' && !$('iSatuanLain').value.trim()) ? 'iSatuanLain' : 'iHarga';
-    pesanForm('Isi nama barang, jumlah, satuan, dan harga sebelum menyimpan.', fokus);
+    pesanBarang();
     return;
   }
-  if (tipe === 'keluar' && !cur && ($('iNama').value.trim() || $('iHarga').value.trim())) {
-    pesanForm('Barang yang sedang diisi belum lengkap. Lengkapi atau kosongkan sebelum menyimpan.', !$('iNama').value.trim() ? 'iNama' : 'iHarga');
+  if (tipe === 'keluar' && !cur && ($('iNama').value.trim() || $('iHarga').value.trim() || !$('iQty').value || ($('iSatuan').value === '__custom__'))) {
+    pesanBarang();
     return;
   }
   const total = items.reduce((s,i) => s + subtotalItem(i), 0);
@@ -2769,6 +3046,152 @@ $('btnSimpan').onclick = () => {
 };
 
 // ===== SCAN STRUK =====
+let scanDraftItems = [];
+let scanDraftTotal = 0;
+function hapusDraftScan() {
+  scanDraftItems = [];
+  scanDraftTotal = 0;
+  $('scanDraft').hidden = true;
+  $('scanDraftList').replaceChildren();
+}
+
+function barangDariStruk(baris) {
+  const barang = [];
+  const bukanBarang = /\b(?:sub\s*total|grand\s*total|total|jumlah|bayar|tunai|kembali|diskon|potongan|pajak|ppn|kasir|struk|nota|alamat|telepon|telp|tanggal|waktu|jam|qris|debit|kredit|pembayaran|kartu|member|poin|saldo|change|cash|tax)\b/i;
+  const hargaAkhir = /(?:^|[\s:=])(?:Rp\.?\s*)?(\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{2})?|\d{3,8}(?:[.,]\d{2})?)[\s,.-]*$/i;
+  for (let index = 0; index < baris.length; index++) {
+    if (barang.length >= 40) break;
+    let line = baris[index].trim();
+    if (bukanBarang.test(line)) continue;
+    let ujung = hargaAkhir.exec(line);
+    // Sebagian struk memisahkan nama dan jumlah/harga ke dua baris.
+    if (!ujung && index + 1 < baris.length && /[a-z]{2}/i.test(line) &&
+        !/\d{1,3}(?:[.,]\d{3})/.test(line) &&
+        /^(?:Rp\.?\s*)?\d/.test(baris[index + 1]) && !bukanBarang.test(baris[index + 1])) {
+      const gabung = line + ' ' + baris[index + 1].trim();
+      const kandidat = hargaAkhir.exec(gabung);
+      if (kandidat) { line = gabung; ujung = kandidat; index++; }
+    }
+    if (!ujung) continue;
+    const raw = ujung[1];
+    const hargaTotal = Number(raw.replace(/\D/g, '')) / (/[.,]\d{2}$/.test(raw) ? 100 : 1);
+    if (!Number.isFinite(hargaTotal) || hargaTotal < 100 || hargaTotal > 100000000) continue;
+    let nama = line.slice(0, ujung.index).replace(/[\s.:@-]+$/, '').trim();
+    let qty = 1, satuan = 'buah';
+    const ukuran = /(?:^|\s)(\d+(?:[,.]\d+)?)\s*(kg|kilogram|gr|gram|g|liter|ltr|l|ml|pcs|pc|butir|buah|botol|galon|bungkus|bks|lembar|paket|pkt)\b/i.exec(nama);
+    if (ukuran) {
+      qty = angkaJumlah(ukuran[1]);
+      const unit = ukuran[2].toLowerCase();
+      satuan = ({ kilogram:'kg', gr:'gram', g:'gram', l:'liter', ltr:'liter', pc:'pcs', bks:'bungkus', pkt:'paket' })[unit] || unit;
+      nama = nama.replace(ukuran[0], ' ').trim();
+    } else {
+      const perkalian = /(?:^|\s)(\d+(?:[,.]\d+)?)\s*[x×@]\s*(?:Rp\.?\s*)?\d[\d.,]*/i.exec(nama);
+      if (perkalian) {
+        qty = angkaJumlah(perkalian[1]);
+        nama = nama.replace(perkalian[0], ' ').trim();
+      } else {
+        const depan = /^(\d+(?:[,.]\d+)?)\s*[x×]\s+(?=[a-z])/i.exec(nama);
+        if (depan) { qty = angkaJumlah(depan[1]); nama = nama.slice(depan[0].length).trim(); }
+      }
+    }
+    // Hilangkan harga per satuan yang mendahului harga total.
+    nama = nama.replace(/\s+(?:[x×@]\s*)?(?:Rp\.?\s*)?\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{2})?\s*$/i, '');
+    nama = nama.replace(/^(?:\d{5,}\s+|[-–•*]+\s*)/, '').replace(/\s+/g, ' ').slice(0, 80).trim();
+    if (!/[a-z]{2}/i.test(nama) || !Number.isFinite(qty) || qty <= 0 || qty > 10000) continue;
+    barang.push({ nama, qty, satuan, hargaTotal });
+  }
+  return barang;
+}
+
+function perbaruiTotalDraftScan() {
+  const jumlahDraft = scanDraftItems.reduce((n, i) => n + (angkaUang(i.hargaTotal) || 0), 0);
+  $('btnPakaiScan').disabled = !scanDraftItems.length;
+  if (!scanDraftItems.length) {
+    $('scanDraftTotal').textContent = 'Semua barang hasil scan sudah dihapus. Scan ulang atau batalkan.';
+    return;
+  }
+  $('scanDraftTotal').textContent = 'Jumlah barang: ' + rp(jumlahDraft) +
+    (scanDraftTotal ? ' · Total di struk: ' + rp(scanDraftTotal) +
+      (jumlahDraft !== scanDraftTotal ? ' · Ada selisih, periksa diskon/ongkir atau angka yang terbaca.' : ' · Cocok.') :
+      ' · Total struk belum terbaca, periksa satu per satu.');
+}
+
+function tampilkanDraftScan(barang, total) {
+  hapusDraftScan();
+  scanDraftItems = barang.map(i => ({ ...i }));
+  scanDraftTotal = total || 0;
+  const box = $('scanDraftList');
+  const bidang = (teks, input) => {
+    const label = el('label', 'field-wrap');
+    label.append(el('span', 'field-label', teks), input);
+    return label;
+  };
+  scanDraftItems.forEach(item => {
+    const row = el('div', 'itemrow');
+    const nama = el('input'); nama.type = 'text'; nama.value = item.nama;
+    nama.maxLength = 80; nama.oninput = () => { item.nama = nama.value; };
+    const namaWrap = bidang('Nama barang', nama);
+    namaWrap.style.gridColumn = '1 / -1';
+    row.appendChild(namaWrap);
+    const qty = el('input'); qty.type = 'text'; qty.inputMode = 'decimal'; qty.value = jumlah(item.qty);
+    qty.oninput = () => { item.qty = angkaJumlah(qty.value); };
+    const satuan = el('select'); isiSatuanSelect(satuan, item.satuan);
+    const lain = el('input'); lain.type = 'text'; lain.maxLength = 30; lain.placeholder = 'Contoh: dus';
+    lain.value = satuan.value === '__custom__' ? item.satuan : '';
+    const lainWrap = bidang('Satuan sendiri', lain);
+    lainWrap.style.display = satuan.value === '__custom__' ? '' : 'none';
+    satuan.onchange = () => {
+      lainWrap.style.display = satuan.value === '__custom__' ? '' : 'none';
+      item.satuan = satuan.value === '__custom__' ? lain.value.trim() : satuan.value;
+    };
+    lain.oninput = () => { item.satuan = lain.value.trim(); };
+    row.append(bidang('Jumlah', qty), bidang('Satuan', satuan), lainWrap);
+    const harga = el('input'); harga.type = 'text'; harga.inputMode = 'decimal';
+    harga.dataset.uang = ''; isiUang(harga, item.hargaTotal);
+    harga.oninput = () => { item.hargaTotal = angkaUang(harga.value); perbaruiTotalDraftScan(); };
+    const hargaWrap = bidang('Harga total (Rp)', harga);
+    hargaWrap.style.gridColumn = '1 / -1';
+    row.appendChild(hargaWrap);
+    const hapus = el('button', 'del', 'Hapus barang ini');
+    hapus.type = 'button';
+    hapus.style.gridColumn = '1 / -1';
+    hapus.onclick = () => {
+      scanDraftItems.splice(scanDraftItems.indexOf(item), 1);
+      row.remove();
+      perbaruiTotalDraftScan();
+    };
+    row.appendChild(hapus);
+    box.appendChild(row);
+  });
+  $('scanDraft').hidden = false;
+  perbaruiTotalDraftScan();
+}
+
+$('btnBatalScan').onclick = () => { hapusDraftScan(); $('statusScan').textContent = 'Hasil scan dibatalkan. Transaksi belum berubah.'; };
+$('btnPakaiScan').onclick = () => {
+  const dipilih = scanDraftItems;
+  if (!dipilih.length) { $('statusScan').textContent = 'Semua barang dihapus. Scan ulang atau batalkan hasil scan.'; beriPesan($('statusScan').textContent, true); return; }
+  const buruk = dipilih.find(i => !i.nama.trim() || !Number.isFinite(i.qty) || i.qty <= 0 || !i.satuan.trim() || !Number.isFinite(i.hargaTotal) || i.hargaTotal <= 0);
+  if (buruk) {
+    $('statusScan').textContent = 'Ada nama, jumlah, satuan, atau harga yang belum benar. Periksa hasil scan dahulu.';
+    const indeks = dipilih.indexOf(buruk), baris = $('scanDraftList').children[indeks];
+    const input = !buruk.nama.trim() ? baris.querySelector('input')
+      : !(buruk.qty > 0) ? baris.querySelectorAll('input')[1]
+      : !buruk.satuan.trim() ? (baris.querySelector('select').value === '__custom__' ? baris.querySelectorAll('input')[2] : baris.querySelector('select'))
+      : baris.querySelector('input[data-uang]');
+    return gagalIsi($('statusScan').textContent, input);
+  }
+  const tambahan = dipilih.map(i => ({ nama:i.nama.trim(), qty:i.qty, satuan:i.satuan.trim().slice(0,30), harga:i.hargaTotal/i.qty, hargaTotal:i.hargaTotal }));
+  const sebelumnya = keranjang;
+  keranjang = [...keranjang, ...tambahan];
+  try { simpanKrj(); }
+  catch (_) { keranjang = sebelumnya; $('statusScan').textContent = 'Penyimpanan perangkat penuh. Barang hasil scan belum dimasukkan.'; return; }
+  hapusDraftScan();
+  $('statusScan').textContent = tambahan.length + ' barang masuk ke daftar transaksi. Periksa juga barang yang sedang diisi sebelum menekan Simpan transaksi.';
+  renderKeranjang();
+  beriPesan(tambahan.length + ' barang hasil scan ditambahkan.');
+};
+
 function muatTesseract() {
   return new Promise((ok, err) => {
     if (window.Tesseract) return ok();
@@ -2781,7 +3204,7 @@ function muatTesseract() {
 }
 
 function bacaStruk(teks) {
-  const baris = teks.split(/\r?\n/).map(s => s.trim().replace(/(\d)\s+(?=\d{3}\b)/g, '$1.')).filter(Boolean);
+  const baris = teks.split(/\r?\n/).map(s => s.trim().replace(/\s{2,}/g, ' ')).filter(Boolean);
   const nominal = s => [...s.matchAll(/(?:^|[^\d])(?:Rp\.?\s*)?(\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{2})?|\d{1,8}(?:[.,]\d{2})?)(?!\d)/gi)]
     .map(m => {
       const raw = m[1];
@@ -2799,13 +3222,14 @@ function bacaStruk(teks) {
     if (!angka.length && i + 1 < baris.length && !/[a-z]{3,}/i.test(baris[i + 1].replace(/rp/ig, ''))) {
       angka = nominal(baris[i + 1]);
     }
-    const skor = /grand\s*total|total\s*(?:bayar|belanja|tagihan)|harus\s*dibayar/i.test(label[0]) ? 3 : 2;
+    const skor = /grand\s*total|total\s*(?:bayar|belanja|tagihan)|harus\s*dibayar/i.test(label[0]) ? 4
+      : /total/i.test(label[0]) ? 3 : 2;
     if (angka.length && skor >= nilai) { total = angka[0]; nilai = skor; }
   });
-  const produk = baris.filter(b => /[a-z]{3,}/i.test(b) && nominal(b).length &&
-    !/total|bayar|tunai|kembali|diskon|pajak|ppn|kasir|telp|alamat|struk|jumlah/i.test(b));
-  const nama = produk.length === 1 ? produk[0].replace(/(?:Rp\.?\s*)?\d[\d.,]*\s*$/i, '').trim().slice(0, 40) : '';
-  return { nama, total, teks: baris.join('\n') };
+  const barang = barangDariStruk(baris);
+  const jumlahBarang = barang.reduce((n, i) => n + i.hargaTotal, 0);
+  const cocok = total > 0 && Math.abs(jumlahBarang - total) <= 1;
+  return { nama: barang.length === 1 ? barang[0].nama : '', total, barang, cocok, teks: baris.join('\n') };
 }
 
 async function siapkanGambarScan(file) {
@@ -2823,22 +3247,39 @@ async function siapkanGambarScan(file) {
   if (!w || !h) throw new Error('ukuran gambar tidak valid');
   const skala = Math.min(3, 2200 / Math.max(w, h), Math.max(1, 1500 / Math.max(w, h)));
   const asli = document.createElement('canvas');
-  asli.width = Math.max(1, Math.round(w * skala));
-  asli.height = Math.max(1, Math.round(h * skala));
-  asli.getContext('2d').drawImage(sumber, 0, 0, asli.width, asli.height);
+  const tepi = 12;
+  asli.width = Math.max(1, Math.round(w * skala)) + tepi * 2;
+  asli.height = Math.max(1, Math.round(h * skala)) + tepi * 2;
+  const dasar = asli.getContext('2d');
+  dasar.fillStyle = '#fff'; dasar.fillRect(0, 0, asli.width, asli.height);
+  dasar.drawImage(sumber, tepi, tepi, asli.width - tepi * 2, asli.height - tepi * 2);
   const olah = document.createElement('canvas');
   olah.width = asli.width; olah.height = asli.height;
   const ctx = olah.getContext('2d');
-  ctx.filter = 'grayscale(1) contrast(1.5)';
+  ctx.filter = 'grayscale(1) contrast(1.25)';
   ctx.drawImage(asli, 0, 0);
   if (sumber.close) sumber.close();
-  return { asli, olah };
+  const buatKontrasKuat = () => {
+    const kuat = document.createElement('canvas');
+    kuat.width = asli.width; kuat.height = asli.height;
+    const konteks = kuat.getContext('2d');
+    konteks.filter = 'grayscale(1) contrast(1.8) brightness(1.05)';
+    konteks.drawImage(asli, 0, 0);
+    return kuat;
+  };
+  return { asli, olah, buatKontrasKuat };
+}
+
+function nilaiScan(h) {
+  return Math.min(h.barang.length, 30) * 4 + (h.total ? 2 : 0) +
+    (h.cocok ? 5 : 0) + Math.min(h.keyakinan || 0, 100) / 100;
 }
 
 let scanBerjalan = false;
 async function prosesScan(file) {
   if (!file || scanBerjalan) return;
   scanBerjalan = true;
+  hapusDraftScan();
   const st = $('statusScan');
   $('btnScan').disabled = $('btnScanGaleri').disabled = true;
   st.textContent = 'Menyiapkan gambar...';
@@ -2851,34 +3292,53 @@ async function prosesScan(file) {
   let worker;
   try {
     await muatTesseract();
-    const { asli, olah } = await siapkanGambarScan(file);
+    const { asli, olah, buatKontrasKuat } = await siapkanGambarScan(file);
     st.textContent = 'Memuat pembaca teks...';
     worker = await Tesseract.createWorker(['ind', 'eng'], 1, {
       logger: m => {
         if (m.status && m.progress > 0) st.textContent = 'Membaca gambar... ' + Math.round(m.progress * 100) + '%';
       }
     });
-    st.textContent = 'Mencari total pada struk...';
-    const pertama = bacaStruk((await worker.recognize(olah, { rotateAuto: true })).data.text || '');
-    let hasil = pertama, teksLain = '';
-    if (!pertama.total) {
-      st.textContent = 'Mencoba gambar asli untuk membaca ulang...';
-      const kedua = bacaStruk((await worker.recognize(asli, { rotateAuto: true })).data.text || '');
-      if (kedua.total || kedua.teks.length > pertama.teks.length) hasil = kedua;
-      teksLain = hasil === pertama ? kedua.teks : pertama.teks;
+    await worker.setParameters({ tessedit_pageseg_mode: '4', preserve_interword_spaces: '1' });
+    const baca = async gambar => {
+      const data = (await worker.recognize(gambar, { rotateAuto: true })).data;
+      const h = bacaStruk(data.text || '');
+      h.keyakinan = Number(data.confidence) || 0;
+      return h;
+    };
+    st.textContent = 'Membaca barang dan total pada struk...';
+    const kandidat = [await baca(olah)];
+    if (!kandidat[0].cocok || !kandidat[0].barang.length) {
+      st.textContent = 'Memeriksa pembacaan dari gambar asli...';
+      await worker.setParameters({ tessedit_pageseg_mode: '3' });
+      kandidat.push(await baca(asli));
     }
+    let hasil = kandidat.reduce((terbaik, h) => nilaiScan(h) > nilaiScan(terbaik) ? h : terbaik);
+    if ((!hasil.barang.length || !hasil.total) && asli.width * asli.height <= 5000000) {
+      st.textContent = 'Mencoba meningkatkan kontras tulisan yang samar...';
+      await worker.setParameters({ tessedit_pageseg_mode: '6' });
+      kandidat.push(await baca(buatKontrasKuat()));
+      hasil = kandidat.reduce((terbaik, h) => nilaiScan(h) > nilaiScan(terbaik) ? h : terbaik);
+    }
+    if (!hasil.total) {
+      hasil.total = kandidat.find(h => h.total)?.total || 0;
+      hasil.cocok = hasil.total > 0 && Math.abs(hasil.barang.reduce((n, i) => n + i.hargaTotal, 0) - hasil.total) <= 1;
+    }
+    const teksLain = kandidat.filter(h => h !== hasil && h.teks && h.teks !== hasil.teks)
+      .map(h => h.teks).slice(0, 2).join('\n\n--- Pembacaan lain ---\n');
     $('scanTeks').textContent = hasil.teks + (teksLain ? '\n\n--- Pembacaan alternatif ---\n' + teksLain : '');
     $('scanReview').style.display = hasil.teks || teksLain ? 'block' : 'none';
-    if (hasil.nama && !$('iNama').value.trim()) $('iNama').value = hasil.nama;
-    if (hasil.total && !keranjang.length && !$('iHarga').value.trim()) {
-      $('iModeHarga').value = 'total'; modeHargaSebelumnya = 'total';
-      isiUang($('iHarga'), hasil.total);
-      tampilkanModeHarga();
-      st.textContent = 'Total terdeteksi ' + rp(hasil.total) + '. Periksa nama, jumlah, satuan, dan harga sebelum menyimpan.';
+    if ($('tipe').value !== 'keluar') { st.textContent = 'Jenis transaksi berubah. Pilih Pengeluaran dan scan lagi jika ingin memakai struk.'; return; }
+    if (hasil.barang.length) {
+      tampilkanDraftScan(hasil.barang, hasil.total);
+      st.textContent = hasil.barang.length + ' barang terbaca. Periksa dan ubah bila perlu, lalu tekan Gunakan hasil scan.';
+      $('scanDraft').scrollIntoView({ block: 'start', behavior: 'smooth' });
     } else if (hasil.total) {
-      st.textContent = 'Total struk terdeteksi ' + rp(hasil.total) + '. Harga yang sudah diisi atau barang di keranjang tidak diganti. Periksa manual.';
+      tampilkanDraftScan([{ nama: hasil.nama || 'Belanja dari struk', qty: 1, satuan: 'buah', hargaTotal: hasil.total }], hasil.total);
+      st.textContent = 'Total ' + rp(hasil.total) + ' terbaca, tetapi rincian barang belum jelas. Isi nama dan jumlah pada hasil scan sebelum digunakan.';
+      $('scanDraft').scrollIntoView({ block: 'start', behavior: 'smooth' });
     } else {
-      st.textContent = 'Baris total belum terbaca dengan yakin. Lihat gambar/teks di bawah, lalu isi harga secara manual.';
+      st.textContent = 'Barang dan total belum terbaca dengan yakin. Lihat gambar/teks di bawah, lalu isi transaksi secara manual.';
     }
   } catch (err) {
     st.textContent = 'Gagal membaca gambar. Coba foto lebih terang dan lurus, atau pilih gambar lain. Scan memerlukan internet saat memuat pembaca teks.';
@@ -2933,7 +3393,7 @@ function renderWish() {
 
     const aksi = el('div', 'aksi');
     const inp = document.createElement('input');
-    inp.type = 'text'; inp.dataset.uang = ''; inp.placeholder = 'Setor (Rp)'; inp.inputMode = 'decimal';
+    inp.type = 'text'; inp.dataset.uang = ''; inp.placeholder = 'Contoh: 50.000'; inp.inputMode = 'decimal';
     inp.id = 'setor-' + w.id;
     inp.style.margin = '0';
     const bidangSetor = el('div', 'field-wrap');
@@ -2944,12 +3404,14 @@ function renderWish() {
     const setor = el('button', 'kecil beli', 'Setor');
     setor.onclick = () => {
       const n = angkaUang(inp.value) || 0;
-      if (n <= 0) { alert('Isi jumlah setoran.'); return; }
+      if (!Number.isFinite(n) || n <= 0) return gagalIsi('Jumlah setoran harus lebih dari 0.', inp);
       db.transaksi.push({ id: uid(), ts: Date.now(), tanggal: hariIni(), tipe: 'keluar',
         judul: 'Tabungan: ' + w.nama, kategori: 'Tabungan',
         items: [{ nama: 'Setor tabungan ' + w.nama, qty: 1, harga: n }], total: n, wishId: w.id,
         tags: [], foto: null, berulangId: null, saldoAwal: false });
-      simpan(); renderSemua();
+      if (!simpan()) { db.transaksi.pop(); return; }
+      renderSemua();
+      beriPesan('Setoran tabungan tersimpan.');
     };
     const selesai = el('button', 'kecil sec', kur > 0 ? 'Hapus' : 'Selesai');
     selesai.onclick = () => {
@@ -2966,18 +3428,21 @@ function renderWish() {
 $('btnWish').onclick = () => {
   const nama = $('wNama').value.trim();
   const target = angkaUang($('wTarget').value) || 0;
-  if (!nama || target <= 0) { alert('Isi nama barang dan target harganya.'); return; }
+  if (!nama) return gagalIsi('Nama target tabungan wajib diisi.', 'wNama');
+  if (!Number.isFinite(target) || target <= 0) return gagalIsi('Target harga harus lebih dari 0.', 'wTarget');
   db.wishlist.push({ id: uid(), nama, target, tenggat: $('wTgl').value || '' });
-  simpan();
+  if (!simpan()) { db.wishlist.pop(); return; }
   $('wNama').value = ''; $('wTarget').value = ''; $('wTgl').value = '';
   renderSemua();
+  beriPesan('Target tabungan tersimpan.');
 };
 
 // ===== PENGINGAT HARIAN =====
 function renderPengingat() {
-  const jam = Number(set.pengingat);
+  const sekarang = new Date();
+  const jamMenit = String(sekarang.getHours()).padStart(2, '0') + ':' + String(sekarang.getMinutes()).padStart(2, '0');
   const sudahCatat = db.transaksi.some(x => x.tanggal === hariIni());
-  const tampil = set.pengingat !== '' && new Date().getHours() >= jam && !sudahCatat && set.ditutup !== hariIni();
+  const tampil = !!set.pengingat && jamMenit >= set.pengingat && !sudahCatat && set.ditutup !== hariIni();
   $('bannerPengingat').style.display = tampil ? 'flex' : 'none';
   if (tampil && set.notifHari !== hariIni() && 'Notification' in window && Notification.permission === 'granted' && navigator.serviceWorker) {
     navigator.serviceWorker.ready.then(reg => {
@@ -2998,10 +3463,14 @@ function renderNotifStatus() {
 }
 
 $('sPengingat').onchange = () => {
-  set.pengingat = $('sPengingat').value;
+  set.pengingat = normalJamPengingat($('sPengingat').value);
+  set.ditutup = '';
+  set.notifHari = '';
   simpanSet();
   renderPengingat();
+  beriPesan(set.pengingat ? 'Pengingat harian diatur pukul ' + set.pengingat + '.' : 'Pengingat harian dimatikan.');
 };
+$('btnPengingatMati').onclick = () => { $('sPengingat').value = ''; $('sPengingat').onchange(); };
 $('btnNotif').onclick = () => {
   if (!('Notification' in window)) { renderNotifStatus(); return; }
   Notification.requestPermission().then(() => { renderNotifStatus(); renderPengingat(); });
@@ -3153,7 +3622,9 @@ let kembaliCatat = 'beranda';
 function goto(p) {
   if (p === 'catat' && halamanAktif !== 'catat') kembaliCatat = halamanAktif;
   halamanAktif = p;
-  document.querySelectorAll('.page').forEach(s => s.style.display = s.id === p ? 'block' : 'none');
+  document.querySelectorAll('.page').forEach(s => s.style.display = s.id === p
+    ? (p === 'beranda' && document.documentElement.dataset.layout !== '1' ? 'flex' : 'block')
+    : 'none');
   const tabAktif = p === 'data' ? 'setelan' : p;
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('aktif', t.dataset.page === tabAktif));
   if (p === 'catat') $('btnNavCatat').setAttribute('aria-current', 'page');
@@ -3323,9 +3794,9 @@ const KEY_TAMPILAN = 'catatan-tampilan-v1';
 let tampilan = (() => {
   try {
     const { beranda, ...tersimpan } = JSON.parse(localStorage.getItem(KEY_TAMPILAN) || '{}');
-    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', ...tersimpan };
+    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', layout: '1', ...tersimpan };
   } catch (e) {
-    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa' };
+    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', layout: '1' };
   }
 })();
 
@@ -3378,6 +3849,20 @@ function perbaruiSetelanTersedia() {
 
 function terapkanTampilan() {
   const h = document.documentElement;
+  h.dataset.layout = ['1', '2', '3'].includes(String(tampilan.layout)) ? String(tampilan.layout) : '1';
+  $('sLayout').value = h.dataset.layout;
+  const keteranganLayout = {
+    '1': ['Saldo, ringkasan minggu, lalu tombol catat.', 'Urutan beranda semula: saldo → ringkasan → catat.'],
+    '2': ['Pantau uangmu', 'Ringkasan minggu tampil paling atas, lalu saldo dan tombol catat.'],
+    '3': ['Catat dulu, lihat nanti', 'Tombol catat tampil paling atas, lalu saldo dan ringkasan minggu.']
+  };
+  const [judulLayout, infoLayout] = keteranganLayout[h.dataset.layout];
+  $('layoutIntro').hidden = h.dataset.layout === '1';
+  $('layoutIntroTitle').textContent = judulLayout;
+  $('layoutIntroText').textContent = infoLayout;
+  $('infoLayout').textContent = infoLayout + ' Berlaku untuk semua gaya tampilan.';
+  if ($('beranda').style.display && $('beranda').style.display !== 'none')
+    $('beranda').style.display = h.dataset.layout === '1' ? 'block' : 'flex';
   h.dataset.gaya = ['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat', 'pop'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
   h.dataset.tema = h.dataset.gaya === 'retro' ? 'dark' : tampilan.tema;
   h.dataset.efek = h.dataset.gaya === 'glass' && ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'tanpa';
@@ -3430,6 +3915,11 @@ function kompresBg(file) {
   });
 }
 
+$('sLayout').onchange = () => {
+  tampilan.layout = $('sLayout').value;
+  simpanTampilan();
+  terapkanTampilan();
+};
 $('sTema').value = tampilan.tema;
 $('sTema').onchange = () => {
   tampilan.tema = $('sTema').value;
@@ -3538,8 +4028,9 @@ function bacaPecahan(prefix) {
 
 function pecahanValid(prefix) {
   return DENOM.every(d => {
-    const raw = $(prefix + '-' + d).value;
-    return raw === '' || (Number.isInteger(Number(raw)) && Number(raw) >= 0);
+    const input = $(prefix + '-' + d);
+    const raw = input.value;
+    return !input.validity.badInput && (raw === '' || (Number.isInteger(Number(raw)) && Number(raw) >= 0));
   });
 }
 
@@ -3663,11 +4154,15 @@ buatGridDenom('pkGrid', 'pk');
 isiPecahan('st', db.uangFisik.stok);
 
 $('btnStokSimpan').onclick = () => {
-  if (!pecahanValid('st')) { alert('Jumlah lembar stok harus angka bulat 0 atau lebih.'); return; }
+  if (!pecahanValid('st')) {
+    const salah = DENOM.map(d => $('st-' + d)).find(input => input.validity.badInput || (input.value && (!Number.isInteger(Number(input.value)) || Number(input.value) < 0)));
+    return gagalIsi('Jumlah lembar stok harus angka bulat 0 atau lebih.', salah || $('st-500'));
+  }
   const sebelumnya = db.uangFisik;
   db.uangFisik = { aktif: true, stok: bacaPecahan('st') };
   if (!simpan()) { db.uangFisik = sebelumnya; return; }
   renderSemua();
+  beriPesan('Stok uang fisik tersimpan.');
 };
 $('iCara').onchange = updateFormPecahan;
 $('btnPecahOtomatis').onclick = () => {
@@ -3758,10 +4253,13 @@ $('btnEbSimpan').onclick = () => {
   const harga = angkaUang($('ebHarga').value) || 0;
   const satuan = satuanDariForm($('ebSatuan'), $('ebSatuanLain'));
   const mulai = $('ebMulai').value;
-  if (!nama || qty <= 0 || harga <= 0 || !mulai || ($('ebSatuan').value === '__custom__' && !satuan)) {
-    alert('Lengkapi nama, jumlah, satuan sendiri jika dipilih, harga per satuan, dan tanggal mulai.');
-    return;
-  }
+  if (!nama) return gagalIsi('Nama transaksi berulang wajib diisi.', 'ebNama');
+  if (!Number.isFinite(qty) || qty <= 0) return gagalIsi('Jumlah harus lebih dari 0.', 'ebQty');
+  if ($('ebSatuan').value === '__custom__' && !satuan) return gagalIsi('Satuan sendiri wajib diisi.', 'ebSatuanLain');
+  if (!Number.isFinite(harga) || harga <= 0) return gagalIsi('Harga per satuan harus lebih dari 0.', 'ebHarga');
+  if (!mulai) return gagalIsi('Tanggal mulai wajib diisi.', 'ebMulai');
+  if (!$('ebKat').value) return gagalIsi('Pilih kategori transaksi berulang.', 'ebKat');
+  const sebelumnya = { ...r };
   r.nama = nama;
   r.tipe = $('ebTipe').value;
   r.kategori = $('ebKat').value;
@@ -3770,9 +4268,10 @@ $('btnEbSimpan').onclick = () => {
   r.harga = harga;
   r.periode = $('ebPeriode').value;
   r.mulai = mulai;
-  simpan();
+  if (!simpan()) { Object.assign(r, sebelumnya); return; }
   $('dlgBerulang').close();
   renderSemua();
+  beriPesan('Perubahan transaksi berulang tersimpan.');
 };
 
 // ===== WARNA AKSEN DARI FOTO LATAR =====
@@ -3947,10 +4446,16 @@ function renderBackupBanner() {
 
 $('sBackupIngat').value = set.backupIngat || '';
 $('sBackupIngat').onchange = () => {
-  set.backupIngat = $('sBackupIngat').value;
+  const isi = $('sBackupIngat').value;
+  if (isi && (!/^\d+$/.test(isi) || Number(isi) < 1 || Number(isi) > 3650))
+    return gagalIsi('Isi jeda backup dengan angka bulat 1 sampai 3650 hari.', 'sBackupIngat');
+  set.backupIngat = isi;
+  set.ditutupBackup = '';
   simpanSet();
   renderBackupBanner();
+  beriPesan(isi ? 'Pengingat backup diatur tiap ' + isi + ' hari.' : 'Pengingat backup dimatikan.');
 };
+$('btnBackupMati').onclick = () => { $('sBackupIngat').value = ''; $('sBackupIngat').onchange(); };
 $('btnBackupSekarang').onclick = () => $('btnBackup').click();
 $('btnBackupNanti').onclick = () => {
   set.ditutupBackup = hariIni();
@@ -3964,6 +4469,43 @@ const DRIVE_NAMA = 'catatan-keuangan-backup.json';
 const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.file';
 let driveToken = null;
 let driveTokenExp = 0;
+let driveAutoTimer = null;
+let driveAutoBusy = false;
+let driveRevisi = 0;
+let driveAutoError = '';
+let driveUploadPromise = null;
+const tokenDriveAktif = () => !!driveToken && Date.now() < driveTokenExp;
+const asalDriveValid = () => location.protocol === 'https:' ||
+  (location.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(location.hostname));
+
+function tandaiPerubahanDrive() {
+  if (!set.driveAuto) return;
+  driveRevisi++;
+  set.drivePending = true;
+  try { simpanSet(); } catch (_) { /* Data utama tetap tersimpan di perangkat. */ }
+  driveAutoError = '';
+  jadwalkanDriveOtomatis();
+}
+
+function jadwalkanDriveOtomatis() {
+  clearTimeout(driveAutoTimer);
+  renderDriveStatus();
+  if (!set.driveAuto || !set.drivePending || !tokenDriveAktif() || !asalDriveValid() || !navigator.onLine) return;
+  driveAutoTimer = setTimeout(async () => {
+    if (driveAutoBusy) return;
+    driveAutoBusy = true;
+    try { await simpanKeDrive({ otomatis: true }); }
+    catch (e) {
+      if (e.status === 401) { driveToken = null; driveTokenExp = 0; }
+      driveAutoError = e && e.message ? e.message : 'Koneksi gagal';
+      renderDriveStatus();
+      beriPesan('Auto simpan Drive belum berhasil. Buka Data & backup untuk melihat status.', true);
+    } finally {
+      driveAutoBusy = false;
+      if (set.drivePending && !driveAutoError) jadwalkanDriveOtomatis();
+    }
+  }, 5000);
+}
 
 function buatBackupObjek() {
   return {
@@ -3989,11 +4531,10 @@ function loadGis() {
   });
 }
 
-async function mintaTokenDrive() {
-  if (driveToken && Date.now() < driveTokenExp) return driveToken;
-  const asalValid = location.protocol === 'https:' ||
-    (location.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(location.hostname));
-  if (!asalValid) throw new Error('Login Google Drive memerlukan situs HTTPS yang terdaftar di Google. Jika membuka file HTML langsung, gunakan Export backup');
+async function mintaTokenDrive(interaktif = true) {
+  if (tokenDriveAktif()) return driveToken;
+  if (!interaktif) throw new Error('Sesi Drive berakhir. Tekan Simpan ke Drive untuk menghubungkan lagi');
+  if (!asalDriveValid()) throw new Error('Login Google Drive memerlukan situs HTTPS yang terdaftar di Google. Jika membuka file HTML langsung, gunakan Export backup');
   await loadGis();
   return new Promise((ok, err) => {
     const client = google.accounts.oauth2.initTokenClient({
@@ -4011,13 +4552,14 @@ async function mintaTokenDrive() {
   });
 }
 
-async function driveFetch(url, opsi = {}) {
-  const t = await mintaTokenDrive();
+async function driveFetch(url, opsi = {}, interaktif = true) {
+  const t = await mintaTokenDrive(interaktif);
   const res = await fetch(url, {
     ...opsi,
     headers: { ...(opsi.headers || {}), Authorization: 'Bearer ' + t }
   });
   if (!res.ok) {
+    if (res.status === 401) { driveToken = null; driveTokenExp = 0; }
     const e = new Error('Drive ' + res.status);
     e.status = res.status;
     throw e;
@@ -4029,9 +4571,29 @@ function renderDriveStatus() {
   $('driveStatus').textContent = set.driveSimpan
     ? 'Terakhir disimpan ke Drive: ' + tglIndo(set.driveSimpan) + '.'
     : 'Belum pernah disimpan ke Drive.';
+  $('driveAutoInfo').textContent = !set.driveAuto
+    ? 'Jika diaktifkan, perubahan disimpan otomatis saat web terbuka dan sesi Google masih aktif.'
+    : !asalDriveValid()
+      ? 'Auto simpan perlu situs HTTPS yang terdaftar di Google; file HTML langsung tidak bisa login ke Drive.'
+      : !tokenDriveAktif()
+        ? 'Aktif, tetapi perlu sambungan Google. Tekan Simpan ke Drive untuk menghubungkan atau memperbarui sesi.'
+        : driveAutoError
+          ? 'Belum berhasil menyimpan otomatis: ' + driveAutoError + '. Tekan Simpan ke Drive untuk mencoba lagi.'
+          : set.drivePending
+            ? 'Perubahan sedang menunggu simpan otomatis ke Drive.'
+            : 'Aktif. Perubahan berikutnya akan disimpan otomatis selama web terbuka.';
 }
 
-async function simpanKeDrive(sudahCoba = false) {
+async function simpanKeDrive(pilihan = {}) {
+  if (driveUploadPromise) return driveUploadPromise;
+  driveUploadPromise = kirimBackupKeDrive(pilihan);
+  try { return await driveUploadPromise; }
+  finally { driveUploadPromise = null; }
+}
+
+async function kirimBackupKeDrive({ otomatis = false, sudahCoba = false } = {}) {
+  if (otomatis && !tokenDriveAktif()) throw new Error('Sesi Drive berakhir. Tekan Simpan ke Drive untuk menghubungkan lagi');
+  const revisiSaatMulai = driveRevisi;
   const teks = JSON.stringify(buatBackupObjek(), null, 2);
   const boundary = 'catatan' + uid();
   const meta = { name: DRIVE_NAMA, mimeType: 'application/json' };
@@ -4048,20 +4610,24 @@ async function simpanKeDrive(sudahCoba = false) {
       method: id ? 'PATCH' : 'POST',
       headers: { 'Content-Type': 'multipart/related; boundary=' + boundary },
       body
-    });
+    }, !otomatis);
     const data = await res.json();
     set.driveId = data.id;
     set.driveSimpan = hariIni();
+    set.backupTerakhir = hariIni();
+    set.drivePending = driveRevisi !== revisiSaatMulai;
+    driveAutoError = '';
     simpanSet();
     renderDriveStatus();
     renderPanduanStatus();
-    alert('Backup tersimpan di Google Drive.');
+    renderBackupBanner();
+    beriPesan(otomatis ? 'Backup otomatis tersimpan di Google Drive.' : 'Backup tersimpan di Google Drive.');
   } catch (e) {
     // File di Drive sudah terhapus: buat file baru
     if (e.status === 404 && id && !sudahCoba) {
       set.driveId = '';
       simpanSet();
-      return simpanKeDrive(true);
+      return kirimBackupKeDrive({ otomatis, sudahCoba: true });
     }
     throw e;
   }
@@ -4096,12 +4662,27 @@ async function ambilDariDrive() {
 }
 
 function errorDrive(e) {
+  renderDriveStatus();
   alert('Gagal memakai Google Drive: ' + (e && e.message ? e.message : e) + '.');
 }
 
-$('btnDriveSimpan').onclick = () => simpanKeDrive().catch(errorDrive);
+$('sDriveAuto').value = set.driveAuto ? 'on' : 'off';
+$('sDriveAuto').onchange = () => {
+  set.driveAuto = $('sDriveAuto').value === 'on';
+  if (set.driveAuto) set.drivePending = true;
+  else clearTimeout(driveAutoTimer);
+  driveAutoError = '';
+  simpanSet();
+  jadwalkanDriveOtomatis();
+  beriPesan(set.driveAuto
+    ? !asalDriveValid() ? 'Auto Drive perlu situs HTTPS yang terdaftar di Google.'
+      : tokenDriveAktif() ? 'Auto simpan Drive aktif.' : 'Auto simpan aktif. Tekan Simpan ke Drive untuk menghubungkan.'
+    : 'Auto simpan Drive dimatikan.');
+};
+$('btnDriveSimpan').onclick = () => simpanKeDrive().then(() => jadwalkanDriveOtomatis()).catch(errorDrive);
 $('btnDriveAmbil').onclick = () => ambilDariDrive().catch(errorDrive);
 renderDriveStatus();
+window.addEventListener('online', () => { driveAutoError = ''; jadwalkanDriveOtomatis(); });
 
 // ===== KATEGORI SENDIRI =====
 // Kategori tambahan disimpan di pengaturan, lalu dimasukkan ke daftar KAT.
@@ -4145,15 +4726,21 @@ $('sKatTipe').onchange = renderKatKustom;
 $('btnKatTambah').onclick = () => {
   const nama = $('kbBaru').value.trim();
   const tipe = $('sKatTipe').value;
-  if (!nama) { alert('Isi nama kategori.'); return; }
+  if (!nama) return gagalIsi('Nama kategori wajib diisi.', 'kbBaru');
   const sudahAda = KAT[tipe].some(k => k.toLowerCase() === nama.toLowerCase());
-  if (sudahAda) { alert('Kategori "' + nama + '" sudah ada.'); return; }
+  if (sudahAda) return gagalIsi('Kategori "' + nama + '" sudah ada.', 'kbBaru');
   katKustom()[tipe].push(nama);
   sisipKat(tipe, nama);
-  localStorage.setItem(KEY_SET, JSON.stringify(set));
+  try { simpanSet(); }
+  catch (_) {
+    katKustom()[tipe].pop();
+    KAT[tipe] = KAT[tipe].filter(k => k !== nama);
+    return gagalIsi('Penyimpanan HP penuh. Kategori belum ditambahkan.', 'kbBaru');
+  }
   $('kbBaru').value = '';
   refreshKategoriSelect();
   renderKatKustom();
+  beriPesan('Kategori baru tersimpan.');
 };
 
 function hapusKatKustom(tipe, nama) {
@@ -4370,6 +4957,17 @@ isiKategoriBerulang();
 renderNotifStatus();
 simpan();
 goto('beranda');
+if (asalDriveValid()) loadGis().catch(() => {});
+setInterval(() => {
+  if (document.visibilityState === 'visible') { renderPengingat(); renderBackupBanner(); renderDriveStatus(); }
+}, 30000);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    renderPengingat();
+    renderBackupBanner();
+    jadwalkanDriveOtomatis();
+  }
+});
 
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost', '127.0.0.1'].includes(location.hostname))) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
