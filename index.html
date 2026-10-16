@@ -71,6 +71,10 @@
 
   .row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--rowline);gap:10px}
   .row:last-child{border-bottom:none}
+  .cart-entry{align-items:flex-start}
+  .cart-entry > :first-child{min-width:0;overflow-wrap:anywhere}
+  .cart-entry .aksi{justify-content:flex-end;max-width:150px;flex-shrink:0}
+  .cart-entry .aksi .cart-amount{width:100%;text-align:right;font-weight:700;white-space:nowrap}
   .aksi{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
   .merah{color:var(--bad)}.hijau{color:var(--ok)}.oranye{color:#d97706}
   .muted{color:var(--muted);font-size:13px}
@@ -101,6 +105,7 @@
   .page{display:none}
 
   dialog{width:92%;max-width:520px;border:none;border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(15,23,42,.3);background:var(--card);color:var(--ink)}
+  #dlgKeranjang,#dlgEdit{max-height:calc(100dvh - 32px);overflow:auto}
   dialog::backdrop{background:rgba(15,23,42,.45)}
   dialog h2{font-size:17px;margin-bottom:14px}
   .itemrow{display:grid;grid-template-columns:1fr 1fr;gap:6px;align-items:center;margin-bottom:10px;padding:10px;border:1px solid var(--line);border-radius:14px}
@@ -110,6 +115,24 @@
   .itemrow .item-harga{grid-column:1 / -1}
   .itemrow .field-wrap{margin:0}
   .itemrow button{width:100%;margin:0;padding:10px;box-shadow:none;align-self:end}
+  #eFotoActions{margin:10px 0 18px;gap:8px}
+  #eFotoActions button{margin:0}
+  #btnEScan{margin-top:4px}
+  #eScanDraft{margin-top:16px}
+  #eScanChoices{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  #eScanChoices button{width:auto;margin:0}
+  #eScanList .scan-pick{display:flex;align-items:center;justify-content:flex-start;gap:12px;cursor:pointer;min-height:58px}
+  #eScanList .scan-pick input[type=checkbox]{appearance:checkbox !important;-webkit-appearance:checkbox !important;accent-color:var(--ghostink);width:24px;height:24px;min-width:24px;min-height:24px;margin:0;padding:0;flex:none;border:0 !important;box-shadow:none !important;background:transparent !important}
+  #eScanList .scan-pick span{overflow-wrap:anywhere}
+  #eCashMath{margin:8px 0 12px}
+  .cash-track{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:12px;margin:4px 0 12px;border:1px solid var(--line);border-radius:12px;background:var(--ghostbg)}
+  .cash-track span{font-size:13px;font-weight:700;line-height:1.35}
+  .cash-track button{width:auto;min-width:130px;margin:0;padding:10px 12px;box-shadow:none;background:var(--card);color:var(--ink);border:1px solid var(--line);white-space:nowrap}
+  .cash-track button[aria-pressed="true"]{background:var(--ok);color:#fff;border-color:var(--ok)}
+  #eStokWrap{border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0}
+  #eStokWrap summary{font-size:14px;font-weight:700;margin:0;color:var(--ghostink)}
+  #eStokWrap[open] summary{margin-bottom:10px}
+  #eStokWrap .grid-denom{margin-top:12px}
   .kosong{text-align:center;padding:18px 0;color:var(--muted);font-size:13px}
   .preview{background:var(--track);border-radius:12px;padding:8px;margin-bottom:12px;max-height:60vh;overflow:auto}
   .preview canvas,.preview img{width:100%;height:auto;display:block;border-radius:8px;background:#fff}
@@ -691,7 +714,7 @@ html[data-gaya="retro"]{--st-bg:#050805;--st-card:#0a140a;--st-ink:#4dff7a;--st-
 html[data-gaya="retro"][data-tema="dark"]{--st-bg:#050805;--st-card:#0a140a;--st-ink:#4dff7a;--st-muted:#2fbf56;--st-acc:#ffb000;--st-on-acc:#000000;--st-acc-ink:#ffb000;--st-soft:#0f220f;--st-border:1px solid #2f8f47;--st-r:0px;--st-shadow:inset 0 0 0 1px rgba(77,255,122,.06),0 0 14px rgba(77,255,122,.12);--st-btn-r:0px;--st-btn-border:1px solid #ffb000;--st-btn-shadow:none;--st-input:#061006;--st-inr:0px;--st-nav-r:0px;--st-line:rgba(77,255,122,.25);--st-track:#0f2a12;--st-ok:#4dff7a;--st-bad:#ff5c5c;--st-plus-r:0px;--st-tab-r:0px;--st-tag-r:0px;--st-bgimg:repeating-linear-gradient(0deg, rgba(0,0,0,.25) 0 1px, transparent 1px 3px);--st-font:"Roboto Mono", ui-monospace, Menlo, Consolas, monospace}
 html[data-gaya="retro"][data-tema="auto"]{--st-bg:#050805;--st-card:#0a140a;--st-ink:#4dff7a;--st-muted:#2fbf56;--st-acc:#ffb000;--st-on-acc:#000000;--st-acc-ink:#ffb000;--st-soft:#0f220f;--st-border:1px solid #2f8f47;--st-r:0px;--st-shadow:inset 0 0 0 1px rgba(77,255,122,.06),0 0 14px rgba(77,255,122,.12);--st-btn-r:0px;--st-btn-border:1px solid #ffb000;--st-btn-shadow:none;--st-input:#061006;--st-inr:0px;--st-nav-r:0px;--st-line:rgba(77,255,122,.25);--st-track:#0f2a12;--st-ok:#4dff7a;--st-bad:#ff5c5c;--st-plus-r:0px;--st-tab-r:0px;--st-tag-r:0px;--st-bgimg:repeating-linear-gradient(0deg, rgba(0,0,0,.25) 0 1px, transparent 1px 3px);--st-font:"Roboto Mono", ui-monospace, Menlo, Consolas, monospace}
 html[data-gaya="retro"] h2{text-transform:uppercase;letter-spacing:1px}
-  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .card{text-shadow:0 0 6px rgba(77,255,122,.35)}
+  html[data-gaya="retro"] .card{text-shadow:0 0 6px rgba(77,255,122,.2)}
 html[data-gaya="paper"]{--st-bg:#f7f1e1;--st-bgimg:repeating-linear-gradient(to bottom, transparent 0 27px, #dcd2b8 27px 28px);--st-card:#fffdf6;--st-ink:#3b3223;--st-muted:#6b5d45;--st-acc:#b45309;--st-on-acc:#ffffff;--st-acc-ink:#92400e;--st-soft:#f3e9cc;--st-border:1px solid #e3d7b8;--st-r:4px;--st-shadow:2px 3px 0 rgba(120,90,40,.18);--st-btn-r:4px;--st-btn-border:1px solid #92400e;--st-btn-shadow:2px 2px 0 rgba(120,90,40,.3);--st-input:#fffdf6;--st-inr:4px;--st-nav-r:4px;--st-line:#e3d7b8;--st-track:#e8dcc0;--st-ok:#3f7d20;--st-bad:#b91c1c;--st-font:Georgia, "Times New Roman", serif;--st-tab-r:4px;--st-tag-r:4px;--st-plus-r:50%}
 html[data-gaya="paper"][data-tema="dark"]{--st-bg:#1f1c15;--st-bgimg:repeating-linear-gradient(to bottom, transparent 0 27px, #36321f 27px 28px);--st-card:#2a261c;--st-ink:#f1e8d0;--st-muted:#c9bb99;--st-acc:#f59e0b;--st-on-acc:#1f1c15;--st-acc-ink:#fcd34d;--st-soft:#3a3425;--st-border:1px solid #4a422e;--st-r:4px;--st-shadow:2px 3px 0 rgba(0,0,0,.4);--st-btn-r:4px;--st-btn-border:1px solid #f59e0b;--st-btn-shadow:2px 2px 0 rgba(0,0,0,.5);--st-input:#2a261c;--st-inr:4px;--st-nav-r:4px;--st-line:#4a422e;--st-track:#3a3425;--st-ok:#86efac;--st-bad:#fca5a5;--st-font:Georgia, "Times New Roman", serif;--st-tab-r:4px;--st-tag-r:4px;--st-plus-r:50%}
 @media (prefers-color-scheme: dark){
@@ -1178,6 +1201,121 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     box-shadow:19px 18px 0 rgba(101,138,68,.23);transform:rotate(-8deg);
   }
   html[data-gaya="blok"][data-tema="dark"] #styleDecor{opacity:.48}
+  /* Gaya Spider: palet krem, merah, hitam, dan ungu dari referensi. */
+  html[data-gaya="spider"]{
+    --sp-bg:#f8efdf;--sp-card:#fffbf2;--sp-ink:#19182b;--sp-muted:#675e6d;
+    --sp-line:#dfd0cf;--sp-input:#fff7ec;--sp-soft:#f2e4ed;
+    --sp-red:#ce2239;--sp-purple:#753da5;--sp-on:#fff9ee;
+    --ink:var(--sp-ink);--muted:var(--sp-muted);--line:var(--sp-line);--input:var(--sp-input);
+    --rowline:var(--sp-line);--ghostbg:var(--sp-soft);--ghostink:#663794;
+    --keranjangbg:#fff3e9;--keranjangline:#bb99c7;--delbg:#ffe0e1;--delink:#ad1d35;
+    --track:#ead8df;--navbg:var(--sp-card);--shadow:0 7px 22px rgba(37,20,52,.09);
+    --pillbg:#f0e2ef;--pillink:#6c348d;--detline:#c69ad6;
+    --banbg:#fff0d4;--banink:#5e3548;--secbg:#e9dbeb;--sec2bg:#f0e2ef;--sec2ink:#532878;
+    --pri:var(--sp-red);--pri2:#e24660;--ok:#168052;--bad:#c5243e;
+    color-scheme:light;background:var(--sp-bg) !important;
+  }
+  html[data-gaya="spider"][data-tema="dark"]{
+    --sp-bg:#0e0d19;--sp-card:#1c1829;--sp-ink:#fff4e9;--sp-muted:#c8b9c8;
+    --sp-line:#554059;--sp-input:#282035;--sp-soft:#30213d;
+    --sp-red:#ff5167;--sp-purple:#bd86ed;--sp-on:#170f1e;
+    --ghostink:#d1a2fb;--keranjangbg:#251c32;--keranjangline:#806195;
+    --delbg:#472431;--delink:#ff9da9;--track:#41304a;--pillbg:#3a274c;
+    --pillink:#e1baf8;--detline:#8f6a9e;--banbg:#382935;--banink:#ffe3b8;
+    --secbg:#392b49;--sec2bg:#392b49;--sec2ink:#f0d8ff;
+    --ok:#78d5a1;--bad:#ff7184;color-scheme:dark;
+  }
+  @media(prefers-color-scheme:dark){
+    html[data-gaya="spider"][data-tema="auto"]{
+      --sp-bg:#0e0d19;--sp-card:#1c1829;--sp-ink:#fff4e9;--sp-muted:#c8b9c8;
+      --sp-line:#554059;--sp-input:#282035;--sp-soft:#30213d;
+      --sp-red:#ff5167;--sp-purple:#bd86ed;--sp-on:#170f1e;
+      --ghostink:#d1a2fb;--keranjangbg:#251c32;--keranjangline:#806195;
+      --delbg:#472431;--delink:#ff9da9;--track:#41304a;--pillbg:#3a274c;
+      --pillink:#e1baf8;--detline:#8f6a9e;--banbg:#382935;--banink:#ffe3b8;
+      --secbg:#392b49;--sec2bg:#392b49;--sec2ink:#f0d8ff;
+      --ok:#78d5a1;--bad:#ff7184;color-scheme:dark;
+    }
+  }
+  html[data-gaya="spider"] body{background:transparent !important;color:var(--sp-ink)}
+  html[data-gaya="spider"] body::before,html[data-gaya="spider"] #bgLayer{display:none !important}
+  html[data-gaya="spider"] header.top{
+    background:linear-gradient(125deg,#12152a 0%,#322041 52%,#96233d 100%);
+    color:#fff4e8;border-radius:0 0 28px 28px;
+    padding:24px 96px 29px 20px;min-height:132px;overflow:hidden;
+  }
+  html[data-gaya="spider"] header.top::before{
+    content:"";position:absolute;right:-78px;top:-97px;width:245px;height:245px;
+    border-radius:50%;opacity:.15;pointer-events:none;
+    background:repeating-radial-gradient(circle,transparent 0 23px,#f8e7f8 24px 25px,transparent 26px 40px),
+      repeating-conic-gradient(from 15deg,#f8e7f8 0deg 1deg,transparent 1deg 30deg);
+  }
+  html[data-gaya="spider"] header.top > :not(.spider-mask){position:relative;z-index:1}
+  html[data-gaya="spider"] header.top h1{color:#fff4e8;font-size:clamp(21px,5.7vw,29px);line-height:1.13;overflow-wrap:normal}
+  html[data-gaya="spider"] header.top .title-money{display:none}
+  html[data-gaya="spider"] header.top p{color:#f9e7e4}
+  .spider-mask,.spider-emblem{display:none}
+  html[data-gaya="spider"] header.top .spider-mask{
+    display:block;position:absolute;right:15px;top:15px;width:76px;height:91px;
+    z-index:2;pointer-events:none;filter:drop-shadow(0 8px 9px rgba(10,7,24,.45));
+    animation:spider-float 5s ease-in-out infinite;
+  }
+  @keyframes spider-float{50%{transform:translateY(4px)}}
+  @media(prefers-reduced-motion:reduce){html[data-gaya="spider"] header.top .spider-mask{animation:none}}
+  html[data-gaya="spider"] h2{color:var(--sp-ink)}
+  html[data-gaya="spider"] :is(.card,.stat,dialog,nav.bottom){
+    background:var(--sp-card) !important;color:var(--sp-ink);
+    border:1px solid var(--sp-line);box-shadow:var(--shadow) !important;
+    -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
+  }
+  html[data-gaya="spider"] .card#cardMingguan{border-left:4px solid var(--sp-purple)}
+  html[data-gaya="spider"] .saldo-hero{
+    background:linear-gradient(130deg,#13172d,#392142 60%,#6e2449) !important;
+    color:#fff4e8 !important;border:1px solid var(--sp-red);
+    box-shadow:0 10px 26px rgba(68,29,64,.2) !important;
+  }
+  html[data-gaya="spider"] .saldo-hero :is(.lbl,.mini,b){color:#fff4e8}
+  html[data-gaya="spider"] #beranda .saldo-hero .spider-emblem{
+    display:block;position:absolute;right:12px;top:13px;width:49px;height:49px;
+    z-index:0;opacity:.62;pointer-events:none;
+  }
+  html[data-gaya="spider"] button:not(.tab):not(.nav-plus){
+    background:linear-gradient(135deg,var(--sp-red),#a81f55) !important;
+    color:#fff !important;box-shadow:0 4px 11px rgba(150,30,65,.18) !important;
+  }
+  html[data-gaya="spider"] button:not(.tab):not(.nav-plus):is(.sec,.ghost,.kecil.sec){
+    background:var(--sp-soft) !important;color:var(--ghostink) !important;box-shadow:none !important;
+  }
+  html[data-gaya="spider"] button:not(.tab):not(.nav-plus).del{background:var(--delbg) !important;color:var(--delink) !important;box-shadow:none !important}
+  html[data-gaya="spider"] button:not(.tab):not(.nav-plus).beli{background:var(--ok) !important;color:var(--sp-on) !important}
+  html[data-gaya="spider"] .save-status button:not(.tab):not(.nav-plus){background:transparent !important;color:var(--ghostink) !important;box-shadow:none !important}
+  html[data-gaya="spider"] button:disabled{opacity:.48;box-shadow:none !important}
+  html[data-gaya="spider"] :is(input,select){
+    background-color:var(--sp-input) !important;color:var(--sp-ink) !important;
+    border:1px solid var(--sp-line) !important;box-shadow:none !important;
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+  }
+  html[data-gaya="spider"] :is(input,select):focus{border-color:var(--sp-purple) !important;box-shadow:0 0 0 3px var(--sp-soft) !important}
+  html[data-gaya="spider"] input[type=range]{background:transparent !important;border:0 !important;accent-color:var(--sp-red)}
+  html[data-gaya="spider"] dialog .dialog-error{background:var(--sp-card)}
+  html[data-gaya="spider"] .keranjang{background:var(--keranjangbg) !important;border-color:var(--keranjangline) !important}
+  html[data-gaya="spider"] .banner{background:var(--banbg) !important;color:var(--banink) !important;border:1px solid var(--sp-line)}
+  html[data-gaya="spider"] .pill{background:var(--pillbg);color:var(--pillink)}
+  html[data-gaya="spider"] nav.bottom .tab{background:transparent !important;color:var(--sp-muted);box-shadow:none !important}
+  html[data-gaya="spider"] nav.bottom .tab.aktif{background:var(--sp-soft) !important;color:var(--ghostink)}
+  html[data-gaya="spider"] nav.bottom .nav-plus{background:linear-gradient(135deg,var(--sp-red),#8a2b8c) !important;border-color:var(--sp-card) !important;box-shadow:0 6px 14px rgba(115,36,92,.3) !important}
+  html[data-gaya="spider"] nav.bottom .nav-plus svg{stroke:#fff !important}
+  html[data-gaya="spider"] .toast-note{background:var(--sp-card);color:var(--sp-ink);border:1px solid var(--sp-line)}
+  html[data-gaya="spider"] #styleDecor{
+    background:radial-gradient(circle,rgba(151,46,108,.08) 1px,transparent 2px) 0 0/18px 18px;
+  }
+  html[data-gaya="spider"] #styleDecor::before,html[data-gaya="spider"] #styleDecor::after{
+    width:170px;height:170px;border-radius:50%;opacity:.36;
+    background:repeating-radial-gradient(circle,transparent 0 22px,var(--sp-purple) 23px 24px,transparent 25px 38px),
+      repeating-conic-gradient(from 15deg,var(--sp-red) 0deg 1deg,transparent 1deg 30deg);
+  }
+  html[data-gaya="spider"] #styleDecor::before{right:-85px;top:115px}
+  html[data-gaya="spider"] #styleDecor::after{left:-100px;bottom:16%}
   @media (prefers-color-scheme:dark){
     html[data-gaya="neo"][data-tema="auto"] #styleDecor,
     html[data-gaya="soft"][data-tema="auto"] #styleDecor,
@@ -1193,16 +1331,162 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;
     font-size:clamp(12px,3.5vw,15px);line-height:1.4;font-variant-numeric:tabular-nums;
   }
+
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom .tab{background:transparent !important;color:var(--st-muted) !important;border-color:transparent !important;box-shadow:none !important}
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom .tab.aktif{background:var(--st-soft) !important;color:var(--st-acc-ink) !important}
+  /* Koleksi gaya: panel pilihan dan tiga dunia baru. */
+  .style-signature{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:5px 10px;border:1px solid var(--line);border-radius:99px;color:var(--ghostink);font-size:10px;letter-spacing:1.7px;font-weight:750;line-height:1.3}
+  .style-signature svg{width:17px;height:17px;flex:none}
+  html[data-gaya="spider"] .style-signature{border-color:#ffffff40;color:#fff0e8}
+  html[data-gaya="blok"] .style-signature{border-radius:2px;border-color:var(--px-edge);color:var(--px-green-dark)}
+  html[data-gaya="neo"] .style-signature{border:2px solid currentColor;color:var(--neo-line);border-radius:5px}
+  html[data-gaya="retro"] .style-signature{border-radius:0;color:var(--st-acc)}
+  html[data-gaya="paper"] .style-signature{border-radius:4px;border-style:dashed;color:var(--st-acc-ink)}
+  html[data-gaya] #beranda .saldo-hero::after{display:none}
+  html[data-gaya] #beranda .saldo-hero > .hero-style-art{position:absolute !important;right:-18px;top:-25px;width:170px;height:155px;z-index:0 !important;pointer-events:none;opacity:.13;color:inherit;transform:rotate(-12deg)}
+  html:is([data-gaya="blok"],[data-gaya="spider"]) .hero-style-art{display:none}
+  #beranda .saldo-hero .mini{flex-wrap:wrap;gap:6px 14px;line-height:1.5}
+  html[data-gaya="glass"] .saldo-hero{box-shadow:0 12px 32px rgba(50,90,175,.23),inset 0 1px 0 #ffffff88}
+  html[data-gaya="biasa"] #cardMingguan{border-top:3px solid #818cf8 !important}
+  html[data-gaya="berwarna"] header.top h1{letter-spacing:-.8px}
+  html[data-gaya="neo"] #cardMingguan{background-image:radial-gradient(#0000000d 1px,transparent 1px) !important;background-size:9px 9px !important}
+  html[data-gaya="material"] #cardMingguan{border-left:4px solid var(--st-acc) !important}
+  html[data-gaya="soft"] .style-signature{box-shadow:var(--st-btn-shadow);border:0}
+  html[data-gaya="retro"] #cardMingguan{border-top:3px double var(--st-acc) !important}
+  html[data-gaya="paper"] #cardMingguan{border-left:4px solid #b77552 !important}
+  html[data-gaya="flat"] #cardMingguan{border-left:3px solid var(--st-acc) !important}
+  html[data-gaya="pop"] #cardMingguan{border-top:4px solid var(--pop-orange) !important}
+  html[data-gaya="spider"] #cardMingguan{border-top:1px solid var(--sp-line)}
+  html[data-gaya="blok"] .pixel-mobs{background-image:radial-gradient(circle at 87% 23%,#fff6b7 0 8px,transparent 9px),linear-gradient(to bottom,#d4ecca 0 72%,#74a344 72% 83%,#4b7532 83% 88%,#73563c 88% 100%)}
+
+  html[data-gaya="orbit"]{--n-bg:#f0eff9;--n-card:#fff;--n-input:#f6f5fc;--n-ink:#26213e;--n-muted:#696079;--n-line:#e1ddee;--n-soft:#eee9fb;--n-accent:#6846ba;--n-on:#fff;--n-ok:#287458;--n-bad:#b93a59;--n-hero:linear-gradient(120deg,#292344,#453673 62%,#60458a);--n-radius:24px;--n-shadow:0 6px 22px #4536730c}
+  html[data-gaya="sakura"]{--n-bg:#faf2ed;--n-card:#fffcf7;--n-input:#fff8f3;--n-ink:#51363a;--n-muted:#806465;--n-line:#ecd9d5;--n-soft:#f8e6e7;--n-accent:#a34e65;--n-on:#fff;--n-ok:#3d725b;--n-bad:#b03449;--n-hero:linear-gradient(115deg,#815c59,#a15c70 65%,#b57982);--n-radius:18px;--n-shadow:0 4px 0 #e8d4d266,0 8px 24px #8757640a}
+  html[data-gaya="ocean"]{--n-bg:#edf7f6;--n-card:#fbffff;--n-input:#f0f9f8;--n-ink:#163e46;--n-muted:#55757a;--n-line:#d2e8e6;--n-soft:#def1ed;--n-accent:#14796f;--n-on:#fff;--n-ok:#267557;--n-bad:#bb4858;--n-hero:linear-gradient(125deg,#153e52,#176771 58%,#248987);--n-radius:26px;--n-shadow:0 6px 24px #1c737010}
+  html[data-gaya="orbit"][data-tema="dark"]{--n-bg:#10121f;--n-card:#1a1e31;--n-input:#14182a;--n-ink:#eeeafa;--n-muted:#b0abc5;--n-line:#343850;--n-soft:#2b2845;--n-accent:#c4acf9;--n-on:#241d38;--n-ok:#88d2b1;--n-bad:#ffa5b8;--n-shadow:0 8px 24px #00000022}
+  @media(prefers-color-scheme:dark){html[data-gaya="orbit"][data-tema="auto"]{--n-bg:#10121f;--n-card:#1a1e31;--n-input:#14182a;--n-ink:#eeeafa;--n-muted:#b0abc5;--n-line:#343850;--n-soft:#2b2845;--n-accent:#c4acf9;--n-on:#241d38;--n-ok:#88d2b1;--n-bad:#ffa5b8;--n-shadow:0 8px 24px #00000022}}
+  html[data-gaya="sakura"][data-tema="dark"]{--n-bg:#251c24;--n-card:#32252e;--n-input:#291f28;--n-ink:#f9e9e7;--n-muted:#cfb0b6;--n-line:#59404b;--n-soft:#49303e;--n-accent:#efb1c0;--n-on:#42202d;--n-ok:#a8d1b1;--n-bad:#ffa2a7;--n-shadow:0 4px 0 #1b121b66,0 8px 24px #00000016}
+  @media(prefers-color-scheme:dark){html[data-gaya="sakura"][data-tema="auto"]{--n-bg:#251c24;--n-card:#32252e;--n-input:#291f28;--n-ink:#f9e9e7;--n-muted:#cfb0b6;--n-line:#59404b;--n-soft:#49303e;--n-accent:#efb1c0;--n-on:#42202d;--n-ok:#a8d1b1;--n-bad:#ffa2a7;--n-shadow:0 4px 0 #1b121b66,0 8px 24px #00000016}}
+  html[data-gaya="ocean"][data-tema="dark"]{--n-bg:#10262e;--n-card:#17353d;--n-input:#112d35;--n-ink:#e5f5f0;--n-muted:#a1c2c3;--n-line:#31515a;--n-soft:#20474c;--n-accent:#80d8c3;--n-on:#0c3632;--n-ok:#99d5b5;--n-bad:#ffb0af;--n-shadow:0 8px 26px #00000020}
+  @media(prefers-color-scheme:dark){html[data-gaya="ocean"][data-tema="auto"]{--n-bg:#10262e;--n-card:#17353d;--n-input:#112d35;--n-ink:#e5f5f0;--n-muted:#a1c2c3;--n-line:#31515a;--n-soft:#20474c;--n-accent:#80d8c3;--n-on:#0c3632;--n-ok:#99d5b5;--n-bad:#ffb0af;--n-shadow:0 8px 26px #00000020}}
+
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]){background:var(--n-bg) !important;--bg:var(--n-bg);--card:var(--n-card);--glass:var(--n-card);--input:var(--n-input);--ink:var(--n-ink);--muted:var(--n-muted);--line:var(--n-line);--glass-line:var(--n-line);--rowline:var(--n-line);--navbg:var(--n-card);--ghostbg:var(--n-soft);--ghostink:var(--n-accent);--pillbg:var(--n-soft);--pillink:var(--n-accent);--keranjangbg:var(--n-input);--keranjangline:var(--n-line);--detline:var(--n-line);--track:var(--n-line);--banbg:var(--n-soft);--banink:var(--n-ink);--delbg:var(--n-soft);--delink:var(--n-bad);--secbg:var(--n-soft);--sec2bg:var(--n-soft);--sec2ink:var(--n-ink);--ok:var(--n-ok);--bad:var(--n-bad)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) body{background:transparent !important;color:var(--n-ink)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) body::before,html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) #bgLayer{display:none !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) header.top h1,html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) h2{color:var(--n-ink)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .title-money{display:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) :is(.card,.stat,dialog,nav.bottom){background:var(--n-card) !important;color:var(--n-ink);border:1px solid var(--n-line) !important;border-radius:var(--n-radius) !important;box-shadow:var(--n-shadow) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .saldo-hero{position:relative;overflow:hidden;background:var(--n-hero) !important;color:#fff !important;border:1px solid #ffffff22;border-radius:var(--n-radius);box-shadow:var(--n-shadow);backdrop-filter:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .saldo-hero :is(.lbl,.mini,b){color:#fff !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) button:not(.tab):not(.nav-plus){background:var(--n-accent);color:var(--n-on);box-shadow:none;border-radius:14px}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) button:not(.tab):is(.ghost,.sec){background:var(--n-soft);color:var(--n-accent)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) button:not(.tab).del{background:var(--n-soft);color:var(--n-bad)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) button:disabled{opacity:.45;cursor:not-allowed}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .save-status button{background:transparent !important;color:var(--n-accent) !important;padding:0}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .cash-track button[aria-pressed="true"]{background:var(--n-accent);color:var(--n-on)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) :is(input,select,textarea){background-color:var(--n-input) !important;color:var(--n-ink);border:1px solid var(--n-line);border-radius:12px;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) :is(input,select):focus{border-color:var(--n-accent);outline:2px solid var(--n-line);outline-offset:2px;box-shadow:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) nav.bottom .tab{background:transparent;color:var(--n-muted);box-shadow:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) nav.bottom .tab.aktif{background:var(--n-soft);color:var(--n-accent)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) nav.bottom .nav-plus{background:var(--n-accent) !important;border-color:var(--n-card) !important;box-shadow:0 5px 14px #0002 !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) nav.bottom .nav-plus svg{stroke:var(--n-on) !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) :is(.keranjang,.banner){background:var(--n-input) !important;border-color:var(--n-line);backdrop-filter:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .toast-note{background:var(--n-card);color:var(--n-ink);border:1px solid var(--n-line)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .field-label{color:var(--n-muted)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .stat::before{display:block;left:14px;right:14px;top:0;height:3px;border-radius:0 0 3px 3px}
+  html[data-gaya="orbit"] #styleDecor{background:radial-gradient(circle at 81% 9%,#9775d526,transparent 30%),radial-gradient(circle at 10% 66%,#57bbaa12,transparent 30%),radial-gradient(circle,#a799cc66 .7px,transparent 1px) 9px 13px/61px 71px}
+  html[data-gaya="orbit"] #styleDecor::before{width:240px;height:240px;top:60px;right:-130px;border:1px solid #9c84ce33;border-radius:50%;box-shadow:0 0 0 24px #9c84ce0c,0 0 0 60px #9c84ce09}
+  html[data-gaya="orbit"] #styleDecor::after{width:140px;height:55px;border:1px solid #8974b426;border-radius:50%;left:-45px;bottom:21%;transform:rotate(-30deg)}
+  html[data-gaya="orbit"] #cardMingguan{border-top:3px solid #a78bda !important}
+  html[data-gaya="sakura"] #styleDecor{background:radial-gradient(ellipse at 98% 12%,#d68d9a21,transparent 33%),radial-gradient(ellipse at 0% 75%,#d6ba8e18,transparent 38%)}
+  html[data-gaya="sakura"] #styleDecor::before{width:180px;height:180px;right:-80px;top:85px;background:radial-gradient(ellipse at 50% 25%,#ca819532 0 17%,transparent 18%),radial-gradient(ellipse at 76% 45%,#ca819532 0 17%,transparent 18%),radial-gradient(ellipse at 67% 76%,#ca819532 0 17%,transparent 18%),radial-gradient(ellipse at 32% 76%,#ca819532 0 17%,transparent 18%),radial-gradient(ellipse at 24% 43%,#ca819532 0 17%,transparent 18%);transform:rotate(12deg)}
+  html[data-gaya="sakura"] #styleDecor::after{width:160px;height:190px;left:-100px;bottom:14%;border:2px solid #a1846d22;border-radius:0 100% 0 100%;transform:rotate(34deg)}
+  html[data-gaya="sakura"] #cardMingguan{border-left:4px solid #d5a1a8 !important}
+  html[data-gaya="sakura"] .style-signature{border-radius:5px;border-style:dashed}
+  html[data-gaya="ocean"] #styleDecor{background:radial-gradient(ellipse at 90% 3%,#56baa621,transparent 30%),radial-gradient(ellipse at 0% 83%,#237b8e12,transparent 30%)}
+  html[data-gaya="ocean"] #styleDecor::before{width:370px;height:370px;right:-230px;top:100px;border-radius:50%;background:repeating-radial-gradient(ellipse at 50% 50%,transparent 0 18px,#409c9820 19px 20px,transparent 21px 38px)}
+  html[data-gaya="ocean"] #styleDecor::after{width:250px;height:250px;left:-185px;bottom:8%;border-radius:50%;border:1px solid #479c9a26;box-shadow:0 0 0 18px #479c9a0b,0 0 0 45px #479c9a09}
+  html[data-gaya="ocean"] #cardMingguan{border-top:3px solid #6cb4a6 !important;border-radius:8px 26px 26px 26px !important}
+
+  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]){--gal-card:var(--st-card);--gal-ink:var(--st-ink);--gal-muted:var(--st-muted);--gal-line:var(--st-line);--gal-soft:var(--st-soft);--gal-accent:var(--st-acc-ink)}
+  html[data-gaya="blok"]{--gal-card:var(--px-card);--gal-ink:var(--px-ink);--gal-muted:var(--px-muted);--gal-line:var(--px-edge);--gal-soft:var(--px-soft);--gal-accent:var(--px-green-dark)}
+  html[data-gaya="pop"]{--gal-card:var(--pop-card);--gal-ink:var(--pop-ink);--gal-muted:var(--pop-muted);--gal-line:var(--pop-line);--gal-soft:var(--pop-soft);--gal-accent:var(--pop-cta)}
+  html[data-gaya="spider"]{--gal-card:var(--sp-card);--gal-ink:var(--sp-ink);--gal-muted:var(--sp-muted);--gal-line:var(--sp-line);--gal-soft:var(--sp-soft);--gal-accent:var(--sp-purple)}
+  html[data-gaya="neo"]{--gal-card:var(--neo-card);--gal-ink:var(--neo-line);--gal-muted:var(--neo-line);--gal-line:var(--neo-line);--gal-soft:var(--neo-card);--gal-accent:var(--neo-line)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .saldo-hero::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0}
+  html[data-gaya="orbit"] .saldo-hero::before{background:radial-gradient(circle,#ffffff90 0 1px,transparent 1.5px) 19px 11px/81px 59px,radial-gradient(ellipse at 100% 100%,#a9c6cd33,transparent 65%)}
+  html[data-gaya="orbit"] #beranda .saldo-hero > .hero-style-art{opacity:.28;right:-20px;top:-30px}
+  html[data-gaya="sakura"] .saldo-hero::before{background:radial-gradient(ellipse at 92% 0%,#f8d8d431,transparent 65%),repeating-linear-gradient(65deg,transparent 0 9px,#ffffff06 10px 11px)}
+  html[data-gaya="ocean"] .saldo-hero::before{background:repeating-radial-gradient(ellipse at 92% 155%,transparent 0 17px,#b9eeea1c 18px 19px,transparent 20px 34px)}
+  /* Galeri menggunakan panel netral dari gaya aktif; tiap miniatur punya palet sendiri. */
+  #styleSelected{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:13px;margin:4px 0 14px;padding:14px;border:1px solid var(--gal-line,var(--line));border-radius:16px;background:var(--gal-soft,var(--ghostbg))}
+  #styleSelected .style-selected-icon{height:64px;border-radius:14px;display:grid;place-items:center;background:var(--preview-bg);color:var(--preview-accent);border:1px solid #80808022}
+  #styleSelected svg{width:44px;height:44px}
+  #styleSelected h3{margin:0 0 4px;font-size:16px;color:var(--gal-ink,var(--ink))}
+  #styleSelected p{margin:0;font-size:12px;line-height:1.5;color:var(--gal-muted,var(--muted))}
+  #styleGalleryWrap{border:1px solid var(--gal-line,var(--line));border-radius:14px;padding:12px;margin:0 0 20px}
+  #styleGalleryWrap > summary{margin:0;color:var(--gal-accent,var(--ghostink));font-size:13px}
+  #styleGallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}
+  html[data-gaya] #styleGallery .style-choice{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:7px;min-width:0;width:100%;margin:0;padding:6px 6px 9px;border:1px solid var(--gal-line,var(--line)) !important;border-radius:12px !important;background:var(--gal-card,var(--card-solid,var(--card))) !important;box-shadow:none !important;color:var(--gal-ink,var(--ink)) !important;text-align:left;font-size:11px !important;transform:none}
+  html[data-gaya] #styleGallery .style-choice[aria-pressed="true"]{outline:2px solid var(--gal-accent,var(--ghostink));outline-offset:1px}
+  #styleGallery .style-thumb{position:relative;display:block;height:76px;overflow:hidden;border-radius:7px;background:var(--preview-bg);color:var(--preview-accent)}
+  #styleGallery .style-thumb::before{content:"";position:absolute;inset:12px 10px 26px;background:var(--preview-accent);border-radius:6px;opacity:.86;box-shadow:0 21px 0 -2px var(--preview-card)}
+  #styleGallery .style-thumb::after{content:"";position:absolute;left:17px;top:22px;width:18px;height:3px;background:var(--preview-card);box-shadow:0 6px 0 var(--preview-card);opacity:.8}
+  #styleGallery .style-thumb svg{position:absolute;width:44px;height:44px;right:-2px;top:-3px;opacity:.25}
+  #styleGallery .style-choice-name{display:flex;justify-content:space-between;gap:3px;align-items:center;overflow-wrap:anywhere;line-height:1.35}
+  #styleGallery .style-new{font-size:8px;font-weight:800;color:var(--gal-accent,var(--ghostink));letter-spacing:.4px;text-transform:uppercase}
+  #styleGallery .style-choice[data-choice="neo"] .style-thumb::before{border:2px solid #111;box-shadow:3px 3px 0 #111;border-radius:2px}
+  #styleGallery .style-choice[data-choice="blok"] .style-thumb{border-radius:0;image-rendering:pixelated}
+  #styleGallery .style-choice[data-choice="blok"] .style-thumb::before,#styleGallery .style-choice[data-choice="retro"] .style-thumb::before{border-radius:0}
+  #styleGallery .style-choice[data-choice="paper"] .style-thumb{background:repeating-linear-gradient(transparent 0 9px,#ac94742e 10px 11px),var(--preview-bg)}
+  #styleGallery .style-choice[data-choice="soft"] .style-thumb::before{background:var(--preview-bg);box-shadow:3px 3px 6px #0002,-3px -3px 6px #fff9}
+  @media(max-width:360px){#styleGallery{grid-template-columns:repeat(2,minmax(0,1fr))}#styleSelected{grid-template-columns:50px minmax(0,1fr);padding:10px;gap:10px}#styleSelected .style-selected-icon{height:50px}}
+  @media(hover:hover){#styleGallery .style-choice:hover{border-color:var(--gal-accent,var(--ghostink)) !important}}
+
+  /* Hanya Orbit yang mendapat animasi percobaan baru. */
+  #orbitIntro[hidden]{display:none !important}
+  #orbitIntro{position:fixed;inset:0;z-index:60;display:grid;place-items:center;pointer-events:none;background:#10121ff5;color:#f4efff;animation:orbit-intro-fade 1.45s ease both}
+  .orbit-intro-inner{text-align:center;padding:24px}
+  .orbit-intro-planet{position:relative;width:150px;height:150px;margin:0 auto 26px;border:1px solid #bfa3f64d;border-radius:50%;animation:orbit-arrive 1.1s cubic-bezier(.22,.8,.3,1) both}
+  .orbit-intro-planet::before{content:"";position:absolute;inset:37px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#ded3fc,#8a70c2 55%,#41305e);box-shadow:0 0 44px #9d7cdf44}
+  .orbit-intro-planet::after{content:"";position:absolute;inset:48px -10px;border:2px solid #bddfd1aa;border-radius:50%;transform:rotate(-28deg)}
+  .orbit-intro-planet i{position:absolute;inset:-7px;border-radius:50%;border-top:2px solid #c5b3f4;animation:orbit-ring 1.1s ease-out both}
+  #orbitIntro strong{display:block;font-size:25px;letter-spacing:6px;line-height:1.4;font-weight:550}
+  #orbitIntro small{display:block;margin-top:10px;font-size:12px;color:#c0b6d5;letter-spacing:.3px}
+  html[data-gaya="orbit"] .page{animation:orbit-page-in .3s ease-out}
+  html[data-gaya="orbit"] .style-signature svg{animation:orbit-ring 22s linear infinite}
+  @keyframes orbit-ring{to{transform:rotate(360deg)}}
+  @keyframes orbit-arrive{from{opacity:0;transform:scale(.65) rotate(-25deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+  @keyframes orbit-page-in{from{opacity:.5;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes orbit-intro-fade{0%{opacity:0}15%,65%{opacity:1}100%{opacity:0}}
+  @media(prefers-reduced-motion:reduce){#orbitIntro{display:none !important}html[data-gaya="orbit"] .page,html[data-gaya="orbit"] .style-signature svg{animation:none !important}}
+
 </style>
 
 </head>
 <body>
 <div id="bgLayer"></div>
 <div id="styleDecor" aria-hidden="true"></div>
+<div id="orbitIntro" aria-hidden="true" hidden><div class="orbit-intro-inner"><div class="orbit-intro-planet"><i></i></div><strong>ORBIT</strong><small>Catatan kecil, tujuan besar.</small></div></div>
 
 <header class="top">
-  <h1>💰 Catatan Keuangan</h1>
+  <h1><span class="title-money" aria-hidden="true">💰</span> Catatan Keuangan</h1>
   <p id="hdr"></p>
+  <div class="style-signature" aria-hidden="true"><svg id="styleSignatureArt" viewBox="0 0 100 100" fill="none" focusable="false"></svg><span id="styleSignatureName"></span></div>
+  <svg class="spider-mask" viewBox="0 0 110 120" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="spiderMaskFill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f24a62"/><stop offset=".53" stop-color="#bd183c"/><stop offset="1" stop-color="#61246e"/></linearGradient>
+      <clipPath id="spiderMaskClip"><path d="M55 6C82 7 100 31 97 64c-3 26-23 46-42 51C36 110 16 90 13 64 10 31 28 7 55 6Z"/></clipPath>
+    </defs>
+    <path d="M55 4C84 5 103 31 100 65c-3 29-26 49-45 53C36 114 13 94 10 65 7 31 26 5 55 4Z" fill="#17172c" stroke="#b972e0" stroke-width="3"/>
+    <path d="M55 6C82 7 100 31 97 64c-3 26-23 46-42 51C36 110 16 90 13 64 10 31 28 7 55 6Z" fill="url(#spiderMaskFill)"/>
+    <g clip-path="url(#spiderMaskClip)" fill="none" stroke="#471737" stroke-width="2" opacity=".65">
+      <path d="M55 4v45M55 68v50M16 32q39 28 78 0M9 53q46 31 92 0M13 78q42 25 84 0M23 100q32 15 64 0"/>
+      <path d="M55 15Q29 25 12 47M55 15q26 10 43 32M55 39Q25 58 12 76M55 39q30 19 43 37M55 74Q34 90 24 111M55 74q21 16 31 37"/>
+    </g>
+    <path d="M18 53Q28 39 47 46q-5 16-24 19-6-4-5-12Z" fill="#fffaf0" stroke="#271e49" stroke-width="3"/>
+    <path d="M92 53Q82 39 63 46q5 16 24 19 6-4 5-12Z" fill="#fffaf0" stroke="#271e49" stroke-width="3"/>
+    <path d="M22 55q10-8 21-6M88 55q-10-8-21-6" fill="none" stroke="#9fe0f5" stroke-width="2" opacity=".8"/>
+  </svg>
 </header>
 
 <main>
@@ -1215,6 +1499,14 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
 
   <div class="saldo-hero">
+    <svg class="hero-style-art" id="heroStyleArt" viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false"></svg>
+    <svg class="spider-emblem" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#fff2e8" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M26 25 15 15 7 18M23 31 11 27 4 32M23 37 12 44 7 52M38 25l11-10 8 3M41 31l12-4 7 5M41 37l11 7 5 8"/>
+        <path d="M32 13v10"/><path d="M23 29c1-5 5-8 9-8s8 3 9 8v12c0 7-4 13-9 13s-9-6-9-13V29Z" fill="#fff2e8"/>
+        <path d="M32 23v28M25 34h14" stroke="#a5295e" stroke-width="2"/>
+      </g>
+    </svg>
     <span class="lbl">Total saldo</span>
     <b id="saldo"></b>
     <div class="mini"><span>Pemasukan total <span id="totMasuk"></span></span><span>Pengeluaran total <span id="totKeluar"></span></span></div>
@@ -1254,7 +1546,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <h2 id="judulMingguan">Ringkasan minggu ini</h2>
     <p id="teksMingguan" style="margin:0;font-size:15px;line-height:1.5;white-space:pre-line"></p>
   </div>
-  <button class="home-catat" id="btnBerandaCatat" type="button"><span class="home-catat-title">＋ Catat transaksi</span><span class="home-catat-sub">Pengeluaran · Pemasukan · Scan struk</span></button>
+  <button class="home-catat" id="btnBerandaCatat" type="button"><span class="home-catat-title">+ Catat transaksi</span><span class="home-catat-sub">Pengeluaran · Pemasukan · Scan struk</span></button>
 
   <div class="banner" id="bannerBackup" style="display:none">
     <span id="bannerBackupTeks"></span>
@@ -1292,8 +1584,17 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="nontunai">Non-tunai (transfer / e-wallet)</option>
       <option value="tunai">Tunai</option>
     </select>
-    <p class="muted" id="iCaraInfo" style="display:none;margin:-3px 0 10px">Rincian pecahan boleh kosong. Jika diisi, stok uang fisik ikut berubah; jika kosong, hanya saldo yang berubah.</p>
+    <div class="cash-track" id="iCashTrackWrap" style="display:none"><span>Ikut uang fisik di web?</span><button type="button" id="btnTrackCash" aria-pressed="false" aria-label="Ikut uang fisik di web">OFF · Nominal saja</button></div>
+    <div id="iCashNominalWrap" style="display:none">
+      <label class="field-label" for="iBayarNominal" id="iBayarLabel">Uang diberikan ke penjual (Rp)</label>
+      <input type="text" id="iBayarNominal" data-uang inputmode="decimal" placeholder="Contoh: 50.000">
+      <div id="iKembaliWrap"><label class="field-label" for="iKembaliNominal">Kembalian diterima (Rp)</label>
+        <input type="text" id="iKembaliNominal" data-uang inputmode="decimal" placeholder="Contoh: 8.000"></div>
+      <p class="muted" id="iCashMath" aria-live="polite"></p>
+    </div>
+    <p class="muted" id="iCaraInfo" style="display:none;margin:-3px 0 10px">OFF: transaksi tetap Tunai dan hanya nominalnya dicatat. Stok uang di dompet tidak berubah.</p>
     <div id="pfWrap" style="display:none">
+      <p class="muted" id="pfInfo">Rincian lembar uang (opsional saat dompet OFF).</p>
       <span class="muted" id="pfLabel">Dibayar pakai pecahan (lembar)</span>
       <div id="pbGrid" class="grid-denom"></div>
       <div id="pkWrap">
@@ -1303,8 +1604,8 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <button class="ghost" id="btnPecahOtomatis">Isi otomatis</button>
     </div>
     <details id="cardTunai" class="quick-extra" style="display:none">
-      <summary>Atur stok uang fisik (opsional)</summary>
-      <p class="muted">Isi jumlah lembar per pecahan yang kamu pegang. Stok tersimpan untuk transaksi berikutnya.</p>
+      <summary>Isi uang fisik di dompet (opsional)</summary>
+      <p class="muted">Isi jumlah lembar yang kamu pegang sekarang. Contoh: punya dua lembar Rp20.000 → isi 2 pada Rp20.000. Tekan Simpan stok uang fisik sebelum Isi otomatis.</p>
       <div id="stokGrid" class="grid-denom"></div>
       <p class="muted" id="tunaiInfo"></p>
       <button type="button" id="btnStokSimpan">Simpan stok uang fisik</button>
@@ -1528,7 +1829,8 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="3">Layout 3 · Catat dulu</option>
     </select>
     <p class="muted setting-help" id="infoLayout" aria-live="polite"></p>
-    <span class="muted">Gaya tampilan</span>
+    <h3 style="margin:16px 0 10px;font-size:15px">Pilih suasana catatanmu</h3>
+    <div id="styleSelected"><div class="style-selected-icon"><svg id="styleSelectedArt" viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false"></svg></div><div><h3 id="styleSelectedName"></h3><p id="styleSelectedDesc"></p></div></div>
     <select id="sGaya">
       <option value="glass">Glass (kaca transparan)</option>
       <option value="biasa">Biasa (kartu solid, tanpa efek kaca)</option>
@@ -1541,7 +1843,13 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="paper">Paper (buku catatan krem)</option>
       <option value="flat">Minimal flat (tanpa bayangan)</option>
       <option value="pop">Persimmon Pop (plum dan oranye hangat)</option>
+      <option value="spider">Spider (merah, ungu, hitam, dan krem)</option>
+      <option value="orbit">Baru · Orbit (planet dan antariksa, dengan animasi)</option>
+      <option value="sakura">Baru · Sakura (krem, kelopak, dan merah muda)</option>
+      <option value="ocean">Baru · Ocean (biru laut, toska, dan ombak)</option>
     </select>
+    <button type="button" class="ghost" id="btnAnimasiOrbit" hidden>✦ Putar animasi Orbit</button>
+    <details id="styleGalleryWrap"><summary>Jelajahi galeri · 15 gaya <span aria-hidden="true">⌄</span></summary><div id="styleGallery" aria-label="Pilihan gaya tampilan"></div></details>
     <span class="muted">Kualitas efek</span>
     <select id="sEfek">
       <option value="tanpa">Tanpa efek (paling ringan)</option>
@@ -1627,6 +1935,25 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <button class="tab" data-page="setelan"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg><span>Setelan</span></button>
 </nav>
 
+<!-- DIALOG EDIT BARANG DALAM DAFTAR TRANSAKSI -->
+<dialog id="dlgKeranjang">
+  <h2>Edit barang</h2>
+  <label class="field-label" for="kNama">Nama barang / layanan</label>
+  <input type="text" id="kNama" placeholder="Contoh: Cukur rambut" maxlength="80">
+  <div class="grid2">
+    <div class="field-wrap"><label class="field-label" for="kQty">Jumlah</label><input type="text" id="kQty" inputmode="decimal" placeholder="Contoh: 1"></div>
+    <div class="field-wrap"><label class="field-label" for="kSatuan">Satuan (opsional)</label><select id="kSatuan"></select></div>
+  </div>
+  <div class="field-wrap" id="kSatuanLainWrap" style="display:none"><label class="field-label" for="kSatuanLain">Satuan sendiri</label><input type="text" id="kSatuanLain" maxlength="30" placeholder="Contoh: kali"></div>
+  <label class="field-label" for="kModeHarga">Cara mengisi harga</label>
+  <select id="kModeHarga"><option value="total">Harga total yang dibayar</option><option value="satuan">Harga per satuan</option></select>
+  <label class="field-label" for="kHarga" id="kHargaLabel">Harga total (Rp)</label>
+  <input type="text" id="kHarga" data-uang inputmode="decimal" placeholder="Contoh: 25.000">
+  <p class="muted" id="kTotal" aria-live="polite"></p>
+  <button type="button" id="btnKSimpan">Simpan barang</button>
+  <button type="button" class="sec" id="btnKBatal">Batal</button>
+</dialog>
+
 <!-- DIALOG EDIT TRANSAKSI -->
 <dialog id="dlgEdit">
   <h2>Edit transaksi</h2>
@@ -1641,11 +1968,58 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <select id="eKategori"></select>
   <input type="text" id="eTag" placeholder="Contoh: kantor, kuliah">
   <input type="text" id="eNominalMasuk" data-uang placeholder="Contoh: 50.000" inputmode="decimal">
+  <label class="field-label" for="eCara">Cara pembayaran</label>
+  <select id="eCara"><option value="nontunai">Non-tunai (transfer / e-wallet)</option><option value="tunai">Tunai</option></select>
+  <div class="cash-track" id="eCashTrackWrap" style="display:none"><span>Ikut uang fisik di web?</span><button type="button" id="btnETrackCash" aria-pressed="false" aria-label="Ikut uang fisik di web">OFF · Nominal saja</button></div>
+  <div id="eCashNominalWrap" style="display:none">
+    <label class="field-label" for="eBayarNominal" id="eBayarLabel">Uang diberikan ke penjual (Rp)</label>
+    <input type="text" id="eBayarNominal" data-uang inputmode="decimal" placeholder="Contoh: 50.000">
+    <div id="eKembaliNominalWrap"><label class="field-label" for="eKembaliNominal">Kembalian diterima (Rp)</label>
+      <input type="text" id="eKembaliNominal" data-uang inputmode="decimal" placeholder="Contoh: 8.000"></div>
+    <p class="muted" id="eCashNominalMath" aria-live="polite"></p>
+  </div>
   <p class="muted" id="eBarangJudul">Barang di transaksi ini:</p>
   <div id="eItems"></div>
-  <p class="muted" id="eTotal"></p>
+  <button class="ghost" id="btnETambah" type="button">+ Tambah barang</button>
+  <div id="eCashWrap" style="display:none">
+    <p class="muted" id="eCashInfo">Isi jumlah lembar uang, bukan nominal rupiahnya. Contoh belanja Rp57.000: bayar 1 lembar Rp50.000 + 1 lembar Rp5.000 + 1 lembar Rp2.000; kembalian kosong. Rincian boleh dikosongkan jika hanya ingin menandai Tunai.</p>
+    <details id="eStokWrap">
+      <summary>Isi uang fisik yang ada di dompet</summary>
+      <p class="muted">Isi jumlah lembar yang kamu pegang sekarang, bukan jumlah uang yang dibelanjakan. Contoh: punya dua lembar Rp20.000 → isi 2 pada Rp20.000. Perubahan dompet tersimpan saat kamu menekan Simpan perubahan.</p>
+      <div id="eStokGrid" class="grid-denom"></div>
+      <p class="muted" id="eStokSummary"></p>
+    </details>
+    <button type="button" class="ghost" id="btnEPecahOtomatis">✨ Isi otomatis dari uang di dompet</button>
+    <span class="muted" id="eCashBayarLabel">Dibayar pakai pecahan (lembar)</span>
+    <div id="eCashBayarGrid" class="grid-denom"></div>
+    <div id="eCashKembaliWrap"><span class="muted">Kembalian diterima (lembar)</span><div id="eCashKembaliGrid" class="grid-denom"></div></div>
+    <p class="muted" id="eCashMath" aria-live="polite"></p>
+  </div>
+  <p class="muted" id="eCashPreview" aria-live="polite"></p>
+  <div class="field-wrap" id="eFotoWrap">
+    <span class="field-label">Foto struk (opsional)</span>
+    <img id="eFotoPreview" alt="Pratinjau foto struk" style="display:none;width:100%;max-height:220px;object-fit:contain;border-radius:10px;margin:8px 0">
+    <p class="muted" id="eFotoStatus">Belum ada foto struk.</p>
+    <div class="aksi" id="eFotoActions">
+      <button type="button" class="ghost kecil" id="btnEFotoGaleri">🖼️ Galeri</button>
+      <button type="button" class="ghost kecil" id="btnEFotoKamera">📷 Kamera</button>
+      <button type="button" class="del kecil" id="btnEFotoHapus" style="display:none">Hapus foto</button>
+    </div>
+    <input type="file" id="eFotoGaleri" accept="image/*" hidden>
+    <input type="file" id="eFotoKamera" accept="image/*" capture="environment" hidden>
+    <button type="button" class="ghost" id="btnEScan" style="display:none">Baca isi foto struk (opsional)</button>
+    <div id="eScanDraft" style="display:none"><p class="muted" id="eScanStatus" role="status" aria-live="polite"></p><div id="eScanChoices"><button type="button" class="ghost kecil" id="btnEScanPilihSemua">Pilih semua</button><button type="button" class="ghost kecil" id="btnEScanKosongkan">Kosongkan pilihan</button></div><p class="muted" id="eScanCount" aria-live="polite"></p><div id="eScanList"></div><button type="button" id="btnEScanTambah">Tambahkan barang terpilih</button></div>
+  </div>
+  <p class="muted" id="eTotal" aria-live="polite"></p>
   <button id="btnESimpan">Simpan perubahan</button>
   <button class="sec" id="btnEBatal">Batal</button>
+</dialog>
+
+<dialog id="dlgKonfirmasiEdit" aria-labelledby="judulKonfirmasiEdit">
+  <h2 id="judulKonfirmasiEdit">Batalkan edit transaksi?</h2>
+  <p>Perubahan yang belum disimpan akan hilang.</p>
+  <button type="button" class="del" id="btnBuangEdit">Ya, batalkan</button>
+  <button type="button" class="sec" id="btnLanjutEdit">Kembali mengedit</button>
 </dialog>
 
 <!-- DIALOG EDIT BERULANG -->
@@ -1744,7 +2118,7 @@ const parseTags = s => [...new Set(String(s || '').split(',').map(t => t.trim())
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
 const el = (tag, cls, teks) => { const e = document.createElement(tag); if (cls) e.className = cls; if (teks !== undefined) e.textContent = teks; return e; };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const SATUAN = ['buah','butir','kg','gram','liter','ml','botol','galon','bungkus','lembar','pcs','paket'];
+const SATUAN = ['buah','butir','kg','gram','liter','ml','botol','galon','bungkus','lembar','pcs','paket','kali','sesi'];
 const angkaJumlah = v => Number(String(v).trim().replace(',', '.'));
 // Titik hanya untuk tampilan ribuan; angka yang disimpan tetap numerik.
 function formatUang(teks) {
@@ -1790,10 +2164,10 @@ const rincianItem = i => i.hargaTotal != null
   ? i.nama + ' · ' + jumlahSatuan(i) + ' = ' + rp(subtotalItem(i))
   : i.nama + ' · ' + jumlahSatuan(i) + ' × ' + hargaSatuan(i) + ' = ' + rp(subtotalItem(i));
 const satuanDariForm = (pilihan, lainnya) => pilihan.value === '__custom__' ? lainnya.value.trim().slice(0, 30) : pilihan.value;
-function isiSatuanSelect(select, pilih = 'buah', bolehKosong = false) {
+function isiSatuanSelect(select, pilih = '', bolehKosong = true) {
   select.innerHTML = '';
   const tambah = (nilai, teks) => { const o = document.createElement('option'); o.value = nilai; o.textContent = teks; select.appendChild(o); };
-  if (bolehKosong) tambah('', 'Tanpa satuan (catatan lama)');
+  if (bolehKosong) tambah('', 'Tanpa satuan (opsional)');
   SATUAN.forEach(s => tambah(s, s));
   tambah('__custom__', 'Lainnya (isi sendiri)');
   select.value = SATUAN.includes(pilih) || (bolehKosong && !pilih) ? pilih : '__custom__';
@@ -1807,7 +2181,7 @@ function pasangLabelForm() {
   const label = {
     tipe:'Jenis transaksi', tgl:'Tanggal transaksi', judul:'Nama transaksi (opsional)',
     kategori:'Kategori', iNominalMasuk:'Jumlah uang masuk (Rp)', iCara:'Cara pembayaran', tTag:'Tag (opsional)',
-    iNama:'Nama barang', iQty:'Jumlah barang', iSatuan:'Satuan barang',
+    iNama:'Nama barang / layanan', iQty:'Jumlah', iSatuan:'Satuan (opsional)',
     iSatuanLain:'Satuan sendiri', iModeHarga:'Cara mengisi harga', iHarga:'Harga total (Rp)', fFoto:'Foto struk (opsional)',
     rbNama:'Nama transaksi berulang', rbTipe:'Jenis transaksi', rbKat:'Kategori',
     rbQty:'Jumlah', rbSatuan:'Satuan', rbSatuanLain:'Satuan sendiri',
@@ -1816,7 +2190,7 @@ function pasangLabelForm() {
     wNama:'Nama target tabungan', wTarget:'Target harga (Rp)', wTgl:'Tenggat (opsional)',
     rDari:'Dari tanggal', rSampai:'Sampai tanggal', rTipe:'Jenis transaksi', rCari:'Cari transaksi',
     gDari:'Dari tanggal', gSampai:'Sampai tanggal', cmpA:'Hari pertama', cmpB:'Hari pembanding',
-    sGaya:'Gaya tampilan', sEfek:'Kualitas efek', sAdaptif:'Warna mengikuti foto',
+    sGaya:'Gaya aktif', sEfek:'Kualitas efek', sAdaptif:'Warna mengikuti foto',
     sFont:'Font', sTema:'Tema', sKatTipe:'Jenis kategori', kbBaru:'Nama kategori baru', fBg:'Pilih foto latar',
     eTipe:'Jenis transaksi', eTgl:'Tanggal transaksi', eJudul:'Nama transaksi',
     eKategori:'Kategori', eTag:'Tag (opsional)', eNominalMasuk:'Jumlah uang masuk (Rp)',
@@ -2079,16 +2453,17 @@ function baris(x) {
   }
   if (x.tunai) {
     const tunai = x.tunai;
-    const dibayar = tunai.bayar ? sumPecahan(tunai.bayar) : 0;
-    const kembali = tunai.kembali ? sumPecahan(tunai.kembali) : 0;
-    const diterima = tunai.diterima ? sumPecahan(tunai.diterima) : 0;
-    const rincian = el('div', 'muted', tunai.diterima
-      ? 'Uang fisik diterima: ' + rp(diterima)
-      : 'Uang fisik dipakai: ' + rp(dibayar) + ' · Kembalian: ' + rp(kembali));
+    const dibayar = nominalTunai(tunai, 'bayar');
+    const kembali = nominalTunai(tunai, 'kembali');
+    const diterima = nominalTunai(tunai, 'diterima');
+    const rincian = el('div', 'muted', x.tipe === 'masuk'
+      ? 'Uang tunai diterima: ' + rp(diterima)
+      : 'Diberikan ke penjual: ' + rp(dibayar) + ' · Kembalian: ' + rp(kembali));
     rincian.style.marginTop = '5px';
     info.appendChild(rincian);
+    info.appendChild(el('div', 'muted', tunaiMengubahStok(x) ? 'Stok dompet ikut berubah' : 'Stok dompet tidak berubah'));
   } else if (x.cara === 'tunai') {
-    info.appendChild(el('div', 'muted', 'Tanpa rincian pecahan · stok uang fisik tetap'));
+    info.appendChild(el('div', 'muted', 'Nominal saja · uang di dompet tidak berubah'));
   }
   top.append(info, el('span', 'amt', rp(x.total)));
   wrap.appendChild(top);
@@ -2131,7 +2506,7 @@ function baris(x) {
 
   if (x.items.length > 1 || x.items[0].nama !== x.judul || x.tunai) {
     const det = document.createElement('details');
-    det.appendChild(el('summary', null, 'Lihat rincian' + (x.tunai ? ' barang & pecahan' : '')));
+    det.appendChild(el('summary', null, 'Lihat rincian' + (tunaiMengubahStok(x) ? ' barang & pecahan' : '')));
     x.items.forEach(i => det.appendChild(el('div', 'muted', rincianItem(i))));
     if (x.tunai) {
       const pecahan = (label, lembar) => {
@@ -2549,21 +2924,262 @@ $('btnFotoHapus').onclick = () => {
 $('btnFotoTutup').onclick = () => $('dlgFoto').close();
 
 // ===== EDIT TRANSAKSI =====
+let editFoto = null;
+let editFotoFile = null;
+let editScanItems = [];
+let editGenerasi = 0;
+let editAwal = '';
+let editMemproses = false;
+function tunaiTerlacak(id) { return $(id).getAttribute('aria-pressed') === 'true'; }
+function tunaiMengubahStok(x) {
+  return !!(x?.tunai && x.tunai.lacakDompet !== false && (x.tunai.bayar || x.tunai.diterima));
+}
+function nominalTunai(tunai, jenis) {
+  if (!tunai) return 0;
+  const properti = jenis === 'diterima' ? 'diterimaNominal' : jenis === 'kembali' ? 'kembaliNominal' : 'bayarNominal';
+  return Number(tunai[properti] ?? (tunai[jenis] ? sumPecahan(tunai[jenis]) : 0));
+}
+function bacaNominalTunai(awalan, tipe, total, wajib) {
+  const dibayar = $(awalan + 'BayarNominal').value.trim();
+  const kembalian = $(awalan + 'KembaliNominal').value.trim();
+  if (!wajib && !dibayar && !kembalian) return { tunai:null };
+  const bayar = angkaUang(dibayar), kembali = tipe === 'masuk' ? 0 : (kembalian ? angkaUang(kembalian) : 0);
+  if (!dibayar || !Number.isFinite(bayar) || bayar <= 0)
+    return { error:'Isi jumlah uang tunai yang diberikan atau diterima.', field:awalan + 'BayarNominal' };
+  if (!Number.isFinite(kembali) || kembali < 0 || bayar - kembali !== total)
+    return { error: 'Uang ' + rp(bayar) + ' dikurangi kembalian ' + rp(kembali) + ' harus sama dengan total ' + rp(total) + '.', field:awalan + (tipe === 'masuk' ? 'BayarNominal' : 'KembaliNominal') };
+  return { tunai:tipe === 'masuk' ? { diterimaNominal:bayar, lacakDompet:false } :
+    { bayarNominal:bayar, kembaliNominal:kembali, lacakDompet:false } };
+}
+function tampilNominalTunai(awalan, tipe, total) {
+  const bayar = angkaUang($(awalan + 'BayarNominal').value);
+  const kembali = tipe === 'masuk' ? 0 : angkaUang($(awalan + 'KembaliNominal').value);
+  const hasil = (bayar || 0) - (kembali || 0);
+  const target = $(awalan + 'Cash' + (awalan === 'e' ? 'Nominal' : '') + 'Math');
+  target.textContent = tipe === 'masuk' ? 'Diterima ' + rp(bayar || 0) + ' · total ' + rp(total)
+    : 'Dibayar ' + rp(bayar || 0) + ' − kembalian ' + rp(kembali || 0) + ' = ' + rp(hasil) + ' · total belanja ' + rp(total);
+  target.classList.toggle('merah', !!$(awalan + 'BayarNominal').value && hasil !== total);
+}
+function isiKembalianOtomatis(awalan, tipe, total) {
+  if (tipe !== 'keluar') return;
+  const bayar = angkaUang($(awalan + 'BayarNominal').value);
+  if (Number.isFinite(bayar) && bayar >= total && total > 0)
+    isiUang($(awalan + 'KembaliNominal'), bayar - total);
+  else $(awalan + 'KembaliNominal').value = '';
+}
+function aturLacakTunai(id, aktif) {
+  const tombol = $(id);
+  tombol.setAttribute('aria-pressed', String(aktif));
+  tombol.textContent = aktif ? 'ON · Hitung dompet' : 'OFF · Nominal saja';
+}
+function sibukEdit(aktif) {
+  editMemproses = aktif;
+  ['btnESimpan','btnEScan','btnEFotoGaleri','btnEFotoKamera','btnEFotoHapus'].forEach(id => $(id).disabled = aktif);
+}
+
+function tampilkanFotoEdit() {
+  const ada = !!editFoto;
+  $('eFotoPreview').style.display = ada ? 'block' : 'none';
+  if (ada) $('eFotoPreview').src = editFoto;
+  else $('eFotoPreview').removeAttribute('src');
+  $('eFotoStatus').textContent = ada ? 'Foto siap. Perubahan berlaku setelah Simpan perubahan.' : 'Belum ada foto struk.';
+  $('btnEFotoHapus').style.display = ada ? '' : 'none';
+  $('btnEScan').style.display = ada && $('eTipe').value === 'keluar' ? '' : 'none';
+}
+
+function keadaanEdit() {
+  return JSON.stringify({
+    tipe: $('eTipe').value, tanggal: $('eTgl').value, judul: $('eJudul').value,
+    kategori: $('eKategori').value, tag: $('eTag').value,
+    nominal: $('eNominalMasuk').value, cara: $('eCara').value, lacakTunai: tunaiTerlacak('btnETrackCash'),
+    bayarNominal: $('eBayarNominal').value, kembaliNominal: $('eKembaliNominal').value,
+    items: editItems.map(i => ({ nama:i.nama, qty:i.qty, satuan:i.satuan, harga:i.harga,
+      hargaTotal:i.hargaTotal, baru:!!i.baru })), foto: editFoto,
+    bayar: DENOM.map(d => $('epb-' + d).value), kembali: DENOM.map(d => $('epk-' + d).value),
+    dompet: DENOM.map(d => $('est-' + d).value)
+  });
+}
+
+function tutupEdit() {
+  if (!$('dlgKonfirmasiEdit').open) $('dlgKonfirmasiEdit').showModal();
+}
+$('btnLanjutEdit').onclick = () => $('dlgKonfirmasiEdit').close();
+$('btnBuangEdit').onclick = () => { $('dlgKonfirmasiEdit').close(); $('dlgEdit').close(); };
+$('dlgEdit').addEventListener('cancel', e => {
+  e.preventDefault();
+  tutupEdit();
+});
+['input','change'].forEach(nama => $('dlgEdit').addEventListener(nama, e => {
+  $('dlgEdit').querySelector('.dialog-error')?.remove();
+  e.target.removeAttribute?.('aria-invalid');
+}));
+$('dlgEdit').addEventListener('close', () => {
+  editGenerasi++;
+  editFotoFile = null;
+  editScanItems = [];
+  editAwal = '';
+  $('eFotoGaleri').value = $('eFotoKamera').value = '';
+});
+
 function bukaEdit(id) {
   const x = db.transaksi.find(d => d.id === id);
   if (!x) return;
+  editGenerasi++;
   editId = id;
-  editItems = x.items.map(i => ({ ...i, satuanBolehKosong: !i.satuan }));
+  editItems = x.items.map(i => ({ ...i }));
+  editFoto = x.foto || null;
+  editFotoFile = null;
+  editScanItems = [];
+  sibukEdit(false);
+  $('eScanDraft').style.display = 'none';
+  $('eScanList').replaceChildren();
+  tampilkanFotoEdit();
   $('eTipe').value = x.tipe;
+  $('eTipe').disabled = !!x.tunai;
+  $('eCara').value = x.cara === 'tunai' || x.tunai ? 'tunai' : 'nontunai';
+  aturLacakTunai('btnETrackCash', tunaiMengubahStok(x));
   isiKategoriSelect($('eKategori'), x.tipe, x.kategori);
   $('eTgl').value = x.tanggal;
   $('eJudul').value = x.judul;
   $('eTag').value = (x.tags || []).join(', ');
   isiUang($('eNominalMasuk'), x.tipe === 'masuk' ? x.total : '');
+  isiUang($('eBayarNominal'), x.tunai ? nominalTunai(x.tunai, x.tipe === 'masuk' ? 'diterima' : 'bayar') : '');
+  isiUang($('eKembaliNominal'), x.tunai && x.tipe === 'keluar' ? nominalTunai(x.tunai, 'kembali') : '');
+  isiPecahan('epb', x.tunai?.bayar || x.tunai?.diterima);
+  isiPecahan('epk', x.tunai?.kembali);
+  isiPecahan('est', db.uangFisik.stok);
+  $('eStokWrap').open = false;
   updateEditJenis();
   renderEditItems();
+  const error = $('dlgEdit').querySelector('.dialog-error');
+  if (error) error.remove();
+  editAwal = keadaanEdit();
   $('dlgEdit').showModal();
 }
+
+$('btnEFotoGaleri').onclick = () => $('eFotoGaleri').click();
+$('btnEFotoKamera').onclick = () => $('eFotoKamera').click();
+async function pilihFotoEdit(file) {
+  if (!file) return;
+  const generasi = editGenerasi;
+  sibukEdit(true);
+  editScanItems = [];
+  $('eScanDraft').style.display = 'none';
+  $('eFotoStatus').textContent = 'Memproses foto...';
+  try {
+    const hasil = await kompresUmum(file, 800, 0.6);
+    if (generasi !== editGenerasi || !$('dlgEdit').open) return;
+    editFoto = hasil;
+    editFotoFile = file;
+    editScanItems = [];
+    $('eScanDraft').style.display = 'none';
+    tampilkanFotoEdit();
+  } catch (_) {
+    if (generasi === editGenerasi && $('dlgEdit').open) {
+      tampilkanFotoEdit();
+      beriPesan('Foto gagal dibaca. Coba gambar lain.', true);
+    }
+  } finally {
+    if (generasi === editGenerasi) {
+      sibukEdit(false);
+    }
+  }
+}
+$('eFotoGaleri').onchange = e => pilihFotoEdit(e.target.files[0]);
+$('eFotoKamera').onchange = e => pilihFotoEdit(e.target.files[0]);
+$('btnEFotoHapus').onclick = () => {
+  editFoto = null;
+  editFotoFile = null;
+  editScanItems = [];
+  $('eFotoGaleri').value = $('eFotoKamera').value = '';
+  $('eScanDraft').style.display = 'none';
+  tampilkanFotoEdit();
+};
+
+function perbaruiPilihanScanEdit() {
+  const jumlah = $('eScanList').querySelectorAll('input[type=checkbox]:checked').length;
+  $('eScanCount').textContent = jumlah + ' dari ' + editScanItems.length + ' barang dipilih.';
+  $('btnEScanTambah').disabled = jumlah === 0;
+}
+$('btnEScanPilihSemua').onclick = () => {
+  $('eScanList').querySelectorAll('input[type=checkbox]').forEach(cek => { cek.checked = true; });
+  perbaruiPilihanScanEdit();
+};
+$('btnEScanKosongkan').onclick = () => {
+  $('eScanList').querySelectorAll('input[type=checkbox]').forEach(cek => { cek.checked = false; });
+  perbaruiPilihanScanEdit();
+};
+
+function tampilkanScanEdit(hasil) {
+  editScanItems = hasil.barang.length ? hasil.barang : hasil.total
+    ? [{ nama: 'Belanja dari struk', qty: 1, satuan: '', hargaTotal: hasil.total }] : [];
+  const daftar = $('eScanList');
+  daftar.replaceChildren();
+  editScanItems.forEach((item, i) => {
+    const label = el('label', 'row scan-pick');
+    const cek = el('input'); cek.type = 'checkbox'; cek.checked = false;
+    cek.value = String(i);
+    cek.onchange = perbaruiPilihanScanEdit;
+    label.append(cek, el('span', null, item.nama + ' · ' + jumlahSatuan(item) + ' · ' + rp(item.hargaTotal)));
+    daftar.appendChild(label);
+  });
+  $('eScanDraft').style.display = '';
+  $('eScanChoices').style.display = editScanItems.length ? '' : 'none';
+  perbaruiPilihanScanEdit();
+  $('eScanStatus').textContent = editScanItems.length
+    ? 'Centang hanya barang yang belum ada di transaksi ini supaya tidak terhitung dua kali. Setelah ditambahkan, periksa nama dan harga sebelum menyimpan.' +
+      (hasil.total && Math.abs(editScanItems.reduce((n,i) => n + i.hargaTotal, 0) - hasil.total) > 1
+        ? ' Total barang berbeda dari total di struk ' + rp(hasil.total) + '.' : '')
+    : 'Barang belum terbaca. Foto tetap bisa disimpan tanpa hasil scan.';
+}
+$('btnEScan').onclick = async () => {
+  if (!editFoto || editMemproses) return;
+  const generasi = editGenerasi;
+  let worker;
+  sibukEdit(true);
+  $('eScanDraft').style.display = '';
+  $('eScanStatus').textContent = 'Membaca foto struk...';
+  editScanItems = [];
+  $('eScanChoices').style.display = 'none';
+  $('eScanCount').textContent = '';
+  $('eScanList').replaceChildren();
+  $('btnEScanTambah').disabled = true;
+  try {
+    await muatTesseract();
+    const gambar = editFotoFile || await (await fetch(editFoto)).blob();
+    const { asli, olah } = await siapkanGambarScan(gambar);
+    worker = await Tesseract.createWorker(['ind', 'eng'], 1);
+    await worker.setParameters({ tessedit_pageseg_mode: '4', preserve_interword_spaces: '1' });
+    let hasil = bacaStruk((await worker.recognize(olah, { rotateAuto: true })).data.text || '');
+    if (!hasil.barang.length || !hasil.total) {
+      await worker.setParameters({ tessedit_pageseg_mode: '3' });
+      const lain = bacaStruk((await worker.recognize(asli, { rotateAuto: true })).data.text || '');
+      if (nilaiScan({ ...lain, keyakinan: 0 }) > nilaiScan({ ...hasil, keyakinan: 0 })) hasil = lain;
+    }
+    if (generasi === editGenerasi && $('dlgEdit').open) tampilkanScanEdit(hasil);
+  } catch (_) {
+    if (generasi === editGenerasi && $('dlgEdit').open)
+      $('eScanStatus').textContent = 'Gagal membaca foto. Kamu tetap bisa menyimpan fotonya dan mengisi barang secara manual. Scan memerlukan internet untuk memuat pembaca teks.';
+  } finally {
+    if (worker) await worker.terminate().catch(() => {});
+    if (generasi === editGenerasi) {
+      sibukEdit(false);
+    }
+  }
+};
+$('btnEScanTambah').onclick = () => {
+  if ($('eTipe').value !== 'keluar') return;
+  const dipilih = [...$('eScanList').querySelectorAll('input:checked')]
+    .map(cek => editScanItems[Number(cek.value)]).filter(Boolean);
+  if (!dipilih.length) return gagalIsi('Centang minimal satu barang hasil scan.', $('eScanList').querySelector('input'));
+  dipilih.forEach(i => editItems.push({ nama:i.nama, qty:i.qty, satuan:i.satuan || '',
+    harga:i.hargaTotal / i.qty, hargaTotal:i.hargaTotal, baru:true }));
+  $('eScanDraft').style.display = 'none';
+  editScanItems = [];
+  renderEditItems();
+  $('eItem-' + (editItems.length - dipilih.length) + '-nama').scrollIntoView({ block:'center' });
+  beriPesan(dipilih.length + ' barang hasil scan ditambahkan. Periksa lagi sebelum menyimpan.');
+};
 
 function renderEditItems() {
   const box = $('eItems');
@@ -2578,7 +3194,7 @@ function renderEditItems() {
       wrap.append(label, control);
       return wrap;
     };
-    const nama = el('input'); nama.type = 'text'; nama.placeholder = 'Contoh: Nasi goreng'; nama.value = it.nama;
+    const nama = el('input'); nama.type = 'text'; nama.placeholder = 'Contoh: Cukur rambut'; nama.value = it.nama;
     nama.oninput = () => { editItems[i].nama = nama.value; hitungEdit(); };
     const qty = el('input'); qty.type = 'number'; qty.min = '0.001'; qty.step = 'any'; qty.inputMode = 'decimal'; qty.placeholder = 'Contoh: 0,5'; qty.value = it.qty;
     qty.oninput = () => {
@@ -2587,7 +3203,7 @@ function renderEditItems() {
       hitungEdit();
     };
     const satuan = el('select'); satuan.setAttribute('aria-label', 'Satuan barang');
-    isiSatuanSelect(satuan, it.satuan || '', !!it.satuanBolehKosong);
+    isiSatuanSelect(satuan, it.satuan || '');
     const satuanLain = el('input'); satuanLain.type = 'text'; satuanLain.placeholder = 'Contoh: dus'; satuanLain.maxLength = 30;
     satuanLain.value = satuan.value === '__custom__' ? it.satuan : '';
     const lainWrap = bidang(satuanLain, 'Satuan sendiri', 'satuan-lain', 'item-satuan-lain');
@@ -2624,9 +3240,16 @@ function renderEditItems() {
       else it.harga = n;
       hitungEdit();
     };
-    row.append(bidang(nama, 'Nama barang', 'nama', 'item-nama'),
-      bidang(qty, 'Jumlah', 'qty'), bidang(satuan, 'Satuan', 'satuan'),
+    row.append(bidang(nama, 'Nama barang / layanan', 'nama', 'item-nama'),
+      bidang(qty, 'Jumlah', 'qty'), bidang(satuan, 'Satuan (opsional)', 'satuan'),
       lainWrap, bidang(mode, 'Cara mengisi harga', 'mode-harga', 'item-mode-harga'), hargaWrap);
+    if (it.baru) {
+      const batal = el('button', 'ghost', 'Batalkan barang baru');
+      batal.type = 'button';
+      batal.style.gridColumn = '1 / -1';
+      batal.onclick = () => { editItems.splice(i, 1); renderEditItems(); };
+      row.appendChild(batal);
+    }
     box.appendChild(row);
   });
   hitungEdit();
@@ -2634,7 +3257,65 @@ function renderEditItems() {
 
 function hitungEdit() {
   const t = $('eTipe').value === 'masuk' ? angkaUang($('eNominalMasuk').value) || 0 : editItems.reduce((s,i) => s + subtotalItem(i), 0);
-  $('eTotal').textContent = 'Total baru: ' + rp(t);
+  const x = db.transaksi.find(d => d.id === editId);
+  $('eTotal').textContent = (x ? 'Total sebelumnya: ' + rp(x.total) + ' · ' : '') + 'Total baru: ' + rp(t);
+  pratinjauTunaiEdit();
+}
+
+function stokSetelahEdit(x, tunaiBaru, stokDompet = db.uangFisik.stok) {
+  const stok = { ...stokDompet };
+  DENOM.forEach(d => {
+    if (tunaiMengubahStok(x)) {
+      if (x.tunai.diterima) stok[d] -= x.tunai.diterima[d] || 0;
+      else stok[d] += (x.tunai.bayar[d] || 0) - (x.tunai.kembali?.[d] || 0);
+    }
+    if (tunaiMengubahStok({ tunai:tunaiBaru })) {
+      if (tunaiBaru.diterima) stok[d] += tunaiBaru.diterima[d] || 0;
+      else stok[d] += (tunaiBaru.kembali?.[d] || 0) - (tunaiBaru.bayar[d] || 0);
+    }
+  });
+  return stok;
+}
+function pesanDompetEdit(teks) {
+  $('eStokWrap').open = true;
+  return gagalIsi(teks, 'est-500');
+}
+
+function pratinjauTunaiEdit() {
+  const x = db.transaksi.find(d => d.id === editId);
+  if (!x) return;
+  const tunai = $('eCara').value === 'tunai';
+  const lacak = tunai && tunaiTerlacak('btnETrackCash');
+  $('eCashPreview').style.display = tunai || x.tunai ? '' : 'none';
+  const sebelum = sumPecahan(db.uangFisik.stok);
+  const bayar = bacaPecahan('epb'), kembali = bacaPecahan('epk');
+  const total = $('eTipe').value === 'masuk' ? angkaUang($('eNominalMasuk').value) || 0
+    : editItems.reduce((s,i) => s + subtotalItem(i), 0);
+  tampilNominalTunai('e', $('eTipe').value, total);
+  const stokDompet = lacak ? bacaPecahan('est') : db.uangFisik.stok;
+  $('eStokSummary').textContent = 'Uang di dompet yang kamu isi: ' + rp(sumPecahan(stokDompet)) + '.';
+  const adaPecahan = lacak && (sumPecahan(bayar) > 0 || ($('eTipe').value === 'keluar' && sumPecahan(kembali) > 0));
+  const rincian = adaPecahan ? $('eTipe').value === 'masuk' ? { diterima:bayar } : { bayar,kembali } : null;
+  const sesudah = stokSetelahEdit(x, rincian, stokDompet);
+  let pecahanCocok = false;
+  if (lacak && adaPecahan) {
+    const hasil = $('eTipe').value === 'masuk' ? sumPecahan(bayar) : sumPecahan(bayar) - sumPecahan(kembali);
+    pecahanCocok = hasil === total;
+    $('eCashMath').classList.toggle('merah', hasil !== total);
+    $('eCashMath').textContent = $('eTipe').value === 'masuk'
+      ? 'Diterima ' + rp(hasil) + ' dari total ' + rp(total) + (hasil === total ? ' ✓ Cocok.' : hasil < total ? ' · Kurang ' + rp(total - hasil) + '.' : ' · Lebih ' + rp(hasil - total) + '.')
+      : 'Dibayar ' + rp(sumPecahan(bayar)) + ' − kembalian ' + rp(sumPecahan(kembali)) + ' = ' + rp(hasil) +
+        '. Total belanja ' + rp(total) + (hasil === total ? ' ✓ Cocok.' : hasil < total ? ' · Masih kurang ' + rp(total - hasil) + '.' : ' · Kembalian kurang ' + rp(hasil - total) + '.');
+  } else {
+    $('eCashMath').classList.remove('merah');
+    $('eCashMath').textContent = lacak ? 'Pelacakan ON: isi pecahan dibayar atau tekan Isi otomatis sebelum menyimpan.' : '';
+  }
+  $('eCashPreview').textContent = (tunai && !lacak ? 'Pelacakan OFF: nominal dibayar dan kembalian tetap tersimpan. ' : '') + 'Dompet tercatat sekarang: ' + rp(sebelum) +
+    (lacak && sumPecahan(stokDompet) !== sebelum ? ' · Dompet yang kamu isi: ' + rp(sumPecahan(stokDompet)) : '') +
+    ' → sesudah menyimpan Edit: ' + rp(sumPecahan(sesudah)) +
+    (DENOM.some(d => sesudah[d] < 0) ? ' · Ada pecahan yang stoknya kurang.' : '') +
+    (tunai && !lacak && tunaiMengubahStok(x) ? ' · Pengaruh pecahan lama akan dibatalkan.' : '') +
+    (lacak && !pecahanCocok ? ' · Lengkapi pecahan sebelum menyimpan.' : '');
 }
 
 function updateEditJenis() {
@@ -2642,16 +3323,83 @@ function updateEditJenis() {
   $('eNominalMasuk').parentElement.style.display = masuk ? '' : 'none';
   $('eBarangJudul').style.display = masuk ? 'none' : '';
   $('eItems').style.display = masuk ? 'none' : '';
+  $('btnETambah').style.display = masuk ? 'none' : '';
+  $('btnEScan').style.display = !masuk && editFoto ? '' : 'none';
+  if (masuk) $('eScanDraft').style.display = 'none';
+  const tunai = $('eCara').value === 'tunai';
+  $('eCashTrackWrap').style.display = tunai ? '' : 'none';
+  $('eCashNominalWrap').style.display = tunai ? '' : 'none';
+  $('eKembaliNominalWrap').style.display = masuk ? 'none' : '';
+  $('eBayarLabel').textContent = masuk ? 'Uang tunai diterima (Rp)' : 'Uang diberikan ke penjual (Rp)';
+  $('eCashWrap').style.display = tunai ? '' : 'none';
+  $('eStokWrap').style.display = tunaiTerlacak('btnETrackCash') ? '' : 'none';
+  $('btnEPecahOtomatis').style.display = tunaiTerlacak('btnETrackCash') ? '' : 'none';
+  $('eCashKembaliWrap').style.display = masuk ? 'none' : '';
+  $('eCashBayarLabel').textContent = masuk ? 'Uang tunai yang diterima (lembar)' : 'Dibayar pakai pecahan (lembar)';
+  $('eCashInfo').textContent = tunaiTerlacak('btnETrackCash')
+    ? 'ON: rincian lembar wajib sama dengan nominal di atas dan stok dompet ikut berubah.'
+    : 'OFF: rincian lembar ini opsional. Nominal di atas tetap tersimpan, stok dompet tidak berubah.';
   if (masuk && !$('eNominalMasuk').value) isiUang($('eNominalMasuk'), editItems.reduce((s,i) => s + subtotalItem(i), 0) || '');
   hitungEdit();
 }
 $('eNominalMasuk').oninput = hitungEdit;
 $('eTipe').onchange = () => { isiKategoriSelect($('eKategori'), $('eTipe').value); updateEditJenis(); };
-$('btnEBatal').onclick = () => $('dlgEdit').close();
+$('eCara').onchange = updateEditJenis;
+$('btnETrackCash').onclick = () => { aturLacakTunai('btnETrackCash', !tunaiTerlacak('btnETrackCash')); updateEditJenis(); };
+$('eCashWrap').addEventListener('input', pratinjauTunaiEdit);
+['eBayarNominal','eKembaliNominal'].forEach(id => $(id).addEventListener('input', pratinjauTunaiEdit));
+$('eBayarNominal').addEventListener('input', () => {
+  isiKembalianOtomatis('e', $('eTipe').value, $('eTipe').value === 'masuk'
+    ? angkaUang($('eNominalMasuk').value) || 0 : editItems.reduce((s,i) => s + subtotalItem(i), 0));
+  pratinjauTunaiEdit();
+});
+$('btnEPecahOtomatis').onclick = () => {
+  const x = db.transaksi.find(d => d.id === editId);
+  if (!x) return;
+  const total = $('eTipe').value === 'masuk' ? angkaUang($('eNominalMasuk').value) || 0
+    : editItems.reduce((s,i) => s + subtotalItem(i), 0);
+  if (!(total > 0)) return gagalIsi('Isi harga barang atau jumlah pemasukan terlebih dahulu.', 'btnEPecahOtomatis');
+  if (!pecahanValid('est')) return pesanDompetEdit('Jumlah lembar uang di dompet harus angka bulat 0 atau lebih.');
+  if ($('eTipe').value === 'masuk') {
+    const terima = cariPecahan(total, null);
+    if (!terima) return gagalIsi('Jumlah ' + rp(total) + ' tidak bisa dibagi dengan pecahan yang tersedia. Isi pecahan sendiri atau biarkan kosong.', 'btnEPecahOtomatis');
+    isiPecahan('epb', terima);
+    isiPecahan('epk', null);
+    isiUang($('eBayarNominal'), sumPecahan(terima));
+    isiUang($('eKembaliNominal'), '');
+  } else {
+    const dompetSebelumTransaksi = stokSetelahEdit(x, null, bacaPecahan('est'));
+    if (DENOM.some(d => dompetSebelumTransaksi[d] < 0))
+      return pesanDompetEdit('Jumlah lembar dompet sekarang tidak cocok dengan pembayaran lama. Periksa isian dompet.');
+    const hasil = cariPembayaran(total, dompetSebelumTransaksi);
+    if (!hasil) {
+      const tersedia = sumPecahan(dompetSebelumTransaksi);
+      const alasan = tersedia < total ? 'Uang yang tersedia untuk transaksi ini ' + rp(tersedia) + ', masih kurang ' + rp(total - tersedia) + '. '
+        : 'Jumlah total cukup, tetapi gabungan pecahan yang tersedia belum cocok. ';
+      return gagalIsi(alasan + 'Periksa isian dompet, isi pecahan sendiri, atau kosongkan rinciannya.', 'btnEPecahOtomatis');
+    }
+    isiPecahan('epb', hasil.bayar);
+    isiPecahan('epk', hasil.kembali);
+    isiUang($('eBayarNominal'), sumPecahan(hasil.bayar));
+    isiUang($('eKembaliNominal'), sumPecahan(hasil.kembali));
+  }
+  pratinjauTunaiEdit();
+  beriPesan('Pecahan terisi. Cocokkan dengan uang yang sebenarnya sebelum menyimpan.');
+};
+$('btnETambah').onclick = () => {
+  if ($('eTipe').value !== 'keluar') return;
+  editItems.push({ nama: '', qty: 1, satuan: '', harga: 0, hargaTotal: 0, baru: true });
+  renderEditItems();
+  const nama = $('eItem-' + (editItems.length - 1) + '-nama');
+  nama.scrollIntoView({ block: 'center' });
+  nama.focus();
+};
+$('btnEBatal').onclick = tutupEdit;
 
 $('btnESimpan').onclick = () => {
   const x = db.transaksi.find(d => d.id === editId);
   if (!x) { $('dlgEdit').close(); return; }
+  if (editMemproses) return gagalIsi('Tunggu foto atau scan selesai.', 'eFotoStatus');
   const tipeBaru = $('eTipe').value;
   if (!$('eTgl').value) return gagalIsi('Tanggal transaksi wajib diisi.', 'eTgl');
   if (!$('eKategori').value) return gagalIsi('Pilih kategori transaksi.', 'eKategori');
@@ -2669,20 +3417,67 @@ $('btnESimpan').onclick = () => {
     for (let i = 0; i < items.length; i++) {
       if (!items[i].nama) return gagalIsi('Nama barang wajib diisi.', 'eItem-' + i + '-nama');
       if (!Number.isFinite(items[i].qty) || items[i].qty <= 0) return gagalIsi('Jumlah barang harus lebih dari 0.', 'eItem-' + i + '-qty');
-      if (!items[i].satuan && !editItems[i]?.satuanBolehKosong)
-        return gagalIsi('Satuan sendiri wajib diisi.', 'eItem-' + i + '-satuan-lain');
+      if ($('eItem-' + i + '-satuan').value === '__custom__' && !items[i].satuan)
+        return gagalIsi('Isi satuan sendiri atau pilih Tanpa satuan.', 'eItem-' + i + '-satuan-lain');
       if (!Number.isFinite(subtotalItem(items[i])) || subtotalItem(items[i]) <= 0)
         return gagalIsi('Harga barang harus lebih dari 0.', 'eItem-' + i + '-harga');
     }
   }
   const totalBaru = items.reduce((s, i) => s + subtotalItem(i), 0);
-  if (x.tunai && (totalBaru !== x.total || $('eTipe').value !== x.tipe)) {
-    alert('Transaksi tunai tidak bisa diubah nominal atau tipenya, karena stok pecahan ikut berubah. Hapus lalu catat ulang.');
-    return;
+  if (tunaiMengubahStok(x) && tipeBaru !== x.tipe)
+    return gagalIsi('Jenis transaksi dengan rincian pecahan tunai tidak bisa diubah.', 'eTipe');
+  const caraBaru = $('eCara').value;
+  const lacakTunai = caraBaru === 'tunai' && tunaiTerlacak('btnETrackCash');
+  const nominal = caraBaru === 'tunai' ? bacaNominalTunai('e', tipeBaru, totalBaru, lacakTunai) : { tunai:null };
+  if (nominal.error) return gagalIsi(nominal.error, nominal.field);
+  let tunaiBaru = nominal.tunai;
+  if (caraBaru === 'tunai' && !lacakTunai) {
+    if (!pecahanValid('epb') || !pecahanValid('epk'))
+      return gagalIsi('Jumlah lembar harus angka bulat 0 atau lebih.', 'epb-500');
+    const bayarLembar = bacaPecahan('epb'), kembaliLembar = bacaPecahan('epk');
+    if ((sumPecahan(bayarLembar) || (tipeBaru === 'keluar' && sumPecahan(kembaliLembar))) && !tunaiBaru)
+      return gagalIsi('Isi uang tunai yang diberikan dan kembalian di atas.', 'eBayarNominal');
+    if (tunaiBaru && (sumPecahan(bayarLembar) || (tipeBaru === 'keluar' && sumPecahan(kembaliLembar)))) {
+      if ((sumPecahan(bayarLembar) && sumPecahan(bayarLembar) !== nominalTunai(tunaiBaru, tipeBaru === 'masuk' ? 'diterima' : 'bayar')) ||
+          (tipeBaru === 'keluar' && sumPecahan(kembaliLembar) && sumPecahan(kembaliLembar) !== nominalTunai(tunaiBaru, 'kembali')))
+        return gagalIsi('Rincian lembar perlu sama dengan nominal yang diisi di atas, atau kosongkan semua lembar.', 'epb-500');
+      tunaiBaru = { ...tunaiBaru,
+        ...(sumPecahan(bayarLembar) ? { [tipeBaru === 'masuk' ? 'diterima' : 'bayar']:bayarLembar } : {}),
+        ...(tipeBaru === 'keluar' && sumPecahan(kembaliLembar) ? { kembali:kembaliLembar } : {}) };
+    }
   }
+  if (lacakTunai && !pecahanValid('est'))
+    return pesanDompetEdit('Jumlah lembar uang di dompet harus angka bulat 0 atau lebih.');
+  if (lacakTunai) {
+    if (!pecahanValid('epb') || (tipeBaru === 'keluar' && !pecahanValid('epk')))
+      return gagalIsi('Jumlah lembar pecahan harus angka bulat 0 atau lebih.', 'epb-500');
+    const bayar = bacaPecahan('epb'), kembali = tipeBaru === 'keluar' ? bacaPecahan('epk') : stokKosong();
+    if (tipeBaru === 'masuk') {
+      if (sumPecahan(bayar) !== nominalTunai(tunaiBaru, 'diterima'))
+        return gagalIsi('Jumlah lembar diterima harus sama dengan nominal uang tunai yang kamu isi.', 'epb-500');
+      if (sumPecahan(bayar) !== totalBaru)
+        return gagalIsi('Pemasukan ' + rp(totalBaru) + ', tetapi pecahan diterima berjumlah ' + rp(sumPecahan(bayar)) + '. Ubah jumlah lembar atau tekan Isi otomatis.', 'epb-500');
+      tunaiBaru = { ...tunaiBaru, diterima: bayar, lacakDompet:true };
+    } else {
+      if (sumPecahan(bayar) !== nominalTunai(tunaiBaru, 'bayar') || sumPecahan(kembali) !== nominalTunai(tunaiBaru, 'kembali'))
+        return gagalIsi('Jumlah lembar dibayar dan kembalian harus sama dengan nominal yang kamu isi di atas.', 'epb-500');
+      if (sumPecahan(bayar) - sumPecahan(kembali) !== totalBaru)
+        return gagalIsi('Belanja ' + rp(totalBaru) + ', tetapi dibayar ' + rp(sumPecahan(bayar)) + ' dikurangi kembalian ' + rp(sumPecahan(kembali)) + ' hanya ' + rp(sumPecahan(bayar) - sumPecahan(kembali)) + '. Ubah pecahan atau tekan Isi otomatis.', 'epb-500');
+      tunaiBaru = { ...tunaiBaru, bayar, kembali, lacakDompet:true };
+    }
+  }
+  const stokDompet = lacakTunai ? bacaPecahan('est') : db.uangFisik.stok;
+  const dompetBerubah = lacakTunai && DENOM.some(d => stokDompet[d] !== db.uangFisik.stok[d]);
+  const ubahStok = !!(tunaiMengubahStok(x) || tunaiMengubahStok({ tunai:tunaiBaru }) || dompetBerubah);
+  const stokBaru = ubahStok ? stokSetelahEdit(x, tunaiBaru, stokDompet) : null;
+  if (stokBaru && DENOM.some(d => stokBaru[d] < 0))
+    return lacakTunai
+      ? pesanDompetEdit('Ada pecahan uang di dompet yang kurang. Periksa jumlah lembar dompet, uang dibayar, dan kembalian.')
+      : gagalIsi('Uang fisik dari transaksi lama belum bisa dilepas karena stok dompet akan menjadi minus. Periksa stok di Catat transaksi terlebih dahulu.', 'eCara');
   const tgl = $('eTgl').value;
   const judul = $('eJudul').value.trim() || (tipeBaru === 'masuk' ? $('eKategori').value : items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
   const sebelumnya = { ...x };
+  const stokLama = stokBaru ? { ...db.uangFisik.stok } : null;
   x.tipe = $('eTipe').value;
   x.tanggal = tgl;
   x.judul = judul;
@@ -2690,10 +3485,19 @@ $('btnESimpan').onclick = () => {
   x.tags = parseTags($('eTag').value);
   x.items = items;
   x.total = totalBaru;
-  if (!simpan()) { Object.assign(x, sebelumnya); return; }
+  x.cara = caraBaru;
+  x.tunai = tunaiBaru;
+  x.foto = editFoto;
+  if (stokBaru) db.uangFisik.stok = stokBaru;
+  if (!simpan()) {
+    Object.assign(x, sebelumnya);
+    if (stokLama) db.uangFisik.stok = stokLama;
+    return;
+  }
+  if (stokBaru) isiPecahan('st', db.uangFisik.stok);
   $('dlgEdit').close();
   renderSemua();
-  beriPesan('Perubahan transaksi tersimpan.');
+  beriPesan(stokBaru ? 'Transaksi dan stok uang di dompet tersimpan.' : 'Perubahan transaksi tersimpan.');
 };
 
 // ===== TRANSAKSI BERULANG =====
@@ -2788,7 +3592,7 @@ $('btnBerulang').onclick = () => {
   const satuan = satuanDariForm($('rbSatuan'), $('rbSatuanLain'));
   if (!nama) return gagalIsi('Nama transaksi berulang wajib diisi.', 'rbNama');
   if (!Number.isFinite(qty) || qty <= 0) return gagalIsi('Jumlah harus lebih dari 0.', 'rbQty');
-  if (!satuan) return gagalIsi('Isi satuan sendiri atau pilih satuan lain.', $('rbSatuan').value === '__custom__' ? 'rbSatuanLain' : 'rbSatuan');
+  if ($('rbSatuan').value === '__custom__' && !satuan) return gagalIsi('Isi satuan sendiri atau pilih Tanpa satuan.', 'rbSatuanLain');
   if (!Number.isFinite(harga) || harga <= 0) return gagalIsi('Harga per satuan harus lebih dari 0.', 'rbHarga');
   if (!$('rbMulai').value) return gagalIsi('Tanggal mulai wajib diisi.', 'rbMulai');
   if (!$('rbKat').value) return gagalIsi('Pilih kategori transaksi berulang.', 'rbKat');
@@ -2798,7 +3602,7 @@ $('btnBerulang').onclick = () => {
   });
   if (!simpan()) { db.berulang.pop(); return; }
   $('rbNama').value = ''; $('rbHarga').value = ''; $('rbQty').value = 1;
-  $('rbSatuan').value = 'buah'; $('rbSatuanLain').value = ''; tampilkanSatuanLain($('rbSatuan'), $('rbSatuanLain'));
+  $('rbSatuan').value = ''; $('rbSatuanLain').value = ''; tampilkanSatuanLain($('rbSatuan'), $('rbSatuanLain'));
   renderSemua();
   beriPesan('Transaksi berulang tersimpan.');
 };
@@ -2869,7 +3673,7 @@ function itemDariForm() {
   const qty = angkaJumlah($('iQty').value) || 0;
   const hargaInput = angkaUang($('iHarga').value) || 0;
   const satuan = $('iSatuan').value === '__custom__' ? $('iSatuanLain').value.trim() : $('iSatuan').value;
-  if (!nama || !Number.isFinite(qty) || qty <= 0 || !Number.isFinite(hargaInput) || hargaInput <= 0 || !satuan) return null;
+  if (!nama || !Number.isFinite(qty) || qty <= 0 || !Number.isFinite(hargaInput) || hargaInput <= 0 || ($('iSatuan').value === '__custom__' && !satuan)) return null;
   return $('iModeHarga').value === 'total'
     ? { nama, qty, satuan: satuan.slice(0, 30), harga: hargaInput / qty, hargaTotal: hargaInput }
     : { nama, qty, satuan: satuan.slice(0, 30), harga: hargaInput };
@@ -2878,7 +3682,6 @@ function itemDariForm() {
 function pesanBarang() {
   if (!$('iNama').value.trim()) return pesanForm('Nama barang wajib diisi.', 'iNama');
   if (!(angkaJumlah($('iQty').value) > 0)) return pesanForm('Jumlah barang harus lebih dari 0.', 'iQty');
-  if (!$('iSatuan').value) return pesanForm('Pilih satuan barang.', 'iSatuan');
   if ($('iSatuan').value === '__custom__' && !$('iSatuanLain').value.trim())
     return pesanForm('Satuan sendiri wajib diisi.', 'iSatuanLain');
   return pesanForm('Harga barang harus lebih dari 0.', 'iHarga');
@@ -2913,7 +3716,7 @@ function resetFormBarang() {
   $('iQty').value = 1;
   $('iModeHarga').value = 'total';
   modeHargaSebelumnya = 'total';
-  $('iSatuan').value = 'buah';
+  $('iSatuan').value = '';
   $('iSatuanLain').value = '';
   tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
   $('statusScan').textContent = '';
@@ -2927,19 +3730,84 @@ function resetFormBarang() {
   cekTombolSimpan();
 }
 
+let editKeranjangIndex = -1;
+let modeHargaKeranjangSebelumnya = 'total';
+function perbaruiEditKeranjang() {
+  const total = $('kModeHarga').value === 'total';
+  $('kHargaLabel').textContent = total ? 'Harga total (Rp)' : 'Harga per satuan (Rp)';
+  const qty = angkaJumlah($('kQty').value);
+  const harga = angkaUang($('kHarga').value);
+  $('kTotal').textContent = qty > 0 && harga > 0
+    ? 'Total barang: ' + rp(total ? harga : qty * harga) : 'Isi jumlah dan harga lebih dari 0.';
+}
+function bukaEditKeranjang(i) {
+  const it = keranjang[i];
+  if (!it) return;
+  const error = $('dlgKeranjang').querySelector('.dialog-error');
+  if (error) error.remove();
+  editKeranjangIndex = i;
+  $('kNama').value = it.nama;
+  $('kQty').value = jumlah(it.qty);
+  isiSatuanSelect($('kSatuan'), it.satuan || '');
+  $('kSatuanLain').value = $('kSatuan').value === '__custom__' ? it.satuan : '';
+  tampilkanSatuanLain($('kSatuan'), $('kSatuanLain'));
+  $('kModeHarga').value = it.hargaTotal != null ? 'total' : 'satuan';
+  modeHargaKeranjangSebelumnya = $('kModeHarga').value;
+  isiUang($('kHarga'), it.hargaTotal != null ? it.hargaTotal : it.harga);
+  perbaruiEditKeranjang();
+  $('dlgKeranjang').showModal();
+}
+$('kSatuan').onchange = () => tampilkanSatuanLain($('kSatuan'), $('kSatuanLain'));
+['kQty','kHarga'].forEach(id => $(id).addEventListener('input', perbaruiEditKeranjang));
+$('kModeHarga').onchange = () => {
+  const harga = angkaUang($('kHarga').value), qty = angkaJumlah($('kQty').value);
+  if (harga > 0 && qty > 0)
+    isiUang($('kHarga'), modeHargaKeranjangSebelumnya === 'total' ? harga / qty : harga * qty);
+  modeHargaKeranjangSebelumnya = $('kModeHarga').value;
+  perbaruiEditKeranjang();
+};
+$('btnKBatal').onclick = () => $('dlgKeranjang').close();
+$('btnKSimpan').onclick = () => {
+  const i = editKeranjangIndex;
+  if (!keranjang[i]) return $('dlgKeranjang').close();
+  const nama = $('kNama').value.trim(), qty = angkaJumlah($('kQty').value);
+  const satuan = satuanDariForm($('kSatuan'), $('kSatuanLain'));
+  const harga = angkaUang($('kHarga').value);
+  if (!nama) return gagalIsi('Nama barang atau layanan wajib diisi.', 'kNama');
+  if (!Number.isFinite(qty) || qty <= 0) return gagalIsi('Jumlah harus lebih dari 0.', 'kQty');
+  if ($('kSatuan').value === '__custom__' && !satuan) return gagalIsi('Isi satuan sendiri atau pilih Tanpa satuan.', 'kSatuanLain');
+  if (!Number.isFinite(harga) || harga <= 0) return gagalIsi('Harga harus lebih dari 0.', 'kHarga');
+  const sebelumnya = keranjang[i];
+  keranjang[i] = $('kModeHarga').value === 'total'
+    ? { nama, qty, satuan, harga: harga / qty, hargaTotal: harga }
+    : { nama, qty, satuan, harga };
+  try { simpanKrj(); }
+  catch (_) { keranjang[i] = sebelumnya; return gagalIsi('Penyimpanan HP penuh. Perubahan barang belum tersimpan.', 'kHarga'); }
+  $('dlgKeranjang').close();
+  renderKeranjang();
+  beriPesan('Barang diperbarui. Transaksi belum disimpan.');
+};
+
 function renderKeranjang() {
   const box = $('listKrj');
   box.innerHTML = '';
   keranjang.forEach((it, i) => {
-    const row = el('div', 'row');
+    const row = el('div', 'row cart-entry');
     const info = el('div');
     info.appendChild(el('b', null, it.nama));
     info.appendChild(el('div', 'muted', it.hargaTotal != null
       ? jumlahSatuan(it) + ' · harga total ' + rp(subtotalItem(it))
       : jumlahSatuan(it) + ' × ' + hargaSatuan(it)));
     const aksi = el('div', 'aksi');
-    aksi.appendChild(el('span', null, rp(subtotalItem(it))));
+    aksi.appendChild(el('span', 'cart-amount', rp(subtotalItem(it))));
+    const edit = el('button', 'kecil sec', 'Edit');
+    edit.type = 'button';
+    edit.setAttribute('aria-label', 'Edit ' + it.nama);
+    edit.onclick = () => bukaEditKeranjang(i);
+    aksi.appendChild(edit);
     const hap = el('button', 'kecil del', '×');
+    hap.type = 'button';
+    hap.setAttribute('aria-label', 'Hapus ' + it.nama);
     hap.onclick = () => { keranjang.splice(i, 1); simpanKrj(); renderKeranjang(); };
     aksi.appendChild(hap);
     row.append(info, aksi);
@@ -3017,20 +3885,20 @@ $('btnSimpan').onclick = () => {
   const judul = $('judul').value.trim() || (tipe === 'masuk' ? $('kategori').value : items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
   const kat = $('kategori').value;
   const tunai = ambilTunaiForm(tipe, total);
-  if (tunai && tunai.error) { pesanForm(tunai.error); $('pfWrap').scrollIntoView({ block: 'center' }); return; }
+  if (tunai && tunai.error) { pesanForm(tunai.error, tunai.field); $(tunai.field || 'iCashNominalWrap').scrollIntoView({ block: 'center' }); return; }
   db.transaksi.push({
     id: uid(), ts: Date.now(), tanggal: tgl, tipe, judul, kategori: kat, items, total,
     tags: parseTags($('tTag').value), foto: fotoForm, wishId: null, berulangId: null, saldoAwal: false,
     tunai: tunai ? tunai.tunai : null, cara: $('iCara').value
   });
-  if (tunai) db.uangFisik.stok = tunai.stokBaru;
+  if (tunai?.stokBaru) db.uangFisik.stok = tunai.stokBaru;
   if (!simpan()) {
     db.transaksi.pop();
-    if (tunai) db.uangFisik.stok = tunai.stokLama;
+    if (tunai?.stokBaru) db.uangFisik.stok = tunai.stokLama;
     return;
   }
   if (tipe === 'keluar') { keranjang = []; simpanKrj(); }
-  if (tunai) isiPecahan('st', db.uangFisik.stok);
+  if (tunai?.stokBaru) isiPecahan('st', db.uangFisik.stok);
   if (tipe === 'masuk') $('iNominalMasuk').value = '';
   $('judul').value = '';
   $('tTag').value = '';
@@ -3077,7 +3945,7 @@ function barangDariStruk(baris) {
     const hargaTotal = Number(raw.replace(/\D/g, '')) / (/[.,]\d{2}$/.test(raw) ? 100 : 1);
     if (!Number.isFinite(hargaTotal) || hargaTotal < 100 || hargaTotal > 100000000) continue;
     let nama = line.slice(0, ujung.index).replace(/[\s.:@-]+$/, '').trim();
-    let qty = 1, satuan = 'buah';
+    let qty = 1, satuan = '';
     const ukuran = /(?:^|\s)(\d+(?:[,.]\d+)?)\s*(kg|kilogram|gr|gram|g|liter|ltr|l|ml|pcs|pc|butir|buah|botol|galon|bungkus|bks|lembar|paket|pkt)\b/i.exec(nama);
     if (ukuran) {
       qty = angkaJumlah(ukuran[1]);
@@ -3136,12 +4004,14 @@ function tampilkanDraftScan(barang, total) {
     const qty = el('input'); qty.type = 'text'; qty.inputMode = 'decimal'; qty.value = jumlah(item.qty);
     qty.oninput = () => { item.qty = angkaJumlah(qty.value); };
     const satuan = el('select'); isiSatuanSelect(satuan, item.satuan);
+    item._satuanCustom = satuan.value === '__custom__';
     const lain = el('input'); lain.type = 'text'; lain.maxLength = 30; lain.placeholder = 'Contoh: dus';
     lain.value = satuan.value === '__custom__' ? item.satuan : '';
     const lainWrap = bidang('Satuan sendiri', lain);
     lainWrap.style.display = satuan.value === '__custom__' ? '' : 'none';
     satuan.onchange = () => {
       lainWrap.style.display = satuan.value === '__custom__' ? '' : 'none';
+      item._satuanCustom = satuan.value === '__custom__';
       item.satuan = satuan.value === '__custom__' ? lain.value.trim() : satuan.value;
     };
     lain.oninput = () => { item.satuan = lain.value.trim(); };
@@ -3167,17 +4037,25 @@ function tampilkanDraftScan(barang, total) {
   perbaruiTotalDraftScan();
 }
 
-$('btnBatalScan').onclick = () => { hapusDraftScan(); $('statusScan').textContent = 'Hasil scan dibatalkan. Transaksi belum berubah.'; };
+$('btnBatalScan').onclick = () => {
+  hapusDraftScan();
+  $('scanPreviewWrap').style.display = 'none';
+  $('scanPreview').removeAttribute('src');
+  $('scanReview').style.display = 'none';
+  $('scanReview').open = false;
+  $('scanTeks').textContent = '';
+  $('statusScan').textContent = 'Hasil scan dibatalkan. Transaksi belum berubah.';
+};
 $('btnPakaiScan').onclick = () => {
   const dipilih = scanDraftItems;
   if (!dipilih.length) { $('statusScan').textContent = 'Semua barang dihapus. Scan ulang atau batalkan hasil scan.'; beriPesan($('statusScan').textContent, true); return; }
-  const buruk = dipilih.find(i => !i.nama.trim() || !Number.isFinite(i.qty) || i.qty <= 0 || !i.satuan.trim() || !Number.isFinite(i.hargaTotal) || i.hargaTotal <= 0);
+  const buruk = dipilih.find(i => !i.nama.trim() || !Number.isFinite(i.qty) || i.qty <= 0 || !Number.isFinite(i.hargaTotal) || i.hargaTotal <= 0 || (i._satuanCustom && !i.satuan.trim()));
   if (buruk) {
-    $('statusScan').textContent = 'Ada nama, jumlah, satuan, atau harga yang belum benar. Periksa hasil scan dahulu.';
+    $('statusScan').textContent = 'Ada nama, jumlah, satuan sendiri, atau harga yang belum benar. Periksa hasil scan dahulu.';
     const indeks = dipilih.indexOf(buruk), baris = $('scanDraftList').children[indeks];
     const input = !buruk.nama.trim() ? baris.querySelector('input')
       : !(buruk.qty > 0) ? baris.querySelectorAll('input')[1]
-      : !buruk.satuan.trim() ? (baris.querySelector('select').value === '__custom__' ? baris.querySelectorAll('input')[2] : baris.querySelector('select'))
+      : buruk._satuanCustom && !buruk.satuan.trim() ? baris.querySelectorAll('input')[2]
       : baris.querySelector('input[data-uang]');
     return gagalIsi($('statusScan').textContent, input);
   }
@@ -3334,7 +4212,7 @@ async function prosesScan(file) {
       st.textContent = hasil.barang.length + ' barang terbaca. Periksa dan ubah bila perlu, lalu tekan Gunakan hasil scan.';
       $('scanDraft').scrollIntoView({ block: 'start', behavior: 'smooth' });
     } else if (hasil.total) {
-      tampilkanDraftScan([{ nama: hasil.nama || 'Belanja dari struk', qty: 1, satuan: 'buah', hargaTotal: hasil.total }], hasil.total);
+      tampilkanDraftScan([{ nama: hasil.nama || 'Belanja dari struk', qty: 1, satuan: '', hargaTotal: hasil.total }], hasil.total);
       st.textContent = 'Total ' + rp(hasil.total) + ' terbaca, tetapi rincian barang belum jelas. Isi nama dan jumlah pada hasil scan sebelum digunakan.';
       $('scanDraft').scrollIntoView({ block: 'start', behavior: 'smooth' });
     } else {
@@ -3640,7 +4518,6 @@ $('btnNavCatat').onclick = () => {
 };
 $('btnBerandaCatat').onclick = () => goto('catat');
 $('btnKembaliCatat').onclick = () => goto(kembaliCatat);
-
 $('btnMulaiCatat').onclick = () => $('btnNavCatat').click();
 $('btnLewatiPanduan').onclick = () => {
   set.panduanDilewati = true;
@@ -3652,7 +4529,7 @@ function catatLagi(id) {
   const lama = db.transaksi.find(x => x.id === id);
   if (!lama || lama.saldoAwal || !lama.items.length) return;
   if ((keranjang.length || $('iNama').value.trim() || $('iHarga').value.trim() || $('iNominalMasuk').value ||
-       $('iQty').value !== '1' || $('iSatuan').value !== 'buah' || $('judul').value.trim() ||
+       $('iQty').value !== '1' || $('iSatuan').value !== '' || $('judul').value.trim() ||
        $('tTag').value.trim() || fotoForm || $('iCara').value === 'tunai') &&
       !confirm('Form transaksi saat ini akan diganti dengan catatan ini. Lanjutkan?')) return;
   keranjang = lama.tipe === 'keluar' ? lama.items.slice(1).map(i => ({ ...i })) : [];
@@ -3671,8 +4548,8 @@ function catatLagi(id) {
   $('iModeHarga').value = 'total';
   modeHargaSebelumnya = 'total';
   isiUang($('iHarga'), lama.tipe === 'keluar' ? subtotalItem(pertama) : '');
-  isiSatuanSelect($('iSatuan'), lama.tipe === 'keluar' ? pertama.satuan || 'buah' : 'buah');
-  $('iSatuanLain').value = lama.tipe === 'keluar' && !SATUAN.includes(pertama.satuan) ? (pertama.satuan || '') : '';
+  isiSatuanSelect($('iSatuan'), lama.tipe === 'keluar' ? pertama.satuan || '' : '');
+  $('iSatuanLain').value = lama.tipe === 'keluar' && pertama.satuan && !SATUAN.includes(pertama.satuan) ? pertama.satuan : '';
   tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
   tampilkanModeHarga();
   fotoForm = null;
@@ -3681,6 +4558,7 @@ function catatLagi(id) {
   resetPecahan();
   if (lama.cara === 'tunai' || lama.tunai) {
     $('iCara').value = 'tunai';
+    aturLacakTunai('btnTrackCash', tunaiMengubahStok(lama));
     updateFormPecahan();
   }
   $('catatExtra').open = !!$('judul').value;
@@ -3688,7 +4566,7 @@ function catatLagi(id) {
   goto('catat');
   $(lama.tipe === 'masuk' ? 'iNominalMasuk' : 'iHarga').focus();
   beriPesan(lama.cara === 'tunai' || lama.tunai
-    ? 'Periksa harga baru dan isi ulang pecahan pembayaran tunai.'
+    ? 'Periksa harga baru. Jika uang fisik ON, isi ulang pecahan pembayaran.'
     : 'Periksa harga sebelum menyimpan transaksi baru.');
 }
 
@@ -3790,6 +4668,93 @@ $('fileImport').onchange = async e => {
 };
 
 // ===== TAMPILAN (TEMA, KACA, LATAR) =====
+
+// Bentuk digambar di dalam file agar dekorasi tetap tersedia saat offline.
+const GAYA_ART = {
+  glass:'<path d="m50 9 32 23-9 39-23 20-23-20-9-39Z"/><path d="m18 32 32 9 32-9M50 41v50M32 21l18 20 18-20M27 71l23-30 23 30"/>',
+  biasa:'<rect x="17" y="53" width="17" height="30" rx="5"/><rect x="42" y="35" width="17" height="48" rx="5"/><rect x="67" y="16" width="17" height="67" rx="5"/><path d="m15 38 24-18 18 6 25-15"/>',
+  berwarna:'<circle cx="30" cy="31" r="19"/><rect x="52" y="15" width="33" height="33" rx="8"/><path d="m21 83 15-26 15 26ZM61 72h27M74.5 58.5v27"/>',
+  neo:'<path d="m50 8 9 23 24-13-13 24 23 8-23 9 13 24-24-13-9 23-9-23-24 13 13-24-23-9 23-8-13-24 24 13Z"/>',
+  blok:'<path d="M29 13h42v14h14v42H71v17H29V69H15V27h14Z"/><path d="M29 27h42v42H29ZM38 38h8v8h-8ZM56 38h8v8h-8ZM40 57h22"/>',
+  material:'<path d="M50 24C33 2 10 22 24 42 0 52 13 81 36 72c-1 26 28 26 28 0 23 9 36-20 12-30C90 22 67 2 50 24Z"/><circle cx="50" cy="50" r="14"/>',
+  soft:'<rect x="12" y="20" width="54" height="54" rx="22"/><rect x="35" y="33" width="54" height="54" rx="22"/><path d="M35 51c0-10 7-18 18-18M66 55c0 11-8 19-18 19"/>',
+  retro:'<path d="m16 26 19 19-19 19M43 66h31M60 13h24v23M84 13 60 37M15 85h69"/><circle cx="84" cy="85" r="3" fill="currentColor"/>',
+  paper:'<path d="M22 21h48v64H22ZM33 36h25M33 47h19M33 69h13M62 64l19-34 9 5-19 34-11 8Z"/><path d="m77 38 9 5"/>',
+  flat:'<path d="M14 28h72M14 50h47M14 72h25"/><path d="M60 85a25 25 0 0 0 25-25H60Z"/>',
+  pop:'<path d="M24 38c-12 4-12 35 4 44 12 7 37 7 47-6 10-12 13-34-3-38-13-4-35-4-48 0Z"/><path d="M50 37c-9-6-17-7-23-5M50 37c4-13 18-24 31-20-1 13-16 21-31 20ZM50 37c-2-13-8-22-17-23"/>',
+  spider:'<path d="M50 10v26M50 10 16 27 10 63 50 90l40-27-6-36ZM16 27l34 9 34-9M10 63l40-27 40 27M50 36v54M31 23l-4 27 23 17 23-17-4-27"/><path d="m37 50-11-9M36 57l-12 7M63 50l11-9M64 57l12 7"/>',
+  orbit:'<circle cx="50" cy="50" r="25"/><ellipse cx="50" cy="50" rx="44" ry="13" transform="rotate(-27 50 50)"/><path d="M75 12v13M68.5 18.5h13M20 70v11M14.5 75.5h11"/><circle cx="24" cy="20" r="2" fill="currentColor"/>',
+  sakura:'<path d="M50 43C27 3 70 3 50 43c24-40 52-4 10 6 46-4 32 37 0 12 23 39-21 45-15 8C23 106-1 72 37 58 0 56 12 15 43 43Z"/><circle cx="50" cy="53" r="7"/><path d="m65 72 17 15M75 77q14-20 16-7-2 10-16 7Z"/>',
+  ocean:'<path d="M10 66c15-21 28 12 43-7 12-15 25 6 37-10M10 82c15-21 28 12 43-7 12-15 25 6 37-10M15 45c7-20 27-29 45-20-14-1-20 13-14 24M61 12v7M78 20l-5 6"/><circle cx="78" cy="39" r="5"/>'
+};
+const KOLEKSI_GAYA = [
+  {id:'orbit',nama:'Orbit',teks:'Planet, rasi bintang, dan warna ungu kosmis. Coba animasi masuknya.',warna:['#181b30','#baa0ed','#2a2f49'],baru:true},
+  {id:'sakura',nama:'Sakura',teks:'Kertas krem, kelopak bunga, dan merah muda yang hangat.',warna:['#faf0e9','#a45b70','#fffaf4'],baru:true},
+  {id:'ocean',nama:'Ocean',teks:'Ombak, garis pantai, dan toska yang terasa tenang.',warna:['#e7f3ef','#246e79','#fbffff'],baru:true},
+  {id:'glass',nama:'Glass',teks:'Kristal bening, pantulan cahaya, dan kartu kaca dengan foto latarmu.',warna:['#d8e5f4','#6b8ee1','#f3f7ff']},
+  {id:'biasa',nama:'Biasa',teks:'Rapi dan ringan, dengan detail garis dan aksen indigo.',warna:['#edf0f7','#6776c9','#ffffff']},
+  {id:'berwarna',nama:'Berwarna',teks:'Bentuk geometri ceria dan warna yang membedakan setiap ringkasan.',warna:['#f4f2fc','#8b6cc7','#ffffff']},
+  {id:'neo',nama:'Neobrutal',teks:'Garis tebal, bayangan tegas, dan motif titik seperti poster.',warna:['#fbf1ca','#f4c943','#ffffff']},
+  {id:'blok',nama:'Blok Pixel',teks:'Panel inventori, matahari kecil, dan teman mob di padang rumput.',warna:['#c9dfba','#5f8e3c','#e6dfc8']},
+  {id:'material',nama:'Material You',teks:'Bidang membulat dan motif bunga geometris yang mengikuti warna aksen.',warna:['#edf0fc','#6577b2','#ffffff']},
+  {id:'soft',nama:'Soft UI',teks:'Lingkaran bertaut dan panel timbul yang terasa lembut.',warna:['#e0e5ec','#8a9dcc','#e0e5ec']},
+  {id:'retro',nama:'Retro',teks:'Grid terminal, simbol perintah, dan aksen amber di atas hijau gelap.',warna:['#081108','#42c96b','#142115']},
+  {id:'paper',nama:'Paper',teks:'Garis buku, cap pena, dan tepian kartu seperti jurnal pribadi.',warna:['#f3ead7','#a26c3c','#fffdf5']},
+  {id:'flat',nama:'Minimal Flat',teks:'Bentuk garis sederhana dengan ruang lega untuk angka.',warna:['#eef2f5','#527589','#ffffff']},
+  {id:'pop',nama:'Persimmon Pop',teks:'Buah kecil, warna plum, dan aksen persik yang ceria.',warna:['#fff0e8','#743f77','#fffcf8']},
+  {id:'spider',nama:'Spider',teks:'Merah, ungu, jaring halus, dan topeng hero yang sudah kamu kenal.',warna:['#f9e9dc','#ad2250','#fff9ef']}
+];
+function isiArtGaya(svg, id) {
+  svg.setAttribute('stroke','currentColor');
+  svg.setAttribute('stroke-width','3');
+  svg.setAttribute('stroke-linecap','round');
+  svg.setAttribute('stroke-linejoin','round');
+  svg.innerHTML = GAYA_ART[id] || GAYA_ART.biasa;
+}
+function warnaPratinjau(elemen, gaya) {
+  ['bg','accent','card'].forEach((nama,i) => elemen.style.setProperty('--preview-' + nama, gaya.warna[i]));
+}
+function bangunGaleriGaya() {
+  const galeri = $('styleGallery');
+  galeri.replaceChildren();
+  KOLEKSI_GAYA.forEach(g => {
+    const tombol = document.createElement('button');
+    tombol.type = 'button'; tombol.className = 'style-choice'; tombol.dataset.choice = g.id;
+    tombol.setAttribute('aria-label', 'Pilih gaya ' + g.nama); tombol.setAttribute('aria-pressed','false');
+    warnaPratinjau(tombol,g);
+    const mini = document.createElement('span'); mini.className = 'style-thumb'; mini.setAttribute('aria-hidden','true');
+    const svg = document.createElementNS('http://www.w3.org/2000/svg','svg'); svg.setAttribute('viewBox','0 0 100 100'); svg.setAttribute('fill','none'); isiArtGaya(svg,g.id); mini.appendChild(svg);
+    const nama = document.createElement('span'); nama.className = 'style-choice-name'; nama.appendChild(document.createTextNode(g.nama));
+    if (g.baru) { const baru = document.createElement('span'); baru.className = 'style-new'; baru.textContent = 'Baru'; nama.appendChild(baru); }
+    tombol.append(mini,nama);
+    tombol.onclick = () => { if ($('sGaya').value === g.id) return; $('sGaya').value = g.id; $('sGaya').dispatchEvent(new Event('change',{bubbles:true})); };
+    galeri.appendChild(tombol);
+  });
+}
+let orbitIntroTimer;
+function tutupIntroOrbit() { clearTimeout(orbitIntroTimer); $('orbitIntro').hidden = true; }
+function putarIntroOrbit() {
+  tutupIntroOrbit();
+  if (document.documentElement.dataset.gaya !== 'orbit' || window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.querySelector('dialog[open]')) return;
+  const intro = $('orbitIntro');
+  intro.hidden = false; intro.style.animation = 'none';
+  void intro.offsetWidth; intro.style.animation = '';
+  orbitIntroTimer = setTimeout(tutupIntroOrbit, 1500);
+}
+function perbaruiKoleksiGaya() {
+  const id = document.documentElement.dataset.gaya;
+  const g = KOLEKSI_GAYA.find(g => g.id === id) || KOLEKSI_GAYA.find(g => g.id === 'glass');
+  $('styleSelectedName').textContent = g.nama + (g.baru ? ' · Baru' : '');
+  $('styleSelectedDesc').textContent = g.teks;
+  $('styleSignatureName').textContent = g.nama;
+  ['styleSelectedArt','styleSignatureArt','heroStyleArt'].forEach(idSvg => isiArtGaya($(idSvg),g.id));
+  warnaPratinjau($('styleSelected'),g);
+  document.querySelectorAll('.style-choice').forEach(t => t.setAttribute('aria-pressed', String(t.dataset.choice === g.id)));
+  $('btnAnimasiOrbit').hidden = id !== 'orbit';
+  if (id !== 'orbit') tutupIntroOrbit();
+}
+$('btnAnimasiOrbit').onclick = putarIntroOrbit;
+
 const KEY_TAMPILAN = 'catatan-tampilan-v1';
 let tampilan = (() => {
   try {
@@ -3863,7 +4828,7 @@ function terapkanTampilan() {
   $('infoLayout').textContent = infoLayout + ' Berlaku untuk semua gaya tampilan.';
   if ($('beranda').style.display && $('beranda').style.display !== 'none')
     $('beranda').style.display = h.dataset.layout === '1' ? 'block' : 'flex';
-  h.dataset.gaya = ['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat', 'pop'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
+  h.dataset.gaya = ['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat', 'pop', 'spider', 'orbit', 'sakura', 'ocean'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
   h.dataset.tema = h.dataset.gaya === 'retro' ? 'dark' : tampilan.tema;
   h.dataset.efek = h.dataset.gaya === 'glass' && ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'tanpa';
   $('bgLayer').style.filter = tampilan.buram ? 'blur(' + tampilan.buram + 'px)' : 'none';
@@ -3880,7 +4845,7 @@ function terapkanTampilan() {
   const kunciPalet = ['--ink','--muted','--ok','--bad','--glass','--glass-line','--navbg','--input',
     '--rowline','--track','--ghostbg','--ghostink','--pillbg','--pillink','--card-solid','--line-solid',
     '--delbg','--delink','--detline','--keranjangline','--keranjangbg','--banbg','--banink','--secbg','--sec2bg','--sec2ink'];
-  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false && !['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat', 'pop'].includes(tampilan.gaya)) {
+  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false && !['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat', 'pop', 'spider', 'orbit', 'sakura', 'ocean'].includes(tampilan.gaya)) {
     const terang = tampilan.aksen.terang === true;
     h.dataset.adaptif = terang ? 'terang' : 'gelap';
     paletAdaptif(tampilan.aksen, terang, tampilan.kaca / 100, kunciPalet, h);
@@ -3895,6 +4860,7 @@ function terapkanTampilan() {
     h.style.setProperty('--muted', tampilan.warnaTeks);
   }
   perbaruiSetelanTersedia();
+  perbaruiKoleksiGaya();
 }
 
 function kompresBg(file) {
@@ -3945,7 +4911,8 @@ $('sBuram').oninput = () => {
   terapkanTampilan();
 };
 $('sBuram').onchange = () => simpanTampilan();
-$('sGaya').value = ['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat', 'pop'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
+bangunGaleriGaya();
+$('sGaya').value = ['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat', 'pop', 'spider', 'orbit', 'sakura', 'ocean'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
 $('sEfek').value = ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'hd';
 $('sEfek').onchange = () => {
   tampilan.efek = $('sEfek').value;
@@ -3959,6 +4926,7 @@ $('sGaya').onchange = () => {
   simpanTampilan();
   terapkanTampilan();
   renderGrafik();
+  if (tampilan.gaya === 'orbit' && !$('dlgGaya').open) putarIntroOrbit();
 };
 
 $('fBg').onchange = async e => {
@@ -3992,6 +4960,7 @@ $('btnBgHapus').onclick = () => {
 };
 
 terapkanTampilan();
+if (tampilan.gaya === 'orbit') setTimeout(putarIntroOrbit, 100);
 
 // ===== UANG TUNAI (PECAHAN, OPSIONAL) =====
 const DENOM = [500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
@@ -4074,40 +5043,64 @@ function totalForm() {
   return keranjang.reduce((s, i) => s + subtotalItem(i), 0) + (it ? subtotalItem(it) : 0);
 }
 
-// Rincian pecahan opsional: transaksi tunai tanpa rincian tidak mengubah stok.
+// Nominal pembayaran boleh dicatat sendiri; pecahan hanya dibutuhkan saat dompet ON.
 function ambilTunaiForm(tipe, total) {
   if ($('iCara').value !== 'tunai') return null;
+  const lacak = tunaiTerlacak('btnTrackCash');
+  const nominal = bacaNominalTunai('i', tipe, total, lacak);
+  if (nominal.error) return nominal;
+  if (!lacak) {
+    if (!pecahanValid('pb') || !pecahanValid('pk'))
+      return { error:'Jumlah lembar harus angka bulat 0 atau lebih.', field:'pb-500' };
+    const bayar = bacaPecahan('pb'), kembali = bacaPecahan('pk');
+    if ((sumPecahan(bayar) || (tipe === 'keluar' && sumPecahan(kembali))) && !nominal.tunai)
+      return { error:'Isi uang tunai yang diberikan dan kembalian di atas.', field:'iBayarNominal' };
+    if (nominal.tunai && (sumPecahan(bayar) || (tipe === 'keluar' && sumPecahan(kembali)))) {
+      if ((sumPecahan(bayar) && sumPecahan(bayar) !== nominalTunai(nominal.tunai, tipe === 'masuk' ? 'diterima' : 'bayar')) ||
+          (tipe === 'keluar' && sumPecahan(kembali) && sumPecahan(kembali) !== nominalTunai(nominal.tunai, 'kembali')))
+        return { error:'Rincian lembar perlu sama dengan nominal di atas, atau kosongkan semua lembar.', field:'pb-500' };
+      nominal.tunai = { ...nominal.tunai,
+        ...(sumPecahan(bayar) ? { [tipe === 'masuk' ? 'diterima' : 'bayar']:bayar } : {}),
+        ...(tipe === 'keluar' && sumPecahan(kembali) ? { kembali } : {}) };
+    }
+    return nominal;
+  }
   if (!pecahanValid('pb') || (tipe === 'keluar' && !pecahanValid('pk')))
-    return { error: 'Jumlah lembar pecahan harus angka bulat 0 atau lebih.' };
+    return { error: 'Jumlah lembar pecahan harus angka bulat 0 atau lebih.', field:'pb-500' };
   const stokLama = { ...db.uangFisik.stok };
   const stokBaru = { ...db.uangFisik.stok };
   const pb = bacaPecahan('pb');
   const pk = bacaPecahan('pk');
-  if (!sumPecahan(pb) && (tipe === 'masuk' || !sumPecahan(pk))) return null;
 
   if (tipe === 'masuk') {
     const diterima = sumPecahan(pb);
+    if (diterima !== nominalTunai(nominal.tunai, 'diterima'))
+      return { error:'Pecahan yang diterima harus sama dengan nominal tunai di atas.', field:'pb-500' };
     if (diterima !== total) return { error: 'Pecahan uang yang diterima harus berjumlah ' + rp(total) + ' (sekarang ' + rp(diterima) + ').' };
     DENOM.forEach(d => stokBaru[d] += pb[d]);
-    return { tunai: { diterima: pb }, stokLama, stokBaru };
+    return { tunai: { ...nominal.tunai, diterima: pb, lacakDompet:true }, stokLama, stokBaru };
   }
 
   const dibayar = sumPecahan(pb), kembali = sumPecahan(pk);
+  if (dibayar !== nominalTunai(nominal.tunai, 'bayar') || kembali !== nominalTunai(nominal.tunai, 'kembali'))
+    return { error:'Pecahan dibayar dan kembalian harus sama dengan nominal tunai di atas.', field:'pb-500' };
   if (dibayar - kembali !== total) {
-    return { error: 'Uang dibayar dikurangi kembalian harus sama dengan total ' + rp(total) + ' (sekarang ' + rp(dibayar - kembali) + ').' };
+    const selisih = total - (dibayar - kembali);
+    return { error: 'Belanja ' + rp(total) + '. Kamu mengisi dibayar ' + rp(dibayar) + ' dan kembalian ' + rp(kembali) + ', jadi yang tercatat ' + rp(dibayar - kembali) +
+      (selisih > 0 ? '. Masih kurang ' + rp(selisih) + '.' : '. Kembalian masih kurang ' + rp(-selisih) + '.') + ' Ubah pecahan atau tekan Isi otomatis.' };
   }
   const kurang = DENOM.filter(d => pb[d] > db.uangFisik.stok[d]).map(d =>
     rp(d) + ': kamu pakai ' + pb[d] + ' lembar, stok hanya ' + db.uangFisik.stok[d] + ' lembar');
   if (kurang.length) {
-    return { error: 'Stok uang tunai tidak cukup.\n' + kurang.join('\n') + '\nBuka Atur stok uang fisik pada form ini, atau ubah pecahan yang dibayar.' };
+    return { error: 'Jumlah lembar uang di dompet tidak cukup.\n' + kurang.join('\n') + '\nBuka Isi uang fisik di dompet, atau ubah pecahan yang dibayar.' };
   }
   DENOM.forEach(d => stokBaru[d] = stokBaru[d] - pb[d] + pk[d]);
-  return { tunai: { bayar: pb, kembali: pk }, stokLama, stokBaru };
+  return { tunai: { ...nominal.tunai, bayar: pb, kembali: pk, lacakDompet:true }, stokLama, stokBaru };
 }
 
 // Mengembalikan stok ketika transaksi tunai dihapus
 function balikStokTunai(x) {
-  if (!x.tunai) return;
+  if (!tunaiMengubahStok(x)) return;
   const s = db.uangFisik.stok;
   if (x.tunai.bayar) {
     DENOM.forEach(d => { s[d] = (s[d] || 0) + (x.tunai.bayar[d] || 0) - (x.tunai.kembali ? (x.tunai.kembali[d] || 0) : 0); });
@@ -4124,12 +5117,23 @@ function renderTunai() {
 
 function updateFormPecahan() {
   const tipe = $('tipe').value;
-  const tampilPecah = $('iCara').value === 'tunai';
-  $('pfWrap').style.display = tampilPecah ? 'block' : 'none';
+  const tunai = $('iCara').value === 'tunai';
+  const tampilPecah = tunai && tunaiTerlacak('btnTrackCash');
+  $('iCashTrackWrap').style.display = tunai ? '' : 'none';
+  $('iCashNominalWrap').style.display = tunai ? '' : 'none';
+  $('iKembaliWrap').style.display = tipe === 'keluar' ? '' : 'none';
+  $('iBayarLabel').textContent = tipe === 'masuk' ? 'Uang tunai diterima (Rp)' : 'Uang diberikan ke penjual (Rp)';
+  $('pfWrap').style.display = tunai ? 'block' : 'none';
+  $('btnPecahOtomatis').style.display = tampilPecah ? '' : 'none';
   $('cardTunai').style.display = tampilPecah ? '' : 'none';
-  $('iCaraInfo').style.display = tampilPecah ? '' : 'none';
+  $('iCaraInfo').style.display = tunai ? '' : 'none';
+  $('iCaraInfo').textContent = tampilPecah
+    ? 'ON: isi jumlah lembar yang benar atau tekan Isi otomatis. Stok uang di dompet akan ikut berubah saat transaksi disimpan.'
+    : 'OFF: isi uang yang diberikan dan kembalian tanpa mengubah stok dompet. Keduanya boleh kosong jika hanya ingin mencatat total belanja.';
   $('pkWrap').style.display = tipe === 'keluar' ? 'block' : 'none';
   $('pfLabel').textContent = tipe === 'masuk' ? 'Uang tunai yang diterima (lembar)' : 'Dibayar pakai pecahan (lembar)';
+  $('pfInfo').textContent = tampilPecah ? 'Rincian lembar wajib sama dengan nominal pembayaran di atas.' : 'Rincian lembar opsional. Kosongkan jika hanya ingin mencatat nominal rupiah.';
+  tampilNominalTunai('i', tipe, totalForm());
 }
 
 function updateFormJenis() {
@@ -4144,13 +5148,18 @@ function updateFormJenis() {
 
 function resetPecahan() {
   DENOM.forEach(d => { $('pb-' + d).value = ''; $('pk-' + d).value = ''; });
+  $('iBayarNominal').value = $('iKembaliNominal').value = '';
   $('iCara').value = 'nontunai';
+  aturLacakTunai('btnTrackCash', false);
   updateFormPecahan();
 }
 
 buatGridDenom('stokGrid', 'st');
 buatGridDenom('pbGrid', 'pb');
 buatGridDenom('pkGrid', 'pk');
+buatGridDenom('eCashBayarGrid', 'epb');
+buatGridDenom('eCashKembaliGrid', 'epk');
+buatGridDenom('eStokGrid', 'est');
 isiPecahan('st', db.uangFisik.stok);
 
 $('btnStokSimpan').onclick = () => {
@@ -4165,7 +5174,14 @@ $('btnStokSimpan').onclick = () => {
   beriPesan('Stok uang fisik tersimpan.');
 };
 $('iCara').onchange = updateFormPecahan;
+$('btnTrackCash').onclick = () => { aturLacakTunai('btnTrackCash', !tunaiTerlacak('btnTrackCash')); updateFormPecahan(); };
+['iBayarNominal','iKembaliNominal'].forEach(id => $(id).addEventListener('input', () => tampilNominalTunai('i', $('tipe').value, totalForm())));
+$('iBayarNominal').addEventListener('input', () => {
+  isiKembalianOtomatis('i', $('tipe').value, totalForm());
+  tampilNominalTunai('i', $('tipe').value, totalForm());
+});
 $('btnPecahOtomatis').onclick = () => {
+  if (!tunaiTerlacak('btnTrackCash')) return;
   const total = totalForm();
   if (!total) { alert('Isi nominal transaksi dulu supaya total diketahui.'); return; }
   if ($('tipe').value === 'masuk') {
@@ -4176,6 +5192,9 @@ $('btnPecahOtomatis').onclick = () => {
     }
     isiPecahan('pb', pecah);
     isiPecahan('pk', null);
+    isiUang($('iBayarNominal'), sumPecahan(pecah));
+    isiUang($('iKembaliNominal'), '');
+    tampilNominalTunai('i', 'masuk', total);
     return;
   }
   if (total % 500 !== 0) {
@@ -4184,11 +5203,14 @@ $('btnPecahOtomatis').onclick = () => {
   }
   const hasil = cariPembayaran(total, db.uangFisik.stok);
   if (!hasil) {
-    alert('Stok tunai belum cukup. Buka Atur stok uang fisik pada form ini, atau biarkan rincian pecahan kosong.');
+    alert('Belum ada kombinasi uang dompet untuk membayar ' + rp(total) + '. Buka Isi uang fisik di dompet dan simpan jumlah lembar yang benar, isi pecahan sendiri, atau biarkan rincian kosong.');
     return;
   }
   isiPecahan('pb', hasil.bayar);
   isiPecahan('pk', hasil.kembali);
+  isiUang($('iBayarNominal'), sumPecahan(hasil.bayar));
+  isiUang($('iKembaliNominal'), sumPecahan(hasil.kembali));
+  tampilNominalTunai('i', 'keluar', total);
 };
 
 // ===== KOMPRESI GAMBAR (ORIENTASI BENAR) =====
@@ -4836,6 +5858,9 @@ function renderMingguan() {
 
 // ===== PANDUAN GAYA (pop-up sekali per gaya) DAN CARA PAKAI FITUR =====
 const PANDUAN_GAYA = {
+  orbit: { judul:'Gaya Orbit', teks:'Planet dan rasi bintang menemani kartu bernuansa ungu. Tersedia tema terang dan gelap.\n\nAda animasi masuk singkat dan perpindahan halaman yang lembut, khusus gaya ini. Coba ulang melalui tombol Putar animasi Orbit di Setelan. Animasi mengikuti pengaturan pengurangan gerakan di perangkatmu.' },
+  sakura: { judul:'Gaya Sakura', teks:'Kartu seperti kertas hangat, kelopak bunga, dan warna merah muda. Tema gelap memakai nuansa plum yang lembut.\n\nGaya ini memakai dekorasi statis agar catatan tetap nyaman dibaca. Font tetap mengikuti pilihanmu.' },
+  ocean: { judul:'Gaya Ocean', teks:'Biru laut dan toska dengan garis ombak serta pola pantai. Tema gelap terasa seperti laut malam.\n\nGaya ini memakai dekorasi statis. Kamu tetap bisa memilih tata letak dan font yang disukai.' },
   glass: { judul: 'Gaya Glass', teks:
     'Kartu dan navigasi berupa kaca transparan.\nBisa memasang latar gambar dan mengatur buramnya.\nWarna teks dan tombol bisa mengikuti foto latar (mode Adaptif).\n\nCara pakai: pasang foto di Latar belakang, lalu atur Transparansi dan Kualitas efek sesuai HP kamu.' },
   biasa: { judul: 'Gaya Biasa', teks:
@@ -4853,11 +5878,13 @@ const PANDUAN_GAYA = {
   retro: { judul: 'Retro Terminal', teks:
     'Tampilan terminal hijau di latar hitam, dengan garis pemindai.\nSelalu gelap, pilihan Tema tidak berpengaruh.\nLatar gambar TIDAK tampil.\n\nCara pakai: cocok untuk kesan catatan pribadi yang khas.' },
   paper: { judul: 'Paper', teks:
-    'Latar kertas krem bergaris dengan kartu seperti buku catatan.\nLatar gambar dan Mode Adaptif TIDAK tampil.\n\nCara pakai: tulisan memakai font serif supaya terasa seperti buku.' },
+    'Latar kertas krem bergaris dengan kartu seperti buku catatan.\nLatar gambar dan Mode Adaptif TIDAK tampil.\n\nCara pakai: pilih font Klasik jika ingin suasana jurnal, atau gunakan font favoritmu.' },
   flat: { judul: 'Minimal Flat', teks:
     'Tanpa bayangan dan garis tepi, warna sederhana.\nLatar gambar TIDAK tampil. Warna aksen dari foto tetap dipakai untuk tombol kalau fotonya pernah diupload.\n\nCara pakai: paling ringan untuk HP yang lambat.' },
   pop: { judul: 'Persimmon Pop', teks:
     'Kartu hangat dengan warna plum dan aksen oranye. Angka tetap jelas pada tema terang maupun gelap.\nLatar foto dan Mode Adaptif tidak tampil.\n\nCara pakai: pilih gaya ini jika ingin tampilan yang ceria tanpa mengubah tata letak.' },
+  spider: { judul: 'Gaya Spider', teks:
+    'Terinspirasi warna pada gambar: krem, hitam, merah, dan ungu dengan dekorasi jaring yang halus.\nBisa dipakai pada tema Terang, Gelap, atau Otomatis. Latar foto dan warna Adaptif tidak tampil.\n\nCara pakai: pilih Spider di Setelan. Layout dan catatan keuanganmu tidak berubah.' },
 };
 
 function tampilkanPanduanGaya() {
@@ -4872,10 +5899,11 @@ function tampilkanPanduanGaya() {
   $('dlgGaya').showModal();
 }
 $('btnGayaOk').onclick = () => $('dlgGaya').close();
+$('dlgGaya').addEventListener('close', () => { if (tampilan.gaya === 'orbit') putarIntroOrbit(); });
 
 const BANTUAN = {
   tunai: { judul: 'Cara pakai: Uang tunai', teks:
-    'Di form Catat transaksi pilih Tunai. Kamu boleh membiarkan rincian pecahan kosong: saldo tetap berubah, stok uang fisik tetap. Untuk melacak lembar uang, buka Atur stok uang fisik lalu isi pecahan dibayar dan kembalian. Jika pecahan yang dibayar melebihi stok, transaksi perlu diperbaiki sebelum disimpan.' },
+    'Di form Catat transaksi pilih Tunai. OFF · Nominal saja: transaksi tetap tunai, saldo berubah, dan stok dompet tidak berubah. ON · Hitung dompet: isi jumlah lembar yang kamu pegang sekarang di Isi uang fisik di dompet, lalu tekan Simpan stok uang fisik. Setelah itu isi pecahan dibayar dan kembalian atau tekan Isi otomatis. Di Edit Riwayat, stok dompet dan transaksi disimpan bersama saat menekan Simpan perubahan.' },
   berulang: { judul: 'Cara pakai: Transaksi berulang', teks:
     '1. Isi nama, jumlah, satuan, harga per satuan, periode (bulan atau minggu), dan tanggal mulai.\n2. Saat jatuh tempo, muncul di kartu Perlu dicatat.\n3. Tekan Catat untuk mencatatnya, Lewati untuk melewatinya, atau Catat semua.\n\nEdit dan Hapus di sini hanya mengubah transaksi berulangnya, bukan catatan yang sudah tercatat.' },
   target: { judul: 'Cara pakai: Target tabungan', teks:
