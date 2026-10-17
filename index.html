@@ -105,7 +105,8 @@
   .page{display:none}
 
   dialog{width:92%;max-width:520px;border:none;border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(15,23,42,.3);background:var(--card);color:var(--ink)}
-  #dlgKeranjang,#dlgEdit{max-height:calc(100dvh - 32px);overflow:auto}
+  #dlgKeranjang,#dlgEdit,#dlgBantuan{max-height:calc(100dvh - 32px);overflow:auto}
+  button.cash-help{margin:0 0 12px !important;min-height:38px}
   dialog::backdrop{background:rgba(15,23,42,.45)}
   dialog h2{font-size:17px;margin-bottom:14px}
   .itemrow{display:grid;grid-template-columns:1fr 1fr;gap:6px;align-items:center;margin-bottom:10px;padding:10px;border:1px solid var(--line);border-radius:14px}
@@ -1334,7 +1335,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom .tab{background:transparent !important;color:var(--st-muted) !important;border-color:transparent !important;box-shadow:none !important}
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom .tab.aktif{background:var(--st-soft) !important;color:var(--st-acc-ink) !important}
-  /* Koleksi gaya: panel pilihan dan tiga dunia baru. */
+  /* Koleksi gaya: pratinjau dan dua puluh suasana. */
   .style-signature{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:5px 10px;border:1px solid var(--line);border-radius:99px;color:var(--ghostink);font-size:10px;letter-spacing:1.7px;font-weight:750;line-height:1.3}
   .style-signature svg{width:17px;height:17px;flex:none}
   html[data-gaya="spider"] .style-signature{border-color:#ffffff40;color:#fff0e8}
@@ -1359,6 +1360,23 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html[data-gaya="spider"] #cardMingguan{border-top:1px solid var(--sp-line)}
   html[data-gaya="blok"] .pixel-mobs{background-image:radial-gradient(circle at 87% 23%,#fff6b7 0 8px,transparent 9px),linear-gradient(to bottom,#d4ecca 0 72%,#74a344 72% 83%,#4b7532 83% 88%,#73563c 88% 100%)}
 
+
+  /* Cakrawala baru: lima palet lengkap, termasuk tema otomatis. */
+  html[data-gaya="aurora"]{--n-bg:#edf5f5;--n-card:#fbffff;--n-input:#f0f8f7;--n-ink:#183d45;--n-muted:#4c6c74;--n-line:#cfe1e3;--n-soft:#dcefed;--n-accent:#216c73;--n-on:#ffffff;--n-ok:#257359;--n-bad:#b63a53;--n-hero:linear-gradient(130deg,#142d47,#285266 57%,#49336c);--n-radius:28px;--n-shadow:0 8px 26px #1e626310}
+  html[data-gaya="aurora"][data-tema="dark"]{--n-bg:#0b1e2b;--n-card:#142f3c;--n-input:#0e2634;--n-ink:#e7f9f4;--n-muted:#9fbdc6;--n-line:#2c4c5b;--n-soft:#1b424d;--n-accent:#8de6d6;--n-on:#12343b;--n-ok:#9bdfb9;--n-bad:#ffb0bf;--n-hero:linear-gradient(130deg,#142b43,#234e5a 57%,#49366b);--n-radius:28px;--n-shadow:0 8px 28px #0003}
+  @media(prefers-color-scheme:dark){html[data-gaya="aurora"][data-tema="auto"]{--n-bg:#0b1e2b;--n-card:#142f3c;--n-input:#0e2634;--n-ink:#e7f9f4;--n-muted:#9fbdc6;--n-line:#2c4c5b;--n-soft:#1b424d;--n-accent:#8de6d6;--n-on:#12343b;--n-ok:#9bdfb9;--n-bad:#ffb0bf;--n-hero:linear-gradient(130deg,#142b43,#234e5a 57%,#49366b);--n-radius:28px;--n-shadow:0 8px 28px #0003}}
+  html[data-gaya="arcade"]{--n-bg:#f6edf9;--n-card:#fffaff;--n-input:#f5edf8;--n-ink:#342244;--n-muted:#74607e;--n-line:#e6d3ec;--n-soft:#f0ddf3;--n-accent:#813585;--n-on:#ffffff;--n-ok:#28764f;--n-bad:#b73555;--n-hero:linear-gradient(130deg,#292049,#5b225e 57%,#782955);--n-radius:14px;--n-shadow:4px 4px 0 #d5bee1}
+  html[data-gaya="arcade"][data-tema="dark"]{--n-bg:#170f2a;--n-card:#261735;--n-input:#1c112d;--n-ink:#faf0ff;--n-muted:#c2a8d2;--n-line:#4c315b;--n-soft:#3c244d;--n-accent:#e69cdb;--n-on:#361a40;--n-ok:#99dcba;--n-bad:#ffb3ca;--n-hero:linear-gradient(130deg,#251a41,#4b2055 57%,#642654);--n-radius:14px;--n-shadow:4px 4px 0 #090612}
+  @media(prefers-color-scheme:dark){html[data-gaya="arcade"][data-tema="auto"]{--n-bg:#170f2a;--n-card:#261735;--n-input:#1c112d;--n-ink:#faf0ff;--n-muted:#c2a8d2;--n-line:#4c315b;--n-soft:#3c244d;--n-accent:#e69cdb;--n-on:#361a40;--n-ok:#99dcba;--n-bad:#ffb3ca;--n-hero:linear-gradient(130deg,#251a41,#4b2055 57%,#642654);--n-radius:14px;--n-shadow:4px 4px 0 #090612}}
+  html[data-gaya="botanica"]{--n-bg:#f0f2e8;--n-card:#fffff7;--n-input:#f4f5eb;--n-ink:#2c402f;--n-muted:#657360;--n-line:#d9e0cc;--n-soft:#e6edd9;--n-accent:#49623b;--n-on:#ffffff;--n-ok:#26724d;--n-bad:#ae3948;--n-hero:linear-gradient(120deg,#2d4436,#4b644b 65%,#66794e);--n-radius:28px 12px 28px 12px;--n-shadow:0 5px 18px #435c3410}
+  html[data-gaya="botanica"][data-tema="dark"]{--n-bg:#18251d;--n-card:#24342a;--n-input:#1c2c22;--n-ink:#edf4e3;--n-muted:#b1c2aa;--n-line:#435442;--n-soft:#354b37;--n-accent:#c2d79f;--n-on:#283c24;--n-ok:#afd4af;--n-bad:#ffb2b4;--n-hero:linear-gradient(120deg,#243e31,#3f5a42 65%,#516b43);--n-radius:28px 12px 28px 12px;--n-shadow:0 6px 22px #0002}
+  @media(prefers-color-scheme:dark){html[data-gaya="botanica"][data-tema="auto"]{--n-bg:#18251d;--n-card:#24342a;--n-input:#1c2c22;--n-ink:#edf4e3;--n-muted:#b1c2aa;--n-line:#435442;--n-soft:#354b37;--n-accent:#c2d79f;--n-on:#283c24;--n-ok:#afd4af;--n-bad:#ffb2b4;--n-hero:linear-gradient(120deg,#243e31,#3f5a42 65%,#516b43);--n-radius:28px 12px 28px 12px;--n-shadow:0 6px 22px #0002}}
+  html[data-gaya="atelier"]{--n-bg:#f1eee6;--n-card:#fffdf6;--n-input:#f6f3eb;--n-ink:#202736;--n-muted:#606474;--n-line:#d9d8d4;--n-soft:#e2e8f9;--n-accent:#2d4dc6;--n-on:#ffffff;--n-ok:#2d7251;--n-bad:#b33445;--n-hero:linear-gradient(120deg,#1c2c65,#344fb7 65%,#556fc5);--n-radius:7px;--n-shadow:4px 5px 0 #dad8cc}
+  html[data-gaya="atelier"][data-tema="dark"]{--n-bg:#1c202a;--n-card:#272c38;--n-input:#212632;--n-ink:#f6f2e8;--n-muted:#bbbfd0;--n-line:#464b5a;--n-soft:#333d5a;--n-accent:#afc0ff;--n-on:#1c2e6a;--n-ok:#a5dbb8;--n-bad:#ffafb8;--n-hero:linear-gradient(120deg,#17275b,#30479c 65%,#4760b3);--n-radius:7px;--n-shadow:4px 5px 0 #11161e}
+  @media(prefers-color-scheme:dark){html[data-gaya="atelier"][data-tema="auto"]{--n-bg:#1c202a;--n-card:#272c38;--n-input:#212632;--n-ink:#f6f2e8;--n-muted:#bbbfd0;--n-line:#464b5a;--n-soft:#333d5a;--n-accent:#afc0ff;--n-on:#1c2e6a;--n-ok:#a5dbb8;--n-bad:#ffafb8;--n-hero:linear-gradient(120deg,#17275b,#30479c 65%,#4760b3);--n-radius:7px;--n-shadow:4px 5px 0 #11161e}}
+  html[data-gaya="latte"]{--n-bg:#f4ebdd;--n-card:#fffaf2;--n-input:#f9f0e4;--n-ink:#49372a;--n-muted:#7e6a58;--n-line:#e4d4c0;--n-soft:#efe0cb;--n-accent:#805738;--n-on:#ffffff;--n-ok:#3f7152;--n-bad:#ae3d47;--n-hero:linear-gradient(120deg,#4f382b,#79533a 65%,#96714d);--n-radius:23px;--n-shadow:0 5px 0 #e7d9c855,0 10px 25px #6543280a}
+  html[data-gaya="latte"][data-tema="dark"]{--n-bg:#29221d;--n-card:#382d25;--n-input:#2f261f;--n-ink:#fbefdc;--n-muted:#cbbb9e;--n-line:#5a4b3c;--n-soft:#4d3d2d;--n-accent:#ebc291;--n-on:#412d1f;--n-ok:#afd2a7;--n-bad:#ffb5b7;--n-hero:linear-gradient(120deg,#443026,#684832 65%,#876246);--n-radius:23px;--n-shadow:0 5px 0 #19151077,0 10px 25px #0002}
+  @media(prefers-color-scheme:dark){html[data-gaya="latte"][data-tema="auto"]{--n-bg:#29221d;--n-card:#382d25;--n-input:#2f261f;--n-ink:#fbefdc;--n-muted:#cbbb9e;--n-line:#5a4b3c;--n-soft:#4d3d2d;--n-accent:#ebc291;--n-on:#412d1f;--n-ok:#afd2a7;--n-bad:#ffb5b7;--n-hero:linear-gradient(120deg,#443026,#684832 65%,#876246);--n-radius:23px;--n-shadow:0 5px 0 #19151077,0 10px 25px #0002}}
   html[data-gaya="orbit"]{--n-bg:#f0eff9;--n-card:#fff;--n-input:#f6f5fc;--n-ink:#26213e;--n-muted:#696079;--n-line:#e1ddee;--n-soft:#eee9fb;--n-accent:#6846ba;--n-on:#fff;--n-ok:#287458;--n-bad:#b93a59;--n-hero:linear-gradient(120deg,#292344,#453673 62%,#60458a);--n-radius:24px;--n-shadow:0 6px 22px #4536730c}
   html[data-gaya="sakura"]{--n-bg:#faf2ed;--n-card:#fffcf7;--n-input:#fff8f3;--n-ink:#51363a;--n-muted:#806465;--n-line:#ecd9d5;--n-soft:#f8e6e7;--n-accent:#a34e65;--n-on:#fff;--n-ok:#3d725b;--n-bad:#b03449;--n-hero:linear-gradient(115deg,#815c59,#a15c70 65%,#b57982);--n-radius:18px;--n-shadow:0 4px 0 #e8d4d266,0 8px 24px #8757640a}
   html[data-gaya="ocean"]{--n-bg:#edf7f6;--n-card:#fbffff;--n-input:#f0f9f8;--n-ink:#163e46;--n-muted:#55757a;--n-line:#d2e8e6;--n-soft:#def1ed;--n-accent:#14796f;--n-on:#fff;--n-ok:#267557;--n-bad:#bb4858;--n-hero:linear-gradient(125deg,#153e52,#176771 58%,#248987);--n-radius:26px;--n-shadow:0 6px 24px #1c737010}
@@ -1369,30 +1387,30 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html[data-gaya="ocean"][data-tema="dark"]{--n-bg:#10262e;--n-card:#17353d;--n-input:#112d35;--n-ink:#e5f5f0;--n-muted:#a1c2c3;--n-line:#31515a;--n-soft:#20474c;--n-accent:#80d8c3;--n-on:#0c3632;--n-ok:#99d5b5;--n-bad:#ffb0af;--n-shadow:0 8px 26px #00000020}
   @media(prefers-color-scheme:dark){html[data-gaya="ocean"][data-tema="auto"]{--n-bg:#10262e;--n-card:#17353d;--n-input:#112d35;--n-ink:#e5f5f0;--n-muted:#a1c2c3;--n-line:#31515a;--n-soft:#20474c;--n-accent:#80d8c3;--n-on:#0c3632;--n-ok:#99d5b5;--n-bad:#ffb0af;--n-shadow:0 8px 26px #00000020}}
 
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]){background:var(--n-bg) !important;--bg:var(--n-bg);--card:var(--n-card);--glass:var(--n-card);--input:var(--n-input);--ink:var(--n-ink);--muted:var(--n-muted);--line:var(--n-line);--glass-line:var(--n-line);--rowline:var(--n-line);--navbg:var(--n-card);--ghostbg:var(--n-soft);--ghostink:var(--n-accent);--pillbg:var(--n-soft);--pillink:var(--n-accent);--keranjangbg:var(--n-input);--keranjangline:var(--n-line);--detline:var(--n-line);--track:var(--n-line);--banbg:var(--n-soft);--banink:var(--n-ink);--delbg:var(--n-soft);--delink:var(--n-bad);--secbg:var(--n-soft);--sec2bg:var(--n-soft);--sec2ink:var(--n-ink);--ok:var(--n-ok);--bad:var(--n-bad)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) body{background:transparent !important;color:var(--n-ink)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) body::before,html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) #bgLayer{display:none !important}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) header.top h1,html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) h2{color:var(--n-ink)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .title-money{display:none}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) :is(.card,.stat,dialog,nav.bottom){background:var(--n-card) !important;color:var(--n-ink);border:1px solid var(--n-line) !important;border-radius:var(--n-radius) !important;box-shadow:var(--n-shadow) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .saldo-hero{position:relative;overflow:hidden;background:var(--n-hero) !important;color:#fff !important;border:1px solid #ffffff22;border-radius:var(--n-radius);box-shadow:var(--n-shadow);backdrop-filter:none}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .saldo-hero :is(.lbl,.mini,b){color:#fff !important}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) button:not(.tab):not(.nav-plus){background:var(--n-accent);color:var(--n-on);box-shadow:none;border-radius:14px}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) button:not(.tab):is(.ghost,.sec){background:var(--n-soft);color:var(--n-accent)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) button:not(.tab).del{background:var(--n-soft);color:var(--n-bad)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) button:disabled{opacity:.45;cursor:not-allowed}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .save-status button{background:transparent !important;color:var(--n-accent) !important;padding:0}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .cash-track button[aria-pressed="true"]{background:var(--n-accent);color:var(--n-on)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) :is(input,select,textarea){background-color:var(--n-input) !important;color:var(--n-ink);border:1px solid var(--n-line);border-radius:12px;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) :is(input,select):focus{border-color:var(--n-accent);outline:2px solid var(--n-line);outline-offset:2px;box-shadow:none}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) nav.bottom .tab{background:transparent;color:var(--n-muted);box-shadow:none}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) nav.bottom .tab.aktif{background:var(--n-soft);color:var(--n-accent)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) nav.bottom .nav-plus{background:var(--n-accent) !important;border-color:var(--n-card) !important;box-shadow:0 5px 14px #0002 !important}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) nav.bottom .nav-plus svg{stroke:var(--n-on) !important}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) :is(.keranjang,.banner){background:var(--n-input) !important;border-color:var(--n-line);backdrop-filter:none}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .toast-note{background:var(--n-card);color:var(--n-ink);border:1px solid var(--n-line)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .field-label{color:var(--n-muted)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .stat::before{display:block;left:14px;right:14px;top:0;height:3px;border-radius:0 0 3px 3px}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]){background:var(--n-bg) !important;--bg:var(--n-bg);--card:var(--n-card);--glass:var(--n-card);--input:var(--n-input);--ink:var(--n-ink);--muted:var(--n-muted);--line:var(--n-line);--glass-line:var(--n-line);--rowline:var(--n-line);--navbg:var(--n-card);--ghostbg:var(--n-soft);--ghostink:var(--n-accent);--pillbg:var(--n-soft);--pillink:var(--n-accent);--keranjangbg:var(--n-input);--keranjangline:var(--n-line);--detline:var(--n-line);--track:var(--n-line);--banbg:var(--n-soft);--banink:var(--n-ink);--delbg:var(--n-soft);--delink:var(--n-bad);--secbg:var(--n-soft);--sec2bg:var(--n-soft);--sec2ink:var(--n-ink);--ok:var(--n-ok);--bad:var(--n-bad)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) body{background:transparent !important;color:var(--n-ink)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) body::before,html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) #bgLayer{display:none !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) header.top h1,html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) h2{color:var(--n-ink)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) .title-money{display:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) :is(.card,.stat,dialog,nav.bottom){background:var(--n-card) !important;color:var(--n-ink);border:1px solid var(--n-line) !important;border-radius:var(--n-radius) !important;box-shadow:var(--n-shadow) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) .saldo-hero{position:relative;overflow:hidden;background:var(--n-hero) !important;color:#fff !important;border:1px solid #ffffff22;border-radius:var(--n-radius);box-shadow:var(--n-shadow);backdrop-filter:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) .saldo-hero :is(.lbl,.mini,b){color:#fff !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) button:not(.tab):not(.nav-plus){background:var(--n-accent);color:var(--n-on);box-shadow:none;border-radius:14px}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) button:not(.tab):is(.ghost,.sec){background:var(--n-soft);color:var(--n-accent)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) button:not(.tab).del{background:var(--n-soft);color:var(--n-bad)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) button:disabled{opacity:.45;cursor:not-allowed}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) .save-status button{background:transparent !important;color:var(--n-accent) !important;padding:0}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) .cash-track button[aria-pressed="true"]{background:var(--n-accent);color:var(--n-on)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) :is(input,select,textarea){background-color:var(--n-input) !important;color:var(--n-ink);border:1px solid var(--n-line);border-radius:12px;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) :is(input,select):focus{border-color:var(--n-accent);outline:2px solid var(--n-line);outline-offset:2px;box-shadow:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) nav.bottom .tab{background:transparent;color:var(--n-muted);box-shadow:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) nav.bottom .tab.aktif{background:var(--n-soft);color:var(--n-accent)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) nav.bottom .nav-plus{background:var(--n-accent) !important;border-color:var(--n-card) !important;box-shadow:0 5px 14px #0002 !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) nav.bottom .nav-plus svg{stroke:var(--n-on) !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) :is(.keranjang,.banner){background:var(--n-input) !important;border-color:var(--n-line);backdrop-filter:none}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) .toast-note{background:var(--n-card);color:var(--n-ink);border:1px solid var(--n-line)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) .field-label{color:var(--n-muted)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) .stat::before{display:block;left:14px;right:14px;top:0;height:3px;border-radius:0 0 3px 3px}
   html[data-gaya="orbit"] #styleDecor{background:radial-gradient(circle at 81% 9%,#9775d526,transparent 30%),radial-gradient(circle at 10% 66%,#57bbaa12,transparent 30%),radial-gradient(circle,#a799cc66 .7px,transparent 1px) 9px 13px/61px 71px}
   html[data-gaya="orbit"] #styleDecor::before{width:240px;height:240px;top:60px;right:-130px;border:1px solid #9c84ce33;border-radius:50%;box-shadow:0 0 0 24px #9c84ce0c,0 0 0 60px #9c84ce09}
   html[data-gaya="orbit"] #styleDecor::after{width:140px;height:55px;border:1px solid #8974b426;border-radius:50%;left:-45px;bottom:21%;transform:rotate(-30deg)}
@@ -1412,11 +1430,14 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html[data-gaya="pop"]{--gal-card:var(--pop-card);--gal-ink:var(--pop-ink);--gal-muted:var(--pop-muted);--gal-line:var(--pop-line);--gal-soft:var(--pop-soft);--gal-accent:var(--pop-cta)}
   html[data-gaya="spider"]{--gal-card:var(--sp-card);--gal-ink:var(--sp-ink);--gal-muted:var(--sp-muted);--gal-line:var(--sp-line);--gal-soft:var(--sp-soft);--gal-accent:var(--sp-purple)}
   html[data-gaya="neo"]{--gal-card:var(--neo-card);--gal-ink:var(--neo-line);--gal-muted:var(--neo-line);--gal-line:var(--neo-line);--gal-soft:var(--neo-card);--gal-accent:var(--neo-line)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"]) .saldo-hero::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0}
+  html[data-gaya] .cash-track button[aria-pressed="false"]{background:var(--gal-card,var(--card)) !important;color:var(--gal-muted,var(--muted)) !important;border:1px solid var(--gal-line,var(--line)) !important;box-shadow:none !important}
+  html[data-gaya] .cash-track button[aria-pressed="true"]{background:var(--gal-soft,var(--ghostbg)) !important;color:var(--gal-accent,var(--ghostink)) !important;border:2px solid currentColor !important;box-shadow:none !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) .saldo-hero::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0}
   html[data-gaya="orbit"] .saldo-hero::before{background:radial-gradient(circle,#ffffff90 0 1px,transparent 1.5px) 19px 11px/81px 59px,radial-gradient(ellipse at 100% 100%,#a9c6cd33,transparent 65%)}
   html[data-gaya="orbit"] #beranda .saldo-hero > .hero-style-art{opacity:.28;right:-20px;top:-30px}
   html[data-gaya="sakura"] .saldo-hero::before{background:radial-gradient(ellipse at 92% 0%,#f8d8d431,transparent 65%),repeating-linear-gradient(65deg,transparent 0 9px,#ffffff06 10px 11px)}
   html[data-gaya="ocean"] .saldo-hero::before{background:repeating-radial-gradient(ellipse at 92% 155%,transparent 0 17px,#b9eeea1c 18px 19px,transparent 20px 34px)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]){--gal-card:var(--n-card);--gal-ink:var(--n-ink);--gal-muted:var(--n-muted);--gal-line:var(--n-line);--gal-soft:var(--n-soft);--gal-accent:var(--n-accent)}
   /* Galeri menggunakan panel netral dari gaya aktif; tiap miniatur punya palet sendiri. */
   #styleSelected{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:13px;margin:4px 0 14px;padding:14px;border:1px solid var(--gal-line,var(--line));border-radius:16px;background:var(--gal-soft,var(--ghostbg))}
   #styleSelected .style-selected-icon{height:64px;border-radius:14px;display:grid;place-items:center;background:var(--preview-bg);color:var(--preview-accent);border:1px solid #80808022}
@@ -1442,7 +1463,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   @media(max-width:360px){#styleGallery{grid-template-columns:repeat(2,minmax(0,1fr))}#styleSelected{grid-template-columns:50px minmax(0,1fr);padding:10px;gap:10px}#styleSelected .style-selected-icon{height:50px}}
   @media(hover:hover){#styleGallery .style-choice:hover{border-color:var(--gal-accent,var(--ghostink)) !important}}
 
-  /* Hanya Orbit yang mendapat animasi percobaan baru. */
+  /* Intro Orbit yang dapat diputar ulang. */
   #orbitIntro[hidden]{display:none !important}
   #orbitIntro{position:fixed;inset:0;z-index:60;display:grid;place-items:center;pointer-events:none;background:#10121ff5;color:#f4efff;animation:orbit-intro-fade 1.45s ease both}
   .orbit-intro-inner{text-align:center;padding:24px}
@@ -1452,7 +1473,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   .orbit-intro-planet i{position:absolute;inset:-7px;border-radius:50%;border-top:2px solid #c5b3f4;animation:orbit-ring 1.1s ease-out both}
   #orbitIntro strong{display:block;font-size:25px;letter-spacing:6px;line-height:1.4;font-weight:550}
   #orbitIntro small{display:block;margin-top:10px;font-size:12px;color:#c0b6d5;letter-spacing:.3px}
-  html[data-gaya="orbit"] .page{animation:orbit-page-in .3s ease-out}
+  html[data-gaya="orbit"] .page{animation:none}
   html[data-gaya="orbit"] .style-signature svg{animation:orbit-ring 22s linear infinite}
   @keyframes orbit-ring{to{transform:rotate(360deg)}}
   @keyframes orbit-arrive{from{opacity:0;transform:scale(.65) rotate(-25deg)}to{opacity:1;transform:scale(1) rotate(0)}}
@@ -1460,12 +1481,216 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   @keyframes orbit-intro-fade{0%{opacity:0}15%,65%{opacity:1}100%{opacity:0}}
   @media(prefers-reduced-motion:reduce){#orbitIntro{display:none !important}html[data-gaya="orbit"] .page,html[data-gaya="orbit"] .style-signature svg{animation:none !important}}
 
+
+  /* Dompet non-tunai mengikuti palet gaya aktif. */
+  .wallet-section{--wl-card:var(--gal-card,var(--card-solid,var(--card)));--wl-ink:var(--gal-ink,var(--ink));--wl-muted:var(--gal-muted,var(--muted));--wl-soft:var(--gal-soft,var(--ghostbg));--wl-line:var(--gal-line,var(--line));--wl-accent:var(--gal-accent,var(--ghostink))}
+  .wallet-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+  .wallet-heading h2{margin:0}
+  .wallet-heading button{flex:none;margin:0}
+  .wallet-summary{background:var(--wl-soft);border:1px solid var(--wl-line);border-radius:16px;padding:16px;margin:16px 0}
+  .wallet-summary span{display:block;font-size:12px;color:var(--wl-muted)}
+  .wallet-summary b{display:block;font-size:25px;margin-top:5px;color:var(--wl-ink);overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+  .wallet-summary small{display:block;margin-top:7px;color:var(--wl-muted);line-height:1.5}
+  .wallet-entry{padding:14px 0;border-bottom:1px solid var(--wl-line)}
+  .wallet-entry:last-child{border-bottom:0}
+  .wallet-entry-top{display:flex;align-items:center;gap:11px;min-width:0}
+  .wallet-entry-title{min-width:0;flex:1;overflow-wrap:anywhere}
+  .wallet-entry-title b{display:block;font-size:14px;color:var(--wl-ink)}
+  .wallet-entry-title small{color:var(--wl-muted);font-size:11px}
+  .wallet-entry-amount{font-size:15px;font-weight:750;color:var(--wl-ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;max-width:46%;text-align:right}
+  .wallet-symbol{width:39px;height:39px;flex:none;display:grid;place-items:center;border-radius:12px;color:var(--wl-accent);background:var(--wl-soft);border:1px solid var(--wl-line)}
+  .wallet-symbol svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .wallet-entry .aksi{margin-top:11px;padding-left:50px;gap:8px}
+  .wallet-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+  .wallet-actions button{flex:1;min-width:110px;margin:0}
+  .wallet-form-panel{padding:13px;border:1px solid var(--line);border-radius:14px;margin-bottom:12px;background:var(--keranjangbg)}
+  .wallet-form-panel select{margin-bottom:8px}
+  .wallet-form-panel p{line-height:1.5;margin:6px 0}
+  .wallet-form-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:4px 0 12px}
+  .wallet-form-actions button{margin:0}
+  #dlgDompet,#dlgTransferDompet,#dlgKonfirmasiDompet{max-height:calc(100dvh - 32px);overflow:auto}
+  .wallet-dialog-note{padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--ghostbg);line-height:1.55;font-size:13px;margin:8px 0 16px;color:var(--ink)}
+  #wltError,#transferError{color:var(--bad);font-size:13px;line-height:1.5}
+  #wltError:empty,#transferError:empty{display:none}
+  .wallet-empty{text-align:center;padding:10px 4px 16px}
+  .wallet-empty .wallet-symbol{margin:0 auto 10px;width:48px;height:48px}
+  .wallet-empty p{font-size:13px;line-height:1.6;color:var(--wl-muted);margin:5px 0}
+  .wallet-transfer-row{padding:12px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+  .wallet-transfer-row strong{display:block;color:var(--ink)}
+  #walletArchived{margin-top:16px}
+  #walletArchived > summary{padding:8px 0;font-size:13px}
+  #walletHistory{margin-top:16px}
+  #walletHistory summary{font-size:14px;padding:5px 0}
+  @media(max-width:360px){.wallet-entry-top{flex-wrap:wrap}.wallet-entry-amount{max-width:none;margin-left:50px;flex-basis:100%;text-align:left}.wallet-entry .aksi{padding-left:0}}
+
+
+  /* Uangku: satu panel di Beranda dengan dua tab. */
+  #homeMoney .money-title{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;align-items:center;margin-bottom:13px}
+  #homeMoney .money-title h2{margin:0}
+  #homeMoney .money-title > span{font-size:11px}
+  #moneyTabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:5px;border:1px solid var(--wl-line);border-radius:15px;background:var(--wl-card)}
+  html[data-gaya] #moneyTabs .money-tab{width:100%;margin:0;padding:11px 8px;min-height:42px;border:1px solid transparent !important;border-radius:10px !important;background:transparent !important;color:var(--wl-muted) !important;font-size:14px;box-shadow:none !important;transform:none}
+  html[data-gaya] #moneyTabs .money-tab[aria-selected="true"]{background:var(--wl-soft) !important;color:var(--wl-accent) !important;border-color:var(--wl-line) !important;font-weight:800}
+  #moneyTabs .money-tab:focus-visible{outline:2px solid var(--wl-accent);outline-offset:2px}
+  #homeMoney .money-swipe-hint{font-size:10px;text-align:center;margin:8px 0 18px;color:var(--wl-muted)}
+  #moneyPanels{touch-action:pan-y pinch-zoom}
+  #moneyPanels > [role="tabpanel"][hidden]{display:none !important}
+  #moneyPanels > [role="tabpanel"]{min-width:0}
+  #moneyPanels .wallet-heading h3{margin:0;font-size:14px;line-height:1.4;color:var(--wl-ink)}
+  #moneyPanels .wallet-summary{margin-top:12px}
+  #homeMoney .wallet-actions button{font-size:13px;padding:11px 9px}
+  .money-cash-units{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 16px}
+  #homeCashUnits[hidden]{display:none}
+  .money-cash-unit{display:flex;justify-content:space-between;flex-wrap:wrap;gap:3px 8px;padding:10px;border:1px solid var(--wl-line);border-radius:11px;background:var(--wl-card);font-size:12px;color:var(--wl-muted)}
+  .money-cash-unit b{color:var(--wl-ink);font-variant-numeric:tabular-nums}
+  #dlgUangFisik{max-height:calc(100dvh - 32px);overflow:auto}
+  html[data-layout="2"] #homeMoney{order:-16}
+  html[data-layout="2"] #btnBerandaCatat{order:-15}
+  html[data-layout="3"] #homeMoney{order:-16}
+
+  /* Petunjuk suasana ada di tepi; seluruh ornamen mengabaikan sentuhan. */
+  #styleAmbient{position:absolute;inset:0;width:min(100%,760px);margin:0 auto;pointer-events:none;color:var(--gal-accent,var(--ghostink));overflow:hidden}
+  .ambient-mark{position:absolute;width:36px;height:36px;opacity:.16;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+  .ambient-mark:nth-child(1){left:2%;top:18%;width:44px;height:44px}
+  .ambient-mark:nth-child(2){right:2%;top:37%;width:31px;height:31px}
+  .ambient-mark:nth-child(3){left:5%;top:62%;width:27px;height:27px}
+  .ambient-mark:nth-child(4){right:6%;top:79%;width:42px;height:42px}
+  .ambient-mark:nth-child(5){right:22%;top:7%;width:23px;height:23px}
+  html[data-gaya] #beranda .saldo-hero > .hero-style-art{display:none}
+  html[data-gaya] #beranda .saldo-hero > #heroScene{display:block;position:absolute !important;width:190px;height:170px;right:-29px;top:-4px;z-index:0 !important;pointer-events:none;opacity:.25;overflow:visible;mask-image:linear-gradient(90deg,transparent,#000 45%)}
+  html:is([data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"]) #beranda .saldo-hero > #heroScene{width:210px;height:180px;opacity:.61;right:-29px;top:-6px}
+  html[data-gaya="flat"] #beranda .saldo-hero > #heroScene{opacity:.14}
+  html[data-gaya="blok"] #beranda .saldo-hero > #heroScene{display:none}
+  html[data-gaya="spider"] #beranda .saldo-hero > #heroScene{right:-12px;top:25px;width:160px;opacity:.23}
+  #heroScene g{transform-box:view-box;transform-origin:50% 50%}
+  #heroScene .scene-swing{transform-origin:120px 0}
+  #heroScene .scene-leaf{transform-origin:115px 160px}
+  #styleReveal[hidden]{display:none !important}
+  #styleReveal{position:fixed;inset:0;z-index:8;pointer-events:none;border:3px solid var(--gal-accent,var(--ghostink));border-radius:24px;box-shadow:inset 0 0 65px -36px var(--gal-accent,var(--ghostink));animation:gaya-reveal .85s ease-out both}
+  html[data-gerak]:not([data-gerak="mati"]) .page.masuk-halaman{animation:gaya-page-in .28s cubic-bezier(.2,.65,.3,1) both}
+  html[data-gerak]:not([data-gerak="mati"]) dialog[open]{animation:gaya-dialog-in .18s ease-out}
+  html[data-gerak]:not([data-gerak="mati"]) button{transition:scale .13s ease,box-shadow .18s ease,background-color .18s ease}
+  html[data-gerak]:not([data-gerak="mati"]) button:active:not(:disabled){scale:.97}
+  #styleSelected.coba-gerak svg{animation:gaya-preview .8s cubic-bezier(.2,.8,.3,1)}
+  html[data-gerak="penuh"] #styleAmbient .ambient-mark{animation:gaya-drift calc(17s + var(--i)*3s) ease-in-out infinite;animation-delay:calc(var(--i)*-4s)}
+  html[data-gerak="penuh"] #styleDecor::before{animation:gaya-wallpaper 19s ease-in-out infinite}
+  html[data-gerak="penuh"] #styleDecor::after{animation:gaya-wallpaper 25s ease-in-out -7s infinite reverse}
+  html[data-gerak="penuh"] .scene-float{animation:gaya-float 6s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-tilt{animation:gaya-tilt 8s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-spin{animation:gaya-spin 38s linear infinite}
+  html[data-gerak="penuh"] .scene-twinkle{animation:gaya-twinkle 5s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-breathe{animation:gaya-breathe 8s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-flow{animation:gaya-flow 9s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-cursor{animation:gaya-cursor 2.6s steps(1,end) infinite}
+  html[data-gerak="penuh"] .scene-draw{stroke-dasharray:100;animation:gaya-ink 6s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-swing{animation:gaya-swing 5s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-orbit{animation:gaya-orbit 18s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-petal{animation:gaya-petal 8s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-wave{animation:gaya-wave 7s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-aurora{animation:gaya-aurora 9s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-leaf{animation:gaya-leaf 7s ease-in-out infinite}
+  html[data-gerak="penuh"] .scene-steam{animation:gaya-steam 4s ease-in-out infinite}
+  html[data-gerak="penuh"]:is([data-gaya="glass"],[data-gaya="soft"]) .style-signature svg{animation:gaya-breathe 7s ease-in-out infinite}
+  html[data-gerak="penuh"]:is([data-gaya="material"],[data-gaya="berwarna"]) .style-signature svg{animation:gaya-spin 40s linear infinite}
+  html[data-gerak="penuh"][data-gaya="retro"] .style-signature svg{animation:gaya-twinkle 4s ease-in-out infinite}
+  html[data-gerak="penuh"][data-gaya="blok"] .ambient-mark{animation-timing-function:steps(8,end)}
+  html[data-gerak="penuh"][data-gaya="sakura"] .ambient-mark{animation-name:gaya-sakura-drift}
+  html[data-gerak="penuh"][data-gaya="latte"] .ambient-mark{animation-name:gaya-latte-drift}
+  /* Bentuk, bukan sekadar warna, membedakan lima dunia baru. */
+  html[data-gaya="aurora"] #styleDecor{background:radial-gradient(ellipse at 96% 8%,#55b9a521,transparent 38%),radial-gradient(ellipse at 0% 73%,#ac90d71c,transparent 38%)}
+  html[data-gaya="aurora"] #styleDecor::before{width:340px;height:400px;right:-230px;top:80px;border:30px solid #80bdac22;border-radius:35% 65% 45% 55%;box-shadow:0 0 0 18px #9c8fd51c;transform:rotate(25deg)}
+  html[data-gaya="aurora"] #styleDecor::after{width:220px;height:320px;left:-200px;bottom:8%;border:23px solid #ac91d51c;border-radius:45% 55% 35% 65%;transform:rotate(-30deg)}
+  html[data-gaya="aurora"] #cardMingguan{border-left:4px solid #77b7ac !important}
+  html[data-gaya="aurora"] .style-signature{background:var(--n-soft);border-color:var(--n-line);color:var(--n-accent)}
+  html[data-gaya="arcade"] #styleDecor{background:linear-gradient(#aa76bd12 1px,transparent 1px) 0 0/42px 42px,linear-gradient(90deg,#aa76bd12 1px,transparent 1px) 0 0/42px 42px,radial-gradient(ellipse at 97% 10%,#d471b021,transparent 38%)}
+  html[data-gaya="arcade"] #styleDecor::before{width:170px;height:170px;right:-100px;top:150px;border-radius:50%;background:repeating-linear-gradient(transparent 0 7px,var(--n-accent) 8px 12px);opacity:.14}
+  html[data-gaya="arcade"] #styleDecor::after{width:180px;height:180px;left:-140px;bottom:16%;border:3px solid var(--n-accent);transform:rotate(45deg);opacity:.16}
+  html[data-gaya="arcade"] .saldo-hero{border:1px solid #a0e8dd77 !important;box-shadow:4px 4px 0 var(--n-soft) !important}
+  html[data-gaya="arcade"] .style-signature{border-radius:5px;border-style:dashed;color:var(--n-accent)}
+  html[data-gaya="arcade"] #cardMingguan{border-top:3px double var(--n-accent) !important}
+  html[data-gaya="arcade"] button:not(.tab):not(.nav-plus){border-radius:8px}
+  html[data-gaya="botanica"] #styleDecor{background:radial-gradient(ellipse at 100% 5%,#7d9a5020,transparent 30%),radial-gradient(ellipse at 0% 74%,#769a681a,transparent 35%)}
+  html[data-gaya="botanica"] #styleDecor::before{width:170px;height:250px;right:-132px;top:100px;border:2px solid #7a97594d;border-radius:5% 95% 5% 95%;background:linear-gradient(45deg,transparent 49%,#78965333 50%,transparent 51%);transform:rotate(13deg)}
+  html[data-gaya="botanica"] #styleDecor::after{width:150px;height:220px;left:-130px;bottom:12%;border:2px solid #72906240;border-radius:95% 5% 95% 5%;transform:rotate(-13deg)}
+  html[data-gaya="botanica"] .style-signature{border-radius:16px 4px;background:var(--n-soft);color:var(--n-accent)}
+  html[data-gaya="botanica"] #cardMingguan{border-left:4px solid #8da474 !important}
+  html[data-gaya="atelier"] #styleDecor{background:radial-gradient(circle,#7b819625 .7px,transparent 1px) 6px 6px/22px 22px}
+  html[data-gaya="atelier"] #styleDecor::before{width:145px;height:185px;right:-120px;top:140px;background:var(--n-soft);border:2px solid var(--n-accent);box-shadow:-22px 22px 0 #d7ac8a22;transform:rotate(14deg)}
+  html[data-gaya="atelier"] #styleDecor::after{width:155px;height:155px;left:-120px;bottom:15%;border:24px solid var(--n-accent);border-radius:50%;opacity:.1}
+  html[data-gaya="atelier"] .style-signature{border-radius:0;color:var(--n-accent);border-color:var(--n-accent)}
+  html[data-gaya="atelier"] #cardMingguan{border-top:5px solid var(--n-accent) !important}
+  html[data-gaya="atelier"] .wallet-summary{border-radius:4px}
+  html[data-gaya="latte"] #styleDecor{background:radial-gradient(ellipse at 95% 0%,#c2976120,transparent 35%),radial-gradient(ellipse at 4% 80%,#b27d5310,transparent 35%)}
+  html[data-gaya="latte"] #styleDecor::before{width:185px;height:185px;right:-120px;top:115px;border-radius:50%;border:10px solid #a37e5530;box-shadow:0 0 0 8px #a37e550c,inset 0 0 0 3px #a37e5522;transform:rotate(-12deg)}
+  html[data-gaya="latte"] #styleDecor::after{width:140px;height:170px;left:-110px;bottom:13%;border:1px solid #a37e5544;border-radius:45% 55% 42% 58%;transform:rotate(25deg)}
+  html[data-gaya="latte"] .style-signature{background:var(--n-soft);border-style:dashed;color:var(--n-accent)}
+  html[data-gaya="latte"] #cardMingguan{border-bottom:3px solid #b49777 !important}
+  #styleGallery .style-choice[data-choice="aurora"] .style-thumb{background:linear-gradient(130deg,#dbe9f0,#b6ded1,#d9caf0)}
+  #styleGallery .style-choice[data-choice="arcade"] .style-thumb{background:repeating-linear-gradient(transparent 0 10px,#af72b326 11px 12px),#25143f}
+  #styleGallery .style-choice[data-choice="arcade"] .style-thumb::before{border:1px solid #a7ece2;border-radius:3px;background:#6e356f}
+  #styleGallery .style-choice[data-choice="botanica"] .style-thumb::before{border-radius:16px 3px 16px 3px}
+  #styleGallery .style-choice[data-choice="atelier"] .style-thumb::before{border-radius:0;box-shadow:3px 3px 0 #1c285333}
+  #styleGallery .style-choice[data-choice="latte"] .style-thumb{background:radial-gradient(circle at 85% 15%,#c7a17b33 0 15px,transparent 16px),var(--preview-bg)}
+  @keyframes gaya-drift{0%,100%{transform:translate3d(0,0,0) rotate(-7deg)}50%{transform:translate3d(9px,-18px,0) rotate(9deg)}}
+  @keyframes gaya-wallpaper{0%,100%{translate:0 0}50%{translate:0 -15px}}
+  @keyframes gaya-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @keyframes gaya-tilt{0%,100%{rotate:-3deg}50%{rotate:3deg}}
+  @keyframes gaya-spin{to{rotate:360deg}}
+  @keyframes gaya-twinkle{0%,100%{opacity:.5}50%{opacity:1}}
+  @keyframes gaya-breathe{0%,100%{scale:1}50%{scale:1.04}}
+  @keyframes gaya-flow{0%,100%{translate:0 0}50%{translate:10px 0}}
+  @keyframes gaya-cursor{0%,75%,100%{opacity:1}76%,99%{opacity:.2}}
+  @keyframes gaya-ink{0%,15%{stroke-dashoffset:100}55%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:100}}
+  @keyframes gaya-swing{0%,100%{rotate:-6deg}50%{rotate:6deg}}
+  @keyframes gaya-orbit{0%,100%{rotate:-6deg}50%{rotate:7deg}}
+  @keyframes gaya-petal{0%{translate:0 -12px;opacity:0}20%{opacity:1}80%{opacity:.8}100%{translate:-20px 28px;opacity:0}}
+  @keyframes gaya-wave{0%,100%{translate:-8px 0}50%{translate:8px 3px}}
+  @keyframes gaya-aurora{0%,100%{translate:0 0;scale:1 1}50%{translate:4px -6px;scale:1.03 .91}}
+  @keyframes gaya-leaf{0%,100%{rotate:-2deg}50%{rotate:3deg}}
+  @keyframes gaya-steam{0%{translate:0 5px;opacity:.15}40%{opacity:.9}100%{translate:3px -10px;opacity:.15}}
+  @keyframes gaya-sakura-drift{0%,100%{translate:0 0;rotate:-15deg;opacity:.12}50%{translate:-14px 23px;rotate:14deg;opacity:.22}}
+  @keyframes gaya-latte-drift{0%,100%{translate:0 0;rotate:-5deg}50%{translate:3px -12px;rotate:12deg}}
+  @keyframes gaya-page-in{from{opacity:.55;translate:0 7px}to{opacity:1;translate:0 0}}
+  @keyframes gaya-dialog-in{from{opacity:0;scale:.98}to{opacity:1;scale:1}}
+  @keyframes gaya-preview{0%{scale:.75;rotate:-15deg;opacity:.4}60%{scale:1.12;rotate:6deg}100%{scale:1;rotate:0deg;opacity:1}}
+  @keyframes gaya-reveal{0%{opacity:0}25%{opacity:.23}100%{opacity:0}}
+  /* Ringan menghentikan loop. Mati dan preferensi perangkat menghentikan semua animasi gaya. */
+  html:is([data-gerak="ringan"],[data-gerak="mati"]) :is(#styleAmbient .ambient-mark,#heroScene *,#styleSignatureArt,.pixel-mob,.spider-mask),
+  html:is([data-gerak="ringan"],[data-gerak="mati"]) #styleDecor::before,
+  html:is([data-gerak="ringan"],[data-gerak="mati"]) #styleDecor::after{animation:none !important}
+  html[data-gerak="mati"] :is(.page,dialog,#styleSelected svg){animation:none !important}
+  html[data-gerak="mati"] button{transition:none !important}
+  html:is([data-gerak="ringan"],[data-gerak="mati"]) #orbitIntro,
+  html[data-gerak="mati"] #styleReveal{display:none !important}
+  html[data-gerak-jeda] :is(#styleAmbient .ambient-mark,#heroScene *,#styleSignatureArt,.pixel-mob,.spider-mask),
+  html[data-gerak-jeda] #styleDecor::before,html[data-gerak-jeda] #styleDecor::after{animation-play-state:paused !important}
+  @media(prefers-reduced-motion:reduce){
+    #styleReveal,#orbitIntro{display:none !important}
+    html[data-gaya] :is(.page,dialog,#styleSelected svg,#styleAmbient .ambient-mark,#heroScene *,#styleSignatureArt,.pixel-mob,.spider-mask),
+    html[data-gaya] #styleDecor::before,html[data-gaya] #styleDecor::after{animation:none !important}
+    html[data-gaya] button{transition:none !important}
+  }
+
+
+  html[data-gaya="blok"] .pixel-garden{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;image-rendering:pixelated}
+  html[data-gerak="penuh"][data-gaya="blok"] .pixel-mobs::before{animation:gaya-cloud 22s steps(18,end) infinite}
+  html[data-gerak="penuh"][data-gaya="blok"] .pixel-mobs::after{animation:gaya-cloud 29s steps(22,end) -8s infinite reverse}
+  html[data-gerak="penuh"][data-gaya="blok"] .pixel-mob.pig{animation:gaya-pig 6s steps(2,end) infinite}
+  @keyframes gaya-cloud{0%,100%{translate:0 0}50%{translate:24px 0}}
+  @keyframes gaya-pig{0%,70%,100%{translate:0 0}80%,90%{translate:0 -3px}}
+  html[data-gerak-jeda] .pixel-mobs::before,html[data-gerak-jeda] .pixel-mobs::after{animation-play-state:paused !important}
+  @media(prefers-reduced-motion:reduce){html[data-gaya="blok"] .pixel-mobs::before,html[data-gaya="blok"] .pixel-mobs::after{animation:none !important}}
+
+  /* Tanggal riwayat mengikuti lebar kolom pada layar HP. */
+  #riwayat .grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #riwayat .grid2 > *,#riwayat input[type="date"]{min-width:0;max-width:100%}
 </style>
 
 </head>
 <body>
 <div id="bgLayer"></div>
-<div id="styleDecor" aria-hidden="true"></div>
+<div id="styleDecor" aria-hidden="true"><div id="styleAmbient"></div></div>
+<div id="styleReveal" aria-hidden="true" hidden></div>
 <div id="orbitIntro" aria-hidden="true" hidden><div class="orbit-intro-inner"><div class="orbit-intro-planet"><i></i></div><strong>ORBIT</strong><small>Catatan kecil, tujuan besar.</small></div></div>
 
 <header class="top">
@@ -1509,9 +1734,11 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     </svg>
     <span class="lbl">Total saldo</span>
     <b id="saldo"></b>
+    <svg id="heroScene" viewBox="0 0 220 180" fill="none" aria-hidden="true" focusable="false"></svg>
     <div class="mini"><span>Pemasukan total <span id="totMasuk"></span></span><span>Pengeluaran total <span id="totKeluar"></span></span></div>
   </div>
   <div class="pixel-mobs" aria-hidden="true">
+    <svg class="pixel-garden" viewBox="0 0 360 80" fill="none" focusable="false"><path d="M22 66v-9h4v9m-9-6h14M170 67v-9h4v9m-9-6h14M333 66v-9h4v9m-9-6h14" stroke="#557c32" stroke-width="2"/><path d="M20 54h7v6h-7m149-5h7v6h-7m163-7h7v6h-7" fill="#f4cc68"/></svg>
     <svg class="pixel-mob slime" viewBox="0 0 48 48" shape-rendering="crispEdges" focusable="false">
       <rect x="5" y="13" width="38" height="31" fill="#2d6332"/><rect x="8" y="16" width="32" height="25" fill="#7fc44e"/>
       <rect x="11" y="19" width="11" height="5" fill="#b5e578"/><rect x="13" y="26" width="6" height="6" fill="#223d2c"/><rect x="29" y="26" width="6" height="6" fill="#223d2c"/>
@@ -1546,6 +1773,47 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <h2 id="judulMingguan">Ringkasan minggu ini</h2>
     <p id="teksMingguan" style="margin:0;font-size:15px;line-height:1.5;white-space:pre-line"></p>
   </div>
+  <section class="card wallet-section" id="homeMoney" aria-labelledby="homeMoneyTitle">
+    <div class="money-title"><h2 id="homeMoneyTitle">Uangku</h2><span class="muted">Tunai &amp; dompet digital</span></div>
+    <div id="moneyTabs" role="tablist" aria-label="Jenis dompet">
+      <button type="button" class="money-tab" id="tabMoneyCash" role="tab" aria-selected="true" aria-controls="panelMoneyCash" tabindex="0">Tunai</button>
+      <button type="button" class="money-tab" id="tabMoneyDigital" role="tab" aria-selected="false" aria-controls="panelMoneyDigital" tabindex="-1">Wallet</button>
+    </div>
+    <p class="muted money-swipe-hint">Ketuk tab atau geser untuk berpindah.</p>
+    <p class="wallet-dialog-note" id="homeAllocationInfo" hidden></p>
+    <div id="moneyPanels">
+      <div id="panelMoneyCash" role="tabpanel" aria-labelledby="tabMoneyCash" tabindex="0">
+        <div class="wallet-heading"><h3>Tunai</h3><button type="button" class="ghost kecil" id="btnHomeCashHelp">Cara pakai</button></div>
+        <div class="wallet-summary"><span>Saldo tunai</span><b id="homeCashTotal">Rp0</b><small>Mengikuti pemasukan dan pengeluaran tunai. Tidak perlu mengisi jumlah lembar uang.</small></div>
+        <div class="wallet-actions"><button type="button" id="btnHomeCashAdd">+ Tambah saldo</button><button type="button" class="ghost" id="btnHomeCashRecord">Catat tunai</button></div>
+        <details id="homeCashDetails" class="quick-extra">
+          <summary>Rincian uang fisik <span class="muted">(opsional)</span></summary>
+          <div class="cash-track"><span>Catat lembar uang di dompet</span><button type="button" id="btnHomeCashTracking" aria-pressed="false">OFF · Tidak dipakai</button></div>
+          <p class="muted" id="homeCashTrackingInfo" style="line-height:1.5"></p>
+          <div id="homeCashStock" hidden>
+            <p class="muted" id="homeCashStockTotal"></p>
+            <div id="homeCashUnits" class="money-cash-units"></div>
+            <p class="muted" id="homeCashEmpty" style="line-height:1.5">Belum ada rincian lembar uang. Isi sesuai uang yang kamu pegang jika ingin memakainya.</p>
+            <button type="button" class="ghost" id="btnHomeCashManage">Atur uang fisik</button>
+          </div>
+        </details>
+      </div>
+      <div id="panelMoneyDigital" role="tabpanel" aria-labelledby="tabMoneyDigital" tabindex="0" hidden>
+<div class="wallet-section" id="cardDompetDigital">
+    <div class="wallet-heading"><h3>Rekening &amp; e-wallet</h3><button type="button" class="ghost kecil" id="btnWalletHelp">Cara pakai</button></div>
+    <p class="muted" style="margin:0;line-height:1.5">Pisahkan uang di rekening dan e-wallet sesuai yang kamu miliki.</p>
+    <div class="wallet-summary"><span>Jumlah saldo di dompet</span><b id="walletTotal">Rp0</b><small>Bagian dari saldo total, tidak dijumlahkan dua kali.</small></div>
+    <p class="muted" id="walletUnassignedInfo" style="line-height:1.5"></p>
+    <div id="walletList"></div>
+    <div class="wallet-actions"><button type="button" id="btnWalletAdd">+ Tambah dompet</button><button type="button" class="ghost" id="btnWalletTransfer">Transfer antar dompet</button></div>
+    <p class="muted" id="walletTransferHint" style="line-height:1.5"></p>
+    <details id="walletArchived" hidden><summary id="walletArchivedTitle">Dompet diarsipkan</summary><div id="walletArchivedList"></div></details>
+    <details class="quick-extra" id="walletTransferDetails" hidden><summary>Transfer terbaru</summary><div id="walletTransferList"></div></details>
+  </div>
+      </div>
+    </div>
+  </section>
+
   <button class="home-catat" id="btnBerandaCatat" type="button"><span class="home-catat-title">+ Catat transaksi</span><span class="home-catat-sub">Pengeluaran · Pemasukan · Scan struk</span></button>
 
   <div class="banner" id="bannerBackup" style="display:none">
@@ -1581,10 +1849,23 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <p class="muted" id="saldoAwalHint" style="display:none;margin:-4px 0 10px">Saldo awal cukup dicatat sekali untuk uang yang sudah kamu miliki sebelum mulai mencatat, agar tidak terhitung dua kali.</p>
     <input type="text" id="iNominalMasuk" data-uang placeholder="Contoh: 50.000" inputmode="decimal">
     <select id="iCara">
-      <option value="nontunai">Non-tunai (transfer / e-wallet)</option>
       <option value="tunai">Tunai</option>
+      <option value="nontunai">Wallet / non-tunai</option>
     </select>
-    <div class="cash-track" id="iCashTrackWrap" style="display:none"><span>Ikut uang fisik di web?</span><button type="button" id="btnTrackCash" aria-pressed="false" aria-label="Ikut uang fisik di web">OFF · Nominal saja</button></div>
+    <div id="iDigitalWrap" style="display:none">
+      <div id="iDigitalDetail" class="wallet-form-panel" hidden>
+        <label class="field-label" id="iDigitalLabel" for="iDigitalSelect">Dompet pembayaran</label>
+        <select id="iDigitalSelect"><option value="">Pilih dompet</option></select>
+        <p class="muted" id="iDigitalBalance" aria-live="polite"></p>
+        <p class="muted" id="iDigitalPreview" aria-live="polite"></p>
+        <button class="ghost kecil" id="iDigitalAdd" type="button">+ Tambah dompet</button>
+      </div>
+      <div class="wallet-form-actions"><button type="button" class="ghost kecil" id="iDigitalHelp" aria-haspopup="dialog" aria-controls="dlgBantuan">Cara pakai dompet</button><span class="muted" id="iDigitalInfo">Pilih dompet tujuan. Nominal cukup diisi sekali.</span></div>
+    </div>
+    <details id="iCashOptions" class="quick-extra"><summary>Rincian pembayaran tunai (opsional)</summary>
+    <button type="button" class="ghost kecil cash-help" id="btnCashHelp" aria-haspopup="dialog" aria-controls="dlgBantuan" style="display:none">Cara pakai tunai</button>
+    <div class="cash-track" id="iCashDetailsWrap" style="display:none"><span>Catat rincian tunai?</span><button type="button" id="btnCashDetails" aria-pressed="false" aria-label="Catat rincian pembayaran tunai">OFF · Cukup total</button></div>
+    <div class="cash-track" id="iCashTrackWrap" style="display:none"><span>Ikut uang fisik di web?</span><button type="button" id="btnTrackCash" aria-pressed="false" aria-label="Ikut uang fisik di web">OFF · Pecahan tetap</button></div>
     <div id="iCashNominalWrap" style="display:none">
       <label class="field-label" for="iBayarNominal" id="iBayarLabel">Uang diberikan ke penjual (Rp)</label>
       <input type="text" id="iBayarNominal" data-uang inputmode="decimal" placeholder="Contoh: 50.000">
@@ -1604,11 +1885,10 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <button class="ghost" id="btnPecahOtomatis">Isi otomatis</button>
     </div>
     <details id="cardTunai" class="quick-extra" style="display:none">
-      <summary>Isi uang fisik di dompet (opsional)</summary>
-      <p class="muted">Isi jumlah lembar yang kamu pegang sekarang. Contoh: punya dua lembar Rp20.000 → isi 2 pada Rp20.000. Tekan Simpan stok uang fisik sebelum Isi otomatis.</p>
-      <div id="stokGrid" class="grid-denom"></div>
+      <summary>Uang fisik di dompet</summary>
       <p class="muted" id="tunaiInfo"></p>
-      <button type="button" id="btnStokSimpan">Simpan stok uang fisik</button>
+      <button type="button" class="ghost" id="btnCashManageForm">Atur uang fisik</button>
+    </details>
     </details>
     <input type="text" id="tTag" placeholder="Contoh: kantor, kuliah">
 
@@ -1749,7 +2029,8 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     </div>
     <button class="sec" id="btnRekapRiwayat">🖼️ Cetak rekap sesuai filter (gambar)</button>
   </div>
-  <div class="card"><div id="rList"></div></div>
+  <div class="card"><div id="rList"></div>
+    <details id="walletHistory" hidden><summary>Transfer antar dompet</summary><p class="muted">Perpindahan saldo. Hanya biaya admin dihitung sebagai pengeluaran.</p><div id="walletHistoryList"></div></details></div>
 </section>
 
 <!-- GRAFIK -->
@@ -1844,12 +2125,21 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="flat">Minimal flat (tanpa bayangan)</option>
       <option value="pop">Persimmon Pop (plum dan oranye hangat)</option>
       <option value="spider">Spider (merah, ungu, hitam, dan krem)</option>
-      <option value="orbit">Baru · Orbit (planet dan antariksa, dengan animasi)</option>
-      <option value="sakura">Baru · Sakura (krem, kelopak, dan merah muda)</option>
-      <option value="ocean">Baru · Ocean (biru laut, toska, dan ombak)</option>
+      <option value="orbit">Orbit (planet dan antariksa, dengan animasi)</option>
+      <option value="sakura">Sakura (krem, kelopak, dan merah muda)</option>
+      <option value="ocean">Ocean (biru laut, toska, dan ombak)</option>
+      <option value="aurora">Baru · Aurora</option>
+      <option value="arcade">Baru · Arcade</option>
+      <option value="botanica">Baru · Botanica</option>
+      <option value="atelier">Baru · Atelier</option>
+      <option value="latte">Baru · Latte</option>
     </select>
     <button type="button" class="ghost" id="btnAnimasiOrbit" hidden>✦ Putar animasi Orbit</button>
-    <details id="styleGalleryWrap"><summary>Jelajahi galeri · 15 gaya <span aria-hidden="true">⌄</span></summary><div id="styleGallery" aria-label="Pilihan gaya tampilan"></div></details>
+    <details id="styleGalleryWrap"><summary>Jelajahi galeri · 20 gaya <span aria-hidden="true">⌄</span></summary><div id="styleGallery" aria-label="Pilihan gaya tampilan"></div></details>
+    <label class="field-label" for="sGerak">Animasi gaya</label>
+    <select id="sGerak"><option value="penuh">Aktif · dekorasi bergerak</option><option value="ringan">Ringan · transisi singkat</option><option value="mati">Mati · tampilan diam</option></select>
+    <p class="muted setting-help" id="infoGerak" aria-live="polite"></p>
+    <button type="button" class="ghost" id="btnCobaGerak">✦ Coba animasi gaya</button>
     <span class="muted">Kualitas efek</span>
     <select id="sEfek">
       <option value="tanpa">Tanpa efek (paling ringan)</option>
@@ -1969,8 +2259,20 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <input type="text" id="eTag" placeholder="Contoh: kantor, kuliah">
   <input type="text" id="eNominalMasuk" data-uang placeholder="Contoh: 50.000" inputmode="decimal">
   <label class="field-label" for="eCara">Cara pembayaran</label>
-  <select id="eCara"><option value="nontunai">Non-tunai (transfer / e-wallet)</option><option value="tunai">Tunai</option></select>
-  <div class="cash-track" id="eCashTrackWrap" style="display:none"><span>Ikut uang fisik di web?</span><button type="button" id="btnETrackCash" aria-pressed="false" aria-label="Ikut uang fisik di web">OFF · Nominal saja</button></div>
+  <select id="eCara"><option value="tunai">Tunai</option><option value="nontunai">Wallet / non-tunai</option></select>
+  <div id="eDigitalWrap" style="display:none">
+      <div id="eDigitalDetail" class="wallet-form-panel" hidden>
+        <label class="field-label" id="eDigitalLabel" for="eDigitalSelect">Dompet pembayaran</label>
+        <select id="eDigitalSelect"><option value="">Pilih dompet</option></select>
+        <p class="muted" id="eDigitalBalance" aria-live="polite"></p>
+        <p class="muted" id="eDigitalPreview" aria-live="polite"></p>
+        <button class="ghost kecil" id="eDigitalAdd" type="button">+ Tambah dompet</button>
+      </div>
+      <div class="wallet-form-actions"><button type="button" class="ghost kecil" id="eDigitalHelp" aria-haspopup="dialog" aria-controls="dlgBantuan">Cara pakai dompet</button><span class="muted" id="eDigitalInfo">Pilih dompet tujuan. Nominal cukup diisi sekali.</span></div>
+    </div>
+    <button type="button" class="ghost kecil cash-help" id="btnECashHelp" aria-haspopup="dialog" aria-controls="dlgBantuan" style="display:none">Cara pakai tunai</button>
+  <div class="cash-track" id="eCashDetailsWrap" style="display:none"><span>Catat rincian tunai?</span><button type="button" id="btnECashDetails" aria-pressed="false" aria-label="Catat rincian pembayaran tunai">OFF · Cukup total</button></div>
+    <div class="cash-track" id="eCashTrackWrap" style="display:none"><span>Ikut uang fisik di web?</span><button type="button" id="btnETrackCash" aria-pressed="false" aria-label="Ikut uang fisik di web">OFF · Pecahan tetap</button></div>
   <div id="eCashNominalWrap" style="display:none">
     <label class="field-label" for="eBayarNominal" id="eBayarLabel">Uang diberikan ke penjual (Rp)</label>
     <input type="text" id="eBayarNominal" data-uang inputmode="decimal" placeholder="Contoh: 50.000">
@@ -2021,6 +2323,40 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <button type="button" class="del" id="btnBuangEdit">Ya, batalkan</button>
   <button type="button" class="sec" id="btnLanjutEdit">Kembali mengedit</button>
 </dialog>
+
+
+
+<dialog id="dlgUangFisik" aria-labelledby="cashStockTitle">
+  <h2 id="cashStockTitle">Atur uang fisik</h2>
+  <p class="muted" style="line-height:1.6">Isi jumlah lembar atau keping yang ada di dompet sekarang. Contoh: dua lembar Rp20.000 → isi 2 pada Rp20.000.</p>
+  <div id="stokGrid" class="grid-denom"></div>
+  <p class="wallet-dialog-note" id="cashStockPreview" aria-live="polite"></p>
+  <p class="muted" style="line-height:1.5">Ini mencatat stok uang fisik, tanpa membuat pemasukan baru. Untuk mencatat uang masuk, gunakan Catat transaksi.</p>
+  <button type="button" id="btnStokSimpan">Simpan uang fisik</button>
+  <button type="button" class="sec" id="btnStockCancel">Batal</button>
+</dialog>
+
+<dialog id="dlgDompet" aria-labelledby="wltTitle">
+  <h2 id="wltTitle">Tambah dompet</h2>
+  <p class="muted" style="line-height:1.5">Beri nama yang mudah dikenali, misalnya DANA atau rekening BCA.</p>
+  <label class="field-label" for="wltNama">Nama dompet</label><input id="wltNama" type="text" maxlength="40" placeholder="Contoh: DANA">
+  <label class="field-label" for="wltJenis">Jenis dompet</label><select id="wltJenis"><option value="wallet">E-wallet</option><option value="bank">Rekening bank</option><option value="saving">Tabungan</option></select>
+  <p class="wallet-dialog-note" id="wltEditInfo">Buat nama dompet dulu. Saldo diisi melalui Catat transaksi, jadi nominal cukup dimasukkan sekali.</p>
+  <p id="wltError" role="alert"></p>
+  <button type="button" id="btnWltSave">Simpan dompet</button><button type="button" class="sec" id="btnWltCancel">Batal</button>
+</dialog>
+<dialog id="dlgTransferDompet" aria-labelledby="transferTitle">
+  <h2 id="transferTitle">Transfer antar dompet</h2>
+  <p class="muted" style="line-height:1.5">Pindahkan uangmu sendiri. Jumlah transfer tidak menjadi pengeluaran baru.</p>
+  <label class="field-label" for="transferDari">Dari dompet</label><select id="transferDari"></select>
+  <label class="field-label" for="transferKe">Ke dompet</label><select id="transferKe"></select>
+  <div class="grid2"><div><label class="field-label" for="transferJumlah">Jumlah diterima tujuan (Rp)</label><input id="transferJumlah" type="text" data-uang inputmode="decimal" placeholder="Contoh: 50.000"></div><div><label class="field-label" for="transferBiaya">Biaya admin (Rp, opsional)</label><input id="transferBiaya" type="text" data-uang inputmode="decimal" placeholder="0"></div></div>
+  <label class="field-label" for="transferTanggal">Tanggal transfer</label><input id="transferTanggal" type="date">
+  <label class="field-label" for="transferCatatan">Catatan (opsional)</label><input id="transferCatatan" type="text" maxlength="120" placeholder="Contoh: Isi DANA dari rekening">
+  <p class="wallet-dialog-note" id="transferPreview" aria-live="polite"></p><p id="transferError" role="alert"></p>
+  <button type="button" id="btnTransferSave">Simpan transfer</button><button type="button" class="sec" id="btnTransferCancel">Batal</button>
+</dialog>
+<dialog id="dlgKonfirmasiDompet" aria-labelledby="walletConfirmTitle"><h2 id="walletConfirmTitle">Batalkan perubahan?</h2><p id="walletConfirmText"></p><button type="button" class="del" id="btnWalletConfirmYes">Ya, lanjutkan</button><button type="button" class="sec" id="btnWalletConfirmNo">Kembali</button></dialog>
 
 <!-- DIALOG EDIT BERULANG -->
 <dialog id="dlgBerulang">
@@ -2238,6 +2574,8 @@ function normal(x) {
     saldoAwal: !!x.saldoAwal,
     tags: Array.isArray(x.tags) ? x.tags.map(String) : [],
     foto: x.foto || null,
+    dompetId: x.dompetId ? String(x.dompetId) : null,
+    transferDompetId: x.transferDompetId ? String(x.transferDompetId) : null,
     tunai: x.tunai || null,
     cara: x.cara === 'tunai' || x.tunai ? 'tunai' : 'nontunai'
   };
@@ -2271,6 +2609,8 @@ function muat() {
       wishlist: normalWish(v3.wishlist || []),
       budgets: v3.budgets || {},
       berulang: normalBerulang(v3.berulang),
+      dompet: normalDompet(v3.dompet),
+      transferDompet: normalTransferDompet(v3.transferDompet),
       uangFisik: v3.uangFisik && typeof v3.uangFisik === 'object' ? v3.uangFisik : null
     };
     const v2 = JSON.parse(localStorage.getItem(KEY_V2) || 'null');
@@ -2299,6 +2639,8 @@ function muatSet() {
 }
 
 let db = muat();
+db.dompet = db.dompet || [];
+db.transferDompet = db.transferDompet || [];
 let set = muatSet();
 let keranjang = JSON.parse(localStorage.getItem(KEY_KRJ) || '[]');
 let editId = null;
@@ -2333,7 +2675,7 @@ function pesanForm(teks, fokus) {
   else $('cardCatat').querySelectorAll('[aria-invalid="true"]').forEach(input => input.removeAttribute('aria-invalid'));
   if (fokus) {
     const input = typeof fokus === 'string' ? $(fokus) : fokus;
-    if (input) { input.setAttribute('aria-invalid', 'true'); input.focus(); }
+    if (input) { for (let node=input.parentElement;node;node=node.parentElement) if(node.tagName==='DETAILS') node.open=true; input.setAttribute('aria-invalid', 'true'); input.focus(); }
   }
 }
 function gagalIsi(teks, fokus) {
@@ -2348,7 +2690,7 @@ function gagalIsi(teks, fokus) {
     }
     pesan.textContent = teks;
   } else beriPesan(teks, true);
-  if (input) { input.setAttribute('aria-invalid', 'true'); input.focus(); }
+  if (input) { for (let node=input.parentElement;node;node=node.parentElement) if(node.tagName==='DETAILS') node.open=true; input.setAttribute('aria-invalid', 'true'); input.focus(); }
   return false;
 }
 document.addEventListener('input', e => {
@@ -2398,7 +2740,7 @@ function filterTr({dari='', sampai='', tipe='semua', cari=''} = {}) {
   return db.transaksi.filter(x =>
     (!a || x.tanggal >= a) && (!b || x.tanggal <= b) &&
     (tipe === 'semua' || x.tipe === tipe) &&
-    (!c || [x.judul, x.kategori, ...(x.tags || []), ...x.items.map(i => i.nama)].some(s => s.toLowerCase().includes(c))));
+    (!c || [x.judul, x.kategori, x.dompetId ? namaDompet(x.dompetId) : '', ...(x.tags || []), ...x.items.map(i => i.nama)].some(s => s.toLowerCase().includes(c))));
 }
 const sum = (list, tipe) => list.filter(x => x.tipe === tipe).reduce((s,x) => s + x.total, 0);
 const saldoTotal = () => sum(db.transaksi, 'masuk') - sum(db.transaksi, 'keluar');
@@ -2443,11 +2785,12 @@ function baris(x) {
       ? jumlahSatuan(satu) + ' ' + satu.nama + ' · total ' + rp(subtotalItem(satu))
       : jumlahSatuan(satu) + ' × ' + hargaSatuan(satu)));
   }
-  if ((x.tags && x.tags.length) || x.cara === 'tunai' || x.tunai) {
+  if ((x.tags && x.tags.length) || x.cara === 'tunai' || x.tunai || x.dompetId) {
     // lencana tunai ditampilkan di atas tag
 
     const tg = el('div', 'tags');
     if (x.cara === 'tunai' || x.tunai) tg.appendChild(el('span', 'pill', '💵 Tunai'));
+    if (x.dompetId) tg.appendChild(el('span', 'pill', (x.tipe === 'masuk' ? 'Masuk ke ' : 'Dibayar dari ') + namaDompet(x.dompetId)));
     (x.tags || []).forEach(t => tg.appendChild(el('span', 'pill', t)));
     info.appendChild(tg);
   }
@@ -2461,16 +2804,16 @@ function baris(x) {
       : 'Diberikan ke penjual: ' + rp(dibayar) + ' · Kembalian: ' + rp(kembali));
     rincian.style.marginTop = '5px';
     info.appendChild(rincian);
-    info.appendChild(el('div', 'muted', tunaiMengubahStok(x) ? 'Stok dompet ikut berubah' : 'Stok dompet tidak berubah'));
+    info.appendChild(el('div', 'muted', tunaiMengubahStok(x) ? 'Pecahan fisik ikut berubah' : 'Pecahan fisik tetap; saldo tunai mengikuti transaksi'));
   } else if (x.cara === 'tunai') {
-    info.appendChild(el('div', 'muted', 'Nominal saja · uang di dompet tidak berubah'));
+    info.appendChild(el('div', 'muted', 'Tanpa rincian pembayaran · saldo tunai mengikuti transaksi'));
   }
   top.append(info, el('span', 'amt', rp(x.total)));
   wrap.appendChild(top);
 
   const aksi = el('div', 'aksi');
   aksi.style.marginTop = '8px';
-  if (!x.saldoAwal) {
+  if (!x.saldoAwal && !x.transferDompetId) {
     const ulang = el('button', 'kecil ghost', '↻ Salin jadi baru');
     ulang.title = 'Membuat transaksi baru dari rincian ini. Transaksi lama tidak berubah.';
     ulang.onclick = () => catatLagi(x.id);
@@ -2488,7 +2831,10 @@ function baris(x) {
   edit.onclick = () => bukaEdit(x.id);
   const hapus = el('button', 'kecil del', 'Hapus');
   hapus.onclick = () => {
+    if (x.transferDompetId) return hapusTransferDompet(x.transferDompetId);
     if (confirm('Hapus transaksi ini?')) {
+      const errorDompet = cekSaldoDompet(db.transaksi.filter(t => t.id !== x.id));
+      if (errorDompet) return beriPesan(errorDompet, true);
       const stokLama = { ...db.uangFisik.stok };
       balikStokTunai(x);
       db.transaksi = db.transaksi.filter(d => d.id !== x.id);
@@ -2931,6 +3277,14 @@ let editGenerasi = 0;
 let editAwal = '';
 let editMemproses = false;
 function tunaiTerlacak(id) { return $(id).getAttribute('aria-pressed') === 'true'; }
+function rincianTunaiAktif(awalan) {
+  return tunaiTerlacak(awalan === 'e' ? 'btnECashDetails' : 'btnCashDetails');
+}
+function aturRincianTunai(awalan, aktif) {
+  const tombol = $(awalan === 'e' ? 'btnECashDetails' : 'btnCashDetails');
+  tombol.setAttribute('aria-pressed', String(aktif));
+  tombol.textContent = aktif ? 'ON · Catat rincian' : 'OFF · Cukup total';
+}
 function tunaiMengubahStok(x) {
   return !!(x?.tunai && x.tunai.lacakDompet !== false && (x.tunai.bayar || x.tunai.diterima));
 }
@@ -2940,6 +3294,7 @@ function nominalTunai(tunai, jenis) {
   return Number(tunai[properti] ?? (tunai[jenis] ? sumPecahan(tunai[jenis]) : 0));
 }
 function bacaNominalTunai(awalan, tipe, total, wajib) {
+  if (tipe === 'masuk') isiUang($(awalan + 'BayarNominal'), total || '');
   const dibayar = $(awalan + 'BayarNominal').value.trim();
   const kembalian = $(awalan + 'KembaliNominal').value.trim();
   if (!wajib && !dibayar && !kembalian) return { tunai:null };
@@ -2952,6 +3307,7 @@ function bacaNominalTunai(awalan, tipe, total, wajib) {
     { bayarNominal:bayar, kembaliNominal:kembali, lacakDompet:false } };
 }
 function tampilNominalTunai(awalan, tipe, total) {
+  if (tipe === 'masuk') isiUang($(awalan + 'BayarNominal'), total || '');
   const bayar = angkaUang($(awalan + 'BayarNominal').value);
   const kembali = tipe === 'masuk' ? 0 : angkaUang($(awalan + 'KembaliNominal').value);
   const hasil = (bayar || 0) - (kembali || 0);
@@ -2967,10 +3323,41 @@ function isiKembalianOtomatis(awalan, tipe, total) {
     isiUang($(awalan + 'KembaliNominal'), bayar - total);
   else $(awalan + 'KembaliNominal').value = '';
 }
+function sinkronNominalPecahan(awalan, target) {
+  const edit = awalan === 'e';
+  const bayarPrefix = edit ? 'epb' : 'pb', kembaliPrefix = edit ? 'epk' : 'pk';
+  const tipe = $(edit ? 'eTipe' : 'tipe').value;
+  const total = edit ? (tipe === 'masuk' ? angkaUang($('eNominalMasuk').value) || 0 : editItems.reduce((s,i) => s + subtotalItem(i), 0)) : totalForm();
+  if (target.id.startsWith(bayarPrefix + '-')) {
+    isiUang($(awalan + 'BayarNominal'), sumPecahan(bacaPecahan(bayarPrefix)));
+    isiKembalianOtomatis(awalan, tipe, total);
+  } else if (tipe === 'keluar' && target.id.startsWith(kembaliPrefix + '-')) {
+    isiUang($(awalan + 'KembaliNominal'), sumPecahan(bacaPecahan(kembaliPrefix)));
+  }
+}
+function isiTunaiTanpaDompet(awalan, tipe, total) {
+  if (!(total > 0) || !Number.isFinite(total)) return { error:'Isi total transaksi terlebih dahulu.' };
+  const bayarPrefix = awalan === 'e' ? 'epb' : 'pb', kembaliPrefix = awalan === 'e' ? 'epk' : 'pk';
+  const raw = $(awalan + 'BayarNominal').value.trim();
+  const lembar = sumPecahan(bacaPecahan(bayarPrefix));
+  const nominalSebelumnya = raw ? angkaUang(raw) : lembar;
+  if (!Number.isFinite(nominalSebelumnya) || nominalSebelumnya < 0)
+    return { error:'Isi nominal uang dengan angka 0 atau lebih, lalu coba Isi otomatis lagi.', field:awalan + 'BayarNominal' };
+  const bayar = tipe === 'masuk' ? total : Math.max(total, nominalSebelumnya);
+  const kembali = tipe === 'masuk' ? 0 : bayar - total;
+  const pb = cariPecahan(bayar, null), pk = cariPecahan(kembali, null);
+  isiUang($(awalan + 'BayarNominal'), bayar);
+  isiUang($(awalan + 'KembaliNominal'), tipe === 'masuk' ? '' : kembali);
+  isiPecahan(bayarPrefix, pb);
+  isiPecahan(kembaliPrefix, pk);
+  return { pesan:pb && pk
+    ? 'Saran pecahan terisi tanpa memakai stok dompet. Cocokkan dengan uang yang benar-benar dipakai.'
+    : 'Nominal terisi. Sebagian nilai tidak bisa dibagi ke pecahan yang tersedia, jadi rincian lembar tersebut dikosongkan.' };
+}
 function aturLacakTunai(id, aktif) {
   const tombol = $(id);
   tombol.setAttribute('aria-pressed', String(aktif));
-  tombol.textContent = aktif ? 'ON · Hitung dompet' : 'OFF · Nominal saja';
+  tombol.textContent = aktif ? 'ON · Ubah pecahan' : 'OFF · Pecahan tetap';
 }
 function sibukEdit(aktif) {
   editMemproses = aktif;
@@ -2991,7 +3378,8 @@ function keadaanEdit() {
   return JSON.stringify({
     tipe: $('eTipe').value, tanggal: $('eTgl').value, judul: $('eJudul').value,
     kategori: $('eKategori').value, tag: $('eTag').value,
-    nominal: $('eNominalMasuk').value, cara: $('eCara').value, lacakTunai: tunaiTerlacak('btnETrackCash'),
+    rincianTunai: rincianTunaiAktif('e'), nominal: $('eNominalMasuk').value, cara: $('eCara').value, lacakTunai: tunaiTerlacak('btnETrackCash'),
+    dompetDigital: $('eDigitalSelect').value,
     bayarNominal: $('eBayarNominal').value, kembaliNominal: $('eKembaliNominal').value,
     items: editItems.map(i => ({ nama:i.nama, qty:i.qty, satuan:i.satuan, harga:i.harga,
       hargaTotal:i.hargaTotal, baru:!!i.baru })), foto: editFoto,
@@ -3024,6 +3412,7 @@ $('dlgEdit').addEventListener('close', () => {
 function bukaEdit(id) {
   const x = db.transaksi.find(d => d.id === id);
   if (!x) return;
+  if (x.transferDompetId) return bukaTransferDompet(x.transferDompetId);
   editGenerasi++;
   editId = id;
   editItems = x.items.map(i => ({ ...i }));
@@ -3037,6 +3426,8 @@ function bukaEdit(id) {
   $('eTipe').value = x.tipe;
   $('eTipe').disabled = !!x.tunai;
   $('eCara').value = x.cara === 'tunai' || x.tunai ? 'tunai' : 'nontunai';
+  renderPilihanDompet('e', x.dompetId || (x.cara !== 'tunai' && !x.tunai ? '__tanpa_dompet__' : ''));
+  aturRincianTunai('e', !!x.tunai);
   aturLacakTunai('btnETrackCash', tunaiMengubahStok(x));
   isiKategoriSelect($('eKategori'), x.tipe, x.kategori);
   $('eTgl').value = x.tanggal;
@@ -3260,6 +3651,7 @@ function hitungEdit() {
   const x = db.transaksi.find(d => d.id === editId);
   $('eTotal').textContent = (x ? 'Total sebelumnya: ' + rp(x.total) + ' · ' : '') + 'Total baru: ' + rp(t);
   pratinjauTunaiEdit();
+  perbaruiDigitalUi('e');
 }
 
 function stokSetelahEdit(x, tunaiBaru, stokDompet = db.uangFisik.stok) {
@@ -3285,7 +3677,9 @@ function pratinjauTunaiEdit() {
   const x = db.transaksi.find(d => d.id === editId);
   if (!x) return;
   const tunai = $('eCara').value === 'tunai';
-  const lacak = tunai && tunaiTerlacak('btnETrackCash');
+  $('btnECashHelp').style.display = tunai ? '' : 'none';
+  const rincianAktif = tunai && rincianTunaiAktif('e');
+  const lacak = rincianAktif && tunaiTerlacak('btnETrackCash');
   $('eCashPreview').style.display = tunai || x.tunai ? '' : 'none';
   const sebelum = sumPecahan(db.uangFisik.stok);
   const bayar = bacaPecahan('epb'), kembali = bacaPecahan('epk');
@@ -3310,7 +3704,14 @@ function pratinjauTunaiEdit() {
     $('eCashMath').classList.remove('merah');
     $('eCashMath').textContent = lacak ? 'Pelacakan ON: isi pecahan dibayar atau tekan Isi otomatis sebelum menyimpan.' : '';
   }
-  $('eCashPreview').textContent = (tunai && !lacak ? 'Pelacakan OFF: nominal dibayar dan kembalian tetap tersimpan. ' : '') + 'Dompet tercatat sekarang: ' + rp(sebelum) +
+  if (!lacak && !tunaiMengubahStok(x)) {
+    $('eCashPreview').textContent = rincianAktif
+      ? 'Rincian pembayaran disimpan tanpa mengubah stok dompet.'
+      : 'Saldo tunai mengikuti total transaksi. Tidak ada rincian pembayaran; pecahan fisik tetap.';
+    return;
+  }
+  $('eCashPreview').textContent = (!lacak && tunaiMengubahStok(x)
+    ? 'Transaksi lama terhubung ke dompet. Saat disimpan, hubungan itu dilepas dan pengaruh stok lamanya dibatalkan. ' : '') + 'Dompet tercatat sekarang: ' + rp(sebelum) +
     (lacak && sumPecahan(stokDompet) !== sebelum ? ' · Dompet yang kamu isi: ' + rp(sumPecahan(stokDompet)) : '') +
     ' → sesudah menyimpan Edit: ' + rp(sumPecahan(sesudah)) +
     (DENOM.some(d => sesudah[d] < 0) ? ' · Ada pecahan yang stoknya kurang.' : '') +
@@ -3320,6 +3721,7 @@ function pratinjauTunaiEdit() {
 
 function updateEditJenis() {
   const masuk = $('eTipe').value === 'masuk';
+  document.querySelector('label[for="eCara"]').textContent = masuk ? 'Simpan uang ke' : 'Bayar menggunakan';
   $('eNominalMasuk').parentElement.style.display = masuk ? '' : 'none';
   $('eBarangJudul').style.display = masuk ? 'none' : '';
   $('eItems').style.display = masuk ? 'none' : '';
@@ -3327,26 +3729,31 @@ function updateEditJenis() {
   $('btnEScan').style.display = !masuk && editFoto ? '' : 'none';
   if (masuk) $('eScanDraft').style.display = 'none';
   const tunai = $('eCara').value === 'tunai';
-  $('eCashTrackWrap').style.display = tunai ? '' : 'none';
-  $('eCashNominalWrap').style.display = tunai ? '' : 'none';
+  const rincianAktif = tunai && rincianTunaiAktif('e');
+  const lacak = rincianAktif && tunaiTerlacak('btnETrackCash');
+  $('eCashDetailsWrap').style.display = tunai ? '' : 'none';
+  $('eCashTrackWrap').style.display = rincianAktif ? '' : 'none';
+  $('eCashNominalWrap').style.display = rincianAktif && !masuk ? '' : 'none';
   $('eKembaliNominalWrap').style.display = masuk ? 'none' : '';
   $('eBayarLabel').textContent = masuk ? 'Uang tunai diterima (Rp)' : 'Uang diberikan ke penjual (Rp)';
-  $('eCashWrap').style.display = tunai ? '' : 'none';
-  $('eStokWrap').style.display = tunaiTerlacak('btnETrackCash') ? '' : 'none';
-  $('btnEPecahOtomatis').style.display = tunaiTerlacak('btnETrackCash') ? '' : 'none';
+  $('eCashWrap').style.display = rincianAktif ? '' : 'none';
+  $('eStokWrap').style.display = lacak ? '' : 'none';
+  $('btnEPecahOtomatis').style.display = rincianAktif ? '' : 'none';
+  $('btnEPecahOtomatis').textContent = lacak ? 'Isi otomatis dari dompet' : 'Isi otomatis tanpa dompet';
   $('eCashKembaliWrap').style.display = masuk ? 'none' : '';
   $('eCashBayarLabel').textContent = masuk ? 'Uang tunai yang diterima (lembar)' : 'Dibayar pakai pecahan (lembar)';
   $('eCashInfo').textContent = tunaiTerlacak('btnETrackCash')
-    ? 'ON: rincian lembar wajib sama dengan nominal di atas dan stok dompet ikut berubah.'
-    : 'OFF: rincian lembar ini opsional. Nominal di atas tetap tersimpan, stok dompet tidak berubah.';
+    ? 'Dompet ON: rincian lembar wajib sama dengan nominal di atas dan stok dompet ikut berubah.'
+    : 'Dompet OFF: rincian lembar opsional. Isi otomatis memberi saran tanpa memakai stok dompet.';
   if (masuk && !$('eNominalMasuk').value) isiUang($('eNominalMasuk'), editItems.reduce((s,i) => s + subtotalItem(i), 0) || '');
   hitungEdit();
 }
 $('eNominalMasuk').oninput = hitungEdit;
 $('eTipe').onchange = () => { isiKategoriSelect($('eKategori'), $('eTipe').value); updateEditJenis(); };
 $('eCara').onchange = updateEditJenis;
+$('btnECashDetails').onclick = () => { aturRincianTunai('e', !rincianTunaiAktif('e')); updateEditJenis(); };
 $('btnETrackCash').onclick = () => { aturLacakTunai('btnETrackCash', !tunaiTerlacak('btnETrackCash')); updateEditJenis(); };
-$('eCashWrap').addEventListener('input', pratinjauTunaiEdit);
+$('eCashWrap').addEventListener('input', e => { sinkronNominalPecahan('e', e.target); pratinjauTunaiEdit(); });
 ['eBayarNominal','eKembaliNominal'].forEach(id => $(id).addEventListener('input', pratinjauTunaiEdit));
 $('eBayarNominal').addEventListener('input', () => {
   isiKembalianOtomatis('e', $('eTipe').value, $('eTipe').value === 'masuk'
@@ -3359,6 +3766,14 @@ $('btnEPecahOtomatis').onclick = () => {
   const total = $('eTipe').value === 'masuk' ? angkaUang($('eNominalMasuk').value) || 0
     : editItems.reduce((s,i) => s + subtotalItem(i), 0);
   if (!(total > 0)) return gagalIsi('Isi harga barang atau jumlah pemasukan terlebih dahulu.', 'btnEPecahOtomatis');
+  if (!rincianTunaiAktif('e')) return;
+  if (!tunaiTerlacak('btnETrackCash')) {
+    const hasil = isiTunaiTanpaDompet('e', $('eTipe').value, total);
+    if (hasil.error) return gagalIsi(hasil.error, hasil.field || 'btnEPecahOtomatis');
+    pratinjauTunaiEdit();
+    beriPesan(hasil.pesan);
+    return;
+  }
   if (!pecahanValid('est')) return pesanDompetEdit('Jumlah lembar uang di dompet harus angka bulat 0 atau lebih.');
   if ($('eTipe').value === 'masuk') {
     const terima = cariPecahan(total, null);
@@ -3424,14 +3839,17 @@ $('btnESimpan').onclick = () => {
     }
   }
   const totalBaru = items.reduce((s, i) => s + subtotalItem(i), 0);
+  const digital = ambilDompetForm('e', tipeBaru, totalBaru, x);
+  if (digital.error) return gagalIsi(digital.error, digital.field);
   if (tunaiMengubahStok(x) && tipeBaru !== x.tipe)
     return gagalIsi('Jenis transaksi dengan rincian pecahan tunai tidak bisa diubah.', 'eTipe');
   const caraBaru = $('eCara').value;
-  const lacakTunai = caraBaru === 'tunai' && tunaiTerlacak('btnETrackCash');
-  const nominal = caraBaru === 'tunai' ? bacaNominalTunai('e', tipeBaru, totalBaru, lacakTunai) : { tunai:null };
+  const rincianAktif = caraBaru === 'tunai' && rincianTunaiAktif('e');
+  const lacakTunai = rincianAktif && tunaiTerlacak('btnETrackCash');
+  const nominal = rincianAktif ? bacaNominalTunai('e', tipeBaru, totalBaru, lacakTunai) : { tunai:null };
   if (nominal.error) return gagalIsi(nominal.error, nominal.field);
   let tunaiBaru = nominal.tunai;
-  if (caraBaru === 'tunai' && !lacakTunai) {
+  if (rincianAktif && !lacakTunai) {
     if (!pecahanValid('epb') || !pecahanValid('epk'))
       return gagalIsi('Jumlah lembar harus angka bulat 0 atau lebih.', 'epb-500');
     const bayarLembar = bacaPecahan('epb'), kembaliLembar = bacaPecahan('epk');
@@ -3482,11 +3900,13 @@ $('btnESimpan').onclick = () => {
   x.tanggal = tgl;
   x.judul = judul;
   x.kategori = $('eKategori').value;
+  x.saldoAwal = tipeBaru === 'masuk' && x.kategori === 'Saldo awal';
   x.tags = parseTags($('eTag').value);
   x.items = items;
   x.total = totalBaru;
   x.cara = caraBaru;
   x.tunai = tunaiBaru;
+  x.dompetId = digital.dompetId;
   x.foto = editFoto;
   if (stokBaru) db.uangFisik.stok = stokBaru;
   if (!simpan()) {
@@ -3499,6 +3919,300 @@ $('btnESimpan').onclick = () => {
   renderSemua();
   beriPesan(stokBaru ? 'Transaksi dan stok uang di dompet tersimpan.' : 'Perubahan transaksi tersimpan.');
 };
+
+// ===== UANGKU DI BERANDA =====
+function pilihTabUang(tab, simpanPilihan = true, pindahFokus = false) {
+  const aktif = tab === 'nontunai' ? 'nontunai' : 'tunai';
+  [['tunai','tabMoneyCash','panelMoneyCash'],['nontunai','tabMoneyDigital','panelMoneyDigital']].forEach(([jenis,tombol,panel])=>{
+    const dipilih = jenis === aktif;
+    $(tombol).setAttribute('aria-selected',String(dipilih)); $(tombol).tabIndex = dipilih ? 0 : -1; $(panel).hidden = !dipilih;
+    if (dipilih && pindahFokus) $(tombol).focus();
+  });
+  if (simpanPilihan) { set.tabUang = aktif; try { simpanSet(); } catch (e) { /* Tab tetap dapat dipakai jika preferensi tidak tersimpan. */ } }
+}
+$('tabMoneyCash').onclick = () => pilihTabUang('tunai');
+$('tabMoneyDigital').onclick = () => pilihTabUang('nontunai');
+$('moneyTabs').addEventListener('keydown', e=>{
+  if (!['ArrowLeft','ArrowRight','Home','End'].includes(e.key)) return;
+  e.preventDefault();
+  const tab = e.key === 'Home' ? 'tunai' : e.key === 'End' ? 'nontunai' : $('tabMoneyCash').getAttribute('aria-selected') === 'true' ? 'nontunai' : 'tunai';
+  pilihTabUang(tab,true,true);
+});
+let geserUangAwal = null;
+$('moneyPanels').addEventListener('touchstart', e=>{
+  if (e.touches.length !== 1 || e.target.closest('button,input,select,textarea,a,label,summary,[contenteditable="true"]')) { geserUangAwal = null; return; }
+  geserUangAwal = { x:e.touches[0].clientX, y:e.touches[0].clientY, waktu:Date.now() };
+},{passive:true});
+$('moneyPanels').addEventListener('touchend', e=>{
+  const awal = geserUangAwal; geserUangAwal = null;
+  if (!awal || !e.changedTouches.length || e.touches.length) return;
+  const dx = e.changedTouches[0].clientX-awal.x, dy = e.changedTouches[0].clientY-awal.y;
+  if (Date.now()-awal.waktu<650 && Math.abs(dx)>70 && Math.abs(dx)>Math.abs(dy)*1.5) pilihTabUang(dx<0?'nontunai':'tunai');
+},{passive:true});
+$('moneyPanels').addEventListener('touchcancel',()=>geserUangAwal=null,{passive:true});
+function ringkasanUang(transaksi = db.transaksi) {
+  const total = bulatDompet(sum(transaksi,'masuk') - sum(transaksi,'keluar'));
+  const digital = bulatDompet([...saldoSemuaDompet(transaksi).values()].reduce((a,b)=>a+b,0));
+  const tanpaTujuan = transaksi.filter(t=>!t.dompetId && t.cara !== 'tunai' && !t.tunai);
+  const neto = bulatDompet(sum(tanpaTujuan,'masuk') - sum(tanpaTujuan,'keluar'));
+  const alokasiLama = db.dompet.reduce((a,w)=>a+(Number(w.saldoAwal)||0),0);
+  const belumDipilih = bulatDompet(neto > 0 ? Math.max(0,neto-alokasiLama) : neto);
+  return {total,digital,tunai:bulatDompet(total-digital-belumDipilih),belumDipilih,tanpaTujuan:tanpaTujuan.length};
+}
+function renderUangFisikBeranda() {
+  const stok = db.uangFisik.stok;
+  const saldo = ringkasanUang();
+  $('homeCashTotal').textContent = rp(saldo.tunai);
+  const aktif = !!set.lacakFisik;
+  $('btnHomeCashTracking').setAttribute('aria-pressed',String(aktif));
+  $('btnHomeCashTracking').textContent = aktif ? 'ON · Pakai rincian' : 'OFF · Tidak dipakai';
+  $('homeCashStock').hidden = !aktif;
+  $('homeCashTrackingInfo').textContent = aktif
+    ? 'Rincian ini opsional. Saat mencatat tunai, aktifkan rincian pembayaran untuk menyesuaikan lembar uang. Periksa stok sesuai uang yang kamu pegang.'
+    : 'Cukup catat nominal transaksi. Saldo tunai tetap berubah. Rincian lembar yang pernah disimpan tetap aman, tanpa ikut berubah.';
+  const fisik = sumPecahan(stok), beda = bulatDompet(fisik-saldo.tunai);
+  $('homeCashStockTotal').textContent = 'Jumlah pecahan tersimpan: '+rp(fisik)+'.'+(beda ? ' Berbeda dari saldo tunai '+rp(Math.abs(beda))+'. Periksa rincian jika ingin memakainya; mengatur pecahan tidak menambah saldo.' : ' Sesuai dengan saldo tunai.');
+  const info = $('homeAllocationInfo'); info.hidden = !saldo.tanpaTujuan && !saldo.belumDipilih;
+  info.textContent = 'Catatan non-tunai tanpa pilihan dompet: '+rp(saldo.belumDipilih)+'. Saldo ini tetap masuk total, terpisah dari Tunai dan Wallet. Pilih tujuan melalui Edit di Riwayat. Alokasi dompet lama tetap dipertahankan.';
+  const box = $('homeCashUnits'); box.replaceChildren();
+  DENOM.filter(d=>Number(stok[d])>0).forEach(d=>{
+    const unit = el('div','money-cash-unit'); unit.append(el('span',null,rp(d)),el('b',null,Number(stok[d])+' lembar/keping')); box.appendChild(unit);
+  });
+  $('homeCashEmpty').hidden = !!box.childElementCount;
+  box.hidden = !box.childElementCount;
+}
+let stokUangAwal = '';
+function keadaanStokUang() { return JSON.stringify(DENOM.map(d=>$('st-'+d).value)); }
+function previewStokUang() {
+  $('cashStockPreview').textContent = pecahanValid('st') ? 'Jumlah uang fisik: '+rp(sumPecahan(bacaPecahan('st')))+'. Perubahan berlaku setelah disimpan.' : 'Isi jumlah lembar/keping dengan angka bulat 0 atau lebih.';
+}
+function bukaUangFisik() {
+  isiPecahan('st',db.uangFisik.stok); $('dlgUangFisik').querySelector('.dialog-error')?.remove();
+  stokUangAwal = keadaanStokUang(); previewStokUang(); $('dlgUangFisik').showModal();
+}
+$('btnHomeCashManage').onclick = bukaUangFisik;
+$('btnCashManageForm').onclick = bukaUangFisik;
+$('btnHomeCashHelp').onclick = () => bantuan('tunai');
+$('btnHomeCashRecord').onclick = () => { $('iCara').value='tunai';updateFormPecahan();goto('catat'); };
+$('btnHomeCashAdd').onclick = () => mulaiPemasukan('tunai');
+$('btnHomeCashTracking').onclick = () => {
+  const lama = set.lacakFisik; set.lacakFisik = !lama;
+  try { simpanSet(); } catch (e) { set.lacakFisik=lama;return beriPesan('Pilihan belum tersimpan. Coba lagi.',true); }
+  aturLacakTunai('btnTrackCash',!!set.lacakFisik);
+  if (set.lacakFisik || !totalForm()) aturRincianTunai('i',!!set.lacakFisik);
+  $('iCashOptions').open=!!set.lacakFisik;updateFormPecahan();
+  renderUangFisikBeranda();
+};
+function mulaiPemasukan(cara,id='') {
+  const terapkan = () => {
+    $('tipe').value='masuk';isiKategori();$('kategori').value='Saldo awal';perbaruiPetunjukSaldoAwal();
+    $('iCara').value=cara;renderPilihanDompet('i',id);
+    updateFormJenis();updateFormPecahan();goto('catat');$('iNominalMasuk').focus();
+  };
+  if ($('iNominalMasuk').value || $('iNama').value.trim() || $('iHarga').value.trim() || keranjang.length || $('judul').value.trim()) {
+    konfirmasiDompet('Buka pemasukan saldo?','Isian transaksi yang sedang dibuat tetap disimpan di formulir. Jenis transaksi akan diganti menjadi Pemasukan.',terapkan);
+  } else terapkan();
+}
+$('btnStockCancel').onclick = () => batalWalletDialog('dlgUangFisik',keadaanStokUang()!==stokUangAwal);
+$('dlgUangFisik').addEventListener('cancel',e=>{e.preventDefault();$('btnStockCancel').click()});
+$('stokGrid').addEventListener('input',previewStokUang);
+
+// ===== DOMPET NON-TUNAI =====
+function normalDompet(list) {
+  return (Array.isArray(list) ? list : []).filter(w => w && w.id && String(w.nama || '').trim()).map(w => ({
+    id:String(w.id), nama:String(w.nama).trim().slice(0,40), jenis:['wallet','bank','saving'].includes(w.jenis) ? w.jenis : 'wallet',
+    saldoAwal:Number.isFinite(Number(w.saldoAwal)) && Number(w.saldoAwal) >= 0 ? Number(w.saldoAwal) : 0, arsip:!!w.arsip
+  }));
+}
+function normalTransferDompet(list) {
+  return (Array.isArray(list) ? list : []).filter(t => t && t.id).map(t => ({
+    id:String(t.id), dariId:String(t.dariId || ''), keId:String(t.keId || ''), jumlah:Number(t.jumlah), biaya:Number(t.biaya || 0),
+    tanggal:String(t.tanggal || ''), catatan:String(t.catatan || '').slice(0,120), ts:Number(t.ts) || 0
+  }));
+}
+const bulatDompet = n => Math.round((n + Number.EPSILON) * 100) / 100;
+function saldoSemuaDompet(transaksi = db.transaksi, transfer = db.transferDompet, dompet = db.dompet) {
+  const saldo = new Map(dompet.map(w => [w.id, Number(w.saldoAwal) || 0]));
+  transaksi.forEach(t => { if (t.dompetId && saldo.has(t.dompetId)) saldo.set(t.dompetId, saldo.get(t.dompetId) + (t.tipe === 'masuk' ? t.total : -t.total)); });
+  transfer.forEach(t => { if (saldo.has(t.dariId)) saldo.set(t.dariId, saldo.get(t.dariId) - t.jumlah); if (saldo.has(t.keId)) saldo.set(t.keId, saldo.get(t.keId) + t.jumlah); });
+  saldo.forEach((v,k) => saldo.set(k, bulatDompet(v)));
+  return saldo;
+}
+function namaDompet(id) { return db.dompet.find(w => w.id === id)?.nama || 'Dompet tidak ditemukan'; }
+function saldoDompet(id, transaksi = db.transaksi, transfer = db.transferDompet) { return saldoSemuaDompet(transaksi,transfer).get(id) || 0; }
+function cekSaldoDompet(transaksi = db.transaksi, transfer = db.transferDompet, dompet = db.dompet) {
+  const ids = new Set(dompet.map(w => w.id));
+  if (transaksi.some(t => t.dompetId && !ids.has(t.dompetId))) return 'Ada transaksi yang dompetnya tidak ditemukan. Periksa data dompet terlebih dahulu.';
+  for (const t of transfer) {
+    if (!ids.has(t.dariId) || !ids.has(t.keId) || t.dariId === t.keId || !t.tanggal || !Number.isFinite(t.jumlah) || t.jumlah <= 0 || !Number.isFinite(t.biaya) || t.biaya < 0)
+      return 'Rincian transfer antar dompet tidak valid.';
+    const biaya = transaksi.filter(x => x.transferDompetId === t.id);
+    if ((t.biaya > 0 && (biaya.length !== 1 || biaya[0].tipe !== 'keluar' || biaya[0].dompetId !== t.dariId || biaya[0].total !== t.biaya)) || (t.biaya === 0 && biaya.length))
+      return 'Biaya admin tidak cocok dengan transfernya. Periksa rincian transfer.';
+  }
+  if (transaksi.some(t => t.transferDompetId && !transfer.some(r => r.id === t.transferDompetId))) return 'Ada biaya admin tanpa catatan transfernya.';
+  const saldo = saldoSemuaDompet(transaksi,transfer,dompet);
+  const kurang = dompet.find(w => saldo.get(w.id) < 0);
+  return kurang ? 'Saldo ' + kurang.nama + ' akan kurang ' + rp(-saldo.get(kurang.id)) + '. Periksa saldo atau transaksi yang terhubung sebelum menyimpan.' : '';
+}
+function ikonDompet(jenis) {
+  const paths = jenis === 'bank' ? '<path d="m3 9 9-5 9 5M4 10h16M6 10v8m6-8v8m6-8v8M3 20h18"/>' : jenis === 'saving' ? '<circle cx="12" cy="12" r="8"/><path d="M12 7v10m3-8H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9"/>' : '<rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 9V6a2 2 0 0 1 2-2h13v2m3 6h-6v5h6"/><circle cx="17.5" cy="14.5" r=".5"/>';
+  return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + paths + '</svg>';
+}
+function renderPilihanDompet(prefix, pilihan = null) {
+  const select = $(prefix + 'DigitalSelect'); const lama = pilihan ?? select.value;
+  select.replaceChildren(new Option('Pilih dompet', ''));
+  const transaksiLama = prefix === 'e' ? db.transaksi.find(t=>t.id===editId) : null;
+  if (transaksiLama && !transaksiLama.dompetId && transaksiLama.cara !== 'tunai' && !transaksiLama.tunai)
+    select.add(new Option('Tanpa dompet (catatan sebelumnya)','__tanpa_dompet__'));
+  db.dompet.filter(w => !w.arsip || (prefix === 'e' && w.id === lama)).forEach(w => select.add(new Option(w.nama + (w.arsip ? ' (diarsipkan)' : '') + ' · ' + rp(saldoDompet(w.id)),w.id)));
+  select.value = [...select.options].some(o => o.value === lama) ? lama : '';
+}
+function totalDigitalForm(prefix) {
+  return prefix === 'e' ? ($('eTipe').value === 'masuk' ? angkaUang($('eNominalMasuk').value) || 0 : editItems.reduce((s,i) => s + subtotalItem(i),0)) : totalForm();
+}
+function ambilDompetForm(prefix, tipe, total, lama = null) {
+  const cara = $(prefix === 'e' ? 'eCara' : 'iCara').value;
+  const aktif = cara === 'nontunai';
+  const pilihan = $(prefix + 'DigitalSelect').value;
+  const warisan = prefix === 'e' && lama && !lama.dompetId && lama.cara !== 'tunai' && !lama.tunai && pilihan === '__tanpa_dompet__';
+  const id = aktif && !warisan ? pilihan : null;
+  if (aktif && !warisan) {
+    const w = db.dompet.find(w => w.id === id);
+    if (!w) return {error:'Pilih dompet, atau tambahkan dompet terlebih dahulu.',field:prefix + 'DigitalSelect'};
+    if (w.arsip && lama?.dompetId !== id) return {error:'Dompet ini diarsipkan. Pilih dompet aktif.',field:prefix + 'DigitalSelect'};
+  }
+  const kandidat = [...db.transaksi.filter(t => t.id !== lama?.id),{id:lama?.id || '__pratinjau_dompet__',tipe,total,dompetId:id,cara}];
+  const error = cekSaldoDompet(kandidat);
+  return error ? {error,field:aktif ? prefix + 'DigitalSelect' : (prefix === 'e' ? 'eCara' : 'iCara')} : {dompetId:id};
+}
+function perbaruiDigitalUi(prefix) {
+  const edit = prefix === 'e'; const nontunai = $(edit ? 'eCara' : 'iCara').value === 'nontunai';
+  const aktif = nontunai;
+  $(prefix + 'DigitalWrap').style.display = nontunai ? '' : 'none'; $(prefix + 'DigitalDetail').hidden = !aktif;
+  const tipe = $(edit ? 'eTipe' : 'tipe').value;
+  $(prefix + 'DigitalLabel').textContent = tipe === 'masuk' ? 'Masuk ke dompet' : 'Dibayar dari dompet';
+  $(prefix + 'DigitalInfo').textContent = 'Nominal cukup diisi sekali. Saldo dompet berubah setelah disimpan.';
+  const id = $(prefix + 'DigitalSelect').value, w = db.dompet.find(w => w.id === id);
+  $(prefix + 'DigitalBalance').textContent = w ? 'Saldo ' + w.nama + ' sekarang: ' + rp(saldoDompet(id)) : 'Pilih tempat uang diterima atau dibayarkan.';
+  const total = totalDigitalForm(prefix), lama = edit ? db.transaksi.find(t => t.id === editId) : null;
+  const preview = $(prefix + 'DigitalPreview'); preview.classList.remove('merah');
+  if (!aktif || !w || !(total > 0)) { preview.textContent = w ? 'Isi nominal transaksi untuk melihat saldo setelah disimpan.' : db.dompet.some(w => !w.arsip) ? '' : 'Belum ada dompet. Tekan + Tambah dompet untuk memulai.'; return; }
+  const hasil = ambilDompetForm(prefix,tipe,total,lama);
+  if (hasil.error) { preview.textContent = hasil.error; preview.classList.add('merah'); return; }
+  const kandidat = [...db.transaksi.filter(t => t.id !== lama?.id),{tipe,total,dompetId:id}];
+  preview.textContent = 'Setelah disimpan: ' + rp(saldoDompet(id,kandidat)) + (lama?.dompetId && lama.dompetId !== id ? ' · Pengaruh pada ' + namaDompet(lama.dompetId) + ' akan dibatalkan.' : '');
+}
+let walletEditId = null, walletContext = null, walletFormAwal = '', transferEditId = null, transferFormAwal = '', walletConfirmAction = null;
+function konfirmasiDompet(judul,teks,aksi) { walletConfirmAction = aksi; $('walletConfirmTitle').textContent = judul; $('walletConfirmText').textContent = teks; $('dlgKonfirmasiDompet').showModal(); }
+$('btnWalletConfirmNo').onclick = () => { walletConfirmAction = null; $('dlgKonfirmasiDompet').close(); };
+$('btnWalletConfirmYes').onclick = () => { const aksi = walletConfirmAction; walletConfirmAction = null; $('dlgKonfirmasiDompet').close(); aksi?.(); };
+$('dlgKonfirmasiDompet').addEventListener('close',()=>{ if (!$('dlgKonfirmasiDompet').open) walletConfirmAction = null; });
+function keadaanWalletForm() { return JSON.stringify(['wltNama','wltJenis'].map(id=>$(id).value)); }
+function keadaanTransferForm() { return JSON.stringify(['transferDari','transferKe','transferJumlah','transferBiaya','transferTanggal','transferCatatan'].map(id=>$(id).value)); }
+function batalWalletDialog(id,berubah) { if (berubah) konfirmasiDompet('Batalkan perubahan?','Isian yang belum disimpan akan dibuang.',()=>$(id).close()); else $(id).close(); }
+function bukaDompet(id = null,context = null) {
+  const w = db.dompet.find(w=>w.id===id); walletEditId = w?.id || null; walletContext = context;
+  $('wltTitle').textContent = w ? 'Edit dompet' : 'Tambah dompet'; $('wltNama').value = w?.nama || ''; $('wltJenis').value = w?.jenis || 'wallet';
+  $('wltEditInfo').textContent = w ? 'Saldo mengikuti riwayat transaksi. Di sini cukup ubah nama dan jenis dompet.' : 'Cukup isi nama dompet. Nominal pemasukan diisi sekali di Catat transaksi.';
+  $('wltError').textContent = ''; walletFormAwal = keadaanWalletForm(); $('dlgDompet').showModal();
+}
+$('btnWltCancel').onclick = () => batalWalletDialog('dlgDompet',keadaanWalletForm()!==walletFormAwal);
+$('dlgDompet').addEventListener('cancel',e=>{e.preventDefault();$('btnWltCancel').click()});
+$('btnWltSave').onclick = () => {
+  const nama = $('wltNama').value.trim(); if (!nama) { $('wltError').textContent = 'Nama dompet wajib diisi.'; $('wltNama').focus(); return; }
+  if (db.dompet.some(w=>w.id!==walletEditId && w.nama.toLowerCase()===nama.toLowerCase())) { $('wltError').textContent = 'Nama dompet sudah digunakan. Pilih nama lain.'; return; }
+  const sebelum = JSON.parse(JSON.stringify(db)); let w = db.dompet.find(w=>w.id===walletEditId);
+  if (w) { w.nama=nama;w.jenis=$('wltJenis').value; }
+  else { w={id:uid(),nama,jenis:$('wltJenis').value,arsip:false,saldoAwal:0};db.dompet.push(w); }
+  if (!simpan()) { db=sebelum; $('wltError').textContent='Dompet belum tersimpan. Coba lagi.'; return; }
+  const id=w.id; $('dlgDompet').close(); renderSemua();
+  if (walletContext) { renderPilihanDompet(walletContext,id);perbaruiDigitalUi(walletContext); }
+  else if (!walletEditId) mulaiPemasukan('nontunai',id);
+  beriPesan(walletEditId?'Nama dompet diperbarui.':'Dompet siap digunakan.');
+};
+function arsipDompet(id) {
+  const w=db.dompet.find(w=>w.id===id); if(!w)return;
+  if(!w.arsip && saldoDompet(id)!==0) return beriPesan('Pindahkan atau catat sisa saldo '+w.nama+' sebelum mengarsipkan.',true);
+  konfirmasiDompet(w.arsip?'Pulihkan dompet?':'Arsipkan dompet?',w.arsip?'Dompet kembali tersedia untuk transaksi baru.':'Riwayat tetap tersimpan. Dompet tidak muncul pada pilihan transaksi baru.',()=>{
+    const lama=w.arsip;w.arsip=!lama;if(!simpan()){w.arsip=lama;return}renderSemua();beriPesan(w.arsip?'Dompet diarsipkan.':'Dompet dipulihkan.');
+  });
+}
+function transaksiBiayaTransfer(t,idLama=null) {
+  return normal({id:idLama||uid(),ts:t.ts,tanggal:t.tanggal,tipe:'keluar',judul:'Biaya transfer '+namaDompet(t.dariId)+' → '+namaDompet(t.keId),kategori:'Lainnya',dompetId:t.dariId,transferDompetId:t.id,tags:['biaya admin'],items:[{nama:'Biaya admin transfer',qty:1,satuan:'',harga:t.biaya,hargaTotal:t.biaya}]});
+}
+function kandidatTransferDompet(t) {
+  const lama=db.transaksi.find(x=>x.transferDompetId===t.id);
+  const transaksi=db.transaksi.filter(x=>x.transferDompetId!==t.id);
+  if(t.biaya>0)transaksi.push(transaksiBiayaTransfer(t,lama?.id));
+  return {transaksi,transfer:[...db.transferDompet.filter(x=>x.id!==t.id),t]};
+}
+function dataTransferForm() {
+  return {id:transferEditId||'__transfer_preview__',dariId:$('transferDari').value,keId:$('transferKe').value,jumlah:angkaUang($('transferJumlah').value),biaya:angkaUang($('transferBiaya').value),tanggal:$('transferTanggal').value,catatan:$('transferCatatan').value.trim(),ts:db.transferDompet.find(t=>t.id===transferEditId)?.ts||Date.now()};
+}
+function previewTransferDompet() {
+  const t=dataTransferForm(), box=$('transferPreview');
+  if(!t.dariId||!t.keId||!(t.jumlah>0)||!Number.isFinite(t.biaya)||t.biaya<0){box.textContent='Pilih dua dompet, isi jumlah transfer, lalu periksa saldo di sini.';return}
+  const kandidat=kandidatTransferDompet(t),error=cekSaldoDompet(kandidat.transaksi,kandidat.transfer);
+  box.textContent=error||('Dari '+namaDompet(t.dariId)+': −'+rp(t.jumlah+t.biaya)+' → saldo '+rp(saldoDompet(t.dariId,kandidat.transaksi,kandidat.transfer))+'. Ke '+namaDompet(t.keId)+': +'+rp(t.jumlah)+' → saldo '+rp(saldoDompet(t.keId,kandidat.transaksi,kandidat.transfer))+'. '+(t.biaya?'Biaya '+rp(t.biaya)+' dicatat sebagai pengeluaran.':'Tanpa biaya, total saldo tetap.'));
+}
+function bukaTransferDompet(id=null) {
+  if(db.dompet.filter(w=>!w.arsip).length<2 && !id)return beriPesan('Tambahkan minimal dua dompet aktif untuk transfer.',true);
+  const t=db.transferDompet.find(t=>t.id===id);transferEditId=t?.id||null;$('transferTitle').textContent=t?'Edit transfer':'Transfer antar dompet';
+  ['transferDari','transferKe'].forEach((id,i)=>{const pilih=$(id);pilih.replaceChildren(new Option(i?'Pilih tujuan':'Pilih sumber',''));db.dompet.filter(w=>!w.arsip || w.id===t?.dariId || w.id===t?.keId).forEach(w=>pilih.add(new Option(w.nama+(w.arsip?' (diarsipkan)':''),w.id)));pilih.value=(i?t?.keId:t?.dariId)||''});
+  isiUang($('transferJumlah'),t?.jumlah??'');isiUang($('transferBiaya'),t?.biaya??'');$('transferTanggal').value=t?.tanggal||hariIni();$('transferCatatan').value=t?.catatan||'';$('transferError').textContent='';previewTransferDompet();transferFormAwal=keadaanTransferForm();$('dlgTransferDompet').showModal();
+}
+$('dlgTransferDompet').addEventListener('input',previewTransferDompet);$('dlgTransferDompet').addEventListener('change',previewTransferDompet);
+$('btnTransferCancel').onclick=()=>batalWalletDialog('dlgTransferDompet',keadaanTransferForm()!==transferFormAwal);
+$('dlgTransferDompet').addEventListener('cancel',e=>{e.preventDefault();$('btnTransferCancel').click()});
+$('btnTransferSave').onclick=()=>{
+  const t=dataTransferForm();
+  if(!t.dariId||!t.keId)return $('transferError').textContent='Pilih dompet sumber dan tujuan.';
+  if(t.dariId===t.keId)return $('transferError').textContent='Sumber dan tujuan harus berbeda.';
+  if(!(t.jumlah>0)||!Number.isFinite(t.jumlah)||!Number.isFinite(t.biaya)||t.biaya<0||!t.tanggal)return $('transferError').textContent='Isi tanggal, jumlah lebih dari 0, dan biaya 0 atau lebih.';
+  if(db.dompet.some(w=>w.arsip&&(w.id===t.dariId||w.id===t.keId)))return $('transferError').textContent='Pulihkan dompet yang diarsipkan sebelum mengubah transfer.';
+  t.id=transferEditId||uid();const kandidat=kandidatTransferDompet(t),error=cekSaldoDompet(kandidat.transaksi,kandidat.transfer);
+  if(error)return $('transferError').textContent=error;
+  const sebelum={transaksi:db.transaksi,transfer:db.transferDompet};db.transaksi=kandidat.transaksi;db.transferDompet=kandidat.transfer;
+  if(!simpan()){db.transaksi=sebelum.transaksi;db.transferDompet=sebelum.transfer;return}
+  $('dlgTransferDompet').close();renderSemua();beriPesan('Transfer tersimpan. Hanya biaya admin menjadi pengeluaran.');
+};
+function hapusTransferDompet(id) {
+  const t=db.transferDompet.find(t=>t.id===id);if(!t)return;
+  konfirmasiDompet('Hapus transfer?','Saldo kedua dompet dan biaya admin akan dikembalikan sesuai sebelum transfer.',()=>{
+    const transaksi=db.transaksi.filter(x=>x.transferDompetId!==id),transfer=db.transferDompet.filter(x=>x.id!==id),error=cekSaldoDompet(transaksi,transfer);
+    if(error)return beriPesan(error,true);
+    const lama={transaksi:db.transaksi,transfer:db.transferDompet};db.transaksi=transaksi;db.transferDompet=transfer;
+    if(!simpan()){db.transaksi=lama.transaksi;db.transferDompet=lama.transfer;return}renderSemua();beriPesan('Transfer dan biaya admin dihapus.');
+  });
+}
+function barisTransferDompet(t) {
+  const row=el('div','wallet-transfer-row');row.appendChild(el('strong',null,namaDompet(t.dariId)+' → '+namaDompet(t.keId)));
+  row.appendChild(el('div','muted',tglIndo(t.tanggal)+' · '+rp(t.jumlah)+(t.biaya?' · biaya '+rp(t.biaya):' · tanpa biaya')));if(t.catatan)row.appendChild(el('div','muted',t.catatan));
+  const aksi=el('div','aksi');aksi.style.marginTop='8px';const edit=el('button','ghost kecil','Edit');edit.type='button';edit.onclick=()=>bukaTransferDompet(t.id);const hapus=el('button','del kecil','Hapus');hapus.type='button';hapus.onclick=()=>hapusTransferDompet(t.id);aksi.append(edit,hapus);row.appendChild(aksi);return row;
+}
+function renderDompet() {
+  const saldo=saldoSemuaDompet(), jumlahSaldo=[...saldo.values()].reduce((a,b)=>a+b,0);$('walletTotal').textContent=rp(jumlahSaldo);
+  $('walletUnassignedInfo').textContent='Catat pemasukan untuk menambah saldo, atau pilih dompet saat mencatat pengeluaran.';
+  const aktif=db.dompet.filter(w=>!w.arsip),arsip=db.dompet.filter(w=>w.arsip);
+  const render=(list,id)=>{const box=$(id);box.replaceChildren();list.forEach(w=>{const row=el('div','wallet-entry'),top=el('div','wallet-entry-top'),icon=el('span','wallet-symbol');icon.innerHTML=ikonDompet(w.jenis);const nama=el('div','wallet-entry-title');nama.append(el('b',null,w.nama),el('small',null,w.jenis==='bank'?'Rekening bank':w.jenis==='saving'?'Tabungan':'E-wallet'));top.append(icon,nama,el('span','wallet-entry-amount',rp(saldo.get(w.id))));const aksi=el('div','aksi'),edit=el('button','ghost kecil','Edit nama'),archive=el('button','ghost kecil',w.arsip?'Pulihkan':'Arsipkan');edit.type=archive.type='button';edit.onclick=()=>bukaDompet(w.id);archive.onclick=()=>arsipDompet(w.id);const tambah=el('button','ghost kecil','+ Tambah saldo');tambah.type='button';tambah.onclick=()=>mulaiPemasukan('nontunai',w.id);if(!w.arsip)aksi.appendChild(tambah);aksi.append(edit,archive);row.append(top,aksi);box.appendChild(row)})};
+  render(aktif,'walletList');render(arsip,'walletArchivedList');
+  if(!aktif.length){const kosong=el('div','wallet-empty'),icon=el('span','wallet-symbol');icon.innerHTML=ikonDompet('wallet');kosong.append(icon,el('b',null,'Uangmu, tempatnya masing-masing'),el('p',null,'Tambahkan dompet pertama. Setelah itu pilih dompet saat mencatat transaksi.'));$('walletList').appendChild(kosong)}
+  $('walletArchived').hidden=!arsip.length;$('walletArchivedTitle').textContent='Diarsipkan ('+arsip.length+')';$('btnWalletTransfer').disabled=aktif.length<2;$('walletTransferHint').textContent=aktif.length<2?'Transfer tersedia setelah ada dua dompet aktif.':'Transfer memindahkan saldo antar dompet; biaya admin dicatat terpisah.';
+  const transfers=urutTerbaru(db.transferDompet);$('walletTransferDetails').hidden=!transfers.length;$('walletTransferList').replaceChildren();transfers.slice(0,5).forEach(t=>$('walletTransferList').appendChild(barisTransferDompet(t)));
+  ['i','e'].forEach(prefix=>{renderPilihanDompet(prefix);perbaruiDigitalUi(prefix)});
+}
+function renderRiwayatTransfer() {
+  let dari=$('rDari').value,sampai=$('rSampai').value;if(dari&&sampai&&dari>sampai)[dari,sampai]=[sampai,dari];const cari=$('rCari').value.trim().toLowerCase();
+  const list=$('rTipe').value!=='semua'?[]:db.transferDompet.filter(t=>(!dari||t.tanggal>=dari)&&(!sampai||t.tanggal<=sampai)&&(!cari||[namaDompet(t.dariId),namaDompet(t.keId),t.catatan].some(s=>s.toLowerCase().includes(cari))));
+  $('walletHistory').hidden=!list.length;$('walletHistoryList').replaceChildren();urutTerbaru(list).forEach(t=>$('walletHistoryList').appendChild(barisTransferDompet(t)));
+  return list.length;
+}
+$('btnWalletAdd').onclick=()=>bukaDompet();$('btnWalletTransfer').onclick=()=>bukaTransferDompet();$('btnWalletHelp').onclick=()=>bantuan('dompet');
+['i','e'].forEach(prefix=>{
+  $(prefix+'DigitalSelect').onchange=()=>perbaruiDigitalUi(prefix);$(prefix+'DigitalAdd').onclick=()=>bukaDompet(null,prefix);$(prefix+'DigitalHelp').onclick=()=>bantuan('dompet');
+});
+$('cardCatat').addEventListener('input',()=>perbaruiDigitalUi('i'));
 
 // ===== TRANSAKSI BERULANG =====
 function occurrences(r, sampaiTgl) {
@@ -3789,6 +4503,7 @@ $('btnKSimpan').onclick = () => {
 };
 
 function renderKeranjang() {
+  queueMicrotask(() => perbaruiDigitalUi('i'));
   const box = $('listKrj');
   box.innerHTML = '';
   keranjang.forEach((it, i) => {
@@ -3820,7 +4535,7 @@ function renderKeranjang() {
 }
 
 $('tipe').onchange = () => { if ($('tipe').value === 'masuk') hapusDraftScan(); isiKategori(); updateFormJenis(); updateFormPecahan(); pesanForm(''); };
-$('iNominalMasuk').oninput = () => pesanForm('');
+$('iNominalMasuk').oninput = () => { pesanForm(''); tampilNominalTunai('i','masuk',totalForm()); };
 ['iNama','iQty','iHarga'].forEach(id => $(id).addEventListener('input', () => { pesanForm(''); renderKeranjang(); }));
 $('iSatuan').onchange = () => {
   tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
@@ -3884,12 +4599,14 @@ $('btnSimpan').onclick = () => {
   const total = items.reduce((s,i) => s + subtotalItem(i), 0);
   const judul = $('judul').value.trim() || (tipe === 'masuk' ? $('kategori').value : items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
   const kat = $('kategori').value;
+  const digital = ambilDompetForm('i', tipe, total);
+  if (digital.error) return pesanForm(digital.error, digital.field);
   const tunai = ambilTunaiForm(tipe, total);
   if (tunai && tunai.error) { pesanForm(tunai.error, tunai.field); $(tunai.field || 'iCashNominalWrap').scrollIntoView({ block: 'center' }); return; }
   db.transaksi.push({
     id: uid(), ts: Date.now(), tanggal: tgl, tipe, judul, kategori: kat, items, total,
-    tags: parseTags($('tTag').value), foto: fotoForm, wishId: null, berulangId: null, saldoAwal: false,
-    tunai: tunai ? tunai.tunai : null, cara: $('iCara').value
+    tags: parseTags($('tTag').value), foto: fotoForm, wishId: null, berulangId: null, saldoAwal: tipe === 'masuk' && kat === 'Saldo awal',
+    tunai: tunai ? tunai.tunai : null, cara: $('iCara').value, dompetId: digital.dompetId
   });
   if (tunai?.stokBaru) db.uangFisik.stok = tunai.stokBaru;
   if (!simpan()) {
@@ -4367,13 +5084,14 @@ function renderBeranda() {
 }
 
 function renderRiwayat() {
+  const jumlahTransfer = renderRiwayatTransfer();
   const p = filterTr({ dari: $('rDari').value, sampai: $('rSampai').value, tipe: $('rTipe').value, cari: $('rCari').value });
   $('masuk').textContent = rp(sum(p, 'masuk'));
   $('keluar').textContent = rp(sum(p, 'keluar'));
-  $('rRingkas').textContent = 'Ditemukan ' + p.length + ' transaksi sesuai filter.';
+  $('rRingkas').textContent = 'Ditemukan ' + p.length + ' transaksi' + (jumlahTransfer ? ' dan ' + jumlahTransfer + ' transfer' : '') + ' sesuai filter.';
   const box = $('rList');
   box.innerHTML = '';
-  if (!p.length) box.appendChild(el('p', 'kosong', 'Tidak ada yang cocok.'));
+  if (!p.length) box.appendChild(el('p', 'kosong', jumlahTransfer ? 'Transfer ditampilkan pada rincian di bawah.' : 'Tidak ada yang cocok.'));
   urutTerbaru(p).forEach(x => box.appendChild(baris(x)));
 }
 
@@ -4478,6 +5196,7 @@ function renderCompare() {
 }
 
 function renderSemua() {
+  renderDompet();
   renderPanduanStatus();
   renderTempo();
   renderTunai();
@@ -4509,6 +5228,7 @@ function goto(p) {
   else $('btnNavCatat').removeAttribute('aria-current');
   window.scrollTo(0, 0);
   renderSemua();
+  gerakkanHalaman(p);
 }
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => goto(t.dataset.page));
 
@@ -4527,10 +5247,10 @@ $('btnLewatiPanduan').onclick = () => {
 
 function catatLagi(id) {
   const lama = db.transaksi.find(x => x.id === id);
-  if (!lama || lama.saldoAwal || !lama.items.length) return;
+  if (!lama || lama.saldoAwal || !lama.items.length || lama.transferDompetId) return;
   if ((keranjang.length || $('iNama').value.trim() || $('iHarga').value.trim() || $('iNominalMasuk').value ||
        $('iQty').value !== '1' || $('iSatuan').value !== '' || $('judul').value.trim() ||
-       $('tTag').value.trim() || fotoForm || $('iCara').value === 'tunai') &&
+       $('tTag').value.trim() || fotoForm || $('iDigitalSelect').value) &&
       !confirm('Form transaksi saat ini akan diganti dengan catatan ini. Lanjutkan?')) return;
   keranjang = lama.tipe === 'keluar' ? lama.items.slice(1).map(i => ({ ...i })) : [];
   simpanKrj();
@@ -4558,8 +5278,12 @@ function catatLagi(id) {
   resetPecahan();
   if (lama.cara === 'tunai' || lama.tunai) {
     $('iCara').value = 'tunai';
+    aturRincianTunai('i', !!lama.tunai);
     aturLacakTunai('btnTrackCash', tunaiMengubahStok(lama));
     updateFormPecahan();
+  }
+  if (lama.dompetId && db.dompet.some(w => w.id === lama.dompetId && !w.arsip)) {
+    $('iCara').value='nontunai';renderPilihanDompet('i', lama.dompetId);updateFormPecahan();
   }
   $('catatExtra').open = !!$('judul').value;
   pesanForm('');
@@ -4585,11 +5309,12 @@ function unduh(nama, isi, tipe) {
 
 $('btnExcel').onclick = () => {
   const esc2 = v => '"' + String(v).replace(/"/g, '""') + '"';
-  const baris = [['Tanggal','Tipe','Transaksi','Kategori','Barang','Jumlah','Satuan','Harga per Satuan','Subtotal','Tag']];
+  const baris = [['Tanggal','Tipe','Transaksi','Kategori','Barang','Jumlah','Satuan','Harga per Satuan','Subtotal','Tag','Dompet']];
   [...db.transaksi].sort((x,y) => x.tanggal.localeCompare(y.tanggal)).forEach(x => {
     x.items.forEach(i => baris.push([tglIndo(x.tanggal), x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran',
-      x.judul, x.kategori, i.nama, i.qty, i.satuan || '', i.harga, subtotalItem(i), (x.tags || []).join(' ')]));
+      x.judul, x.kategori, i.nama, i.qty, i.satuan || '', i.harga, subtotalItem(i), (x.tags || []).join(' '), x.dompetId ? namaDompet(x.dompetId) : '']));
   });
+  urutTerbaru(db.transferDompet).forEach(t => baris.push([tglIndo(t.tanggal),'Transfer',t.catatan || 'Transfer antar dompet','Perpindahan uang','',1,'',t.jumlah,t.jumlah,'',namaDompet(t.dariId) + ' → ' + namaDompet(t.keId)]));
   baris.push([]);
   baris.push(['', '', '', '', '', '', '', 'Saldo total', saldoTotal(), '']);
   const isi = '\uFEFF' + baris.map(r => r.map(esc2).join(';')).join('\r\n');
@@ -4598,7 +5323,7 @@ $('btnExcel').onclick = () => {
 
 $('btnBackup').onclick = () => {
   const isi = JSON.stringify({
-    versi: 3, transaksi: db.transaksi, wishlist: db.wishlist, budgets: db.budgets, berulang: db.berulang, uangFisik: db.uangFisik, tampilan: tampilanBackup(), katKustom: katKustom()
+    versi: 3, transaksi: db.transaksi, wishlist: db.wishlist, budgets: db.budgets, berulang: db.berulang, uangFisik: db.uangFisik, dompet: db.dompet, transferDompet: db.transferDompet, tampilan: tampilanBackup(), katKustom: katKustom()
   }, null, 2);
   unduh('backup-keuangan-' + hariIni() + '.json', isi, 'application/json');
   set.backupTerakhir = hariIni();
@@ -4610,6 +5335,7 @@ $('btnImport').onclick = () => $('fileImport').click();
 $('fileImport').onchange = async e => {
   const file = e.target.files[0];
   if (!file) return;
+  const dbSebelumImport = JSON.parse(JSON.stringify(db));
   try {
     const masuk = JSON.parse(await file.text());
     const listTr = Array.isArray(masuk) ? masuk : (masuk.transaksi || null);
@@ -4620,6 +5346,10 @@ $('fileImport').onchange = async e => {
     const idTr = new Set(db.transaksi.map(x => x.id));
     const idW = new Set(db.wishlist.map(x => x.id));
     const idB = new Set(db.berulang.map(x => x.id));
+    const idDompet = new Set(db.dompet.map(w => w.id));
+    normalDompet(masuk.dompet).forEach(w => { if (!idDompet.has(w.id)) { db.dompet.push(w); idDompet.add(w.id); } });
+    const idTransfer = new Set(db.transferDompet.map(t => t.id));
+    normalTransferDompet(masuk.transferDompet).forEach(t => { if (!idTransfer.has(t.id)) { db.transferDompet.push(t); idTransfer.add(t.id); } });
     let tambah = 0;
     listTr.forEach(x => {
       if (x && x.tanggal && !idTr.has(String(x.id))) {
@@ -4627,6 +5357,8 @@ $('fileImport').onchange = async e => {
         db.transaksi.push(n); idTr.add(n.id); tambah++;
       }
     });
+    const errorDompet = cekSaldoDompet();
+    if (errorDompet) throw new Error('dompet: ' + errorDompet);
     normalWish(listW).forEach(w => {
       if (!idW.has(w.id)) { db.wishlist.push(w); idW.add(w.id); }
     });
@@ -4657,12 +5389,14 @@ $('fileImport').onchange = async e => {
     Object.entries(budgetMasuk).forEach(([k, b]) => {
       if (!db.budgets[k] && b && b.limit) db.budgets[k] = { limit: Number(b.limit), periode: b.periode === 'bulan' ? 'bulan' : 'minggu' };
     });
-    simpan();
+    if (!simpan()) { db = dbSebelumImport; renderSemua(); e.target.value = ''; return; }
     isiPecahan('st', db.uangFisik.stok);
     renderSemua();
     alert('Import selesai. ' + tambah + ' transaksi baru ditambahkan (duplikat dilewati).');
   } catch (err) {
-    alert('File backup tidak valid.');
+    db = dbSebelumImport;
+    renderSemua();
+    alert(err.message?.startsWith('dompet: ') ? 'Import dibatalkan. ' + err.message.slice(8) : 'File backup tidak valid.');
   }
   e.target.value = '';
 };
@@ -4685,12 +5419,23 @@ const GAYA_ART = {
   spider:'<path d="M50 10v26M50 10 16 27 10 63 50 90l40-27-6-36ZM16 27l34 9 34-9M10 63l40-27 40 27M50 36v54M31 23l-4 27 23 17 23-17-4-27"/><path d="m37 50-11-9M36 57l-12 7M63 50l11-9M64 57l12 7"/>',
   orbit:'<circle cx="50" cy="50" r="25"/><ellipse cx="50" cy="50" rx="44" ry="13" transform="rotate(-27 50 50)"/><path d="M75 12v13M68.5 18.5h13M20 70v11M14.5 75.5h11"/><circle cx="24" cy="20" r="2" fill="currentColor"/>',
   sakura:'<path d="M50 43C27 3 70 3 50 43c24-40 52-4 10 6 46-4 32 37 0 12 23 39-21 45-15 8C23 106-1 72 37 58 0 56 12 15 43 43Z"/><circle cx="50" cy="53" r="7"/><path d="m65 72 17 15M75 77q14-20 16-7-2 10-16 7Z"/>',
+  aurora:"<path d=\"M14 68c12-44 19-27 30-43s15-11 17 9 12 27 26-11M14 82c16-39 25-13 36-22s13-14 15-3 9 13 21 1\"/><path d=\"m12 92 24-18 18 11 17-15 19 22M75 8v12m-6-6h12\"/>",
+  arcade:"<rect x=\"16\" y=\"12\" width=\"68\" height=\"46\" rx=\"6\"/><path d=\"m33 58-8 12M67 58l8 12M15 81c-5-20 11-25 23-16h24c12-9 28-4 23 16-4 14-12 6-19-1H34c-7 7-15 15-19 1ZM27 70v12m-6-6h12\"/><circle cx=\"68\" cy=\"71\" r=\"2\"/><circle cx=\"76\" cy=\"78\" r=\"2\"/><path d=\"m40 44 10-17 10 17\"/>",
+  botanica:"<path d=\"M50 89V48M50 61C20 61 8 42 17 20c23 1 36 16 33 41ZM50 75c30 0 42-19 33-41-23 1-36 16-33 41ZM25 30l25 31M73 44 50 75M28 91h44\"/><path d=\"M50 44c-13-16-10-30 1-35 12 8 12 25-1 35Z\"/>",
+  atelier:"<path d=\"M15 88V28h30v60M45 88V55h22v33M67 88V13h18v75M9 88h82M23 40h14M23 51h14M23 62h14\"/><circle cx=\"28\" cy=\"17\" r=\"7\"/><path d=\"m52 37 8-14 8 14Z\"/>",
+  latte:"<path d=\"M18 41h53v24c0 17-11 23-26 23S18 82 18 65ZM71 47h8c18 0 17 26-8 25M12 91h68M32 31c-12-12 12-11 0-23M48 31c-12-12 12-11 0-23M62 28c-9-9 9-9 0-18\"/>",
   ocean:'<path d="M10 66c15-21 28 12 43-7 12-15 25 6 37-10M10 82c15-21 28 12 43-7 12-15 25 6 37-10M15 45c7-20 27-29 45-20-14-1-20 13-14 24M61 12v7M78 20l-5 6"/><circle cx="78" cy="39" r="5"/>'
 };
 const KOLEKSI_GAYA = [
-  {id:'orbit',nama:'Orbit',teks:'Planet, rasi bintang, dan warna ungu kosmis. Coba animasi masuknya.',warna:['#181b30','#baa0ed','#2a2f49'],baru:true},
-  {id:'sakura',nama:'Sakura',teks:'Kertas krem, kelopak bunga, dan merah muda yang hangat.',warna:['#faf0e9','#a45b70','#fffaf4'],baru:true},
-  {id:'ocean',nama:'Ocean',teks:'Ombak, garis pantai, dan toska yang terasa tenang.',warna:['#e7f3ef','#246e79','#fbffff'],baru:true},
+  {"id": "aurora", "nama": "Aurora", "teks": "Pita cahaya mint dan ungu menari di langit, dengan kartu seperti permata.", "warna": ["#e9f3f5", "#246c74", "#fcffff"], "baru": true},
+  {"id": "arcade", "nama": "Arcade", "teks": "Senja neon, grid permainan, dan tombol konsol dengan aksen cyan.", "warna": ["#25143f", "#ed76c9", "#39214d"], "baru": true},
+  {"id": "botanica", "nama": "Botanica", "teks": "Daun sage, taman kecil, dan panel hijau yang terasa teduh.", "warna": ["#eef1e5", "#49623b", "#fffef6"], "baru": true},
+  {"id": "atelier", "nama": "Atelier", "teks": "Galeri modern: biru kobalt, bentuk arsitektur, dan garis yang tegas.", "warna": ["#eeeae1", "#284aca", "#fffcf4"], "baru": true},
+  {"id": "latte", "nama": "Latte", "teks": "Krim hangat, warna kopi, dan secangkir kecil dengan uap yang bergerak.", "warna": ["#f3e8d9", "#825739", "#fffaf2"], "baru": true},
+
+  {id:'orbit',nama:'Orbit',teks:'Planet, rasi bintang, dan warna ungu kosmis. Coba animasi masuknya.',warna:['#181b30','#baa0ed','#2a2f49']},
+  {id:'sakura',nama:'Sakura',teks:'Kertas krem, kelopak bunga, dan merah muda yang hangat.',warna:['#faf0e9','#a45b70','#fffaf4']},
+  {id:'ocean',nama:'Ocean',teks:'Ombak, garis pantai, dan toska yang terasa tenang.',warna:['#e7f3ef','#246e79','#fbffff']},
   {id:'glass',nama:'Glass',teks:'Kristal bening, pantulan cahaya, dan kartu kaca dengan foto latarmu.',warna:['#d8e5f4','#6b8ee1','#f3f7ff']},
   {id:'biasa',nama:'Biasa',teks:'Rapi dan ringan, dengan detail garis dan aksen indigo.',warna:['#edf0f7','#6776c9','#ffffff']},
   {id:'berwarna',nama:'Berwarna',teks:'Bentuk geometri ceria dan warna yang membedakan setiap ringkasan.',warna:['#f4f2fc','#8b6cc7','#ffffff']},
@@ -4704,6 +5449,149 @@ const KOLEKSI_GAYA = [
   {id:'pop',nama:'Persimmon Pop',teks:'Buah kecil, warna plum, dan aksen persik yang ceria.',warna:['#fff0e8','#743f77','#fffcf8']},
   {id:'spider',nama:'Spider',teks:'Merah, ungu, jaring halus, dan topeng hero yang sudah kamu kenal.',warna:['#f9e9dc','#ad2250','#fff9ef']}
 ];
+
+const SUASANA_GAYA = {
+  "glass": {
+    "label": "pantulan kristal dan kilau kecil",
+    "svg": "<g class=\"scene-float\"><path d=\"m112 21 57 37-17 68-40 31-40-31-17-68Z\" fill=\"#c5e5ff\" fill-opacity=\".25\"/><path d=\"m55 58 57 19 57-19M112 77v80M80 37l32 40 32-40M72 126l40-49 40 49\" stroke=\"currentColor\" stroke-width=\"2\"/></g><g class=\"scene-twinkle\"><path d=\"M183 31v22m-11-11h22M38 124v15m-8-7h16\" stroke=\"currentColor\" stroke-width=\"3\"/></g>",
+    "motif": "<path d=\"m50 12 29 26-9 36-20 15-20-15-9-36Z\"/>"
+  },
+  "biasa": {
+    "label": "garis grafik dan titik cahaya yang tenang",
+    "svg": "<g class=\"scene-float\"><path d=\"M43 137V95h24v42m13 0V68h24v69m13 0V40h24v97\" stroke=\"currentColor\" stroke-width=\"4\" stroke-linejoin=\"round\"/><path d=\"m40 68 39-29 28 11 50-28\" stroke=\"currentColor\" stroke-width=\"3\"/></g><circle class=\"scene-twinkle\" cx=\"172\" cy=\"99\" r=\"9\" fill=\"currentColor\"/>",
+    "motif": "<circle cx=\"50\" cy=\"50\" r=\"20\"/><path d=\"M20 76h60\"/>"
+  },
+  "berwarna": {
+    "label": "geometri ceria yang bergoyang",
+    "svg": "<g class=\"scene-spin\"><circle cx=\"110\" cy=\"85\" r=\"53\" stroke=\"currentColor\" stroke-dasharray=\"5 13\" stroke-width=\"2\"/></g><g class=\"scene-float\"><circle cx=\"74\" cy=\"54\" r=\"23\" fill=\"#ffce6e\"/><rect x=\"119\" y=\"39\" width=\"43\" height=\"43\" rx=\"10\" fill=\"#ae9ce8\"/><path d=\"m76 101 25 42H51Z\" fill=\"#93d8c3\"/><path d=\"M133 115h34m-17-17v34\" stroke=\"#8dc7ff\" stroke-width=\"9\"/></g>",
+    "motif": "<circle cx=\"32\" cy=\"34\" r=\"15\"/><path d=\"m65 52 20 32H45Z\"/>"
+  },
+  "neo": {
+    "label": "stiker bintang dan pola komik yang memantul",
+    "svg": "<g class=\"scene-tilt\"><path d=\"m114 13 13 36 36-18-18 36 36 14-36 12 18 36-36-18-13 36-13-36-36 18 18-36-36-12 36-14-18-36 36 18Z\" fill=\"#ff8fc8\" stroke=\"currentColor\" stroke-width=\"4\"/><path d=\"m96 80 12 13 27-31\" stroke=\"currentColor\" stroke-width=\"6\"/></g><g class=\"scene-twinkle\"><circle cx=\"178\" cy=\"30\" r=\"5\" fill=\"currentColor\"/><circle cx=\"42\" cy=\"128\" r=\"7\" fill=\"currentColor\"/></g>",
+    "motif": "<path d=\"m50 13 10 23 25-8-14 24 15 20-26-3-10 22-11-22-25 3 15-20-14-24 25 8Z\"/>"
+  },
+  "blok": {
+    "label": "mob kecil melompat dan bintang pixel",
+    "svg": "<g class=\"scene-float\"><path d=\"M70 40h75v75H70ZM85 57h12v12H85Zm34 0h12v12h-12ZM91 88h35\" stroke=\"currentColor\" stroke-width=\"5\"/></g>",
+    "motif": "<path d=\"M40 15h20v25h25v20H60v25H40V60H15V40h25Z\"/>"
+  },
+  "material": {
+    "label": "bunga geometris yang berputar pelan",
+    "svg": "<g class=\"scene-spin\"><path d=\"M110 42c-30-34-62 0-36 28-44 12-22 58 13 40-3 44 46 44 45 0 35 18 57-28 13-40 26-28-7-62-35-28Z\" fill=\"#b0d8ee\" fill-opacity=\".6\" stroke=\"currentColor\" stroke-width=\"2\"/><circle cx=\"110\" cy=\"86\" r=\"23\" stroke=\"currentColor\" stroke-width=\"3\"/></g>",
+    "motif": "<path d=\"M50 30c-20-25-38 0-20 15-30 15-7 36 10 24-2 29 25 29 23 0 22 15 39-12 13-24 15-19-9-39-26-15Z\"/>"
+  },
+  "soft": {
+    "label": "gelembung lembut yang melayang",
+    "svg": "<g class=\"scene-breathe\"><rect x=\"53\" y=\"37\" width=\"82\" height=\"82\" rx=\"32\" fill=\"currentColor\" fill-opacity=\".12\" stroke=\"currentColor\" stroke-width=\"2\"/><rect x=\"91\" y=\"67\" width=\"82\" height=\"82\" rx=\"32\" fill=\"currentColor\" fill-opacity=\".12\" stroke=\"currentColor\" stroke-width=\"2\"/></g><circle class=\"scene-float\" cx=\"173\" cy=\"34\" r=\"12\" stroke=\"currentColor\" stroke-width=\"3\"/>",
+    "motif": "<rect x=\"20\" y=\"20\" width=\"60\" height=\"60\" rx=\"24\"/>"
+  },
+  "retro": {
+    "label": "kursor terminal dan aliran titik",
+    "svg": "<rect x=\"43\" y=\"36\" width=\"137\" height=\"107\" rx=\"3\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"m65 67 21 17-21 17M105 115h40M52 46h6m6 0h6m6 0h6\" stroke=\"currentColor\" stroke-width=\"4\"/><path class=\"scene-cursor\" d=\"M119 89h19\" stroke=\"currentColor\" stroke-width=\"8\"/><g class=\"scene-flow\"><path d=\"M20 143h14m161-96h12M12 66h13\" stroke=\"currentColor\" stroke-width=\"3\"/></g>",
+    "motif": "<path d=\"m20 30 20 20-20 20M50 73h30\"/>"
+  },
+  "paper": {
+    "label": "goresan pena dan catatan yang bergoyang",
+    "svg": "<g class=\"scene-tilt\"><path d=\"M61 24h87v125H61Z\" fill=\"#fff1d2\" fill-opacity=\".23\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M76 47h57M76 62h43M76 77h49M76 92h30\" stroke=\"currentColor\" stroke-width=\"2\"/><path class=\"scene-draw\" d=\"M76 119q10-19 22 0 10 12 28-3\" stroke=\"currentColor\" stroke-width=\"3\"/><path d=\"m127 123 37-72 13 7-37 72-17 9Z\" fill=\"#efc49b\" stroke=\"currentColor\" stroke-width=\"2\"/></g>",
+    "motif": "<path d=\"m30 70 30-48 12 7-30 48-17 5Z\"/>"
+  },
+  "flat": {
+    "label": "titik kecil dan garis yang bergeser pelan",
+    "svg": "<path d=\"M57 57h115M57 86h78M57 115h42\" stroke=\"currentColor\" stroke-width=\"3\"/><circle class=\"scene-flow\" cx=\"164\" cy=\"117\" r=\"18\" fill=\"currentColor\" fill-opacity=\".35\"/>",
+    "motif": "<path d=\"M20 32h60M20 52h40M20 72h20\"/>"
+  },
+  "pop": {
+    "label": "buah persik dan daun yang bergoyang",
+    "svg": "<g class=\"scene-tilt\"><path d=\"M68 74c-38 7-16 76 35 71 48 7 74-61 39-70-23-7-51-7-74-1Z\" fill=\"#ffbb78\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M105 73c-4-17-15-32-27-31m27 31c-2-29 21-49 48-43-1 27-23 43-48 43Z\" fill=\"#b9d58d\" stroke=\"currentColor\" stroke-width=\"2\"/></g><path class=\"scene-twinkle\" d=\"M46 43v15m-8-8h16\" stroke=\"currentColor\" stroke-width=\"3\"/>",
+    "motif": "<path d=\"M29 40c-19 3-12 40 21 38 29 3 42-35 20-38-12-4-29-4-41 0ZM50 40c0-22 18-25 28-19-4 15-12 20-28 19Z\"/>"
+  },
+  "spider": {
+    "label": "laba-laba menggantung dan jaring yang mengayun",
+    "svg": "<g class=\"scene-swing\"><path d=\"M120 0v77\" stroke=\"currentColor\" stroke-width=\"2\"/><ellipse cx=\"120\" cy=\"107\" rx=\"14\" ry=\"19\" fill=\"currentColor\"/><circle cx=\"120\" cy=\"84\" r=\"9\" fill=\"currentColor\"/><path d=\"m110 90-24-14-10 15m33 9-29-1-11 14m43-1-22 13-2 19m42-54 24-14 10 15m-33 9 29-1 11 14m-43-1 22 13 2 19\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\"/></g>",
+    "motif": "<path d=\"M50 10v25M38 45l-18-10m18 20-20 6m44-16 18-10M62 55l20 6\"/><ellipse cx=\"50\" cy=\"55\" rx=\"13\" ry=\"20\"/>"
+  },
+  "orbit": {
+    "label": "planet, cincin orbit, dan bintang berkilau",
+    "svg": "<circle cx=\"111\" cy=\"86\" r=\"43\" fill=\"#b5a3ee\" fill-opacity=\".6\"/><g class=\"scene-orbit\"><ellipse cx=\"111\" cy=\"86\" rx=\"82\" ry=\"23\" stroke=\"#c8eddf\" stroke-width=\"3\" transform=\"rotate(-26 111 86)\"/><circle cx=\"183\" cy=\"52\" r=\"6\" fill=\"#d6fbec\"/></g><g class=\"scene-twinkle\"><path d=\"M55 30v16m-8-8h16M174 120v18m-9-9h18\" stroke=\"currentColor\" stroke-width=\"2\"/></g>",
+    "motif": "<path d=\"M50 13v74M13 50h74m-61-24 48 48m0-48L26 74\"/>"
+  },
+  "sakura": {
+    "label": "kelopak jatuh dan bunga yang bergoyang",
+    "svg": "<path d=\"M210 139Q148 113 108 35M174 112q-34 3-58-8\" stroke=\"#eec4c0\" stroke-width=\"4\"/><g class=\"scene-tilt\"><path d=\"M114 50c-22-35 17-44 12-11 18-33 46-7 13 6 37-3 30 31 2 12 19 31-18 38-17 10-22 22-42-5-16-15-31 0-20-28 6-2Z\" fill=\"#ffd7e2\"/><circle cx=\"126\" cy=\"53\" r=\"5\" fill=\"#ae6579\"/></g><g class=\"scene-petal\"><path d=\"M59 65q-17 3-8 15 15 4 8-15Zm33 58q-17 3-8 15 15 4 8-15Z\" fill=\"#ffdde6\"/></g>",
+    "motif": "<path d=\"M50 17c-23 7-32 33-17 54 25-4 41-29 17-54Z\"/>"
+  },
+  "ocean": {
+    "label": "ombak lembut, gelembung, dan garis pantai",
+    "svg": "<circle class=\"scene-breathe\" cx=\"127\" cy=\"52\" r=\"28\" fill=\"#f1dcae\"/><g class=\"scene-wave\"><path d=\"M18 102q27-26 55-4t55-1 55 1 55-6M18 124q27-26 55-4t55-1 55 1 55-6M18 146q27-26 55-4t55-1 55 1 55-6\" stroke=\"#c6f1e6\" stroke-width=\"7\" stroke-linecap=\"round\"/></g><circle class=\"scene-float\" cx=\"61\" cy=\"58\" r=\"7\" stroke=\"currentColor\" stroke-width=\"2\"/>",
+    "motif": "<circle cx=\"50\" cy=\"50\" r=\"22\"/><path d=\"M37 44q3-7 10-9\"/>"
+  },
+  "aurora": {
+    "label": "pita aurora yang mengalir di atas pegunungan",
+    "svg": "<g class=\"scene-aurora\"><path d=\"M33 96C66 33 56 110 93 40S141 27 150 66s29 4 55-26\" stroke=\"#80edce\" stroke-width=\"17\" stroke-linecap=\"round\" opacity=\".9\"/><path d=\"M30 116C70 51 81 148 117 67s40-10 54 10 30-7 43-6\" stroke=\"#c4a1f1\" stroke-width=\"11\" stroke-linecap=\"round\" opacity=\".8\"/></g><path d=\"m39 164 49-42 32 20 33-46 63 68\" fill=\"#a5dbe1\" fill-opacity=\".4\"/><g class=\"scene-twinkle\"><path d=\"M137 13v18m-9-9h18M49 30v12m-6-6h12\" stroke=\"#dcfff3\" stroke-width=\"2\"/></g>",
+    "motif": "<path d=\"M16 68c16-45 24-11 34-34s20-17 23 4 8 21 15 11\"/>"
+  },
+  "arcade": {
+    "label": "senja neon dan konsol yang melayang",
+    "svg": "<circle cx=\"121\" cy=\"64\" r=\"42\" fill=\"#fbb579\"/><path d=\"M68 67h106m-106 11h106m-100 11h96M7 150h206M28 130h167M59 114h105M110 103l-53 70m66-70 48 70m-55-70v70\" stroke=\"#b973cc\" stroke-width=\"3\"/><g class=\"scene-float\"><path d=\"M65 119c-18-28-37-7-31 18 6 23 23 8 32 2h52c9 6 26 21 32-2 6-25-13-46-31-18Z\" fill=\"#443060\" stroke=\"#b8f6ed\" stroke-width=\"2\"/><path d=\"M51 119v18m-9-9h18\" stroke=\"#b8f6ed\" stroke-width=\"3\"/><circle cx=\"126\" cy=\"122\" r=\"4\" fill=\"#fc8fca\"/><circle cx=\"136\" cy=\"134\" r=\"4\" fill=\"#b8f6ed\"/></g>",
+    "motif": "<path d=\"M18 36h64v42H18ZM30 46v21m-10-10h21\"/><circle cx=\"65\" cy=\"51\" r=\"4\"/>"
+  },
+  "botanica": {
+    "label": "daun yang bergoyang dan tunas yang tumbuh",
+    "svg": "<path d=\"M115 169V59\" stroke=\"#e5f1c9\" stroke-width=\"3\"/><g class=\"scene-leaf\"><path d=\"M113 105C52 101 45 65 56 36c39 5 63 35 57 69Z\" fill=\"#b7cc91\"/><path d=\"M117 143c58-4 74-36 64-69-40-1-66 26-64 69Z\" fill=\"#d4e5b4\"/><path d=\"m67 51 48 54m52-17-50 55\" stroke=\"#47735a\" stroke-width=\"2\"/></g><g class=\"scene-float\"><circle cx=\"173\" cy=\"38\" r=\"6\" fill=\"#e8d1a1\"/><path d=\"m173 38 9-11m-9 11 12 5\" stroke=\"#e8d1a1\" stroke-width=\"2\"/></g>",
+    "motif": "<path d=\"M50 86V39M49 60C24 63 17 35 24 20c23 3 28 21 25 40Zm2 16c24 2 34-22 27-39-23 1-30 18-27 39Z\"/>"
+  },
+  "atelier": {
+    "label": "bentuk galeri dan cakram yang bergeser",
+    "svg": "<g class=\"scene-flow\"><path d=\"M35 153V67h54v86m0 0V99h36v54m0 0V32h49v121\" fill=\"#b9c8fc\" fill-opacity=\".6\" stroke=\"#fff4d7\" stroke-width=\"2\"/><path d=\"M43 79h37M43 92h37M43 105h37M43 118h37M43 131h37\" stroke=\"#fff4d7\" stroke-width=\"2\"/></g><circle class=\"scene-float\" cx=\"70\" cy=\"36\" r=\"18\" fill=\"#f1d19a\"/><path d=\"m179 107 20 32h-40Z\" fill=\"#edb1a0\"/>",
+    "motif": "<path d=\"M23 80V33h28v47m0 0V16h24v64M18 80h64\"/><circle cx=\"24\" cy=\"18\" r=\"8\"/>"
+  },
+  "latte": {
+    "label": "uap kopi naik dan biji kopi bergoyang",
+    "svg": "<ellipse cx=\"110\" cy=\"147\" rx=\"72\" ry=\"12\" fill=\"#f0d4af\"/><path d=\"M58 78h99v31c0 25-19 38-49 38s-50-13-50-38Z\" fill=\"#f8e8cf\"/><path d=\"M157 86h8c30 0 28 37-11 36\" stroke=\"#f8e8cf\" stroke-width=\"9\"/><g class=\"scene-steam\"><path d=\"M84 63c-20-20 20-20 0-42m26 42c-20-20 20-20 0-42m25 37c-17-17 17-17 0-35\" stroke=\"#f8e8cf\" stroke-width=\"4\" stroke-linecap=\"round\"/></g><ellipse class=\"scene-tilt\" cx=\"184\" cy=\"153\" rx=\"10\" ry=\"15\" fill=\"#edcda3\" transform=\"rotate(35 184 153)\"/>",
+    "motif": "<ellipse cx=\"50\" cy=\"50\" rx=\"20\" ry=\"30\" transform=\"rotate(30 50 50)\"/><path d=\"M62 25Q35 43 40 75\"/>"
+  }
+};
+let suasanaTerpasang = '', timerCobaGerak;
+const preferensiGerak = window.matchMedia('(prefers-reduced-motion: reduce)');
+function gerakPenuh() { return document.documentElement.dataset.gerak === 'penuh' && !preferensiGerak.matches; }
+function bangunSuasanaGaya(id) {
+  if (suasanaTerpasang === id) return;
+  suasanaTerpasang=id;
+  const dunia=SUASANA_GAYA[id] || SUASANA_GAYA.biasa;
+  $('heroScene').innerHTML=dunia.svg;
+  const ambient=$('styleAmbient');ambient.replaceChildren();
+  for(let i=0;i<5;i++) {
+    const titik=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    titik.setAttribute('viewBox','0 0 100 100');titik.setAttribute('fill','none');titik.setAttribute('stroke','currentColor');titik.setAttribute('stroke-width','3');
+    titik.classList.add('ambient-mark');titik.style.setProperty('--i',i);titik.innerHTML=dunia.motif;ambient.appendChild(titik);
+  }
+  document.querySelector('.style-signature').title=dunia.label;
+}
+function perbaruiGerakGaya() {
+  const mode=document.documentElement.dataset.gerak || 'penuh';
+  const diam=mode==='mati'||preferensiGerak.matches;
+  $('btnCobaGerak').disabled=diam;
+  $('btnAnimasiOrbit').disabled=mode!=='penuh'||diam;
+  $('infoGerak').textContent=preferensiGerak.matches ? 'HP-mu meminta pengurangan gerakan. Dekorasi ditampilkan diam.' : mode==='penuh' ? 'Dekorasi bergerak pelan, tombol merespons sentuhan, dan halaman masuk dengan lembut.' : mode==='ringan' ? 'Dekorasi diam. Hanya transisi singkat saat membuka halaman atau mengganti gaya.' : 'Seluruh animasi gaya dimatikan. Pilihan ini tersimpan.';
+  if(!gerakPenuh())tutupIntroOrbit();
+  if(diam){$('styleReveal').hidden=true;$('styleSelected').classList.remove('coba-gerak');document.querySelectorAll('.page.masuk-halaman').forEach(p=>p.classList.remove('masuk-halaman'));}
+}
+function cobaGerakGaya() {
+  clearTimeout(timerCobaGerak);
+  if(document.documentElement.dataset.gerak==='mati'||preferensiGerak.matches||document.querySelector('dialog[open]'))return;
+  const panel=$('styleSelected'),reveal=$('styleReveal');panel.classList.remove('coba-gerak');reveal.hidden=true;
+  void panel.offsetWidth;panel.classList.add('coba-gerak');reveal.hidden=false;
+  timerCobaGerak=setTimeout(()=>{panel.classList.remove('coba-gerak');reveal.hidden=true;},1000);
+}
+function gerakkanHalaman(id) {
+  const page=$(id);if(!page||document.documentElement.dataset.gerak==='mati'||preferensiGerak.matches)return;
+  page.classList.remove('masuk-halaman');void page.offsetWidth;page.classList.add('masuk-halaman');
+}
+document.addEventListener('animationend',e=>{if(e.animationName==='gaya-page-in')e.target.classList.remove('masuk-halaman');});
+preferensiGerak.addEventListener('change',()=>perbaruiGerakGaya());
+document.addEventListener('visibilitychange',()=>{document.documentElement.toggleAttribute('data-gerak-jeda',document.hidden);if(document.hidden){tutupIntroOrbit();$('styleReveal').hidden=true;}});
+
 function isiArtGaya(svg, id) {
   svg.setAttribute('stroke','currentColor');
   svg.setAttribute('stroke-width','3');
@@ -4735,7 +5623,7 @@ let orbitIntroTimer;
 function tutupIntroOrbit() { clearTimeout(orbitIntroTimer); $('orbitIntro').hidden = true; }
 function putarIntroOrbit() {
   tutupIntroOrbit();
-  if (document.documentElement.dataset.gaya !== 'orbit' || window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.querySelector('dialog[open]')) return;
+  if (document.documentElement.dataset.gaya !== 'orbit' || !gerakPenuh() || document.querySelector('dialog[open]')) return;
   const intro = $('orbitIntro');
   intro.hidden = false; intro.style.animation = 'none';
   void intro.offsetWidth; intro.style.animation = '';
@@ -4745,10 +5633,11 @@ function perbaruiKoleksiGaya() {
   const id = document.documentElement.dataset.gaya;
   const g = KOLEKSI_GAYA.find(g => g.id === id) || KOLEKSI_GAYA.find(g => g.id === 'glass');
   $('styleSelectedName').textContent = g.nama + (g.baru ? ' · Baru' : '');
-  $('styleSelectedDesc').textContent = g.teks;
+  $('styleSelectedDesc').textContent = g.teks+' '+(SUASANA_GAYA[id]?.label || '')+'.';
   $('styleSignatureName').textContent = g.nama;
   ['styleSelectedArt','styleSignatureArt','heroStyleArt'].forEach(idSvg => isiArtGaya($(idSvg),g.id));
   warnaPratinjau($('styleSelected'),g);
+  bangunSuasanaGaya(g.id);
   document.querySelectorAll('.style-choice').forEach(t => t.setAttribute('aria-pressed', String(t.dataset.choice === g.id)));
   $('btnAnimasiOrbit').hidden = id !== 'orbit';
   if (id !== 'orbit') tutupIntroOrbit();
@@ -4759,7 +5648,7 @@ const KEY_TAMPILAN = 'catatan-tampilan-v1';
 let tampilan = (() => {
   try {
     const { beranda, ...tersimpan } = JSON.parse(localStorage.getItem(KEY_TAMPILAN) || '{}');
-    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', layout: '1', ...tersimpan };
+    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', layout: '1', gerak: 'penuh', ...tersimpan };
   } catch (e) {
     return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', layout: '1' };
   }
@@ -4814,6 +5703,8 @@ function perbaruiSetelanTersedia() {
 
 function terapkanTampilan() {
   const h = document.documentElement;
+  h.dataset.gerak = ['penuh','ringan','mati'].includes(tampilan.gerak) ? tampilan.gerak : 'penuh';
+  $('sGerak').value=h.dataset.gerak;
   h.dataset.layout = ['1', '2', '3'].includes(String(tampilan.layout)) ? String(tampilan.layout) : '1';
   $('sLayout').value = h.dataset.layout;
   const keteranganLayout = {
@@ -4828,7 +5719,7 @@ function terapkanTampilan() {
   $('infoLayout').textContent = infoLayout + ' Berlaku untuk semua gaya tampilan.';
   if ($('beranda').style.display && $('beranda').style.display !== 'none')
     $('beranda').style.display = h.dataset.layout === '1' ? 'block' : 'flex';
-  h.dataset.gaya = ['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat', 'pop', 'spider', 'orbit', 'sakura', 'ocean'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
+  h.dataset.gaya = KOLEKSI_GAYA.some(g=>g.id === tampilan.gaya) ? tampilan.gaya : 'glass';
   h.dataset.tema = h.dataset.gaya === 'retro' ? 'dark' : tampilan.tema;
   h.dataset.efek = h.dataset.gaya === 'glass' && ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'tanpa';
   $('bgLayer').style.filter = tampilan.buram ? 'blur(' + tampilan.buram + 'px)' : 'none';
@@ -4845,7 +5736,7 @@ function terapkanTampilan() {
   const kunciPalet = ['--ink','--muted','--ok','--bad','--glass','--glass-line','--navbg','--input',
     '--rowline','--track','--ghostbg','--ghostink','--pillbg','--pillink','--card-solid','--line-solid',
     '--delbg','--delink','--detline','--keranjangline','--keranjangbg','--banbg','--banink','--secbg','--sec2bg','--sec2ink'];
-  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false && !['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat', 'pop', 'spider', 'orbit', 'sakura', 'ocean'].includes(tampilan.gaya)) {
+  if (tampilan.bg && tampilan.aksen && tampilan.adaptif !== false && tampilan.gaya === 'glass') {
     const terang = tampilan.aksen.terang === true;
     h.dataset.adaptif = terang ? 'terang' : 'gelap';
     paletAdaptif(tampilan.aksen, terang, tampilan.kaca / 100, kunciPalet, h);
@@ -4861,6 +5752,7 @@ function terapkanTampilan() {
   }
   perbaruiSetelanTersedia();
   perbaruiKoleksiGaya();
+  perbaruiGerakGaya();
 }
 
 function kompresBg(file) {
@@ -4912,7 +5804,7 @@ $('sBuram').oninput = () => {
 };
 $('sBuram').onchange = () => simpanTampilan();
 bangunGaleriGaya();
-$('sGaya').value = ['biasa', 'berwarna', 'neo', 'blok', 'material', 'soft', 'retro', 'paper', 'flat', 'pop', 'spider', 'orbit', 'sakura', 'ocean'].includes(tampilan.gaya) ? tampilan.gaya : 'glass';
+$('sGaya').value = KOLEKSI_GAYA.some(g=>g.id === tampilan.gaya) ? tampilan.gaya : 'glass';
 $('sEfek').value = ['tanpa', 'sedang', 'hd', 'ultra'].includes(tampilan.efek) ? tampilan.efek : 'hd';
 $('sEfek').onchange = () => {
   tampilan.efek = $('sEfek').value;
@@ -4920,6 +5812,8 @@ $('sEfek').onchange = () => {
   terapkanTampilan();
   renderSemua();
 };
+$('sGerak').onchange=()=>{ const lama=tampilan.gerak;tampilan.gerak=$('sGerak').value;if(!simpanTampilan())tampilan.gerak=lama;terapkanTampilan(); };
+$('btnCobaGerak').onclick=()=>{ if(tampilan.gaya==='orbit')putarIntroOrbit();cobaGerakGaya(); };
 $('sGaya').onchange = () => {
   tampilan.gaya = $('sGaya').value;
   tampilkanPanduanGaya();
@@ -4927,6 +5821,7 @@ $('sGaya').onchange = () => {
   terapkanTampilan();
   renderGrafik();
   if (tampilan.gaya === 'orbit' && !$('dlgGaya').open) putarIntroOrbit();
+  cobaGerakGaya();
 };
 
 $('fBg').onchange = async e => {
@@ -5045,7 +5940,7 @@ function totalForm() {
 
 // Nominal pembayaran boleh dicatat sendiri; pecahan hanya dibutuhkan saat dompet ON.
 function ambilTunaiForm(tipe, total) {
-  if ($('iCara').value !== 'tunai') return null;
+  if ($('iCara').value !== 'tunai' || !rincianTunaiAktif('i')) return null;
   const lacak = tunaiTerlacak('btnTrackCash');
   const nominal = bacaNominalTunai('i', tipe, total, lacak);
   if (nominal.error) return nominal;
@@ -5111,33 +6006,43 @@ function balikStokTunai(x) {
 }
 
 function renderTunai() {
-  $('tunaiInfo').textContent = 'Stok uang fisik tersimpan: ' + rp(sumPecahan(db.uangFisik.stok)) + '.';
+  $('tunaiInfo').textContent = 'Pecahan sebelum transaksi ini: ' + rp(sumPecahan(db.uangFisik.stok)) + '. Untuk pemasukan, isi lembar yang diterima di rincian transaksi; stok akan ditambahkan saat disimpan.';
   updateFormPecahan();
+  renderUangFisikBeranda();
 }
 
 function updateFormPecahan() {
   const tipe = $('tipe').value;
   const tunai = $('iCara').value === 'tunai';
-  const tampilPecah = tunai && tunaiTerlacak('btnTrackCash');
-  $('iCashTrackWrap').style.display = tunai ? '' : 'none';
-  $('iCashNominalWrap').style.display = tunai ? '' : 'none';
+  $('btnCashHelp').style.display = tunai ? '' : 'none';
+  const rincianAktif = tunai && rincianTunaiAktif('i');
+  const tampilPecah = rincianAktif && tunaiTerlacak('btnTrackCash');
+  $('iCashOptions').style.display = tunai ? '' : 'none';
+  $('iCashDetailsWrap').style.display = tunai ? '' : 'none';
+  $('iCashTrackWrap').style.display = rincianAktif ? '' : 'none';
+  $('iCashNominalWrap').style.display = rincianAktif && tipe !== 'masuk' ? '' : 'none';
   $('iKembaliWrap').style.display = tipe === 'keluar' ? '' : 'none';
   $('iBayarLabel').textContent = tipe === 'masuk' ? 'Uang tunai diterima (Rp)' : 'Uang diberikan ke penjual (Rp)';
-  $('pfWrap').style.display = tunai ? 'block' : 'none';
-  $('btnPecahOtomatis').style.display = tampilPecah ? '' : 'none';
+  $('pfWrap').style.display = rincianAktif ? 'block' : 'none';
+  $('btnPecahOtomatis').style.display = rincianAktif ? '' : 'none';
+  $('btnPecahOtomatis').textContent = tampilPecah ? 'Isi otomatis dari dompet' : 'Isi otomatis tanpa dompet';
   $('cardTunai').style.display = tampilPecah ? '' : 'none';
   $('iCaraInfo').style.display = tunai ? '' : 'none';
-  $('iCaraInfo').textContent = tampilPecah
+  $('iCaraInfo').textContent = !rincianAktif
+    ? 'Langsung simpan. Saldo tunai otomatis bertambah atau berkurang; rincian lembar tidak diperlukan.'
+    : tampilPecah
     ? 'ON: isi jumlah lembar yang benar atau tekan Isi otomatis. Stok uang di dompet akan ikut berubah saat transaksi disimpan.'
-    : 'OFF: isi uang yang diberikan dan kembalian tanpa mengubah stok dompet. Keduanya boleh kosong jika hanya ingin mencatat total belanja.';
+    : 'Dompet OFF: catat uang yang diberikan dan kembalian, atau gunakan Isi otomatis. Stok dompet tetap.';
   $('pkWrap').style.display = tipe === 'keluar' ? 'block' : 'none';
   $('pfLabel').textContent = tipe === 'masuk' ? 'Uang tunai yang diterima (lembar)' : 'Dibayar pakai pecahan (lembar)';
   $('pfInfo').textContent = tampilPecah ? 'Rincian lembar wajib sama dengan nominal pembayaran di atas.' : 'Rincian lembar opsional. Kosongkan jika hanya ingin mencatat nominal rupiah.';
   tampilNominalTunai('i', tipe, totalForm());
+  perbaruiDigitalUi('i');
 }
 
 function updateFormJenis() {
   const masuk = $('tipe').value === 'masuk';
+  document.querySelector('label[for="iCara"]').textContent = masuk ? 'Simpan uang ke' : 'Bayar menggunakan';
   $('formKeranjang').style.display = masuk ? 'none' : '';
   $('iNominalMasuk').parentElement.style.display = masuk ? '' : 'none';
   $('btnKosongkan').style.display = masuk ? 'none' : '';
@@ -5149,8 +6054,11 @@ function updateFormJenis() {
 function resetPecahan() {
   DENOM.forEach(d => { $('pb-' + d).value = ''; $('pk-' + d).value = ''; });
   $('iBayarNominal').value = $('iKembaliNominal').value = '';
-  $('iCara').value = 'nontunai';
-  aturLacakTunai('btnTrackCash', false);
+  $('iCara').value = 'tunai';
+  $('iDigitalSelect').value = '';
+  aturRincianTunai('i', !!set.lacakFisik);
+  aturLacakTunai('btnTrackCash', !!set.lacakFisik);
+  $('iCashOptions').open = !!set.lacakFisik;
   updateFormPecahan();
 }
 
@@ -5170,10 +6078,16 @@ $('btnStokSimpan').onclick = () => {
   const sebelumnya = db.uangFisik;
   db.uangFisik = { aktif: true, stok: bacaPecahan('st') };
   if (!simpan()) { db.uangFisik = sebelumnya; return; }
+  $('dlgUangFisik').close();
   renderSemua();
   beriPesan('Stok uang fisik tersimpan.');
 };
 $('iCara').onchange = updateFormPecahan;
+$('btnCashDetails').onclick = () => { aturRincianTunai('i', !rincianTunaiAktif('i')); updateFormPecahan(); };
+['pbGrid','pkGrid'].forEach(id => $(id).addEventListener('input', e => {
+  sinkronNominalPecahan('i', e.target);
+  tampilNominalTunai('i', $('tipe').value, totalForm());
+}));
 $('btnTrackCash').onclick = () => { aturLacakTunai('btnTrackCash', !tunaiTerlacak('btnTrackCash')); updateFormPecahan(); };
 ['iBayarNominal','iKembaliNominal'].forEach(id => $(id).addEventListener('input', () => tampilNominalTunai('i', $('tipe').value, totalForm())));
 $('iBayarNominal').addEventListener('input', () => {
@@ -5181,8 +6095,15 @@ $('iBayarNominal').addEventListener('input', () => {
   tampilNominalTunai('i', $('tipe').value, totalForm());
 });
 $('btnPecahOtomatis').onclick = () => {
-  if (!tunaiTerlacak('btnTrackCash')) return;
+  if (!rincianTunaiAktif('i')) return;
   const total = totalForm();
+  if (!tunaiTerlacak('btnTrackCash')) {
+    const hasil = isiTunaiTanpaDompet('i', $('tipe').value, total);
+    if (hasil.error) return pesanForm(hasil.error, hasil.field || 'btnPecahOtomatis');
+    tampilNominalTunai('i', $('tipe').value, total);
+    beriPesan(hasil.pesan);
+    return;
+  }
   if (!total) { alert('Isi nominal transaksi dulu supaya total diketahui.'); return; }
   if ($('tipe').value === 'masuk') {
     const pecah = total % 500 === 0 ? cariPecahan(total, null) : null;
@@ -5537,6 +6458,8 @@ function buatBackupObjek() {
     budgets: db.budgets,
     berulang: db.berulang,
     uangFisik: db.uangFisik,
+    dompet: db.dompet,
+    transferDompet: db.transferDompet,
     tampilan: tampilanBackup(),
     katKustom: katKustom()
   };
@@ -5858,9 +6781,14 @@ function renderMingguan() {
 
 // ===== PANDUAN GAYA (pop-up sekali per gaya) DAN CARA PAKAI FITUR =====
 const PANDUAN_GAYA = {
-  orbit: { judul:'Gaya Orbit', teks:'Planet dan rasi bintang menemani kartu bernuansa ungu. Tersedia tema terang dan gelap.\n\nAda animasi masuk singkat dan perpindahan halaman yang lembut, khusus gaya ini. Coba ulang melalui tombol Putar animasi Orbit di Setelan. Animasi mengikuti pengaturan pengurangan gerakan di perangkatmu.' },
-  sakura: { judul:'Gaya Sakura', teks:'Kartu seperti kertas hangat, kelopak bunga, dan warna merah muda. Tema gelap memakai nuansa plum yang lembut.\n\nGaya ini memakai dekorasi statis agar catatan tetap nyaman dibaca. Font tetap mengikuti pilihanmu.' },
-  ocean: { judul:'Gaya Ocean', teks:'Biru laut dan toska dengan garis ombak serta pola pantai. Tema gelap terasa seperti laut malam.\n\nGaya ini memakai dekorasi statis. Kamu tetap bisa memilih tata letak dan font yang disukai.' },
+  aurora:{judul:"Gaya Aurora",teks:"Pita cahaya mint dan ungu menari di langit, dengan kartu seperti permata. Tersedia tema terang, gelap, dan otomatis. Atur gerak di Animasi gaya; foto latar khusus Glass."},
+  arcade:{judul:"Gaya Arcade",teks:"Senja neon, grid permainan, dan tombol konsol dengan aksen cyan. Tersedia tema terang, gelap, dan otomatis. Atur gerak di Animasi gaya; foto latar khusus Glass."},
+  botanica:{judul:"Gaya Botanica",teks:"Daun sage, taman kecil, dan panel hijau yang terasa teduh. Tersedia tema terang, gelap, dan otomatis. Atur gerak di Animasi gaya; foto latar khusus Glass."},
+  atelier:{judul:"Gaya Atelier",teks:"Galeri modern: biru kobalt, bentuk arsitektur, dan garis yang tegas. Tersedia tema terang, gelap, dan otomatis. Atur gerak di Animasi gaya; foto latar khusus Glass."},
+  latte:{judul:"Gaya Latte",teks:"Krim hangat, warna kopi, dan secangkir kecil dengan uap yang bergerak. Tersedia tema terang, gelap, dan otomatis. Atur gerak di Animasi gaya; foto latar khusus Glass."},
+  orbit: { judul:'Gaya Orbit', teks:'Planet dan rasi bintang menemani kartu bernuansa ungu. Tersedia tema terang dan gelap.\n\nAda animasi masuk singkat dan perpindahan halaman yang lembut, bersama gerakan cincin planet. Coba ulang melalui tombol Putar animasi Orbit di Setelan. Animasi mengikuti pengaturan pengurangan gerakan di perangkatmu.' },
+  sakura: { judul:'Gaya Sakura', teks:'Kartu seperti kertas hangat, kelopak bunga, dan warna merah muda. Tema gelap memakai nuansa plum yang lembut.\n\nKelopak bunga kini bergerak pelan di tepi layar. Font tetap mengikuti pilihanmu.' },
+  ocean: { judul:'Gaya Ocean', teks:'Biru laut dan toska dengan garis ombak serta pola pantai. Tema gelap terasa seperti laut malam.\n\nOmbak dan gelembung kini bergerak lembut. Kamu tetap bisa memilih tata letak dan font yang disukai.' },
   glass: { judul: 'Gaya Glass', teks:
     'Kartu dan navigasi berupa kaca transparan.\nBisa memasang latar gambar dan mengatur buramnya.\nWarna teks dan tombol bisa mengikuti foto latar (mode Adaptif).\n\nCara pakai: pasang foto di Latar belakang, lalu atur Transparansi dan Kualitas efek sesuai HP kamu.' },
   biasa: { judul: 'Gaya Biasa', teks:
@@ -5895,15 +6823,15 @@ function tampilkanPanduanGaya() {
   simpanSet();
   const pan = PANDUAN_GAYA[g] || PANDUAN_GAYA.glass;
   $('dlgGayaJudul').textContent = pan.judul;
-  $('dlgGayaTeks').textContent = pan.teks;
+  $('dlgGayaTeks').textContent = pan.teks+'\n\nGerak: '+(SUASANA_GAYA[g]?.label || 'dekorasi lembut')+'. Animasi bisa dikurangi atau dimatikan di Setelan → Animasi gaya.';
   $('dlgGaya').showModal();
 }
 $('btnGayaOk').onclick = () => $('dlgGaya').close();
-$('dlgGaya').addEventListener('close', () => { if (tampilan.gaya === 'orbit') putarIntroOrbit(); });
+$('dlgGaya').addEventListener('close', () => { if (tampilan.gaya === 'orbit') putarIntroOrbit();cobaGerakGaya(); });
 
 const BANTUAN = {
-  tunai: { judul: 'Cara pakai: Uang tunai', teks:
-    'Di form Catat transaksi pilih Tunai. OFF · Nominal saja: transaksi tetap tunai, saldo berubah, dan stok dompet tidak berubah. ON · Hitung dompet: isi jumlah lembar yang kamu pegang sekarang di Isi uang fisik di dompet, lalu tekan Simpan stok uang fisik. Setelah itu isi pecahan dibayar dan kembalian atau tekan Isi otomatis. Di Edit Riwayat, stok dompet dan transaksi disimpan bersama saat menekan Simpan perubahan.' },
+  dompet: { judul:'Cara pakai: Wallet', teks:'1. Di Catat transaksi, isi nominal lalu pilih Wallet / non-tunai dan nama dompet, misalnya DANA atau rekening BCA. Jika belum ada, tekan + Tambah dompet. Cukup nama dan jenis; nominal tidak perlu diisi ulang.\n\n2. Untuk uang yang sudah dimiliki, pilih Pemasukan → Saldo awal. Catat sekali saja. Pemasukan menambah saldo dompet; pengeluaran menguranginya.\n\n3. Di Beranda → Uangku → Wallet, tombol + Tambah saldo membuka formulir pemasukan yang sama.\n\n4. Transfer antar dompet memindahkan uang sendiri. Hanya biaya admin menjadi pengeluaran. Saldo Wallet sudah termasuk dalam total saldo aplikasi.\n\nCatatan lama tanpa pilihan dompet tetap aman dan ditampilkan sebagai Belum dipilih. Gunakan Edit di Riwayat untuk menentukan tujuan tanpa membuat pemasukan ganda.' },
+  tunai: { judul:'Cara pakai: Tunai', teks:'1. Isi nominal transaksi lalu pilih Tunai. Langsung simpan; tidak wajib mengisi jumlah lembar atau kembalian. Saldo tunai otomatis mengikuti pemasukan dan pengeluaran.\n\n2. Untuk saldo pertama, tekan + Tambah saldo di Beranda atau pilih Pemasukan → Saldo awal. Masukkan uang yang sudah dimiliki sekali saja.\n\n3. Rincian uang fisik disembunyikan di Beranda → Tunai → Rincian uang fisik. Aktifkan ON jika ingin menyimpan jumlah lembar/keping. Mematikan fitur tidak menghapus pecahan yang pernah disimpan.\n\n4. Saat mencatat transaksi, Catat rincian tunai bisa diaktifkan jika ingin mengetahui pembayaran dan kembalian. Ikut uang fisik ON menyesuaikan pecahan saat disimpan; OFF hanya mencatat pembayaran. Isi otomatis memberi saran yang perlu diperiksa.\n\nMengatur pecahan hanya mencatat lembar uang; tidak menambah saldo. Jika berbeda dengan saldo tunai, periksa stok dan catatan transaksi. Saat mengedit transaksi lama, periksa pratinjau perubahan pecahan.' },
   berulang: { judul: 'Cara pakai: Transaksi berulang', teks:
     '1. Isi nama, jumlah, satuan, harga per satuan, periode (bulan atau minggu), dan tanggal mulai.\n2. Saat jatuh tempo, muncul di kartu Perlu dicatat.\n3. Tekan Catat untuk mencatatnya, Lewati untuk melewatinya, atau Catat semua.\n\nEdit dan Hapus di sini hanya mengubah transaksi berulangnya, bukan catatan yang sudah tercatat.' },
   target: { judul: 'Cara pakai: Target tabungan', teks:
@@ -5922,12 +6850,16 @@ function bantuan(k) {
   $('dlgBantuan').showModal();
 }
 $('btnBantuanOk').onclick = () => $('dlgBantuan').close();
+$('btnCashHelp').onclick = () => bantuan('tunai');
+$('btnECashHelp').onclick = () => bantuan('tunai');
 
 // Beranda berisi ringkasan dan rencana; formulir transaksi memakai halaman tersendiri.
 function susunBeranda() {
   const catat = $('cardCatat');
   document.querySelector('.pixel-mobs').after($('cardMingguan'));
   $('cardMingguan').after($('btnBerandaCatat'));
+  $('cardMingguan').after($('homeMoney'));
+  pilihTabUang(set.tabUang, false);
   $('catat').appendChild(catat);
 
   const tambahan = el('details', 'quick-extra');
@@ -5965,6 +6897,7 @@ function susunBeranda() {
 // ===== INISIALISASI =====
 pasangLabelForm();
 susunBeranda();
+resetPecahan();
 updateFormJenis();
 updateFormPecahan();
 tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
