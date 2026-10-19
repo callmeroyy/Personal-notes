@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" id="financeApp" data-ui="ruang">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -1761,17 +1761,357 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   .chart-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
   .chart-summary > div:last-child{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px}
   .chart-summary > div:last-child b{margin-top:0}
+
+  /* Ruang Ide: kertas krem, sage lembut, dan angka yang mendapat ruang. */
+  html[data-gaya="ruangide"]{
+    color-scheme:light;
+    --ri-bg:#f8f7f2;--ri-card:#fffefa;--ri-input:#f7f7f0;--ri-ink:#292d25;--ri-muted:#656d5f;
+    --ri-line:#e0e3d7;--ri-soft:#efeee6;--ri-lime:#d9ed92;--ri-lime-ink:#283411;
+    --ri-primary:#2a3025;--ri-on-primary:#fffefa;--ri-hero:#e4edce;--ri-hero-ink:#293524;
+    --ri-masuk:#edf2e3;--ri-keluar:#f6e9df;--ri-week:#fff5d5;--ri-del:#fbe9e6;--ri-del-ink:#a3433b;
+    --ri-ok:#416c40;--ri-bad:#a34840;--ri-shadow:0 4px 18px #343d2210;
+    --ri-display:var(--font,system-ui,sans-serif);
+    --bg:var(--ri-bg);--card:var(--ri-card);--card-solid:var(--ri-card);--glass:var(--ri-card);
+    --ink:var(--ri-ink);--muted:var(--ri-muted);--line:var(--ri-line);--line-solid:var(--ri-line);--glass-line:var(--ri-line);
+    --input:var(--ri-input);--rowline:var(--ri-line);--ghostbg:var(--ri-soft);--ghostink:var(--ri-ink);
+    --pillbg:var(--ri-soft);--pillink:var(--ri-ink);--keranjangbg:var(--ri-input);--keranjangline:var(--ri-line);
+    --delbg:var(--ri-del);--delink:var(--ri-del-ink);--track:var(--ri-line);--detline:var(--ri-line);
+    --banbg:var(--ri-week);--banink:var(--ri-ink);--secbg:var(--ri-soft);--sec2bg:var(--ri-soft);--sec2ink:var(--ri-ink);
+    --pri:var(--ri-primary);--pri2:#798b59;--ok:var(--ri-ok);--bad:var(--ri-bad);--r:21px;
+    --navbg:var(--ri-card);--shadow:var(--ri-shadow);
+    --gal-card:var(--ri-card);--gal-ink:var(--ri-ink);--gal-muted:var(--ri-muted);--gal-line:var(--ri-line);--gal-soft:var(--ri-soft);--gal-accent:var(--ri-ink);
+    background:var(--ri-bg) !important;
+  }
+  html[data-gaya="ruangide"][data-tema="dark"]{
+    color-scheme:dark;
+    --ri-bg:#1c211d;--ri-card:#252b25;--ri-input:#20271f;--ri-ink:#edf0e7;--ri-muted:#aeb7a6;
+    --ri-line:#3b4438;--ri-soft:#30372f;--ri-lime:#d2e58c;--ri-lime-ink:#283411;
+    --ri-primary:#d2e58c;--ri-on-primary:#232a1c;--ri-hero:#33402c;--ri-hero-ink:#edf0e7;
+    --ri-masuk:#2d3b2b;--ri-keluar:#42342e;--ri-week:#3d3928;--ri-del:#482d2a;--ri-del-ink:#f8b2a7;
+    --ri-ok:#b4ce98;--ri-bad:#f0a39b;--ri-shadow:0 4px 18px #00000018;
+  }
+  @media(prefers-color-scheme:dark){
+    html[data-gaya="ruangide"][data-tema="auto"]{
+      color-scheme:dark;
+      --ri-bg:#1c211d;--ri-card:#252b25;--ri-input:#20271f;--ri-ink:#edf0e7;--ri-muted:#aeb7a6;
+      --ri-line:#3b4438;--ri-soft:#30372f;--ri-lime:#d2e58c;--ri-lime-ink:#283411;
+      --ri-primary:#d2e58c;--ri-on-primary:#232a1c;--ri-hero:#33402c;--ri-hero-ink:#edf0e7;
+      --ri-masuk:#2d3b2b;--ri-keluar:#42342e;--ri-week:#3d3928;--ri-del:#482d2a;--ri-del-ink:#f8b2a7;
+      --ri-ok:#b4ce98;--ri-bad:#f0a39b;--ri-shadow:0 4px 18px #00000018;
+    }
+  }
+  html[data-gaya="ruangide"][data-font="sistem"]{--ri-display:Georgia,"Times New Roman",serif}
+  html[data-gaya="ruangide"] body{background:transparent !important;padding-bottom:calc(120px + env(safe-area-inset-bottom));color:var(--ri-ink)}
+  html[data-gaya="ruangide"] body::before{display:none !important}
+  html[data-gaya="ruangide"] #bgLayer,html[data-gaya="ruangide"] #styleAmbient{display:none !important}
+  html[data-gaya="ruangide"] #styleDecor{background:none;opacity:1}
+  html[data-gaya="ruangide"] #styleDecor::before{width:210px;height:210px;right:-165px;top:15%;border:1px solid var(--ri-line);border-radius:50%;box-shadow:0 0 0 20px var(--ri-bg),0 0 0 21px var(--ri-line);background:none;animation:none !important}
+  html[data-gaya="ruangide"] #styleDecor::after{display:none}
+  html[data-gaya="ruangide"] header.top{background:transparent;color:var(--ri-ink);padding:29px 22px 18px;box-shadow:none;border:0}
+  html[data-gaya="ruangide"] .title-money{display:none}
+  html[data-gaya="ruangide"] header.top h1{font-family:var(--ri-display);font-size:clamp(26px,6.5vw,34px);font-weight:400;letter-spacing:-1.1px;line-height:1.2;color:var(--ri-ink);text-shadow:none}
+  html[data-gaya="ruangide"] header.top p{font-size:12px;margin-top:8px;color:var(--ri-muted)}
+  html[data-gaya="ruangide"] .style-signature{background:var(--ri-hero);color:var(--ri-hero-ink);border:0;border-radius:9px;letter-spacing:1.4px;font-size:9px;font-weight:600;padding:7px 10px;margin-top:13px}
+  html[data-gaya="ruangide"] main{padding:0 18px}
+  html[data-gaya="ruangide"] :is(.card,.stat,dialog){background:var(--ri-card) !important;color:var(--ri-ink);border:1px solid var(--ri-line) !important;border-radius:21px !important;box-shadow:var(--ri-shadow) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+  html[data-gaya="ruangide"] .card{padding:21px;margin-bottom:17px}
+  html[data-gaya="ruangide"] :is(h2,h3){color:var(--ri-ink);letter-spacing:-.3px}
+  html[data-gaya="ruangide"] h2{font-size:16px;font-weight:650}
+  html[data-gaya="ruangide"] .field-label{color:var(--ri-muted);font-weight:600;font-size:12px}
+  html[data-gaya="ruangide"] :is(.sub,.muted){line-height:1.65}
+  html[data-gaya="ruangide"] #beranda .saldo-hero{background:var(--ri-hero) !important;color:var(--ri-hero-ink) !important;border:1px solid var(--ri-line);border-radius:24px;box-shadow:none !important;padding:24px 23px 20px;backdrop-filter:none;-webkit-backdrop-filter:none}
+  html[data-gaya="ruangide"] .saldo-hero :is(.lbl,.mini,b){color:var(--ri-hero-ink) !important;text-shadow:none}
+  html[data-gaya="ruangide"] .saldo-hero .lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.7px;opacity:.8}
+  html[data-gaya="ruangide"] .saldo-hero b{font-size:clamp(29px,7.5vw,38px);font-weight:550;letter-spacing:-1.3px;line-height:1.25;margin:10px 0 16px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+  html[data-gaya="ruangide"] #beranda .saldo-hero .mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:4px;padding-top:15px;border-top:1px solid var(--ri-line);font-size:10px;opacity:1}
+  html[data-gaya="ruangide"] #beranda .saldo-hero .mini > span{white-space:normal;line-height:1.6;overflow-wrap:anywhere}
+  html[data-gaya="ruangide"] #beranda .saldo-hero .mini > span > span{display:block;font-size:13px;font-weight:650;margin-top:4px;font-variant-numeric:tabular-nums}
+  html[data-gaya="ruangide"] #beranda .saldo-hero > #heroScene{width:113px;height:105px;right:5px;top:2px;opacity:.22;mask-image:linear-gradient(90deg,transparent,#000 25%);animation:none !important}
+  html[data-gaya="ruangide"] #heroScene *{animation:none !important}
+  html[data-gaya="ruangide"] .saldo-hero::before,html[data-gaya="ruangide"] .saldo-hero::after{display:none !important}
+  html[data-gaya="ruangide"] .stat{padding:15px 14px;box-shadow:none !important;border-radius:16px !important}
+  html[data-gaya="ruangide"] .stat::before{display:none}
+  html[data-gaya="ruangide"] .stat.s-masuk{background:var(--ri-masuk) !important}
+  html[data-gaya="ruangide"] .stat.s-keluar{background:var(--ri-keluar) !important}
+  html[data-gaya="ruangide"] .stat .lbl{font-size:11px}
+  html[data-gaya="ruangide"] .stat b{font-weight:650;letter-spacing:-.2px;font-variant-numeric:tabular-nums}
+  html[data-gaya="ruangide"] #cardMingguan{background:var(--ri-week) !important;border-color:var(--ri-line) !important;box-shadow:none !important}
+  html[data-gaya="ruangide"] #cardMingguan h2{font-family:var(--ri-display);font-size:21px;font-weight:400;line-height:1.35}
+  html[data-gaya="ruangide"] #teksMingguan{font-size:12px;line-height:1.8}
+  html[data-gaya="ruangide"] button:not(.tab):not(.nav-plus){background:var(--ri-primary);color:var(--ri-on-primary);box-shadow:none;border:1px solid transparent;border-radius:12px;font-size:14px;font-weight:600;text-shadow:none}
+  html[data-gaya="ruangide"] button:not(.tab):is(.ghost,.sec){background:var(--ri-soft);color:var(--ri-ink)}
+  html[data-gaya="ruangide"] button:not(.tab).del{background:var(--ri-del);color:var(--ri-del-ink)}
+  html[data-gaya="ruangide"] button.kecil{font-size:12px;padding:8px 11px;border-radius:9px}
+  html[data-gaya="ruangide"] button:disabled{background:var(--ri-soft);color:var(--ri-muted);opacity:.55;box-shadow:none;cursor:not-allowed}
+  html[data-gaya="ruangide"] .save-status button{background:transparent !important;color:var(--ri-ink) !important;border:0;padding:0}
+  html[data-gaya="ruangide"] :is(input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]){background-color:var(--ri-input) !important;color:var(--ri-ink);border:1px solid var(--ri-line);border-radius:12px;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  html[data-gaya="ruangide"] :is(input,textarea)::placeholder{color:var(--ri-muted);opacity:.8}
+  html[data-gaya="ruangide"] :is(input,select,textarea):focus{border-color:#798b59;outline:2px solid #798b5970;outline-offset:2px;box-shadow:none}
+  html[data-gaya="ruangide"] :is(button,summary,a):focus-visible{outline:2px solid #798b59;outline-offset:3px;box-shadow:none}
+  html[data-gaya="ruangide"] input:is([type="checkbox"],[type="radio"]){accent-color:#738653}
+  html[data-gaya="ruangide"] :is(.keranjang,.banner,.wallet-form-panel,.draft-toolbar,.cash-track){background:var(--ri-input);color:var(--ri-ink);border:1px solid var(--ri-line);border-radius:15px;backdrop-filter:none;-webkit-backdrop-filter:none}
+  html[data-gaya="ruangide"] .banner{background:var(--ri-week)}
+  html[data-gaya="ruangide"] .keranjang{border-style:solid !important;padding:15px}
+  html[data-gaya="ruangide"] .itemrow{background:var(--ri-card);border-color:var(--ri-line);border-radius:14px}
+  html[data-gaya="ruangide"] .wallet-summary{background:var(--ri-hero);border-color:var(--ri-line);border-radius:16px}
+  html[data-gaya="ruangide"] .wallet-summary :is(span,b,small){color:var(--ri-hero-ink)}
+  html[data-gaya="ruangide"] #homeMoney{box-shadow:none !important}
+  html[data-gaya="ruangide"] #moneyTabs{border:0;background:var(--ri-soft);padding:4px;border-radius:12px}
+  html[data-gaya="ruangide"] #moneyTabs .money-tab[aria-selected="true"]{background:var(--ri-card) !important;border-color:var(--ri-line) !important;color:var(--ri-ink) !important;box-shadow:0 1px 4px #00000008 !important;font-weight:650}
+  html[data-gaya="ruangide"] .bar.hijau{background:var(--ri-ok)}
+  html[data-gaya="ruangide"] .bar.merah{background:var(--ri-bad)}
+  html[data-gaya="ruangide"] .bar.oranye{background:#a68b4f}
+  html[data-gaya="ruangide"] nav.bottom{bottom:0;width:100%;max-width:640px;padding:9px 10px calc(11px + env(safe-area-inset-bottom));background:var(--ri-card) !important;color:var(--ri-ink);border:1px solid var(--ri-line);border-bottom:0;border-radius:21px 21px 0 0;box-shadow:0 -4px 20px #24301906 !important;backdrop-filter:none;-webkit-backdrop-filter:none}
+  html[data-gaya="ruangide"] nav.bottom .tab{background:transparent;color:var(--ri-muted);box-shadow:none;font-size:11px;font-weight:500;border-radius:11px}
+  html[data-gaya="ruangide"] nav.bottom .tab.aktif{background:var(--ri-hero);color:var(--ri-hero-ink);font-weight:650}
+  html[data-gaya="ruangide"] nav.bottom .nav-plus{background:var(--ri-lime) !important;color:var(--ri-lime-ink) !important;border:4px solid var(--ri-card) !important;border-radius:18px !important;box-shadow:none !important}
+  html[data-gaya="ruangide"] nav.bottom .nav-plus svg{stroke:var(--ri-lime-ink) !important}
+  html[data-gaya="ruangide"] .toast-note{background:var(--ri-card) !important;color:var(--ri-ink) !important;border:1px solid var(--ri-line);border-radius:14px;box-shadow:0 8px 25px #28302012;bottom:calc(100px + env(safe-area-inset-bottom))}
+  html[data-gaya="ruangide"] dialog{padding:22px;max-height:calc(100dvh - 32px);overflow:auto}
+  html[data-gaya="ruangide"] dialog::backdrop{background:#1b241f66;backdrop-filter:blur(3px)}
+  html[data-gaya="ruangide"] dialog h2{font-family:var(--ri-display);font-size:23px;font-weight:400;line-height:1.3}
+  html[data-gaya="ruangide"] #styleReveal{display:none !important}
+  #styleGallery .style-choice[data-choice="ruangide"] .style-thumb::before{background:#e4edce;opacity:1;box-shadow:0 21px 0 -2px #fff5d5;border:1px solid #cdd6bb;border-radius:7px}
+  #styleGallery .style-choice[data-choice="ruangide"] .style-thumb::after{background:#536044;box-shadow:0 6px 0 #536044;opacity:.65}
+  @media(max-width:380px){
+    html[data-gaya="ruangide"] main{padding:0 13px}
+    html[data-gaya="ruangide"] header.top{padding-left:17px;padding-right:17px}
+    html[data-gaya="ruangide"] .card{padding:17px}
+    html[data-gaya="ruangide"] #beranda .saldo-hero{padding:21px 18px 18px}
+    html[data-gaya="ruangide"] .stat{padding:13px 10px}
+  }
+
+  /* Fondasi Ruang: satu keluarga komponen, tetap memakai warna masing-masing gaya. */
+  html#financeApp[data-ui="ruang"]{
+    --ui-ink:var(--gal-ink,var(--ink));--ui-muted:var(--gal-muted,var(--muted));
+    --ui-card:var(--gal-card,var(--glass));--ui-solid:var(--gal-card,var(--card-solid,var(--card)));
+    --ui-line:var(--gal-line,var(--line));--ui-soft:var(--gal-soft,var(--ghostbg));
+    --ui-accent:var(--gal-accent,var(--ghostink));--ui-cta:var(--ui-ink);--ui-on-cta:var(--ui-solid);
+    --ui-radius:21px;--ui-control-r:12px;--ui-display:var(--font,system-ui,sans-serif);
+    --ui-shadow:0 3px 20px #15201908;--ui-paper:var(--ui-solid);--ui-paper-ink:var(--ui-ink);
+    scroll-padding-bottom:120px;
+  }
+  html#financeApp[data-ui="ruang"][data-font="sistem"]{--ui-display:Georgia,"Times New Roman",serif}
+  html#financeApp[data-ui="ruang"][data-gaya="blok"]{--ui-radius:5px;--ui-control-r:4px;--ui-shadow:2px 3px 0 var(--px-shadow)}
+  html#financeApp[data-ui="ruang"][data-gaya="neo"]{--ui-radius:13px;--ui-control-r:9px;--ui-shadow:3px 3px 0 var(--neo-line)}
+  html#financeApp[data-ui="ruang"][data-gaya="retro"]{--ui-radius:5px;--ui-control-r:4px;--ui-shadow:none}
+  html#financeApp[data-ui="ruang"][data-gaya="flat"]{--ui-shadow:none}
+  html#financeApp[data-ui="ruang"][data-gaya="soft"]{--ui-shadow:var(--st-shadow)}
+  html#financeApp[data-ui="ruang"][data-gaya="glass"]{--ui-shadow:var(--shadow)}
+  html#financeApp[data-ui="ruang"][data-gaya="glass"]:not([data-adaptif]){--ui-solid:#ffffff}
+  html#financeApp[data-ui="ruang"][data-gaya="glass"][data-tema="dark"]:not([data-adaptif]){--ui-solid:#1e2535}
+  @media(prefers-color-scheme:dark){html#financeApp[data-ui="ruang"][data-gaya="glass"][data-tema="auto"]:not([data-adaptif]){--ui-solid:#1e2535}}
+  html#financeApp[data-ui="ruang"] body{max-width:760px !important;margin:0 auto;padding-bottom:calc(120px + env(safe-area-inset-bottom)) !important;font-size:14px;line-height:1.55}
+  html#financeApp[data-ui="ruang"] main{padding:0 20px !important;margin-top:0;min-width:0}
+  .ui-skip{position:fixed;top:-100px;left:16px;z-index:100;padding:12px 16px;background:var(--ui-cta);color:var(--ui-on-cta);border-radius:10px;text-decoration:none}
+  .ui-skip:focus{top:12px}
+  .ui-icon{display:inline-flex;align-items:center;justify-content:center;flex:none;pointer-events:none}
+  .ui-icon svg{display:block;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .ui-sidebar{display:none}
+  html#financeApp[data-ui="ruang"][data-gaya] header.top{padding:23px 24px 20px;position:relative;border-radius:0;margin:0;box-shadow:none !important}
+  .ui-topline{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:22px;position:relative;z-index:1}
+  .ui-breadcrumb{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.5px;color:inherit;opacity:.75;min-width:0}
+  .ui-breadcrumb>i{display:block;width:6px;height:6px;background:currentColor;border-radius:50%;flex:none}
+  .ui-breadcrumb>span:first-of-type{letter-spacing:1.5px;font-size:8px;text-transform:uppercase}
+  html#financeApp[data-ui="ruang"][data-gaya] button.ui-help{width:auto;margin:0;min-height:35px;padding:7px 10px;font-size:11px !important;background:transparent !important;color:inherit !important;border:1px solid currentColor !important;border-radius:var(--ui-control-r) !important;box-shadow:none !important;display:inline-flex;align-items:center;gap:7px;opacity:.85;white-space:nowrap}
+  .ui-help svg{width:15px;height:15px}
+  html#financeApp[data-ui="ruang"][data-gaya="spider"] header.top .spider-mask{top:92px;right:17px;width:55px;height:65px;opacity:.18;z-index:0;filter:none}
+  html#financeApp[data-ui="ruang"][data-gaya] header.top h1{display:flex;align-items:center;gap:12px;font-family:var(--ui-display);font-size:clamp(27px,6.5vw,36px);font-weight:400;letter-spacing:-1px;line-height:1.2;margin:0;text-shadow:none}
+  html#financeApp[data-ui="ruang"] .title-money{display:none !important}
+  .ui-title-symbol{width:39px;height:42px;display:grid;place-items:center;border-radius:13px;background:var(--ui-soft);color:var(--ui-accent);transform:rotate(-6deg)}
+  .ui-title-symbol svg{width:23px;height:23px}
+  html#financeApp[data-ui="ruang"][data-gaya] header.top p{font-size:12px;line-height:1.6;margin-top:9px;letter-spacing:0}
+  html#financeApp[data-ui="ruang"][data-gaya] .style-signature{font-size:9px;font-weight:600;letter-spacing:1.3px;border-radius:var(--ui-control-r);margin-top:12px;padding:6px 9px}
+  html#financeApp[data-ui="ruang"][data-gaya] :is(.card,.stat,dialog){border-radius:var(--ui-radius) !important;box-shadow:var(--ui-shadow) !important}
+  html#financeApp[data-ui="ruang"][data-gaya] .card{padding:21px;margin-bottom:18px;min-width:0}
+  html#financeApp[data-ui="ruang"][data-gaya] h2{font-size:17px;font-weight:650;letter-spacing:-.35px;line-height:1.4;margin-bottom:14px}
+  html#financeApp[data-ui="ruang"][data-gaya] .ui-card-heading{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
+  .ui-card-title-icon{width:30px;height:30px;background:var(--ui-soft);color:var(--ui-accent);border-radius:9px;flex:none}
+  .ui-card-title-icon svg{width:16px;height:16px}
+  html#financeApp[data-ui="ruang"][data-gaya] .field-label{font-size:12px;font-weight:600;line-height:1.5;margin-bottom:7px}
+  html#financeApp[data-ui="ruang"][data-gaya] :is(.sub,.muted){line-height:1.65}
+  html#financeApp[data-ui="ruang"][data-gaya] :is(input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]){border-radius:var(--ui-control-r) !important;min-height:44px;font-size:15px;line-height:1.5}
+  html#financeApp[data-ui="ruang"][data-gaya] :is(input,select,textarea):focus{outline:2px solid var(--ui-accent);outline-offset:2px;box-shadow:none !important}
+  html#financeApp[data-ui="ruang"][data-gaya] :is(button,summary,a):focus-visible{outline:2px solid var(--ui-accent);outline-offset:3px;box-shadow:none !important}
+  html#financeApp[data-ui="ruang"][data-gaya] input:is([type="checkbox"],[type="radio"]){accent-color:var(--ui-accent)}
+  html#financeApp[data-ui="ruang"][data-gaya] button:where(:not(.tab):not(.nav-plus):not(.ui-side-link):not(.ui-help):not(.style-choice):not(.provider-choice):not(.money-tab)){background:var(--ui-cta) !important;color:var(--ui-on-cta) !important;border-radius:var(--ui-control-r) !important;box-shadow:none !important;font-size:14px;font-weight:600;min-height:43px;line-height:1.5;letter-spacing:0}
+  html#financeApp[data-ui="ruang"][data-gaya] button:not(.tab):not(.nav-plus):is(.ghost,.sec){background:var(--ui-soft) !important;color:var(--ui-ink) !important}
+  html#financeApp[data-ui="ruang"][data-gaya] button:not(.tab).del{background:var(--delbg) !important;color:var(--delink) !important}
+  html#financeApp[data-ui="ruang"][data-gaya] button.kecil{font-size:12px !important;min-height:36px;padding:8px 11px !important}
+  html#financeApp[data-ui="ruang"][data-gaya] button:disabled{opacity:.5 !important;cursor:not-allowed;box-shadow:none !important}
+  html#financeApp[data-ui="ruang"][data-gaya] .save-status button{min-height:28px !important;background:transparent !important;color:var(--ui-accent) !important;padding:0 !important}
+  html#financeApp[data-ui="ruang"][data-gaya] .cash-track button[aria-pressed="false"]{background:var(--ui-solid) !important;color:var(--ui-muted) !important;border:1px solid var(--ui-line) !important}
+  html#financeApp[data-ui="ruang"][data-gaya] .cash-track button[aria-pressed="true"]{background:var(--ui-soft) !important;color:var(--ui-ink) !important;border:2px solid currentColor !important}
+  html#financeApp[data-ui="ruang"][data-gaya] #beranda .saldo-hero{border-radius:calc(var(--ui-radius) + 3px) !important;padding:26px 24px 22px;box-shadow:var(--ui-shadow) !important;min-width:0;isolation:isolate}
+  .ui-hero-kicker{display:block;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;opacity:.75;margin-bottom:18px;line-height:1.6;max-width:calc(100% - 66px)}
+  html#financeApp[data-ui="ruang"][data-gaya] .saldo-hero>.lbl{display:block;font-size:11px;font-weight:500;text-transform:none;letter-spacing:.2px;opacity:.85}
+  html#financeApp[data-ui="ruang"][data-gaya] .saldo-hero b{font-size:clamp(28px,7.5vw,40px);font-weight:550;letter-spacing:-1.2px;line-height:1.2;margin-top:7px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+  html#financeApp[data-ui="ruang"][data-gaya] #beranda .saldo-hero .mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:21px;padding-top:16px;border-top:1px solid currentColor;border-color:color-mix(in srgb,currentColor 17%,transparent);font-size:10px;opacity:.9;line-height:1.5}
+  html#financeApp[data-ui="ruang"][data-gaya] #beranda .saldo-hero .mini>span{white-space:normal;overflow-wrap:anywhere;line-height:1.6}
+  html#financeApp[data-ui="ruang"][data-gaya] #beranda .saldo-hero .mini>span>span{display:block;font-size:13px;font-weight:650;margin-top:5px;font-variant-numeric:tabular-nums}
+  html#financeApp[data-ui="ruang"][data-gaya] #beranda .saldo-hero>#heroScene,html#financeApp[data-ui="ruang"] .spider-emblem{display:none !important}
+  html#financeApp[data-ui="ruang"][data-gaya] #beranda .saldo-hero>#ruangHeroArt{display:block;position:absolute !important;right:-2px;top:7px;width:124px;height:124px;opacity:.24;z-index:0 !important;pointer-events:none;overflow:visible;transform:none;mask-image:linear-gradient(90deg,transparent,#000 32%)}
+  .ui-art-pixel{display:none}
+  html[data-gaya="blok"] #ruangHeroArt .ui-art-smooth{display:none}
+  html[data-gaya="blok"] #ruangHeroArt .ui-art-pixel{display:block}
+  html#financeApp[data-ui="ruang"][data-gerak="penuh"] #ruangHeroArt .ui-art-page{animation:ruang-page-float 8s ease-in-out infinite}
+  html[data-gaya="ruangide"] #ruangHeroArt .ui-art-page{animation:none !important}
+  @keyframes ruang-page-float{50%{translate:0 -3px}}
+  html#financeApp[data-ui="ruang"] #styleAmbient .ambient-mark{opacity:.07}
+  html#financeApp[data-ui="ruang"] #styleAmbient .ambient-mark:nth-child(n+4){display:none}
+  html#financeApp[data-ui="ruang"] #styleReveal{display:none !important}
+  html#financeApp[data-ui="ruang"][data-gaya] .stat{border-radius:var(--ui-control-r) !important;box-shadow:none !important;padding:15px;min-width:0}
+  html#financeApp[data-ui="ruang"][data-gaya] .stat b{font-size:clamp(15px,3.8vw,20px);font-weight:650;font-variant-numeric:tabular-nums;white-space:normal;word-break:normal;overflow-wrap:anywhere;line-height:1.45}
+  html#financeApp[data-ui="ruang"][data-gaya] .stat .lbl{font-size:11px;line-height:1.5}
+  html#financeApp[data-ui="ruang"] .history-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  html#financeApp[data-ui="ruang"][data-gaya] #cardMingguan h2{font-family:var(--ui-display);font-weight:400;font-size:22px;line-height:1.35}
+  html#financeApp[data-ui="ruang"][data-gaya] #teksMingguan{font-size:13px !important;line-height:1.85 !important}
+  html#financeApp[data-ui="ruang"][data-gaya] :is(.keranjang,.itemrow,.wallet-summary,.wallet-form-panel,.draft-toolbar,.cash-track,.chart-more>summary){border-radius:var(--ui-control-r) !important}
+  html#financeApp[data-ui="ruang"][data-gaya] .keranjang{border-style:solid !important;padding:17px}
+  html#financeApp[data-ui="ruang"][data-gaya] #moneyTabs{padding:4px;border-radius:var(--ui-control-r);background:var(--ui-soft);border:1px solid var(--ui-line)}
+  html#financeApp[data-ui="ruang"][data-gaya] #moneyTabs .money-tab{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13px;border-radius:calc(var(--ui-control-r) - 3px) !important}
+  html#financeApp[data-ui="ruang"][data-gaya] #moneyTabs .money-tab[aria-selected="true"]{background:var(--ui-solid) !important;color:var(--ui-ink) !important;border-color:var(--ui-line) !important;box-shadow:0 1px 4px #00000008 !important;font-weight:650}
+  #moneyTabs .money-tab .ui-icon svg{width:17px;height:17px}
+  html#financeApp[data-ui="ruang"][data-gaya] .wallet-summary b{font-size:28px;font-weight:550;letter-spacing:-.6px}
+  html#financeApp[data-ui="ruang"][data-gaya] .wallet-actions{gap:9px;margin-top:15px}
+  html#financeApp[data-ui="ruang"][data-gaya] .wallet-symbol{border-radius:var(--ui-control-r)}
+  .ui-transaction-icon{flex:none;width:36px;height:39px;display:grid;place-items:center;border-radius:11px;background:var(--ui-soft);color:var(--bad)}
+  .ui-transaction-icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .ui-transaction[data-kind="masuk"] .ui-transaction-icon{color:var(--ok)}
+  .ui-transaction-info{min-width:0;flex:1}
+  html#financeApp[data-ui="ruang"] #rList>.ui-transaction{padding:17px 0}
+  html#financeApp[data-ui="ruang"] .ui-transaction .amt{font-weight:650;font-variant-numeric:tabular-nums;font-size:14px}
+  html#financeApp[data-ui="ruang"] .ui-transaction>.aksi{gap:7px;margin-top:13px !important}
+  html#financeApp[data-ui="ruang"][data-gaya] .pill{font-size:10px;padding:4px 8px;line-height:1.5;font-weight:500;border-radius:7px}
+  html#financeApp[data-ui="ruang"][data-gaya] :is(.kosong,.chart-empty){padding:27px 18px;text-align:center;border:1px dashed var(--ui-line);border-radius:var(--ui-control-r);font-size:12px;line-height:1.8;color:var(--ui-muted)}
+  html#financeApp[data-ui="ruang"] :is(.kosong,.chart-empty)::before{content:"";display:block;width:33px;height:37px;margin:0 auto 12px;background:currentColor;opacity:.6;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 44'%3E%3Cg fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='8' y='5' width='25' height='34' rx='4'/%3E%3Cpath d='M14 5v34M5 13h6M5 22h6M5 31h6M20 14h7M20 21h7M20 28h4'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
+  html#financeApp[data-ui="ruang"][data-gaya] #styleSelected{border-radius:var(--ui-control-r);padding:15px;gap:13px}
+  html#financeApp[data-ui="ruang"][data-gaya] #styleGalleryWrap{border-radius:var(--ui-control-r)}
+  html#financeApp[data-ui="ruang"][data-gaya] #styleGallery .style-choice{border-radius:var(--ui-control-r) !important;min-height:0 !important;font-size:11px !important}
+  html#financeApp[data-ui="ruang"][data-gaya] #wltProviders .provider-choice{font-size:12px !important;min-height:63px;border-radius:var(--ui-control-r) !important}
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom{bottom:0;left:50%;transform:translateX(-50%);right:auto;width:100%;max-width:760px;padding:10px 10px calc(11px + env(safe-area-inset-bottom));border-radius:var(--ui-radius) var(--ui-radius) 0 0 !important;box-shadow:0 -4px 24px #13201a0a !important;border-bottom:0 !important;z-index:8}
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .tab{border:0 !important;border-radius:var(--ui-control-r) !important;background:transparent !important;color:var(--ui-muted) !important;box-shadow:none !important;min-height:44px;padding:7px 0;font-size:11px}
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .tab svg{width:20px;height:20px;stroke-width:1.7}
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .tab.aktif{background:var(--ui-soft) !important;color:var(--ui-ink) !important;font-weight:650}
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .nav-plus{background:var(--ui-cta) !important;border:4px solid var(--ui-solid) !important;border-radius:calc(var(--ui-control-r) + 6px) !important;box-shadow:none !important;width:58px;height:58px;margin-top:-26px}
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .nav-plus svg{stroke:var(--ui-on-cta) !important;stroke-width:2.1}
+  html#financeApp[data-ui="ruang"][data-gaya="ruangide"] nav.bottom .nav-plus{background:var(--ri-lime) !important}
+  html#financeApp[data-ui="ruang"][data-gaya="ruangide"] nav.bottom .nav-plus svg{stroke:var(--ri-lime-ink) !important}
+  html#financeApp[data-ui="ruang"][data-gaya] dialog{padding:24px;width:calc(100% - 26px);max-width:590px;max-height:calc(100dvh - 32px) !important;overflow:auto;overscroll-behavior:contain;color:var(--ui-ink);background:var(--ui-solid)}
+  html#financeApp[data-ui="ruang"][data-gaya] dialog::backdrop{background:#14201970;backdrop-filter:blur(4px)}
+  html#financeApp[data-ui="ruang"][data-gaya] dialog h2{font-family:var(--ui-display);font-size:25px;font-weight:400;line-height:1.3;margin-bottom:20px}
+  html#financeApp[data-ui="ruang"][data-gaya] :is(#dlgBantuanTeks,#dlgGayaTeks){font-size:13px;line-height:1.85}
+  html#financeApp[data-ui="ruang"][data-gaya] .toast-note{background:var(--ui-solid) !important;color:var(--ui-ink) !important;border:1px solid var(--ui-line) !important;border-radius:var(--ui-control-r) !important;box-shadow:0 8px 26px #15201915 !important;padding:13px 17px;font-size:13px;line-height:1.6;bottom:calc(105px + env(safe-area-inset-bottom));z-index:30}
+  html#financeApp[data-ui="ruang"] .copy{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px 16px;margin:28px 0 4px;font-size:10px;line-height:1.7;color:var(--ui-muted);opacity:1;text-align:left}
+  .copy .ui-icon{vertical-align:middle;margin-right:5px}
+  .copy .ui-icon svg{width:12px;height:12px}
+  html#financeApp[data-ui="ruang"][data-active-page="beranda"] #beranda{display:flex !important;flex-direction:column;gap:16px}
+  html#financeApp[data-ui="ruang"] #beranda>*{margin-bottom:0;order:35;min-width:0}
+  html#financeApp[data-ui="ruang"] #beranda>.saldo-hero{order:0}
+  html#financeApp[data-ui="ruang"] #beranda>#cardMingguan{order:10}
+  html#financeApp[data-ui="ruang"] #beranda>.pixel-mobs{order:12}
+  html#financeApp[data-ui="ruang"] #beranda>#btnBerandaCatat{order:20;min-height:56px}
+  html#financeApp[data-ui="ruang"] #beranda>#btnLanjutDraf{order:21}
+  html#financeApp[data-ui="ruang"] #beranda>#homeMoney{order:30}
+  html#financeApp[data-ui="ruang"] #beranda>.layout-intro{order:-5}
+  html#financeApp[data-ui="ruang"] #beranda>:is(#bannerBackup,#bannerPengingat){order:-4}
+  html#financeApp[data-ui="ruang"] #beranda>.more-features{order:40}
+  html#financeApp[data-ui="ruang"][data-layout="2"] #beranda>#cardMingguan{order:0}
+  html#financeApp[data-ui="ruang"][data-layout="2"] #beranda>.saldo-hero{order:10}
+  html#financeApp[data-ui="ruang"][data-layout="3"] #beranda>#btnBerandaCatat{order:-2}
+  html#financeApp[data-ui="ruang"][data-layout="3"] #beranda>.saldo-hero{order:0}
+  html#financeApp[data-ui="ruang"][data-layout="3"] #beranda>#cardMingguan{order:10}
+  html#financeApp[data-ui="ruang"][data-gerak="mati"] #ruangHeroArt *,html#financeApp[data-ui="ruang"][data-gerak="ringan"] #ruangHeroArt *{animation:none !important}
+  @media(prefers-reduced-motion:reduce){html#financeApp[data-ui="ruang"] #ruangHeroArt *{animation:none !important}}
+  @media(min-width:800px){
+    html#financeApp[data-ui="ruang"] body{max-width:none !important}
+    html#financeApp[data-ui="ruang"][data-gaya] header.top{max-width:1250px;margin:0 auto;padding:28px 34px 24px}
+    html#financeApp[data-ui="ruang"] main{max-width:1250px;margin:0 auto;padding:0 30px !important}
+    html#financeApp[data-ui="ruang"][data-active-page="beranda"] #beranda{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch}
+    html#financeApp[data-ui="ruang"] #beranda>*{grid-column:1/-1}
+    html#financeApp[data-ui="ruang"] #beranda>:is(.saldo-hero,#cardMingguan){grid-column:auto;margin:0;height:100%}
+    html#financeApp[data-ui="ruang"] #cardMingguan{display:flex;flex-direction:column;justify-content:center}
+    html#financeApp[data-ui="ruang"] #homeMoney{padding:25px}
+    html#financeApp[data-ui="ruang"][data-active-page="grafik"] #grafik,html#financeApp[data-ui="ruang"][data-active-page="data"] #data{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+    html#financeApp[data-ui="ruang"] :is(#grafik,#data)>.card{margin-bottom:0}
+    html#financeApp[data-ui="ruang"] #grafik>.chart-filter,html#financeApp[data-ui="ruang"] #gExtraCharts{grid-column:1/-1}
+    html#financeApp[data-ui="ruang"] #catat{max-width:760px;margin:0 auto}
+    html#financeApp[data-ui="ruang"] #setelan{max-width:900px;margin:0 auto}
+    html#financeApp[data-ui="ruang"] nav.bottom{max-width:760px}
+    html#financeApp[data-ui="ruang"] .toast-note{max-width:620px}
+  }
+  @media(min-width:1080px){
+    html#financeApp[data-ui="ruang"] body{padding-left:230px !important;padding-bottom:26px !important}
+    .ui-sidebar{position:fixed;inset:0 auto 0 0;width:230px;padding:30px 20px 23px;display:flex;flex-direction:column;z-index:12;border-right:1px solid var(--ui-line);background:var(--ui-solid);color:var(--ui-ink);overflow:auto;scrollbar-width:thin}
+    .ui-brand{display:flex;align-items:center;gap:11px;font-size:21px;font-weight:650;letter-spacing:-.9px;line-height:1.2;margin-bottom:45px;text-decoration:none;color:inherit}
+    .ui-brand>.ui-icon{display:grid;place-items:center;width:41px;height:44px;transform:rotate(-7deg);border-radius:var(--ui-control-r);background:var(--ui-soft);color:var(--ui-accent)}
+    .ui-brand>.ui-icon svg{width:24px;height:24px}
+    .ui-brand small{display:block;font-size:9px;letter-spacing:1.5px;font-weight:500;margin-top:8px;color:var(--ui-muted)}
+    .ui-sidebar-caption{font-size:9px;letter-spacing:1.5px;font-weight:650;text-transform:uppercase;color:var(--ui-muted);margin:0 12px 12px}
+    .ui-side-nav{display:grid;gap:7px}
+    html#financeApp[data-ui="ruang"][data-gaya] .ui-side-nav button.ui-side-link{display:flex;align-items:center;justify-content:flex-start;gap:12px;padding:12px 14px;min-height:46px;margin:0;width:100%;font-size:13px;font-weight:550;line-height:1.4;border:1px solid transparent !important;border-radius:var(--ui-control-r) !important;box-shadow:none !important;background:transparent !important;color:var(--ui-muted) !important;text-align:left}
+    html#financeApp[data-ui="ruang"][data-gaya] .ui-side-nav button.ui-side-link:hover{background:var(--ui-soft) !important;color:var(--ui-ink) !important}
+    html#financeApp[data-ui="ruang"][data-gaya] .ui-side-nav button.ui-side-link[aria-current="page"]{background:var(--ui-soft) !important;color:var(--ui-ink) !important;border-color:var(--ui-line) !important;font-weight:650}
+    .ui-side-note{margin-top:auto;padding:24px 15px 18px;border:1px solid var(--ui-line);border-radius:var(--ui-radius);background:var(--ui-card)}
+    .ui-side-note>.ui-icon{margin-bottom:13px;color:var(--ui-accent)}
+    .ui-side-note p{font-family:var(--ui-display);font-size:22px;line-height:1.35;letter-spacing:-.5px;margin:0}
+    .ui-side-note small{display:block;color:var(--ui-muted);font-size:10px;line-height:1.7;margin-top:11px}
+    .ui-side-foot{font-size:10px;color:var(--ui-muted);margin:20px 11px 0;display:flex;align-items:center;gap:7px}
+    .ui-side-foot svg{width:14px;height:14px}
+    .ui-side-nav{margin-bottom:35px}
+    html#financeApp[data-ui="ruang"][data-gaya] header.top{padding-top:28px}
+    html#financeApp[data-ui="ruang"][data-gaya] nav.bottom{display:none !important}
+    html#financeApp[data-ui="ruang"][data-gaya] .toast-note{left:calc(50% + 115px);bottom:25px}
+  }
+  @media(min-width:1080px) and (max-height:650px){.ui-side-note{display:none}.ui-brand{margin-bottom:28px}}
+  @media(max-width:799px){html#financeApp[data-ui="ruang"][data-gaya] :is(input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]){font-size:16px}}
+  @media(max-width:400px){
+    html#financeApp[data-ui="ruang"] main{padding:0 14px !important}
+    html#financeApp[data-ui="ruang"][data-gaya] header.top{padding:19px 18px 18px}
+    .ui-breadcrumb>span:first-of-type,.ui-breadcrumb>.ui-crumb-divider{display:none}
+    html#financeApp[data-ui="ruang"][data-gaya] header.top h1{font-size:27px;gap:9px}
+    .ui-title-symbol{width:32px;height:36px;border-radius:10px}
+    .ui-title-symbol svg{width:20px;height:20px}
+    html#financeApp[data-ui="ruang"][data-gaya] .card{padding:17px}
+    html#financeApp[data-ui="ruang"][data-gaya] #beranda .saldo-hero{padding:22px 19px 20px}
+    html#financeApp[data-ui="ruang"][data-gaya] #beranda .saldo-hero>#ruangHeroArt{width:100px;height:108px;top:5px;right:-7px;opacity:.18}
+    html#financeApp[data-ui="ruang"][data-gaya] .keranjang{padding:13px}
+    html#financeApp[data-ui="ruang"] .ui-transaction .amt{font-size:12px}
+    .ui-transaction-icon{width:29px;height:33px;border-radius:9px}
+    html#financeApp[data-ui="ruang"] .copy{justify-content:center;text-align:center;font-size:9px}
+    html#financeApp[data-ui="ruang"][data-gaya] dialog{padding:20px}
+  }
+  @media print{
+    html#financeApp[data-ui="ruang"] .ui-sidebar,.ui-topline,.ui-skip{display:none !important}
+    html#financeApp[data-ui="ruang"] body{padding-left:0 !important}
+  }
 </style>
 
 </head>
 <body>
+<a class="ui-skip" href="#appMain">Langsung ke isi</a>
 <div id="bgLayer"></div>
 <div id="styleDecor" aria-hidden="true"><div id="styleAmbient"></div></div>
 <div id="styleReveal" aria-hidden="true" hidden></div>
 <div id="orbitIntro" aria-hidden="true" hidden><div class="orbit-intro-inner"><div class="orbit-intro-planet"><i></i></div><strong>ORBIT</strong><small>Catatan kecil, tujuan besar.</small></div></div>
 
+<aside class="ui-sidebar" aria-label="Menu utama">
+  <a class="ui-brand" href="#beranda" data-ruang-page="beranda"><span class="ui-icon" data-ruang-icon="wallet" aria-hidden="true"></span><span>catatan<br>keuangan.<small>BUATAN ROY</small></span></a>
+  <div class="ui-sidebar-caption">Ruang keuanganmu</div>
+  <nav class="ui-side-nav" aria-label="Halaman Catatan Keuangan">
+    <button type="button" class="ui-side-link" data-ruang-page="beranda"><span class="ui-icon" data-ruang-icon="grid" aria-hidden="true"></span>Beranda</button>
+    <button type="button" class="ui-side-link" data-ruang-page="riwayat"><span class="ui-icon" data-ruang-icon="receipt" aria-hidden="true"></span>Riwayat</button>
+    <button type="button" class="ui-side-link" data-ruang-page="catat"><span class="ui-icon" data-ruang-icon="plus" aria-hidden="true"></span>Catat transaksi</button>
+    <button type="button" class="ui-side-link" data-ruang-page="grafik"><span class="ui-icon" data-ruang-icon="chart" aria-hidden="true"></span>Grafik</button>
+    <button type="button" class="ui-side-link" data-ruang-page="setelan"><span class="ui-icon" data-ruang-icon="sliders" aria-hidden="true"></span>Setelan</button>
+    <button type="button" class="ui-side-link" data-ruang-page="data"><span class="ui-icon" data-ruang-icon="backup" aria-hidden="true"></span>Data &amp; backup</button>
+  </nav>
+  <div class="ui-side-note"><span class="ui-icon" data-ruang-icon="sprout" aria-hidden="true"></span><p>Catatan kecil,<br>rencana besar.</p><small>Satu transaksi hari ini membantu kamu mengenali kebiasaanmu.</small></div>
+  <div class="ui-side-foot"><span class="ui-icon" data-ruang-icon="palette" aria-hidden="true"></span><span id="uiSideStyle">Gayamu, ruangmu.</span></div>
+</aside>
 <header class="top">
-  <h1><span class="title-money" aria-hidden="true">💰</span> Catatan Keuangan</h1>
+  <div class="ui-topline"><div class="ui-breadcrumb"><i aria-hidden="true"></i><span>Ruang pribadi</span><span class="ui-crumb-divider" aria-hidden="true">/</span><span id="uiPageCrumb">Beranda</span></div><button type="button" class="ui-help" id="uiOpenHelp"><span class="ui-icon" data-ruang-icon="help" aria-hidden="true"></span>Cara pakai</button></div>
+  <h1><span class="ui-title-symbol ui-icon" data-ruang-icon="wallet" aria-hidden="true"></span><span>Catatan Keuangan</span></h1>
   <p id="hdr"></p>
   <div class="style-signature" aria-hidden="true"><svg id="styleSignatureArt" viewBox="0 0 100 100" fill="none" focusable="false"></svg><span id="styleSignatureName"></span></div>
   <svg class="spider-mask" viewBox="0 0 110 120" aria-hidden="true" focusable="false">
@@ -1791,7 +2131,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </svg>
 </header>
 
-<main>
+<main id="appMain" tabindex="-1">
 
 <!-- BERANDA -->
 <section id="beranda" class="page">
@@ -1801,6 +2141,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
 
   <div class="saldo-hero">
+    <span class="ui-hero-kicker">Sedikit dicatat, banyak terbantu.</span>
     <svg class="hero-style-art" id="heroStyleArt" viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false"></svg>
     <svg class="spider-emblem" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
       <g fill="none" stroke="#fff2e8" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
@@ -1812,6 +2153,16 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <span class="lbl">Total saldo</span>
     <b id="saldo"></b>
     <svg id="heroScene" viewBox="0 0 220 180" fill="none" aria-hidden="true" focusable="false"></svg>
+    <svg id="ruangHeroArt" viewBox="0 0 180 180" fill="none" aria-hidden="true" focusable="false">
+      <g class="ui-art-smooth" color="var(--ui-paper-ink)">
+        <g class="ui-art-page"><g transform="rotate(-9 89 91)"><rect x="37" y="24" width="97" height="131" rx="9" fill="var(--ui-paper)" stroke="currentColor" stroke-width="1.7"/><path d="M54 25v129" stroke="currentColor" stroke-opacity=".2"/><path d="M31 45h13m-13 23h13m-13 23h13m-13 23h13m-13 23h13" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="67" y="42" width="52" height="35" rx="4" fill="var(--ui-soft)"/><path d="M76 53h34m-34 11h24M68 94h45m-45 12h35m-35 12h45" stroke="currentColor" stroke-opacity=".5" stroke-width="1.6" stroke-linecap="round"/><rect x="68" y="131" width="9" height="9" rx="2" stroke="currentColor" stroke-opacity=".5"/><path d="m70 134 2 3 4-5m10 4h25" stroke="currentColor" stroke-opacity=".5" stroke-width="1.5" stroke-linecap="round"/></g></g>
+        <g transform="rotate(24 136 98)"><rect x="132" y="48" width="10" height="92" rx="3" fill="var(--ui-soft)" stroke="currentColor" stroke-width="1.4"/><path d="m132 133 5 19 5-19h-10Z" fill="var(--ui-paper)" stroke="currentColor" stroke-width="1.4"/><path d="m135 145 2 7 2-7h-4Z" fill="currentColor"/></g>
+        <circle cx="138" cy="148" r="21" fill="var(--ui-paper)" stroke="currentColor" stroke-width="1.6"/><circle cx="138" cy="148" r="15" fill="var(--ui-soft)"/><path d="M132 155v-14h5c7 0 7 7 0 7h-5m6 0 6 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M26 147v-23m0 14c-15 0-21-10-18-20 14 0 20 9 18 20Zm0 5c16 0 21-12 17-21-12 2-18 10-17 21Z" fill="var(--ui-soft)" stroke="currentColor" stroke-width="1.4"/>
+      </g>
+      <g class="ui-art-pixel" stroke="currentColor" stroke-width="3"><path d="M37 25h88v128H37Z" fill="var(--ui-paper)"/><path d="M54 25v128M29 44h16M29 69h16M29 94h16M29 119h16M69 48h39M69 63h30M69 88h39M69 103h30M69 126h18"/><path d="M127 128h32v32h-32Z" fill="var(--ui-soft)"/><path d="M136 136h14v14h-14ZM135 37h10v70h-10Z" fill="var(--ui-soft)"/></g>
+      <svg id="ruangThemeMark" x="143" y="9" width="31" height="31" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></svg>
+    </svg>
     <div class="mini"><span>Pemasukan total <span id="totMasuk"></span></span><span>Pengeluaran total <span id="totKeluar"></span></span></div>
   </div>
   <div class="pixel-mobs" aria-hidden="true">
@@ -2197,6 +2548,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <h3 style="margin:16px 0 10px;font-size:15px">Pilih suasana catatanmu</h3>
     <div id="styleSelected"><div class="style-selected-icon"><svg id="styleSelectedArt" viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false"></svg></div><div><h3 id="styleSelectedName"></h3><p id="styleSelectedDesc"></p></div></div>
     <select id="sGaya">
+      <option value="ruangide">Baru · Ruang Ide (krem, sage, dan elegan)</option>
       <option value="glass">Glass (kaca transparan)</option>
       <option value="biasa">Biasa (kartu solid, tanpa efek kaca)</option>
       <option value="berwarna">Berwarna (kartu putih, garis tepi warna per jenis)</option>
@@ -2219,7 +2571,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <option value="latte">Baru · Latte</option>
     </select>
     <button type="button" class="ghost" id="btnAnimasiOrbit" hidden>✦ Putar animasi Orbit</button>
-    <details id="styleGalleryWrap"><summary>Jelajahi galeri · 20 gaya <span aria-hidden="true">⌄</span></summary><div id="styleGallery" aria-label="Pilihan gaya tampilan"></div></details>
+    <details id="styleGalleryWrap"><summary>Jelajahi galeri · 21 gaya <span aria-hidden="true">⌄</span></summary><div id="styleGallery" aria-label="Pilihan gaya tampilan"></div></details>
     <label class="field-label" for="sGerak">Animasi gaya</label>
     <select id="sGerak"><option value="penuh">Aktif · dekorasi bergerak</option><option value="ringan">Ringan · transisi singkat</option><option value="mati">Mati · tampilan diam</option></select>
     <p class="muted setting-help" id="infoGerak" aria-live="polite"></p>
@@ -2298,10 +2650,10 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
 </section>
 
-<footer class="copy">© 2026 Roy · Catatan Keuangan</footer>
+<footer class="copy"><span><strong>Buatan Roy</strong> ✦ catatan kecil, rencana besar.</span><span><span class="ui-icon" data-ruang-icon="lock" aria-hidden="true"></span>Data tersimpan di browser ini</span></footer>
 </main>
 
-<nav class="bottom">
+<nav class="bottom" aria-label="Navigasi HP">
   <button class="tab" data-page="beranda"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Beranda</span></button>
   <button class="tab" data-page="riwayat"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>Riwayat</span></button>
   <button class="nav-plus" id="btnNavCatat" aria-label="Catat transaksi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -2873,11 +3225,13 @@ function isiKategoriBerulang() { isiKategoriSelect($('rbKat'), $('rbTipe').value
 // ===== RENDER TRANSAKSI =====
 function baris(x) {
   const wrap = el('div', 'row');
+  wrap.classList.add('ui-transaction');
+  wrap.dataset.kind=x.tipe;
   wrap.style.display = 'block';
   const top = el('div', 'row');
   top.style.padding = '0';
   top.style.border = 'none';
-  const info = el('div');
+  const info = el('div','ui-transaction-info');
   info.appendChild(el('b', x.tipe === 'masuk' ? 'hijau' : 'merah', (x.tipe === 'masuk' ? '+ ' : '− ') + x.judul));
   info.appendChild(el('div', 'muted', tglIndo(x.tanggal) + ' · ' + x.kategori + (x.items.length > 1 ? ' · ' + x.items.length + ' barang' : '')));
   if (x.items.length === 1 && x.items[0].satuan) {
@@ -2909,7 +3263,10 @@ function baris(x) {
   } else if (x.cara === 'tunai') {
     info.appendChild(el('div', 'muted', 'Tanpa rincian pembayaran · saldo tunai mengikuti transaksi'));
   }
-  top.append(info, el('span', 'amt', rp(x.total)));
+  const tanda=el('span','ui-transaction-icon');
+  tanda.setAttribute('aria-hidden','true');
+  tanda.innerHTML='<svg viewBox="0 0 24 24"><path d="'+(x.tipe==='masuk'?'M17 7 7 17M7 8v9h9':'M7 17 17 7M8 7h9v9')+'"/></svg>';
+  top.append(tanda,info, el('span', 'amt', rp(x.total)));
   wrap.appendChild(top);
 
   const aksi = el('div', 'aksi');
@@ -5366,6 +5723,7 @@ function renderSemua() {
   renderRiwayat();
   renderGrafik();
   renderCompare();
+  if(document.documentElement.dataset.uiReady) hiasJudulRuang();
 }
 
 let halamanAktif = 'beranda';
@@ -5383,6 +5741,7 @@ function goto(p) {
   window.scrollTo(0, 0);
   renderSemua();
   gerakkanHalaman(p);
+  if(document.documentElement.dataset.uiReady) sinkronDesainRuang(p);
 }
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => goto(t.dataset.page));
 
@@ -5523,6 +5882,7 @@ $('fileImport').onchange = async e => {
 
 // Bentuk digambar di dalam file agar dekorasi tetap tersedia saat offline.
 const GAYA_ART = {
+  ruangide:'<rect x="22" y="15" width="53" height="71" rx="7"/><path d="M34 15v71M17 31h10M17 47h10M17 63h10M17 77h10M45 33h18M45 45h12M45 57h18M49 73v-8m0 5c-8 1-12-4-11-10 8 0 12 5 11 10Zm0 3c8 1 13-4 12-10-8 0-12 5-12 10Z"/>',
   glass:'<path d="m50 9 32 23-9 39-23 20-23-20-9-39Z"/><path d="m18 32 32 9 32-9M50 41v50M32 21l18 20 18-20M27 71l23-30 23 30"/>',
   biasa:'<rect x="17" y="53" width="17" height="30" rx="5"/><rect x="42" y="35" width="17" height="48" rx="5"/><rect x="67" y="16" width="17" height="67" rx="5"/><path d="m15 38 24-18 18 6 25-15"/>',
   berwarna:'<circle cx="30" cy="31" r="19"/><rect x="52" y="15" width="33" height="33" rx="8"/><path d="m21 83 15-26 15 26ZM61 72h27M74.5 58.5v27"/>',
@@ -5545,6 +5905,7 @@ const GAYA_ART = {
   ocean:'<path d="M10 66c15-21 28 12 43-7 12-15 25 6 37-10M10 82c15-21 28 12 43-7 12-15 25 6 37-10M15 45c7-20 27-29 45-20-14-1-20 13-14 24M61 12v7M78 20l-5 6"/><circle cx="78" cy="39" r="5"/>'
 };
 const KOLEKSI_GAYA = [
+  {id:'ruangide',nama:'Ruang Ide',teks:'Krem hangat, kartu sage, dan detail catatan kecil yang elegan. Lega dan tenang seperti web Ruang Ide.',warna:['#f8f7f2','#536044','#fffefa'],baru:true},
   {"id": "aurora", "nama": "Aurora", "teks": "Pita cahaya mint dan ungu menari di langit, dengan kartu seperti permata.", "warna": ["#e9f3f5", "#246c74", "#fcffff"], "baru": true},
   {"id": "arcade", "nama": "Arcade", "teks": "Senja neon, grid permainan, dan tombol konsol dengan aksen cyan.", "warna": ["#25143f", "#ed76c9", "#39214d"], "baru": true},
   {"id": "botanica", "nama": "Botanica", "teks": "Daun sage, taman kecil, dan panel hijau yang terasa teduh.", "warna": ["#eef1e5", "#49623b", "#fffef6"], "baru": true},
@@ -5569,6 +5930,7 @@ const KOLEKSI_GAYA = [
 ];
 
 const SUASANA_GAYA = {
+  ruangide:{label:'buku catatan kecil dengan daun sage yang diam',svg:'<g transform="rotate(-8 110 89)"><rect x="65" y="27" width="101" height="132" rx="9" fill="#fffdf5" stroke="currentColor" stroke-width="2"/><path d="M81 27v132" stroke="#bcc8a6" stroke-width="1.5"/><path d="M59 48h12m-12 23h12m-12 23h12m-12 23h12m-12 23h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="93" y="45" width="58" height="34" rx="4" fill="#eadc93"/><path d="M101 56h39m-39 10h29M94 96h49m-49 12h38m-38 12h49" stroke="#829365" stroke-width="2" stroke-linecap="round"/><path d="M128 148v-15m0 8c-17 0-22-10-19-20 13 2 20 10 19 20Zm0 4c15 1 23-9 19-18-12 1-19 9-19 18Z" fill="#cad9ad" stroke="#76875d" stroke-width="1.3"/></g>',motif:'<path d="M50 86V45M50 60C25 60 17 40 24 22c21 1 29 18 26 38Zm0 16c24 1 34-19 27-35-21 1-29 18-27 35Z"/>'},
   "glass": {
     "label": "pantulan kristal dan kilau kecil",
     "svg": "<g class=\"scene-float\"><path d=\"m112 21 57 37-17 68-40 31-40-31-17-68Z\" fill=\"#c5e5ff\" fill-opacity=\".25\"/><path d=\"m55 58 57 19 57-19M112 77v80M80 37l32 40 32-40M72 126l40-49 40 49\" stroke=\"currentColor\" stroke-width=\"2\"/></g><g class=\"scene-twinkle\"><path d=\"M183 31v22m-11-11h22M38 124v15m-8-7h16\" stroke=\"currentColor\" stroke-width=\"3\"/></g>",
@@ -5688,10 +6050,11 @@ function bangunSuasanaGaya(id) {
 }
 function perbaruiGerakGaya() {
   const mode=document.documentElement.dataset.gerak || 'penuh';
+  const suasanaTenang=document.documentElement.dataset.gaya==='ruangide';
   const diam=mode==='mati'||preferensiGerak.matches;
   $('btnCobaGerak').disabled=diam;
   $('btnAnimasiOrbit').disabled=mode!=='penuh'||diam;
-  $('infoGerak').textContent=preferensiGerak.matches ? 'HP-mu meminta pengurangan gerakan. Dekorasi ditampilkan diam.' : mode==='penuh' ? 'Dekorasi bergerak pelan, tombol merespons sentuhan, dan halaman masuk dengan lembut.' : mode==='ringan' ? 'Dekorasi diam. Hanya transisi singkat saat membuka halaman atau mengganti gaya.' : 'Seluruh animasi gaya dimatikan. Pilihan ini tersimpan.';
+  $('infoGerak').textContent=preferensiGerak.matches ? 'HP-mu meminta pengurangan gerakan. Dekorasi ditampilkan diam.' : mode==='penuh' ? suasanaTenang ? 'Dekorasi Ruang Ide tetap diam. Tombol merespons sentuhan dan perpindahan halaman dibuat lembut.' : 'Dekorasi bergerak pelan, tombol merespons sentuhan, dan halaman masuk dengan lembut.' : mode==='ringan' ? 'Dekorasi diam. Hanya transisi singkat saat membuka halaman atau mengganti gaya.' : 'Seluruh animasi gaya dimatikan. Pilihan ini tersimpan.';
   if(!gerakPenuh())tutupIntroOrbit();
   if(diam){$('styleReveal').hidden=true;$('styleSelected').classList.remove('coba-gerak');document.querySelectorAll('.page.masuk-halaman').forEach(p=>p.classList.remove('masuk-halaman'));}
 }
@@ -5759,6 +6122,7 @@ function perbaruiKoleksiGaya() {
   document.querySelectorAll('.style-choice').forEach(t => t.setAttribute('aria-pressed', String(t.dataset.choice === g.id)));
   $('btnAnimasiOrbit').hidden = id !== 'orbit';
   if (id !== 'orbit') tutupIntroOrbit();
+  if(document.documentElement.dataset.uiReady) sinkronDesainRuang(halamanAktif);
 }
 $('btnAnimasiOrbit').onclick = putarIntroOrbit;
 
@@ -5819,6 +6183,18 @@ function perbaruiSetelanTersedia() {
   $('btnBgHapus').disabled = !glass || !foto;
 }
 
+const temaPerangkat=window.matchMedia('(prefers-color-scheme: dark)');
+const warnaBrowserSemula=document.querySelector('meta[name="theme-color"]').content;
+function perbaruiWarnaBrowser() {
+  const h=document.documentElement;
+  const gelap=h.dataset.tema==='dark'||h.dataset.tema==='auto'&&temaPerangkat.matches;
+  document.querySelector('meta[name="theme-color"]').content=h.dataset.gaya==='ruangide' ? gelap ? '#1c211d' : '#f8f7f2' : warnaBrowserSemula;
+  if(h.dataset.ui==='ruang'){
+    const warna=getComputedStyle(h).backgroundColor;
+    if((/^#[\da-f]{3,8}$/i.test(warna)||/^rgb\(/.test(warna))&&warna!=='transparent') document.querySelector('meta[name="theme-color"]').content=warna;
+  }
+}
+temaPerangkat.addEventListener('change',perbaruiWarnaBrowser);
 function terapkanTampilan() {
   const h = document.documentElement;
   h.dataset.gerak = ['penuh','ringan','mati'].includes(tampilan.gerak) ? tampilan.gerak : 'penuh';
@@ -5871,6 +6247,7 @@ function terapkanTampilan() {
   perbaruiSetelanTersedia();
   perbaruiKoleksiGaya();
   perbaruiGerakGaya();
+  perbaruiWarnaBrowser();
 }
 
 function kompresBg(file) {
@@ -6441,7 +6818,7 @@ function paletAdaptif(aks, terang, kaca, kunci, root) {
 // ===== FONT, WARNA TEKS, DAN PENGATURAN BARU =====
 function fontStack(key) {
   const map = {
-    sistem: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif',
+    sistem: 'Inter, "Segoe UI", -apple-system, BlinkMacSystemFont, Arial, sans-serif',
     serif: 'Georgia, "Noto Serif", "Times New Roman", serif',
     bulat: '"SF Pro Rounded", "Varela Round", ui-rounded, system-ui, sans-serif',
     mono: '"Roboto Mono", "Droid Sans Mono", ui-monospace, Menlo, monospace',
@@ -6892,6 +7269,7 @@ function renderMingguan() {
 
 // ===== PANDUAN GAYA (pop-up sekali per gaya) DAN CARA PAKAI FITUR =====
 const PANDUAN_GAYA = {
+  ruangide:{judul:'Gaya Ruang Ide',teks:'Terinspirasi dari web Ruang Ide: latar krem, saldo berwarna sage, ringkasan hangat, dan tombol sederhana.\n\nDekorasi dibuat diam dan tipis agar catatan terasa tenang. Tersedia tema Terang, Gelap, dan Otomatis. Judul memakai huruf klasik saat Font Sistem dipilih; pilihan font lain tetap diikuti.\n\nPilih melalui Setelan → Gaya aktif → Ruang Ide. Semua tata letak tetap bisa dipakai.'},
   aurora:{judul:"Gaya Aurora",teks:"Pita cahaya mint dan ungu menari di langit, dengan kartu seperti permata. Tersedia tema terang, gelap, dan otomatis. Atur gerak di Animasi gaya; foto latar khusus Glass."},
   arcade:{judul:"Gaya Arcade",teks:"Senja neon, grid permainan, dan tombol konsol dengan aksen cyan. Tersedia tema terang, gelap, dan otomatis. Atur gerak di Animasi gaya; foto latar khusus Glass."},
   botanica:{judul:"Gaya Botanica",teks:"Daun sage, taman kecil, dan panel hijau yang terasa teduh. Tersedia tema terang, gelap, dan otomatis. Atur gerak di Animasi gaya; foto latar khusus Glass."},
@@ -7150,6 +7528,52 @@ function susunBeranda() {
   grup('Rencana keuangan', 'Transaksi berulang, anggaran, dan target tabungan.', ['cardBerulang','cardBudget','cardWish']);
 }
 
+// ===== KOMPONEN DESAIN RUANG: hanya tampilan, tanpa data keuangan tambahan. =====
+const RUANG_UI_ICONS={
+  wallet:'<rect x="3" y="5" width="18" height="15" rx="3"/><path d="M3 8V6c0-2 2-3 4-3h11v2m3 6h-6v5h6"/><path d="M17 13.5h.1"/>',
+  grid:'<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>',
+  receipt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Zm3 5h6m-6 4h6"/>',
+  chart:'<path d="M4 20h16M7 15v-5m5 5V5m5 10V8"/>',
+  plus:'<path d="M12 4v16M4 12h16"/>',
+  sliders:'<path d="M4 7h7m5 0h4M4 17h3m5 0h8"/><circle cx="13.5" cy="7" r="2.5"/><circle cx="9.5" cy="17" r="2.5"/>',
+  backup:'<path d="M12 3v11m-4-4 4 4 4-4M4 15v6h16v-6"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9 8.5c.6-2.5 6-2.5 6 1 0 1.7-3 1.8-3 4m0 3v.1"/>',
+  sprout:'<path d="M12 21v-9m0 4C5 17 3 12 4 7c6-1 8 3 8 6m0-2c0-5 3-8 8-8 1 6-3 10-8 10"/>',
+  palette:'<circle cx="12" cy="12" r="9"/><circle cx="8" cy="8" r="1"/><circle cx="15" cy="7" r="1"/><circle cx="17" cy="12" r="1"/><path d="M12 21c4-1-5-6-1-8"/>',
+  lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 10v4m-2-2h4"/>',
+  repeat:'<path d="M4 9a7 7 0 0 1 12-4l3 3m0-5v5h-5M20 15a7 7 0 0 1-12 4l-3-3m0 5v-5h5"/>',
+  pen:'<path d="m16 3 5 5L8 21H3v-5L16 3ZM13 6l5 5"/>',
+  cash:'<rect x="2" y="5" width="20" height="14" rx="3"/><circle cx="12" cy="12" r="3"/><path d="M6 9h.1M18 15h.1"/>',
+};
+function ikonRuang(nama){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+(RUANG_UI_ICONS[nama]||RUANG_UI_ICONS.wallet)+'</svg>';}
+function hiasJudulRuang(){
+  document.querySelectorAll('.card > h2,.chart-heading > h2').forEach(h=>{
+    if(h.dataset.ruangHeading||h.id||h.closest('dialog'))return;
+    const teks=h.textContent.toLowerCase();
+    const jenis=/grafik|kategori|bulanan|perbandingan|saldo|bandingkan/.test(teks)?'chart':/target|tabungan/.test(teks)?'sprout':/anggaran/.test(teks)?'target':/berulang|pengingat/.test(teks)?'repeat':/backup|drive|data/.test(teks)?'backup':/tampilan/.test(teks)?'palette':/riwayat|struk/.test(teks)?'receipt':'pen';
+    const simbol=document.createElement('span');simbol.className='ui-icon ui-card-title-icon';simbol.setAttribute('aria-hidden','true');simbol.innerHTML=ikonRuang(jenis);h.prepend(simbol);h.classList.add('ui-card-heading');h.dataset.ruangHeading='1';
+  });
+}
+function sinkronDesainRuang(halaman){
+  const judul={beranda:'Beranda',riwayat:'Riwayat',catat:'Catat transaksi',grafik:'Grafik',setelan:'Setelan',data:'Data & backup'};
+  document.documentElement.dataset.activePage=Object.prototype.hasOwnProperty.call(judul,halaman)?halaman:'beranda';
+  $('uiPageCrumb').textContent=judul[halaman]||judul.beranda;
+  document.querySelectorAll('.ui-side-link').forEach(b=>{if(b.dataset.ruangPage===halaman)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+  document.querySelectorAll('nav.bottom .tab').forEach(b=>{if(b.dataset.page===(halaman==='data'?'setelan':halaman))b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+  const gaya=KOLEKSI_GAYA.find(g=>g.id===document.documentElement.dataset.gaya)||KOLEKSI_GAYA[0];
+  $('uiSideStyle').textContent='Gaya '+gaya.nama;
+  isiArtGaya($('ruangThemeMark'),gaya.id);
+  hiasJudulRuang();
+}
+function pasangDesainRuang(){
+  document.querySelectorAll('[data-ruang-icon]').forEach(n=>n.innerHTML=ikonRuang(n.dataset.ruangIcon));
+  document.querySelectorAll('[data-ruang-page]').forEach(n=>n.onclick=e=>{e.preventDefault();goto(n.dataset.ruangPage);});
+  $('uiOpenHelp').onclick=()=>bantuan('catat');
+  [['tabMoneyCash','cash'],['tabMoneyDigital','wallet']].forEach(([id,nama])=>{const simbol=document.createElement('span');simbol.className='ui-icon';simbol.setAttribute('aria-hidden','true');simbol.innerHTML=ikonRuang(nama);$(id).prepend(simbol);});
+  document.documentElement.dataset.uiReady='1';sinkronDesainRuang(halamanAktif);
+}
+
 // ===== INISIALISASI =====
 pasangLabelForm();
 susunBeranda();
@@ -7158,7 +7582,7 @@ updateFormJenis();
 updateFormPecahan();
 tampilkanSatuanLain($('iSatuan'), $('iSatuanLain'));
 tampilkanSatuanLain($('rbSatuan'), $('rbSatuanLain'));
-$('hdr').textContent = 'Hari ini, ' + tglIndo(hariIni());
+$('hdr').textContent = new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date());
 $('tgl').value = hariIni();
 aturRentangGrafik('30',false);
 $('cmpA').value = hariIni();
@@ -7175,6 +7599,7 @@ isiKategoriBerulang();
 renderNotifStatus();
 pulihkanDrafCatat();
 simpan();
+pasangDesainRuang();
 goto('beranda');
 if (asalDriveValid()) loadGis().catch(() => {});
 setInterval(() => {
