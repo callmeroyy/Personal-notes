@@ -2085,10 +2085,50 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     html#financeApp[data-ui="ruang"] .ui-sidebar,.ui-topline,.ui-skip{display:none !important}
     html#financeApp[data-ui="ruang"] body{padding-left:0 !important}
   }
+/* Status catatan dan perpindahan mengikuti seluruh gaya aktif. */
+.ledger-notice{padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--ghostbg);color:var(--ink);line-height:1.5;margin:12px 0;overflow-wrap:anywhere}
+.ledger-security{max-width:1080px;margin:12px auto;position:relative;z-index:3}.ledger-security p{margin:8px 0}
+.ledger-check,.ledger-bulk>label{display:flex;align-items:center;gap:10px;font-size:14px;line-height:1.5;margin:12px 0;cursor:pointer}
+.ledger-check input,.ledger-select input,.ledger-bulk input{width:20px!important;height:20px!important;min-height:20px!important;flex:0 0 20px;margin:0!important;padding:0!important;accent-color:var(--ghostink)}
+.ledger-select{display:inline-flex;align-items:center;justify-content:center;min-width:38px;min-height:42px;flex:0 0 auto;cursor:pointer}
+.ledger-row-head{display:flex;align-items:center;gap:8px}.ledger-bulk{padding:8px 0 15px;border-bottom:1px solid var(--line);margin-bottom:12px}.ledger-bulk .aksi{flex-wrap:wrap;margin-top:9px}
+.ledger-status{margin:7px 0;display:flex;flex-wrap:wrap;gap:7px;align-items:center}.ledger-badge{font-size:11px;font-weight:750;padding:5px 9px;background:var(--ghostbg);color:var(--ghostink);border:1px dashed var(--line);border-radius:9px}.is-inactive{border-left:3px dashed var(--muted)!important}.is-inactive .amt{text-decoration:line-through}.ledger-log{width:100%;font-size:12px}.ledger-log p{margin:5px 0;overflow-wrap:anywhere}
+.ledger-undo{display:inline-flex!important;width:auto!important;min-height:40px;margin:8px 0 0 12px!important;padding:7px 14px!important;background:var(--ghostbg)!important;color:var(--ghostink)!important;border:1px solid var(--line)!important;border-radius:10px!important;vertical-align:middle}
+#financeApp .ui-transaction>div.row>.ledger-select{align-self:flex-start}#financeApp .ui-transaction:has(.ledger-select) .ui-transaction-icon{display:none}
+#transferPaidGrid,#transferChangeGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:10px 0 18px}#transferPaidGrid input,#transferChangeGrid input{width:100%}#transferPhysical{margin:16px 0}#transferPhysical .ledger-check{margin-bottom:12px}#transferReportNote{font-size:12px;line-height:1.5;max-width:620px}
+#dlgTransferDompet label.ledger-check{align-items:flex-start}#dlgTransferDompet .ledger-check input{margin-top:2px!important}#ledgerStatusPreview,#ledgerImportSummary{line-height:1.6}#ledgerStatusError,#ledgerImportError,#transferError{color:var(--delink);white-space:pre-line}
+@media(max-width:480px){#transferPaidGrid,#transferChangeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.ledger-bulk .aksi>button{flex:1 1 135px}.ledger-security{margin:10px 12px}.ledger-entry .aksi{flex-wrap:wrap}}
+
+
+  /* Dua seri saldo dengan warna, pola garis, dan bentuk titik berbeda. */
+  #gSaldoChart,#gSaldoLegend{--saldo-tunai:#087f8c;--saldo-wallet:#b45309}
+  html[data-tema="dark"] #gSaldoChart,html[data-tema="dark"] #gSaldoLegend{--saldo-tunai:#5eead4;--saldo-wallet:#fdba74}
+  #gSaldoInfo{white-space:pre-line}
+  .saldo-legend{display:flex;flex-wrap:wrap;gap:12px 24px;margin:14px 0;font-size:13px;color:var(--ink)}
+  .saldo-legend>span{display:inline-flex;align-items:center;gap:8px}
+  .saldo-key{display:inline-block;position:relative;width:28px;border-top:3px solid var(--saldo-tunai)}
+  .saldo-key:after{content:'';position:absolute;width:7px;height:7px;left:10px;top:-5px;border-radius:50%;background:var(--saldo-tunai)}
+  .saldo-key-wallet{border-color:var(--saldo-wallet);border-top-style:dashed}
+  .saldo-key-wallet:after{border-radius:0;background:var(--saldo-wallet)}
+
+  /* Kotak centang ledger harus tetap berupa kontrol centang pada semua gaya. */
+  html#financeApp[data-gaya] :is(.ledger-check,.ledger-select,.ledger-bulk) input[type="checkbox"]{appearance:checkbox!important;-webkit-appearance:checkbox!important;display:inline-block!important;width:22px!important;height:22px!important;min-width:22px!important;min-height:22px!important;max-width:22px!important;max-height:22px!important;flex:0 0 22px!important;padding:0!important;margin:0!important;border:0!important;border-radius:4px!important;background:transparent!important;box-shadow:none!important;accent-color:var(--ghostink);cursor:pointer}
+  #transferDariWrap[hidden],#transferKeWrap[hidden]{display:none!important}
+  .transfer-route>div{min-width:0;padding:12px;margin-bottom:12px;border:1px solid var(--line);border-radius:12px;background:var(--input)}
+  .transfer-route select:last-child{margin-bottom:0}
+  #rPeriodInfo{line-height:1.5}
+
+  #transferSetup[hidden],#transferFields[hidden],#btnTransferSave[hidden],#btnTransferSwap[hidden],#btnTransferFundSource[hidden]{display:none!important}
+  #transferSourceInfo{margin:10px 0 0;line-height:1.6}
+  #btnTransferFundSource{margin-top:10px}
+  #transferError:not(:empty){padding:12px;border:1px solid currentColor;border-radius:10px;background:var(--card);scroll-margin-block:20px;line-height:1.6}
+  #transferSetup p{margin-top:0;line-height:1.6}
+  #transferSetup button{margin-bottom:0}
+  #dlgTransferDompet{overscroll-behavior:contain;scroll-padding-block:18px}
 </style>
 
 </head>
-<body>
+<body><div id="ledgerSecurity" class="ledger-notice ledger-security" role="alert" hidden></div>
 <a class="ui-skip" href="#appMain">Langsung ke isi</a>
 <div id="bgLayer"></div>
 <div id="styleDecor" aria-hidden="true"><div id="styleAmbient"></div></div>
@@ -2151,7 +2191,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       </g>
     </svg>
     <span class="lbl">Total saldo</span>
-    <b id="saldo"></b>
+    <b id="saldo"></b><p class="muted" id="transferReportNote" hidden></p>
     <svg id="heroScene" viewBox="0 0 220 180" fill="none" aria-hidden="true" focusable="false"></svg>
     <svg id="ruangHeroArt" viewBox="0 0 180 180" fill="none" aria-hidden="true" focusable="false">
       <g class="ui-art-smooth" color="var(--ui-paper-ink)">
@@ -2213,7 +2253,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <div id="panelMoneyCash" role="tabpanel" aria-labelledby="tabMoneyCash" tabindex="0">
         <div class="wallet-heading"><h3>Tunai</h3><button type="button" class="ghost kecil" id="btnHomeCashHelp">Cara pakai</button></div>
         <div class="wallet-summary"><span>Saldo tunai</span><b id="homeCashTotal">Rp0</b><small>Mengikuti pemasukan dan pengeluaran tunai. Tidak perlu mengisi jumlah lembar uang.</small></div>
-        <div class="wallet-actions"><button type="button" id="btnHomeCashAdd">+ Tambah saldo</button><button type="button" class="ghost" id="btnHomeCashRecord">Catat tunai</button></div>
+        <div class="wallet-actions"><button type="button" id="btnHomeCashAdd">+ Tambah saldo</button><button type="button" class="ghost" id="btnHomeCashRecord">Catat tunai</button><button type="button" class="ghost" id="btnCashToWallet">Tunai → Wallet</button></div>
         <details id="homeCashDetails" class="quick-extra">
           <summary>Rincian uang fisik <span class="muted">(opsional)</span></summary>
           <div class="cash-track"><span>Catat lembar uang di dompet</span><button type="button" id="btnHomeCashTracking" aria-pressed="false">OFF · Tidak dipakai</button></div>
@@ -2233,7 +2273,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <div class="wallet-summary"><span>Jumlah saldo di dompet</span><b id="walletTotal">Rp0</b><small>Bagian dari saldo total, tidak dijumlahkan dua kali.</small></div>
     <p class="muted" id="walletUnassignedInfo" style="line-height:1.5"></p>
     <div id="walletList"></div>
-    <div class="wallet-actions"><button type="button" id="btnWalletAdd">+ Tambah dompet</button><button type="button" class="ghost" id="btnWalletTransfer">Transfer antar dompet</button></div>
+    <div class="wallet-actions"><button type="button" id="btnWalletAdd">+ Tambah dompet</button><button type="button" class="ghost" id="btnWalletTransfer">Pindahkan saldo</button><button type="button" class="ghost" id="btnWalletToCash">Tarik tunai</button></div>
     <p class="muted" id="walletTransferHint" style="line-height:1.5"></p>
     <details id="walletArchived" hidden><summary id="walletArchivedTitle">Dompet diarsipkan</summary><div id="walletArchivedList"></div></details>
     <details class="quick-extra" id="walletTransferDetails" hidden><summary>Transfer terbaru</summary><div id="walletTransferList"></div></details>
@@ -2386,7 +2426,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <select id="rbKat"></select>
     </div>
     <div class="grid2">
-      <input type="number" id="rbQty" placeholder="Contoh: 1" value="1" min="0.001" step="any" inputmode="decimal">
+      <input type="text" id="rbQty" placeholder="Contoh: 1" value="1" min="0.001" step="any" inputmode="decimal">
       <select id="rbSatuan" aria-label="Satuan transaksi berulang"></select>
     </div>
     <input type="text" id="rbSatuanLain" placeholder="Contoh: dus" maxlength="30" style="display:none">
@@ -2438,7 +2478,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 <!-- RIWAYAT -->
 <section id="riwayat" class="page">
   <div class="card">
-    <h2>Riwayat & periode</h2>
+    <h2>Riwayat & periode</h2><label class="field-label" for="rRentang">Periode riwayat</label><select id="rRentang"><option value="semua" selected>Semua tanggal</option><option value="hari">Hari ini</option><option value="7">7 hari terakhir</option><option value="30">30 hari terakhir</option><option value="bulan">Bulan ini</option><option value="6bulan">6 bulan terakhir</option><option value="custom">Tanggal sendiri</option></select><p class="muted" id="rPeriodInfo" aria-live="polite"></p>
     <div class="grid2">
       <div><span class="muted">Dari</span><input type="date" id="rDari"></div>
       <div><span class="muted">Sampai</span><input type="date" id="rSampai"></div>
@@ -2450,8 +2490,9 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <select id="rTipe">
       <option value="semua">Semua tipe</option>
       <option value="masuk">Pemasukan saja</option>
-      <option value="keluar">Pengeluaran saja</option>
+      <option value="keluar">Pengeluaran saja</option><option value="transfer">Perpindahan uang</option>
     </select>
+    <label class="field-label" for="rStatus">Status catatan</label><select id="rStatus"><option value="aktif">Aktif (dihitung)</option><option value="semua">Semua status</option><option value="nonaktif">Nonaktif (tidak dihitung)</option></select>
     <input type="text" id="rCari" placeholder="Contoh: telur, belanja, atau kantor">
     <p class="muted" id="rRingkas"></p>
     <div class="stats history-stats" style="margin:0 0 12px">
@@ -2460,8 +2501,8 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     </div>
     <button class="sec" id="btnRekapRiwayat">🖼️ Cetak rekap sesuai filter (gambar)</button>
   </div>
-  <div class="card"><div id="rList"></div>
-    <details id="walletHistory" hidden><summary>Transfer antar dompet</summary><p class="muted">Perpindahan saldo. Hanya biaya admin dihitung sebagai pengeluaran.</p><div id="walletHistoryList"></div></details></div>
+  <div class="card"><div class="ledger-bulk" role="group" aria-label="Pilih dan ubah status catatan"><label><input id="ledgerSelectAll" type="checkbox">Pilih yang tampil</label><span id="ledgerSelectedCount" class="muted"></span><div class="aksi"><button type="button" class="ghost kecil" id="ledgerDisable">Nonaktifkan pilihan</button><button type="button" class="ghost kecil" id="ledgerEnable">Aktifkan pilihan</button><button type="button" class="ghost kecil" id="ledgerClear">Batal pilih</button><button type="button" class="ghost kecil" id="ledgerStatusHelp">Cara pakai status</button></div></div><div id="rList"></div>
+    <details id="walletHistory" hidden><summary>Transfer antar dompet</summary><p class="muted">Pilih apakah pokok perpindahan masuk laporan pengeluaran. Saldo total hanya berkurang biaya admin.</p><div id="walletHistoryList"></div></details></div>
 </section>
 
 <!-- GRAFIK -->
@@ -2485,7 +2526,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
   <details class="chart-more" id="gExtraCharts">
     <summary><strong>Grafik lainnya</strong><span>Saldo berjalan, perbandingan bulanan, dan sumber pembayaran</span></summary>
-    <div class="card"><h2>Perubahan saldo</h2><p class="sub">Saldo sebelum tanggal awal ikut dihitung. Transfer antar dompet tidak menambah atau mengurangi total saldo.</p><p class="chart-balance" id="gSaldoInfo"></p><div class="svgbox chart-plot" id="gSaldoChart"></div><details class="chart-data"><summary>Lihat angka saldo</summary><div id="gSaldoData"></div></details></div>
+    <div class="card"><h2>Perubahan saldo</h2><p class="sub">Saldo sebelum tanggal awal ikut dihitung. Pokok perpindahan tetap milikmu; biaya admin mengurangi saldo total.</p><p class="chart-balance" id="gSaldoInfo"></p><div class="saldo-legend" id="gSaldoLegend" aria-label="Keterangan garis saldo"><span><i class="saldo-key" aria-hidden="true"></i>Tunai</span><span><i class="saldo-key saldo-key-wallet" aria-hidden="true"></i>Wallet</span></div><div class="svgbox chart-plot" id="gSaldoChart"></div><p class="sub" id="gSaldoNote"></p><details class="chart-data"><summary>Lihat angka saldo</summary><div id="gSaldoData"></div></details></div>
     <div class="card"><h2>Perbandingan bulanan</h2><p class="sub">Pemasukan dan pengeluaran pada rentang pilihan, sampai 6 bulan terakhir.</p><div class="legend chart-legend"><span class="sw" style="background:var(--ok)"></span>Pemasukan <span class="sw" style="background:var(--bad)"></span>Pengeluaran</div><div class="svgbox chart-plot" id="gMonthChart"></div><details class="chart-data"><summary>Lihat angka bulanan</summary><div id="gMonthData"></div></details></div>
     <div class="card"><h2>Pengeluaran dibayar dari mana?</h2><p class="sub">Bandingkan penggunaan tunai, rekening, dan e-wallet. Biaya admin termasuk pengeluaran; nominal transfer tidak dihitung dua kali.</p><div id="gPaymentChart"></div></div>
   </details>
@@ -2695,7 +2736,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <input type="text" id="eTag" placeholder="Contoh: kantor, kuliah">
   <input type="text" id="eNominalMasuk" data-uang placeholder="Contoh: 50.000" inputmode="decimal">
   <label class="field-label" for="eCara">Cara pembayaran</label>
-  <select id="eCara"><option value="tunai">Tunai</option><option value="nontunai">Wallet / non-tunai</option></select>
+  <p id="eInactiveNote" class="ledger-notice" hidden>Catatan ini NONAKTIF. Edit hanya mengubah rinciannya; saldo dan stok tetap. Gunakan Aktifkan di Riwayat untuk menghitungnya kembali.</p><select id="eCara"><option value="tunai">Tunai</option><option value="nontunai">Wallet / non-tunai</option></select>
   <div id="eDigitalWrap" style="display:none">
       <div id="eDigitalDetail" class="wallet-form-panel" hidden>
         <label class="field-label" id="eDigitalLabel" for="eDigitalSelect">Dompet pembayaran</label>
@@ -2786,17 +2827,23 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <p id="wltError" role="alert"></p><button type="button" id="btnWltSave">Simpan dompet</button><button type="button" class="sec" id="btnWltCancel">Batal</button>
 </dialog>
 <dialog id="dlgTransferDompet" aria-labelledby="transferTitle">
-  <h2 id="transferTitle">Transfer antar dompet</h2>
-  <p class="muted" style="line-height:1.5">Pindahkan uangmu sendiri. Jumlah transfer tidak menjadi pengeluaran baru.</p>
-  <label class="field-label" for="transferDari">Dari dompet</label><select id="transferDari"></select>
-  <label class="field-label" for="transferKe">Ke dompet</label><select id="transferKe"></select>
+  <h2 id="transferTitle">Pindahkan uang</h2>
+  <p class="muted" style="line-height:1.5">Pindahkan uang antara Tunai, bank, atau e-wallet. Ini pencatatan saja, bukan transfer uang melalui bank.</p>
+  <div id="transferSetup" class="wallet-dialog-note" hidden><p>Belum ada rekening / e-wallet aktif. Tambahkan satu terlebih dahulu dan catat saldo yang sudah kamu miliki.</p><button type="button" id="btnTransferAddWallet">Tambah rekening / e-wallet</button></div><div id="transferFields"><div class="transfer-route">
+    <div><label class="field-label" for="transferDariJenis">Dari jenis uang</label><select id="transferDariJenis"></select><div id="transferDariWrap"><label class="field-label" for="transferDari">Rekening / e-wallet sumber</label><select id="transferDari"></select></div><p class="muted" id="transferSourceInfo" aria-live="polite"></p><button type="button" class="ghost kecil" id="btnTransferFundSource" hidden>Catat saldo yang sudah ada</button></div>
+    <div><label class="field-label" for="transferKeJenis">Ke jenis uang</label><select id="transferKeJenis"></select><div id="transferKeWrap"><label class="field-label" for="transferKe">Rekening / e-wallet tujuan</label><select id="transferKe"></select></div></div>
+  </div>
   <div class="grid2"><div><label class="field-label" for="transferJumlah">Jumlah diterima tujuan (Rp)</label><input id="transferJumlah" type="text" data-uang inputmode="decimal" placeholder="Contoh: 50.000"></div><div><label class="field-label" for="transferBiaya">Biaya admin (Rp, opsional)</label><input id="transferBiaya" type="text" data-uang inputmode="decimal" placeholder="0"></div></div>
   <label class="field-label" for="transferTanggal">Tanggal transfer</label><input id="transferTanggal" type="date">
   <label class="field-label" for="transferCatatan">Catatan (opsional)</label><input id="transferCatatan" type="text" maxlength="120" placeholder="Contoh: Isi DANA dari rekening">
-  <p class="wallet-dialog-note" id="transferPreview" aria-live="polite"></p><p id="transferError" role="alert"></p>
-  <button type="button" id="btnTransferSave">Simpan transfer</button><button type="button" class="sec" id="btnTransferCancel">Batal</button>
+  <label class="ledger-check"><input id="transferExpense" type="checkbox">Masukkan pokok perpindahan ke laporan pengeluaran</label><p class="muted">Pilihan ini untuk cara pencatatanmu. Saldo gabungan tetap tidak dikurangi dua kali. Biaya admin selalu pengeluaran.</p><details id="transferPhysical" class="quick-extra" hidden><summary>Pecahan uang fisik (opsional)</summary><label class="ledger-check"><input id="transferTrack" type="checkbox">Sesuaikan lembar uang fisik yang tersimpan</label><p class="muted">OFF: hanya saldo tunai dan wallet berubah. ON: isi pecahan yang diberikan/diterima; stok lembar ikut berubah saat disimpan.</p><div id="transferUnits" hidden><p id="transferUnitsLabel"></p><div class="denom-grid" id="transferPaidGrid"></div><div id="transferChangeWrap"><p>Kembalian diterima (lembar/keping)</p><div class="denom-grid" id="transferChangeGrid"></div></div><button type="button" class="ghost" id="transferAutoUnits">Isi pecahan otomatis</button></div></details>
+  <p class="wallet-dialog-note" id="transferPreview" aria-live="polite"></p></div><p id="transferError" role="alert" tabindex="-1"></p>
+  <button type="button" id="btnTransferSwap" class="ghost">Tukar arah</button><button type="button" id="btnTransferSave">Simpan perpindahan</button><button type="button" class="sec" id="btnTransferCancel">Batal</button>
 </dialog>
 <dialog id="dlgKonfirmasiDompet" aria-labelledby="walletConfirmTitle"><h2 id="walletConfirmTitle">Batalkan perubahan?</h2><p id="walletConfirmText"></p><button type="button" class="del" id="btnWalletConfirmYes">Ya, lanjutkan</button><button type="button" class="sec" id="btnWalletConfirmNo">Kembali</button></dialog>
+
+<dialog id="dlgStatusCatatan" aria-labelledby="ledgerStatusTitle"><h2 id="ledgerStatusTitle">Ubah status catatan</h2><p class="muted" id="ledgerStatusDescription"></p><div id="ledgerReasonWrap"><label class="field-label" for="ledgerReason">Alasan nonaktif (opsional)</label><input id="ledgerReason" type="text" maxlength="240" placeholder="Contoh: catatan uji coba atau transaksi dibatalkan"></div><p class="ledger-notice" id="ledgerStatusPreview" aria-live="polite"></p><p role="alert" id="ledgerStatusError"></p><button type="button" id="ledgerStatusSave">Ya, ubah status</button><button type="button" class="sec" id="ledgerStatusCancel">Kembali</button></dialog>
+<dialog id="dlgImportLedger" aria-labelledby="ledgerImportTitle"><h2 id="ledgerImportTitle">Periksa backup</h2><p id="ledgerImportSummary"></p><label class="field-label" for="ledgerImportMode">Cara memakai backup</label><select id="ledgerImportMode"><option value="gabung">Gabungkan catatan baru (ID lama tetap)</option><option value="pulihkan">Pulihkan penuh (ganti seluruh data)</option></select><p class="muted">Pulihkan penuh mengembalikan status aktif/nonaktif dan stok pecahan persis dari backup. Gabungkan hanya menambah ID baru; pecahan baru ikut diperiksa agar tidak terhitung dua kali.</p><p role="alert" id="ledgerImportError"></p><button type="button" id="ledgerImportSave">Lanjutkan</button><button type="button" class="sec" id="ledgerImportCancel">Batal</button></dialog>
 
 <!-- DIALOG EDIT BERULANG -->
 <dialog id="dlgBerulang">
@@ -2810,7 +2857,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <select id="ebKat"></select>
   </div>
   <div class="grid2">
-    <input type="number" id="ebQty" placeholder="Contoh: 1" min="0.001" step="any" inputmode="decimal">
+    <input type="text" id="ebQty" placeholder="Contoh: 1" min="0.001" step="any" inputmode="decimal">
     <select id="ebSatuan" aria-label="Satuan transaksi berulang"></select>
   </div>
   <input type="text" id="ebSatuanLain" placeholder="Contoh: dus" maxlength="30" style="display:none">
@@ -2869,6 +2916,8 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 </dialog>
 
 <script>
+const TUNAI_ID='__tunai__';
+let financeSnapshot=null,financeMuatError='',transferDraftId=null,pilihanLedger=new Set(),ledgerTerlihat=[],statusDraft=null,urungkanLedger=null;
 const KEY = 'catatan-keuangan-v3';
 const KEY_V2 = 'catatan-keuangan-v2';
 const KEY_V1 = 'catatan-keuangan-v1';
@@ -2933,6 +2982,8 @@ document.addEventListener('input', e => {
   if (e.target.matches('input[data-uang]')) formatInputUang(e.target);
 }, true);
 const jumlah = n => Number(n).toLocaleString('id-ID', { maximumFractionDigits: 6 });
+// Isian jumlah tidak memakai pemisah ribuan agar 1500 tetap dibaca 1500.
+const teksJumlahInput = n => String(n ?? '').replace('.', ',');
 const jumlahSatuan = i => jumlah(i.qty) + (i.satuan ? ' ' + i.satuan : '');
 const hargaSatuan = i => rp(i.harga) + (i.satuan ? '/' + i.satuan : '');
 const subtotalItem = i => i.hargaTotal != null && Number.isFinite(Number(i.hargaTotal))
@@ -2991,36 +3042,16 @@ const svg = (w, h, inner) => `<svg viewBox="0 0 ${w} ${h}" width="100%" xmlns="h
 const PAL = ['#4f46e5','#16a34a','#e11d48','#f59e0b','#9333ea','#0891b2','#64748b','#ec4899'];
 
 const KAT = {
-  keluar: ['Makan','Jajan','Minuman','Transport','Kos','Kuota/Pulsa','Belanja','Tabungan','Lainnya'],
+  keluar: ['Makan','Jajan','Minuman','Transport','Kos','Kuota/Pulsa','Belanja','Tabungan','Pindah saldo','Biaya admin','Lainnya'],
   masuk: ['Uang saku','Gaji','Jualan','Saldo awal','Lainnya']
 };
 
 function normal(x) {
-  const items = Array.isArray(x.items)
-    ? x.items.map(i => ({ nama: String(i.nama), qty: Number(i.qty) || 1, satuan: String(i.satuan || '').trim(), harga: Number(i.harga) || 0,
-      ...(i.hargaTotal != null && Number.isFinite(Number(i.hargaTotal)) && Number(i.hargaTotal) > 0 ? { hargaTotal: Number(i.hargaTotal) } : {}) }))
-    : [{ nama: String(x.nama || 'Barang'), qty: Number(x.qty) || 1, satuan: String(x.satuan || '').trim(), harga: Number(x.harga ?? x.jumlah) || 0 }];
-  const total = items.reduce((s, i) => s + subtotalItem(i), 0);
-  const judul = x.judul || (items.length === 1 ? items[0].nama : (x.nama || 'Belanja ' + tglIndo(x.tanggal)));
-  return {
-    id: String(x.id || uid()),
-    ts: Number(x.ts) || 0,
-    tanggal: x.tanggal,
-    tipe: x.tipe === 'masuk' ? 'masuk' : 'keluar',
-    judul: String(judul),
-    kategori: x.kategori || 'Lainnya',
-    items, total,
-    wishId: x.wishId || null,
-    berulangId: x.berulangId || null,
-    drafId: x.drafId ? String(x.drafId) : null,
-    saldoAwal: !!x.saldoAwal,
-    tags: Array.isArray(x.tags) ? x.tags.map(String) : [],
-    foto: x.foto || null,
-    dompetId: x.dompetId ? String(x.dompetId) : null,
-    transferDompetId: x.transferDompetId ? String(x.transferDompetId) : null,
-    tunai: x.tunai || null,
-    cara: x.cara === 'tunai' || x.tunai ? 'tunai' : 'nontunai'
-  };
+  if(!x || typeof x!=='object') throw Error('Transaksi tidak valid.');
+  if(x.aktif!==undefined && typeof x.aktif!=='boolean') throw Error('Status transaksi harus aktif atau nonaktif.');
+  const items=Array.isArray(x.items)?x.items.map(i=>({nama:String(i.nama),qty:Number(i.qty)||1,satuan:String(i.satuan||'').trim(),harga:Number(i.harga)||0,...(i.hargaTotal!=null&&Number.isFinite(Number(i.hargaTotal))&&Number(i.hargaTotal)>0?{hargaTotal:Number(i.hargaTotal)}:{})})):[{nama:String(x.nama||'Barang'),qty:Number(x.qty)||1,satuan:String(x.satuan||'').trim(),harga:Number(x.harga??x.jumlah)||0}];
+  const total=items.reduce((s,i)=>s+subtotalItem(i),0),judul=x.judul||(items.length===1?items[0].nama:(x.nama||'Belanja '+tglIndo(x.tanggal)));
+  return {id:String(x.id||uid()),ts:Number(x.ts)||0,tanggal:x.tanggal,tipe:x.tipe==='masuk'?'masuk':'keluar',judul:String(judul),kategori:x.kategori||'Lainnya',items,total,wishId:x.wishId||null,berulangId:x.berulangId||null,drafId:x.drafId?String(x.drafId):null,saldoAwal:!!x.saldoAwal,tags:Array.isArray(x.tags)?x.tags.map(String):[],foto:x.foto||null,dompetId:x.dompetId?String(x.dompetId):null,transferDompetId:x.transferDompetId?String(x.transferDompetId):null,tunai:x.tunai||null,cara:x.cara==='tunai'||x.tunai?'tunai':'nontunai',...normalStatusCatatan(x)};
 }
 
 const normalWish = list => list.map(w => ({
@@ -3044,24 +3075,15 @@ const normalBerulang = list => (list || []).filter(r => r && r.mulai).map(r => (
 }));
 
 function muat() {
+  const kosong=()=>({transaksi:[],wishlist:[],budgets:{},berulang:[],dompet:[],transferDompet:[]});
   try {
-    const v3 = JSON.parse(localStorage.getItem(KEY) || 'null');
-    if (v3) return {
-      transaksi: (v3.transaksi || []).map(normal),
-      wishlist: normalWish(v3.wishlist || []),
-      budgets: v3.budgets || {},
-      berulang: normalBerulang(v3.berulang),
-      dompet: normalDompet(v3.dompet),
-      transferDompet: normalTransferDompet(v3.transferDompet),
-      uangFisik: v3.uangFisik && typeof v3.uangFisik === 'object' ? v3.uangFisik : null
-    };
-    const v2 = JSON.parse(localStorage.getItem(KEY_V2) || 'null');
-    if (v2) return { transaksi: (v2.transaksi || []).map(normal), wishlist: normalWish(v2.wishlist || []), budgets: {}, berulang: [] };
-    const v1 = JSON.parse(localStorage.getItem(KEY_V1) || '[]');
-    return { transaksi: v1.map(normal), wishlist: [], budgets: {}, berulang: [] };
-  } catch (e) {
-    return { transaksi: [], wishlist: [], budgets: {}, berulang: [] };
-  }
+    financeSnapshot=localStorage.getItem(KEY);const v3=JSON.parse(financeSnapshot||'null');
+    if(v3){if(typeof v3!=='object'||Array.isArray(v3)||Number(v3.fiturData||0)>4)throw Error('Versi data belum didukung.');
+      for(const k of ['transaksi','wishlist','berulang','dompet','transferDompet'])if(v3[k]!==undefined&&!Array.isArray(v3[k]))throw Error('Daftar '+k+' tidak valid.');
+      return {fiturData:4,transaksi:(v3.transaksi||[]).map(normal),wishlist:normalWish(v3.wishlist||[]),budgets:v3.budgets||{},berulang:normalBerulang(v3.berulang),dompet:normalDompet(v3.dompet),transferDompet:normalTransferDompet(v3.transferDompet),uangFisik:v3.uangFisik&&typeof v3.uangFisik==='object'?v3.uangFisik:null};}
+    const v2=JSON.parse(localStorage.getItem(KEY_V2)||'null');if(v2)return {...kosong(),transaksi:(v2.transaksi||[]).map(normal),wishlist:normalWish(v2.wishlist||[])};
+    const v1=JSON.parse(localStorage.getItem(KEY_V1)||'[]');return {...kosong(),transaksi:v1.map(normal)};
+  }catch(e){financeMuatError=e.message||'Data tidak dapat dibaca.';return kosong();}
 }
 
 function normalJamPengingat(nilai) {
@@ -3170,43 +3192,28 @@ function renderPanduanStatus() {
   box.appendChild(tombol);
 }
 
-function simpan() {
+function simpan({pemulihan=false}={}) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(db));
-    penyimpananBerhasil = true;
-    tandaiPerubahanDrive();
-    return true;
-  } catch (e) {
-    penyimpananBerhasil = false;
-    alert('Penyimpanan HP penuh. Hapus beberapa foto struk, atau export backup lalu bersihkan data.');
-    return false;
-  }
+    if(financeMuatError&&!pemulihan)throw Error('Data lama belum bisa dibaca. Pulihkan backup atau unduh data asli; data lama tetap aman.');
+    if(localStorage.getItem(KEY)!==financeSnapshot)throw Error('Catatan berubah di tab lain. Muat ulang sebelum menyimpan agar data terbaru tidak tertimpa.');
+    db.fiturData=4;const serialized=JSON.stringify(db);localStorage.setItem(KEY,serialized);financeSnapshot=serialized;financeMuatError='';penyimpananBerhasil=true;
+  }catch(e){penyimpananBerhasil=false;beriPesan(e.name==='QuotaExceededError'?'Penyimpanan penuh. Isian belum disimpan; cadangkan data atau kurangi foto struk.':e.message||'Penyimpanan belum tersedia.',true);return false;}
+  try{tandaiPerubahanDrive();}catch(_){beriPesan('Catatan tersimpan. Pengaturan backup otomatis belum berhasil diperbarui.',true);}return true;
 }
 function simpanKrj() { localStorage.setItem(KEY_KRJ, JSON.stringify(keranjang)); jadwalkanDraf(); }
 function simpanSet() { localStorage.setItem(KEY_SET, JSON.stringify(set)); }
 
-function filterTr({dari='', sampai='', tipe='semua', cari=''} = {}) {
-  let a = dari, b = sampai;
-  if (a && b && a > b) [a, b] = [b, a];
-  const c = cari.trim().toLowerCase();
-  return db.transaksi.filter(x =>
-    (!a || x.tanggal >= a) && (!b || x.tanggal <= b) &&
-    (tipe === 'semua' || x.tipe === tipe) &&
-    (!c || [x.judul, x.kategori, x.dompetId ? namaDompet(x.dompetId) : '', ...(x.tags || []), ...x.items.map(i => i.nama)].some(s => s.toLowerCase().includes(c))));
+function filterTr({dari='',sampai='',tipe='semua',cari='',status='aktif'}={}) {
+  let a=dari,b=sampai;if(a&&b&&a>b)[a,b]=[b,a];const c=cari.trim().toLowerCase();
+  return transaksiLaporan().filter(x=>(!a||x.tanggal>=a)&&(!b||x.tanggal<=b)&&(status==='semua'||(status==='nonaktif'?!catatanAktif(x):catatanAktif(x)))&&(tipe==='semua'||(tipe==='transfer'?!!x.transferDompetId:x.tipe===tipe))&&(!c||(x.transferDompetId&&cocokCariTransfer(db.transferDompet.find(t=>t.id===x.transferDompetId),c))||[x.judul,x.kategori,x.dompetId?namaDompet(x.dompetId):'',...(x.tags||[]),...(x.items||[]).map(i=>i.nama)].some(s=>String(s).toLowerCase().includes(c))));
 }
-const sum = (list, tipe) => list.filter(x => x.tipe === tipe).reduce((s,x) => s + x.total, 0);
+const sum=(list,tipe)=>list.filter(x=>catatanAktif(x)&&x.tipe===tipe).reduce((s,x)=>s+x.total,0);
 const saldoTotal = () => sum(db.transaksi, 'masuk') - sum(db.transaksi, 'keluar');
 const urutTerbaru = list => [...list].sort((a,b) => b.tanggal.localeCompare(a.tanggal) || (b.ts - a.ts));
 const harianTipe = (tgl, tipe) => sum(db.transaksi.filter(x => x.tanggal === tgl), tipe);
-const terkumpul = wid => db.transaksi.filter(x => x.wishId === wid && x.tipe === 'keluar').reduce((s,x) => s + x.total, 0);
+const terkumpul=wid=>db.transaksi.filter(x=>catatanAktif(x)&&x.wishId===wid&&x.tipe==='keluar').reduce((s,x)=>s+x.total,0);
 
-function pakaiBudget(kat, per) {
-  const today = hariIni();
-  const awal = per === 'bulan' ? today.slice(0,7) + '-01' : geser(today, -6);
-  return db.transaksi
-    .filter(x => x.tipe === 'keluar' && x.kategori === kat && x.tanggal >= awal && x.tanggal <= today)
-    .reduce((s,x) => s + x.total, 0);
-}
+function pakaiBudget(kat,per){const today=hariIni(),awal=per==='bulan'?today.slice(0,7)+'-01':geser(today,-6);return transaksiLaporan().filter(x=>catatanAktif(x)&&x.tipe==='keluar'&&x.kategori===kat&&x.tanggal>=awal&&x.tanggal<=today).reduce((s,x)=>s+x.total,0);}
 
 function isiKategoriSelect(selectEl, tipe, pilih) {
   selectEl.innerHTML = '';
@@ -3225,6 +3232,7 @@ function isiKategoriBerulang() { isiKategoriSelect($('rbKat'), $('rbTipe').value
 // ===== RENDER TRANSAKSI =====
 function baris(x) {
   const wrap = el('div', 'row');
+  wrap.dataset.transactionId=x.id;wrap.classList.toggle('is-inactive',!catatanAktif(x));
   wrap.classList.add('ui-transaction');
   wrap.dataset.kind=x.tipe;
   wrap.style.display = 'block';
@@ -3259,15 +3267,16 @@ function baris(x) {
       : 'Diberikan ke penjual: ' + rp(dibayar) + ' · Kembalian: ' + rp(kembali));
     rincian.style.marginTop = '5px';
     info.appendChild(rincian);
-    info.appendChild(el('div', 'muted', tunaiMengubahStok(x) ? 'Pecahan fisik ikut berubah' : 'Pecahan fisik tetap; saldo tunai mengikuti transaksi'));
+    info.appendChild(el('div', 'muted', !catatanAktif(x) ? 'Rincian pecahan tetap tersimpan; tidak dihitung selama nonaktif.' : tunaiMengubahStok(x) ? 'Pecahan fisik ikut berubah' : 'Pecahan fisik tetap; saldo tunai mengikuti transaksi'));
   } else if (x.cara === 'tunai') {
-    info.appendChild(el('div', 'muted', 'Tanpa rincian pembayaran · saldo tunai mengikuti transaksi'));
+    info.appendChild(el('div', 'muted', catatanAktif(x)?'Tanpa rincian pembayaran · saldo tunai mengikuti transaksi':'Nonaktif · saldo tunai tidak dipengaruhi catatan ini'));
   }
   const tanda=el('span','ui-transaction-icon');
   tanda.setAttribute('aria-hidden','true');
   tanda.innerHTML='<svg viewBox="0 0 24 24"><path d="'+(x.tipe==='masuk'?'M17 7 7 17M7 8v9h9':'M7 17 17 7M8 7h9v9')+'"/></svg>';
   top.append(tanda,info, el('span', 'amt', rp(x.total)));
-  wrap.appendChild(top);
+  top.prepend(pilihanRiwayat('tr:'+x.id,x.judul));
+  wrap.appendChild(top);wrap.append(statusCatatanNode(x));
 
   const aksi = el('div', 'aksi');
   aksi.style.marginTop = '8px';
@@ -3312,7 +3321,8 @@ function baris(x) {
       beriPesan('Transaksi dihapus. Saldo sudah diperbarui.');
     });
   };
-  aksi.append(edit, hapus);
+  const ubah=el('button','kecil ghost',catatanAktif(x)?'Nonaktifkan':'Aktifkan');ubah.type='button';ubah.onclick=()=>bukaStatusCatatan(['tr:'+x.id],!catatanAktif(x));
+  aksi.append(edit,ubah,hapus);
   wrap.appendChild(aksi);
 
   if (x.items.length > 1 || x.items[0].nama !== x.judul || x.tunai) {
@@ -3387,7 +3397,7 @@ function garisPutus(g, y, x1, x2) {
 // ===== STRUK 1 TRANSAKSI =====
 function gambarStruk(x) {
   const W = 600, pad = 40;
-  const H = 400 + x.items.length * 52;
+  const H = 400 + x.items.length * 52 + (!catatanAktif(x)?34:0);
   const { c, g } = buatKanvas(W, H);
   g.fillStyle = '#ffffff';
   g.fillRect(0, 0, W, H);
@@ -3408,6 +3418,7 @@ function gambarStruk(x) {
   info('Tanggal', tglIndo(x.tanggal));
   info('Tipe', x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran');
   info('Kategori', x.kategori);
+  if(!catatanAktif(x))info('Status','NONAKTIF — tidak dihitung');
   y += 4;
   garisPutus(g, y, pad, W - pad);
   y += 22;
@@ -3458,7 +3469,7 @@ function gambarRekap(list, dari, sampai) {
   const sisa = list.length - tampil.length;
   const masuk = sum(list, 'masuk'), keluar = sum(list, 'keluar');
   const katMap = new Map();
-  list.filter(x => x.tipe === 'keluar').forEach(x => katMap.set(x.kategori, (katMap.get(x.kategori) || 0) + x.total));
+  list.filter(x => catatanAktif(x)&&x.tipe === 'keluar').forEach(x => katMap.set(x.kategori, (katMap.get(x.kategori) || 0) + x.total));
   const kats = [...katMap].sort((a,b) => b[1] - a[1]);
 
   const H = 150 + 130 + (kats.length ? 50 + kats.length * 30 : 0) + 60 + tampil.length * ROW + (sisa > 0 ? 36 : 0) + 110;
@@ -3597,7 +3608,7 @@ function cetakPdf(d) {
   const masuk = sum(d.list, 'masuk'), keluar = sum(d.list, 'keluar');
   const label = (d.dari ? tglIndo(d.dari) : 'awal') + ' s/d ' + (d.sampai ? tglIndo(d.sampai) : 'sekarang');
   const katMap = new Map();
-  d.list.filter(x => x.tipe === 'keluar').forEach(x => katMap.set(x.kategori, (katMap.get(x.kategori) || 0) + x.total));
+  d.list.filter(x => catatanAktif(x)&&x.tipe === 'keluar').forEach(x => katMap.set(x.kategori, (katMap.get(x.kategori) || 0) + x.total));
   const katRows = [...katMap].sort((a,b) => b[1] - a[1])
     .map(([k, v]) => `<tr><td>${esc(k)}</td><td class="r">${esc(rp(v))}</td></tr>`).join('')
     || '<tr><td colspan="2">Tidak ada pengeluaran</td></tr>';
@@ -3642,6 +3653,7 @@ h2{font-size:15px;margin:16px 0 6px}
 }
 
 function bukaRekap(list, dari, sampai) {
+  list=list.map(x=>({...x,judul:x.judul+(!catatanAktif(x)?' [NONAKTIF — tidak dihitung]':'')}));
   rekapData = { list, dari, sampai };
   const holder = $('rekapPrev');
   holder.innerHTML = '';
@@ -3651,7 +3663,7 @@ function bukaRekap(list, dari, sampai) {
 
 $('btnRekapRiwayat').onclick = () => {
   const dari = $('rDari').value, sampai = $('rSampai').value;
-  bukaRekap(filterTr({ dari, sampai, tipe: $('rTipe').value, cari: $('rCari').value }), dari, sampai);
+  bukaRekap(filterTr({ dari, sampai, tipe: $('rTipe').value, cari: $('rCari').value,status:$('rStatus').value }), dari, sampai);
 };
 $('btnRekapUnduh').onclick = () => {
   if (!rekapData) return;
@@ -3899,6 +3911,7 @@ function bukaEdit(id) {
   renderPilihanDompet('e', x.dompetId || (x.cara !== 'tunai' && !x.tunai ? '__tanpa_dompet__' : ''));
   aturRincianTunai('e', !!x.tunai);
   aturLacakTunai('btnETrackCash', tunaiMengubahStok(x));
+  $('eInactiveNote').hidden=x.aktif!==false;
   isiKategoriSelect($('eKategori'), x.tipe, x.kategori);
   $('eTgl').value = x.tanggal;
   $('eJudul').value = x.judul;
@@ -4057,9 +4070,9 @@ function renderEditItems() {
     };
     const nama = el('input'); nama.type = 'text'; nama.placeholder = 'Contoh: Cukur rambut'; nama.value = it.nama;
     nama.oninput = () => { editItems[i].nama = nama.value; hitungEdit(); };
-    const qty = el('input'); qty.type = 'number'; qty.min = '0.001'; qty.step = 'any'; qty.inputMode = 'decimal'; qty.placeholder = 'Contoh: 0,5'; qty.value = it.qty;
+    const qty = el('input'); qty.type = 'text'; qty.inputMode = 'decimal'; qty.placeholder = 'Contoh: 0,5'; qty.value = teksJumlahInput(it.qty);
     qty.oninput = () => {
-      it.qty = Number(qty.value) || 0;
+      it.qty = angkaJumlah(qty.value) || 0;
       if (it.hargaTotal != null && it.qty > 0) it.harga = it.hargaTotal / it.qty;
       hitungEdit();
     };
@@ -4126,6 +4139,7 @@ function hitungEdit() {
 
 function stokSetelahEdit(x, tunaiBaru, stokDompet = db.uangFisik.stok) {
   const stok = { ...stokDompet };
+  if(x?.aktif===false)return stok;
   DENOM.forEach(d => {
     if (tunaiMengubahStok(x)) {
       if (x.tunai.diterima) stok[d] -= x.tunai.diterima[d] || 0;
@@ -4354,9 +4368,9 @@ $('btnESimpan').onclick = () => {
       tunaiBaru = { ...tunaiBaru, bayar, kembali, lacakDompet:true };
     }
   }
-  const stokDompet = lacakTunai ? bacaPecahan('est') : db.uangFisik.stok;
+  const stokDompet = lacakTunai && x.aktif!==false ? bacaPecahan('est') : db.uangFisik.stok;
   const dompetBerubah = lacakTunai && DENOM.some(d => stokDompet[d] !== db.uangFisik.stok[d]);
-  const ubahStok = !!(tunaiMengubahStok(x) || tunaiMengubahStok({ tunai:tunaiBaru }) || dompetBerubah);
+  const ubahStok = x.aktif!==false && !!(tunaiMengubahStok(x) || tunaiMengubahStok({ tunai:tunaiBaru }) || dompetBerubah);
   const stokBaru = ubahStok ? stokSetelahEdit(x, tunaiBaru, stokDompet) : null;
   if (stokBaru && DENOM.some(d => stokBaru[d] < 0))
     return lacakTunai
@@ -4424,7 +4438,7 @@ $('moneyPanels').addEventListener('touchcancel',()=>geserUangAwal=null,{passive:
 function ringkasanUang(transaksi = db.transaksi) {
   const total = bulatDompet(sum(transaksi,'masuk') - sum(transaksi,'keluar'));
   const digital = bulatDompet([...saldoSemuaDompet(transaksi).values()].reduce((a,b)=>a+b,0));
-  const tanpaTujuan = transaksi.filter(t=>!t.dompetId && t.cara !== 'tunai' && !t.tunai);
+  const tanpaTujuan = transaksi.filter(t=>catatanAktif(t)&&!t.dompetId && t.cara !== 'tunai' && !t.tunai);
   const neto = bulatDompet(sum(tanpaTujuan,'masuk') - sum(tanpaTujuan,'keluar'));
   const alokasiLama = db.dompet.reduce((a,w)=>a+(Number(w.saldoAwal)||0),0);
   const belumDipilih = bulatDompet(neto > 0 ? Math.max(0,neto-alokasiLama) : neto);
@@ -4475,7 +4489,7 @@ $('btnHomeCashTracking').onclick = () => {
   renderUangFisikBeranda();
 };
 function mulaiPemasukan(cara,id='') {
-  const sudahAda = db.transaksi.some(t => cara === 'tunai' ? t.cara === 'tunai' || t.tunai : t.dompetId === id) || (id && saldoDompet(id)!==0);
+  const sudahAda = db.transaksi.some(t => catatanAktif(t) && (cara === 'tunai' ? t.cara === 'tunai' || t.tunai : t.dompetId === id)) || (id && saldoDompet(id)!==0);
   siapkanCatatan({tipe:'masuk',kategori:sudahAda?'Lainnya':'Saldo awal',cara,dompetId:id},
     sudahAda ? 'Isi pemasukan baru dan pilih kategorinya.' : 'Isi uang yang sudah dimiliki sekali saja sebagai saldo awal.');
 }
@@ -4531,36 +4545,34 @@ function normalDompet(list) {
     penyediaId:String(w.penyediaId||'').slice(0,80), saldoAwal:Number.isFinite(Number(w.saldoAwal)) && Number(w.saldoAwal) >= 0 ? Number(w.saldoAwal) : 0, arsip:!!w.arsip
   }));
 }
-function normalTransferDompet(list) {
-  return (Array.isArray(list) ? list : []).filter(t => t && t.id).map(t => ({
-    id:String(t.id), dariId:String(t.dariId || ''), keId:String(t.keId || ''), jumlah:Number(t.jumlah), biaya:Number(t.biaya || 0),
-    tanggal:String(t.tanggal || ''), catatan:String(t.catatan || '').slice(0,120), ts:Number(t.ts) || 0
-  }));
-}
+function normalTransferDompet(list){return (Array.isArray(list)?list:[]).map(t=>{
+  if(!t||!t.id||!Number.isFinite(Number(t.jumlah))||Number(t.jumlah)<=0||!Number.isFinite(Number(t.biaya||0))||Number(t.biaya||0)<0)throw Error('Rincian perpindahan saldo tidak valid.');
+  if(t.aktif!==undefined&&typeof t.aktif!=='boolean')throw Error('Status transfer tidak valid.');
+  if(t.catatPengeluaran!==undefined&&typeof t.catatPengeluaran!=='boolean')throw Error('Pilihan pengeluaran transfer tidak valid.');
+  return {id:String(t.id),dariId:String(t.dariId||''),keId:String(t.keId||''),jumlah:Number(t.jumlah),biaya:Number(t.biaya||0),tanggal:String(t.tanggal||''),catatan:String(t.catatan||'').slice(0,120),ts:Number(t.ts)||0,catatPengeluaran:!!t.catatPengeluaran,tunai:t.tunai||null,...normalStatusCatatan(t)};
+});}
 const bulatDompet = n => Math.round((n + Number.EPSILON) * 100) / 100;
-function saldoSemuaDompet(transaksi = db.transaksi, transfer = db.transferDompet, dompet = db.dompet) {
-  const saldo = new Map(dompet.map(w => [w.id, Number(w.saldoAwal) || 0]));
-  transaksi.forEach(t => { if (t.dompetId && saldo.has(t.dompetId)) saldo.set(t.dompetId, saldo.get(t.dompetId) + (t.tipe === 'masuk' ? t.total : -t.total)); });
-  transfer.forEach(t => { if (saldo.has(t.dariId)) saldo.set(t.dariId, saldo.get(t.dariId) - t.jumlah); if (saldo.has(t.keId)) saldo.set(t.keId, saldo.get(t.keId) + t.jumlah); });
-  saldo.forEach((v,k) => saldo.set(k, bulatDompet(v)));
-  return saldo;
+function saldoSemuaDompet(transaksi=db.transaksi,transfer=db.transferDompet,dompet=db.dompet){
+  const saldo=new Map(dompet.map(w=>[w.id,Number(w.saldoAwal)||0]));
+  transaksi.filter(t=>catatanAktif(t,transfer)).forEach(t=>{if(t.dompetId&&saldo.has(t.dompetId))saldo.set(t.dompetId,saldo.get(t.dompetId)+(t.tipe==='masuk'?t.total:-t.total));});
+  transfer.filter(t=>t.aktif!==false).forEach(t=>{if(saldo.has(t.dariId))saldo.set(t.dariId,saldo.get(t.dariId)-t.jumlah);if(saldo.has(t.keId))saldo.set(t.keId,saldo.get(t.keId)+t.jumlah);});saldo.forEach((v,k)=>saldo.set(k,bulatDompet(v)));return saldo;
 }
-function namaDompet(id) { return db.dompet.find(w => w.id === id)?.nama || 'Dompet tidak ditemukan'; }
+function namaDompet(id){return id===TUNAI_ID?'Tunai':db.dompet.find(w=>w.id===id)?.nama||'Dompet tidak ditemukan';}
 function saldoDompet(id, transaksi = db.transaksi, transfer = db.transferDompet) { return saldoSemuaDompet(transaksi,transfer).get(id) || 0; }
-function cekSaldoDompet(transaksi = db.transaksi, transfer = db.transferDompet, dompet = db.dompet) {
-  const ids = new Set(dompet.map(w => w.id));
-  if (transaksi.some(t => t.dompetId && !ids.has(t.dompetId))) return 'Ada transaksi yang dompetnya tidak ditemukan. Periksa data dompet terlebih dahulu.';
-  for (const t of transfer) {
-    if (!ids.has(t.dariId) || !ids.has(t.keId) || t.dariId === t.keId || !t.tanggal || !Number.isFinite(t.jumlah) || t.jumlah <= 0 || !Number.isFinite(t.biaya) || t.biaya < 0)
-      return 'Rincian transfer antar dompet tidak valid.';
-    const biaya = transaksi.filter(x => x.transferDompetId === t.id);
-    if ((t.biaya > 0 && (biaya.length !== 1 || biaya[0].tipe !== 'keluar' || biaya[0].dompetId !== t.dariId || biaya[0].total !== t.biaya)) || (t.biaya === 0 && biaya.length))
-      return 'Biaya admin tidak cocok dengan transfernya. Periksa rincian transfer.';
-  }
-  if (transaksi.some(t => t.transferDompetId && !transfer.some(r => r.id === t.transferDompetId))) return 'Ada biaya admin tanpa catatan transfernya.';
-  const saldo = saldoSemuaDompet(transaksi,transfer,dompet);
-  const kurang = dompet.find(w => saldo.get(w.id) < 0);
-  return kurang ? 'Saldo ' + kurang.nama + ' akan kurang ' + rp(-saldo.get(kurang.id)) + '. Periksa saldo atau transaksi yang terhubung sebelum menyimpan.' : '';
+function cekSaldoDompet(transaksi=db.transaksi,transfer=db.transferDompet,dompet=db.dompet){
+ const ids=new Set(dompet.map(w=>w.id));ids.add(TUNAI_ID);
+ if(transaksi.some(t=>t.dompetId&&(!ids.has(t.dompetId)||t.dompetId===TUNAI_ID)))return 'Ada transaksi yang dompetnya tidak ditemukan.';
+ const seen=new Set();for(const t of transfer){
+  if(seen.has(t.id)||!ids.has(t.dariId)||!ids.has(t.keId)||t.dariId===t.keId||!tanggalGrafikValid(t.tanggal)||!Number.isFinite(t.jumlah)||t.jumlah<=0||!Number.isFinite(t.biaya)||t.biaya<0||t.jumlah>Number.MAX_SAFE_INTEGER-t.biaya)return 'Rincian perpindahan saldo tidak valid.';seen.add(t.id);
+  const fees=transaksi.filter(x=>x.transferDompetId===t.id),fee=fees[0];
+  if(fee&&(fee.aktif!==false)!==(t.aktif!==false))return 'Status biaya admin dan perpindahan harus sama. Ubah melalui catatan perpindahannya.';
+  if((t.biaya>0&&(fees.length!==1||fee.tipe!=='keluar'||fee.dompetId!==(t.dariId===TUNAI_ID?null:t.dariId)||fee.total!==t.biaya||fee.cara!==(t.dariId===TUNAI_ID?'tunai':'nontunai')))||(t.biaya===0&&fees.length))return 'Biaya admin tidak cocok dengan perpindahannya.';
+  const physical=validasiPecahanTransfer(t);if(physical)return physical;
+ }
+ if(transaksi.some(t=>t.transferDompetId&&!transfer.some(r=>r.id===t.transferDompetId)))return 'Ada biaya admin tanpa catatan perpindahannya.';
+ const saldo=saldoSemuaDompet(transaksi,transfer,dompet),kurang=dompet.find(w=>saldo.get(w.id)<-0.005);if(kurang)return 'Saldo '+kurang.nama+' akan kurang '+rp(-saldo.get(kurang.id))+'. Nonaktifkan juga pengeluaran terkait atau periksa saldo awalnya.';
+ if(transfer.some(t=>t.aktif!==false&&t.dariId===TUNAI_ID)&&saldoTunaiKandidat(transaksi,transfer,dompet)<-0.005)return 'Saldo tunai akan kurang. Periksa pemasukan tunai atau nominal perpindahannya.';
+ return '';
 }
 function ikonDompet(jenis) {
   const paths = jenis === 'bank' ? '<path d="m3 9 9-5 9 5M4 10h16M6 10v8m6-8v8m6-8v8M3 20h18"/>' : jenis === 'saving' ? '<circle cx="12" cy="12" r="8"/><path d="M12 7v10m3-8H10a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H9"/>' : '<rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 9V6a2 2 0 0 1 2-2h13v2m3 6h-6v5h6"/><circle cx="17.5" cy="14.5" r=".5"/>';
@@ -4589,7 +4601,7 @@ function ambilDompetForm(prefix, tipe, total, lama = null) {
     if (!w) return {error:'Pilih dompet, atau tambahkan dompet terlebih dahulu.',field:prefix + 'DigitalSelect'};
     if (w.arsip && lama?.dompetId !== id) return {error:'Dompet ini diarsipkan. Pilih dompet aktif.',field:prefix + 'DigitalSelect'};
   }
-  const kandidat = [...db.transaksi.filter(t => t.id !== lama?.id),{id:lama?.id || '__pratinjau_dompet__',tipe,total,dompetId:id,cara}];
+  const kandidat = [...db.transaksi.filter(t => t.id !== lama?.id),{id:lama?.id || '__pratinjau_dompet__',tipe,total,dompetId:id,cara,aktif:lama?.aktif!==false}];
   const error = cekSaldoDompet(kandidat);
   return error ? {error,field:aktif ? prefix + 'DigitalSelect' : (prefix === 'e' ? 'eCara' : 'iCara')} : {dompetId:id};
 }
@@ -4608,16 +4620,16 @@ function perbaruiDigitalUi(prefix) {
   if (!aktif || !w || !(total > 0)) { preview.textContent = w ? 'Isi nominal transaksi untuk melihat saldo setelah disimpan.' : db.dompet.some(w => !w.arsip) ? '' : 'Belum ada dompet. Tekan + Tambah dompet untuk memulai.'; return; }
   const hasil = ambilDompetForm(prefix,tipe,total,lama);
   if (hasil.error) { preview.textContent = hasil.error; preview.classList.add('merah'); return; }
-  const kandidat = [...db.transaksi.filter(t => t.id !== lama?.id),{tipe,total,dompetId:id}];
+  const kandidat = [...db.transaksi.filter(t => t.id !== lama?.id),{tipe,total,dompetId:id,aktif:lama?.aktif!==false}];
   preview.textContent = 'Setelah disimpan: ' + rp(saldoDompet(id,kandidat)) + (lama?.dompetId && lama.dompetId !== id ? ' · Pengaruh pada ' + namaDompet(lama.dompetId) + ' akan dibatalkan.' : '');
 }
-let walletEditId = null, walletContext = null, walletFormAwal = '', transferEditId = null, transferFormAwal = '', walletConfirmAction = null;
+let walletEditId = null, walletContext = null, walletFormAwal = '', transferEditId = null, transferMode = 'bebas', transferFormAwal = '', walletConfirmAction = null;
 function konfirmasiDompet(judul,teks,aksi) { walletConfirmAction = aksi; $('walletConfirmTitle').textContent = judul; $('walletConfirmText').textContent = teks; $('dlgKonfirmasiDompet').showModal(); }
 $('btnWalletConfirmNo').onclick = () => { walletConfirmAction = null; $('dlgKonfirmasiDompet').close(); };
 $('btnWalletConfirmYes').onclick = () => { const aksi = walletConfirmAction; walletConfirmAction = null; $('dlgKonfirmasiDompet').close(); aksi?.(); };
 $('dlgKonfirmasiDompet').addEventListener('close',()=>{ if (!$('dlgKonfirmasiDompet').open) walletConfirmAction = null; });
 function keadaanWalletForm() { return JSON.stringify({fields:['wltNama','wltJenis'].map(id=>$(id).value),penyedia:walletProviderId}); }
-function keadaanTransferForm() { return JSON.stringify(['transferDari','transferKe','transferJumlah','transferBiaya','transferTanggal','transferCatatan'].map(id=>$(id).value)); }
+function keadaanTransferForm(){return JSON.stringify({mode:transferMode,fields:['transferDariJenis','transferKeJenis','transferDari','transferKe','transferJumlah','transferBiaya','transferTanggal','transferCatatan'].map(id=>$(id).value),pengeluaran:$('transferExpense').checked,lacak:$('transferTrack').checked,pecahan:['tpb','tpk'].map(p=>DENOM.map(d=>$(p+'-'+d).value))});}
 function batalWalletDialog(id,berubah) { if (berubah) konfirmasiDompet('Batalkan perubahan?','Isian yang belum disimpan akan dibuang.',()=>$(id).close()); else $(id).close(); }
 function bukaDompet(id = null,context = null) {
   const w = db.dompet.find(w=>w.id===id); walletEditId = w?.id || null; walletContext = context;
@@ -4636,7 +4648,8 @@ $('btnWltSave').onclick = () => {
   else { w={id:uid(),nama,jenis:$('wltJenis').value,penyediaId:walletProviderId,arsip:false,saldoAwal:0};db.dompet.push(w); }
   if (!simpan()) { db=sebelum; $('wltError').textContent='Dompet belum tersimpan. Coba lagi.'; return; }
   const id=w.id; $('dlgDompet').close(); renderSemua();
-  if (walletContext) { renderPilihanDompet(walletContext,id);perbaruiDigitalUi(walletContext); }
+  if(walletContext==='transferSetup'){if(transferMode==='tarik')bukaTarikTunai(id);else if(transferMode==='setor')bukaTransferDompet(null,TUNAI_ID,id);else bukaTransferDompet(null,null,id);}
+  else if (walletContext) { renderPilihanDompet(walletContext,id);perbaruiDigitalUi(walletContext); }
   else if (!walletEditId) mulaiPemasukan('nontunai',id);
   beriPesan(walletEditId?'Nama dompet diperbarui.':'Dompet siap digunakan.');
 };
@@ -4647,77 +4660,93 @@ function arsipDompet(id) {
     const lama=w.arsip;w.arsip=!lama;if(!simpan()){w.arsip=lama;return}renderSemua();beriPesan(w.arsip?'Dompet diarsipkan.':'Dompet dipulihkan.');
   });
 }
-function transaksiBiayaTransfer(t,idLama=null) {
-  return normal({id:idLama||uid(),ts:t.ts,tanggal:t.tanggal,tipe:'keluar',judul:'Biaya transfer '+namaDompet(t.dariId)+' → '+namaDompet(t.keId),kategori:'Lainnya',dompetId:t.dariId,transferDompetId:t.id,tags:['biaya admin'],items:[{nama:'Biaya admin transfer',qty:1,satuan:'',harga:t.biaya,hargaTotal:t.biaya}]});
-}
+function transaksiBiayaTransfer(t,idLama=null){return normal({id:idLama||uid(),ts:t.ts,tanggal:t.tanggal,tipe:'keluar',judul:'Biaya pindah saldo '+namaDompet(t.dariId)+' → '+namaDompet(t.keId),kategori:'Biaya admin',dompetId:t.dariId===TUNAI_ID?null:t.dariId,cara:t.dariId===TUNAI_ID?'tunai':'nontunai',transferDompetId:t.id,tags:['biaya admin'],items:[{nama:'Biaya admin',qty:1,satuan:'',harga:t.biaya,hargaTotal:t.biaya}],...normalStatusCatatan(t)});}
 function kandidatTransferDompet(t) {
   const lama=db.transaksi.find(x=>x.transferDompetId===t.id);
   const transaksi=db.transaksi.filter(x=>x.transferDompetId!==t.id);
   if(t.biaya>0)transaksi.push(transaksiBiayaTransfer(t,lama?.id));
   return {transaksi,transfer:[...db.transferDompet.filter(x=>x.id!==t.id),t]};
 }
-function dataTransferForm() {
-  return {id:transferEditId||'__transfer_preview__',dariId:$('transferDari').value,keId:$('transferKe').value,jumlah:angkaUang($('transferJumlah').value),biaya:angkaUang($('transferBiaya').value),tanggal:$('transferTanggal').value,catatan:$('transferCatatan').value.trim(),ts:db.transferDompet.find(t=>t.id===transferEditId)?.ts||Date.now()};
+function dataTransferForm(){const lama=db.transferDompet.find(t=>t.id===transferEditId);const t={id:transferEditId||'__transfer_preview__',dariId:$('transferDari').value,keId:$('transferKe').value,jumlah:angkaUang($('transferJumlah').value),biaya:angkaUang($('transferBiaya').value),tanggal:$('transferTanggal').value,catatan:$('transferCatatan').value.trim(),ts:lama?.ts||Date.now(),catatPengeluaran:$('transferExpense').checked,tunai:null,...normalStatusCatatan(lama||{})};
+ if($('transferTrack').checked&&(t.dariId===TUNAI_ID||t.keId===TUNAI_ID)){const p=bacaPecahan('tpb');t.tunai=t.dariId===TUNAI_ID?{bayar:p,kembali:bacaPecahan('tpk'),lacakDompet:true}:{diterima:p,lacakDompet:true};}return t;
 }
-function previewTransferDompet() {
-  const t=dataTransferForm(), box=$('transferPreview');
-  if(!t.dariId||!t.keId||!(t.jumlah>0)||!Number.isFinite(t.biaya)||t.biaya<0){box.textContent='Pilih dua dompet, isi jumlah transfer, lalu periksa saldo di sini.';return}
-  const kandidat=kandidatTransferDompet(t),error=cekSaldoDompet(kandidat.transaksi,kandidat.transfer);
-  box.textContent=error||('Dari '+namaDompet(t.dariId)+': −'+rp(t.jumlah+t.biaya)+' → saldo '+rp(saldoDompet(t.dariId,kandidat.transaksi,kandidat.transfer))+'. Ke '+namaDompet(t.keId)+': +'+rp(t.jumlah)+' → saldo '+rp(saldoDompet(t.keId,kandidat.transaksi,kandidat.transfer))+'. '+(t.biaya?'Biaya '+rp(t.biaya)+' dicatat sebagai pengeluaran.':'Tanpa biaya, total saldo tetap.'));
+function previewTransferDompet(){const t=dataTransferForm(),cash=!!t.dariId&&!!t.keId&&(t.dariId===TUNAI_ID||t.keId===TUNAI_ID);const w=db.dompet.find(w=>w.id===t.dariId),belum=ringkasanUang().belumDipilih;$('transferSourceInfo').textContent=t.dariId?'Saldo '+namaDompet(t.dariId)+' saat ini: '+rp(saldoSumber(t.dariId))+(w?.arsip?'. Rekening diarsipkan; pulihkan melalui Beranda → Wallet dahulu.':w&&saldoDompet(w.id)<=0?(belum>0?'. Ada '+rp(belum)+' non-tunai yang belum dipilih rekeningnya. Edit catatan lama di Riwayat agar tidak dicatat dua kali.':'. Catat saldo yang sudah ada di rekening sebelum menarik uang.'):'. Biaya admin dibayar dari sumber ini.'):'Pilih rekening / e-wallet sumber uang terlebih dahulu.';$('btnTransferFundSource').textContent=belum>0?'Tentukan rekening catatan lama':'Catat saldo yang sudah ada';$('btnTransferFundSource').hidden=!w||w.arsip||!!transferEditId||saldoDompet(w.id)>0; $('transferPhysical').hidden=!cash;$('transferUnits').hidden=!cash||!$('transferTrack').checked;$('transferChangeWrap').hidden=t.dariId!==TUNAI_ID;$('transferUnitsLabel').textContent=t.dariId===TUNAI_ID?'Uang diberikan (lembar/keping)':'Uang tunai diterima (lembar/keping)';
+ const box=$('transferPreview');if(!t.dariId||!t.keId||!(t.jumlah>0)||!Number.isFinite(t.biaya)||t.biaya<0){box.textContent='Pilih sumber dan tujuan, lalu isi nominal untuk melihat saldo sebelum dan sesudah.';return;}
+ const k=kandidatTransferDompet(t),error=cekSaldoDompet(k.transaksi,k.transfer),lama=db.transferDompet.find(x=>x.id===t.id),stock=stokSetelahEdit(lama||{},t.aktif===false?null:t.tunai);const e=error||(DENOM.some(d=>stock[d]<0)?'Pecahan uang fisik kurang. Periksa rinciannya atau matikan penyesuaian pecahan.':'');
+ const sebelum=saldoSumber(t.dariId),sesudah=saldoSumber(t.dariId,k.transaksi,k.transfer),keSebelum=saldoSumber(t.keId),keSesudah=saldoSumber(t.keId,k.transaksi,k.transfer);
+ box.textContent=(t.aktif===false?'NONAKTIF: disimpan sebagai catatan; saldo tidak berubah. ':'')+(e?e+' ':'')+namaDompet(t.dariId)+': '+rp(sebelum)+' → '+rp(sesudah)+'. '+namaDompet(t.keId)+': '+rp(keSebelum)+' → '+rp(keSesudah)+'. '+(t.catatPengeluaran?'Laporan pengeluaran mencatat '+rp(t.jumlah+t.biaya)+' (pokok + admin). ':'Hanya biaya admin '+rp(t.biaya)+' masuk pengeluaran. ')+'Saldo gabungan hanya berkurang biaya admin; pokok tetap uang milikmu.';
 }
-function bukaTransferDompet(id=null) {
-  if(db.dompet.filter(w=>!w.arsip).length<2 && !id)return beriPesan('Tambahkan minimal dua dompet aktif untuk transfer.',true);
-  const t=db.transferDompet.find(t=>t.id===id);transferEditId=t?.id||null;$('transferTitle').textContent=t?'Edit transfer':'Transfer antar dompet';
-  ['transferDari','transferKe'].forEach((id,i)=>{const pilih=$(id);pilih.replaceChildren(new Option(i?'Pilih tujuan':'Pilih sumber',''));db.dompet.filter(w=>!w.arsip || w.id===t?.dariId || w.id===t?.keId).forEach(w=>pilih.add(new Option(w.nama+(w.arsip?' (diarsipkan)':''),w.id)));pilih.value=(i?t?.keId:t?.dariId)||''});
-  isiUang($('transferJumlah'),t?.jumlah??'');isiUang($('transferBiaya'),t?.biaya??'');$('transferTanggal').value=t?.tanggal||hariIni();$('transferCatatan').value=t?.catatan||'';$('transferError').textContent='';previewTransferDompet();transferFormAwal=keadaanTransferForm();$('dlgTransferDompet').showModal();
+function jenisSumberTransfer(id){return id===TUNAI_ID?'tunai':db.dompet.find(w=>w.id===id)?.jenis||'';}
+function dompetPilihanTransfer(){const lama=db.transferDompet.find(t=>t.id===transferEditId);return db.dompet.filter(w=>!w.arsip||w.id===lama?.dariId||w.id===lama?.keId);}
+function renderPilihanTransfer(sumber='',tujuan='',jenisDari=jenisSumberTransfer(sumber),jenisKe=jenisSumberTransfer(tujuan)){
+ const list=dompetPilihanTransfer();if(transferMode==='tarik'){tujuan=TUNAI_ID;jenisKe='tunai';if(sumber===TUNAI_ID)sumber='';if(jenisDari==='tunai')jenisDari='';if(!jenisDari){const jenis=[...new Set(list.map(w=>w.jenis))];if(jenis.length===1)jenisDari=jenis[0];}if(!sumber&&list.length===1){sumber=list[0].id;jenisDari=list[0].jenis;}}else if(transferMode==='setor'){sumber=TUNAI_ID;jenisDari='tunai';if(tujuan===TUNAI_ID){tujuan='';jenisKe='';}}const nama={tunai:'Tunai',wallet:'E-wallet',bank:'Rekening bank',saving:'Tabungan'};
+ const isiJenis=(id,jenis,tersedia,placeholder)=>{const select=$(id);select.replaceChildren(new Option(placeholder,''));for(const key of ['tunai','wallet','bank','saving'])if(tersedia(key))select.add(new Option(nama[key],key));select.value=[...select.options].some(o=>o.value===jenis)?jenis:'';return select.value;};
+ jenisDari=isiJenis('transferDariJenis',jenisDari,k=>k==='tunai'?transferMode!=='tarik':list.some(w=>w.jenis===k),'Pilih jenis sumber');
+ const dari=$('transferDari');dari.replaceChildren(new Option('Pilih '+(nama[jenisDari]||'sumber').toLowerCase(),''));
+ if(jenisDari==='tunai'){dari.add(new Option('Tunai',TUNAI_ID));dari.value=TUNAI_ID;}
+ else{list.filter(w=>w.jenis===jenisDari).forEach(w=>dari.add(new Option(w.nama+(w.arsip?' (diarsipkan)':''),w.id)));dari.value=[...dari.options].some(o=>o.value===sumber)?sumber:'';}
+ sumber=dari.value;if(tujuan===sumber)tujuan='';
+ jenisKe=isiJenis('transferKeJenis',jenisKe,k=>transferMode==='tarik'?k==='tunai':k==='tunai'?sumber!==TUNAI_ID:list.some(w=>w.jenis===k&&w.id!==sumber),'Pilih jenis tujuan');
+ const ke=$('transferKe');ke.replaceChildren(new Option('Pilih '+(nama[jenisKe]||'tujuan').toLowerCase(),''));
+ if(jenisKe==='tunai'){ke.add(new Option('Tunai',TUNAI_ID));ke.value=TUNAI_ID;}
+ else{list.filter(w=>w.jenis===jenisKe&&w.id!==sumber).forEach(w=>ke.add(new Option(w.nama+(w.arsip?' (diarsipkan)':''),w.id)));ke.value=[...ke.options].some(o=>o.value===tujuan)?tujuan:'';}
+ $('transferDariJenis').disabled=transferMode==='setor';$('transferKeJenis').disabled=transferMode==='tarik';$('transferDariWrap').hidden=!jenisDari||jenisDari==='tunai';$('transferKeWrap').hidden=!jenisKe||jenisKe==='tunai';
+ const judul=transferMode==='tarik'?'Tarik tunai':sumber===TUNAI_ID?'Tunai ke rekening / e-wallet':ke.value===TUNAI_ID?'Tarik tunai':'Pindahkan saldo';
+ $('transferTitle').textContent=(transferEditId?'Edit · ':'')+judul;$('btnTransferSave').textContent=transferMode==='tarik'?'Simpan penarikan tunai':transferMode==='setor'?'Simpan tunai ke wallet':'Simpan perpindahan';
+}
+function ubahPilihanTransfer(asal){
+ const sumberLama=$('transferDari').value,tujuanLama=$('transferKe').value;
+ renderPilihanTransfer(asal==='jenisDari'?'':sumberLama,asal==='jenisKe'?'':tujuanLama,$('transferDariJenis').value,$('transferKeJenis').value);
+ isiPecahan('tpb',null);isiPecahan('tpk',null);$('transferTrack').checked=false;
+ if(!transferEditId&&(asal==='jenisDari'||asal==='dari'))$('transferExpense').checked=$('transferDari').value===TUNAI_ID;
+ $('transferError').textContent='';previewTransferDompet();
+}
+function tukarArahTransfer(){
+ const sumber=$('transferDari').value,tujuan=$('transferKe').value;
+ if(!sumber||!tujuan){transferGagal('Pilih sumber dan tujuan dahulu sebelum menukar arah.');return;}
+ transferMode=tujuan===TUNAI_ID?'setor':sumber===TUNAI_ID?'tarik':'bebas';renderPilihanTransfer(tujuan,sumber);isiPecahan('tpb',null);isiPecahan('tpk',null);$('transferTrack').checked=false;
+ if(!transferEditId)$('transferExpense').checked=tujuan===TUNAI_ID;
+ $('transferError').textContent='';previewTransferDompet();
+}
+function transferGagal(teks){const box=$('transferError');box.textContent=teks;box.focus({preventScroll:true});box.scrollIntoView({block:'center',behavior:'auto'});return false;}
+function bukaTarikTunai(id=null){bukaTransferDompet(null,id,TUNAI_ID);}
+function bukaTransferDompet(id=null,sumber=null,tujuan=null){
+ if($('dlgTransferDompet').open)return;
+ const t=db.transferDompet.find(t=>t.id===id);transferEditId=t?.id||null;transferDraftId=t?.id||uid();const dari=t?.dariId||sumber,ke=t?.keId||tujuan;transferMode=dari===TUNAI_ID?'setor':ke===TUNAI_ID?'tarik':'bebas';const siap=db.dompet.some(w=>!w.arsip)||!!t;$('transferSetup').hidden=siap;$('transferFields').hidden=!siap;$('btnTransferSave').hidden=!siap;$('btnTransferSwap').hidden=!siap;
+ renderPilihanTransfer(t?.dariId||sumber||'',t?.keId||tujuan||'');
+ isiUang($('transferJumlah'),t?.jumlah??'');isiUang($('transferBiaya'),t?.biaya??'');$('transferTanggal').value=t?.tanggal||hariIni();$('transferCatatan').value=t?.catatan||'';
+ $('transferExpense').checked=t?!!t.catatPengeluaran:$('transferDari').value===TUNAI_ID;$('transferTrack').checked=!!t?.tunai?.lacakDompet;
+ isiPecahan('tpb',t?.tunai?.bayar||t?.tunai?.diterima);isiPecahan('tpk',t?.tunai?.kembali);$('transferPhysical').open=!!t?.tunai?.lacakDompet;$('transferError').textContent='';
+ previewTransferDompet();transferFormAwal=keadaanTransferForm();$('dlgTransferDompet').showModal();
 }
 $('dlgTransferDompet').addEventListener('input',previewTransferDompet);$('dlgTransferDompet').addEventListener('change',previewTransferDompet);
 $('btnTransferCancel').onclick=()=>batalWalletDialog('dlgTransferDompet',keadaanTransferForm()!==transferFormAwal);
 $('dlgTransferDompet').addEventListener('cancel',e=>{e.preventDefault();$('btnTransferCancel').click()});
-$('btnTransferSave').onclick=()=>{
-  const t=dataTransferForm();
-  if(!t.dariId||!t.keId)return $('transferError').textContent='Pilih dompet sumber dan tujuan.';
-  if(t.dariId===t.keId)return $('transferError').textContent='Sumber dan tujuan harus berbeda.';
-  if(!(t.jumlah>0)||!Number.isFinite(t.jumlah)||!Number.isFinite(t.biaya)||t.biaya<0||!t.tanggal)return $('transferError').textContent='Isi tanggal, jumlah lebih dari 0, dan biaya 0 atau lebih.';
-  if(db.dompet.some(w=>w.arsip&&(w.id===t.dariId||w.id===t.keId)))return $('transferError').textContent='Pulihkan dompet yang diarsipkan sebelum mengubah transfer.';
-  t.id=transferEditId||uid();const kandidat=kandidatTransferDompet(t),error=cekSaldoDompet(kandidat.transaksi,kandidat.transfer);
-  if(error)return $('transferError').textContent=error;
-  const sebelum={transaksi:db.transaksi,transfer:db.transferDompet};db.transaksi=kandidat.transaksi;db.transferDompet=kandidat.transfer;
-  if(!simpan()){db.transaksi=sebelum.transaksi;db.transferDompet=sebelum.transfer;return}
-  $('dlgTransferDompet').close();renderSemua();beriPesan('Transfer tersimpan. Hanya biaya admin menjadi pengeluaran.');
-};
-function hapusTransferDompet(id) {
-  const t=db.transferDompet.find(t=>t.id===id);if(!t)return;
-  konfirmasiDompet('Hapus transfer?','Saldo kedua dompet dan biaya admin akan dikembalikan sesuai sebelum transfer.',()=>{
-    const transaksi=db.transaksi.filter(x=>x.transferDompetId!==id),transfer=db.transferDompet.filter(x=>x.id!==id),error=cekSaldoDompet(transaksi,transfer);
-    if(error)return beriPesan(error,true);
-    const lama={transaksi:db.transaksi,transfer:db.transferDompet};db.transaksi=transaksi;db.transferDompet=transfer;
-    if(!simpan()){db.transaksi=lama.transaksi;db.transferDompet=lama.transfer;return}renderSemua();beriPesan('Transfer dan biaya admin dihapus.');
-  });
-}
-function barisTransferDompet(t) {
-  const row=el('div','wallet-transfer-row');row.appendChild(el('strong',null,namaDompet(t.dariId)+' → '+namaDompet(t.keId)));
-  row.appendChild(el('div','muted',tglIndo(t.tanggal)+' · '+rp(t.jumlah)+(t.biaya?' · biaya '+rp(t.biaya):' · tanpa biaya')));if(t.catatan)row.appendChild(el('div','muted',t.catatan));
-  const aksi=el('div','aksi');aksi.style.marginTop='8px';const edit=el('button','ghost kecil','Edit');edit.type='button';edit.onclick=()=>bukaTransferDompet(t.id);const hapus=el('button','del kecil','Hapus');hapus.type='button';hapus.onclick=()=>hapusTransferDompet(t.id);aksi.append(edit,hapus);row.appendChild(aksi);return row;
+$('btnTransferSave').onclick=()=>simpanTransferDariForm();
+$('btnTransferAddWallet').onclick=()=>{$('dlgTransferDompet').close();bukaDompet(null,'transferSetup');$('wltEditInfo').textContent='Tambahkan rekening / e-wallet sumber, lalu catat saldo yang sudah ada. Sesudah itu kamu bisa memakai Tarik tunai.';};
+$('btnTransferFundSource').onclick=()=>{const id=$('transferDari').value;if(!db.dompet.some(w=>w.id===id&&!w.arsip))return transferGagal('Pilih rekening sumber terlebih dahulu.');const lanjutkan=()=>{$('dlgTransferDompet').close();if(ringkasanUang().belumDipilih>0){$('rDari').value='';$('rSampai').value='';$('rRentang').value='semua';$('rTipe').value='semua';$('rStatus').value='aktif';$('rCari').value='';goto('riwayat');beriPesan('Edit catatan non-tunai yang belum punya dompet, lalu pilih rekeningnya. Tidak perlu membuat pemasukan baru.');}else mulaiPemasukan('nontunai',id);};if(keadaanTransferForm()!==transferFormAwal)konfirmasiDompet('Buka catatan saldo sumber?','Isian perpindahan yang belum disimpan akan ditutup. Catat saldo sumber dahulu, lalu buka kembali perpindahan uangnya.',lanjutkan);else lanjutkan();};
+function hapusTransferDompet(id){const t=db.transferDompet.find(t=>t.id===id);if(!t)return;konfirmasiDompet('Hapus perpindahan uang?','Pokok dan biaya admin akan dihapus bersama. Kamu juga bisa memilih Nonaktifkan agar catatannya tetap ada.',()=>{
+ const lama=cloneKeuangan(db),next=cloneKeuangan(db);next.transaksi=next.transaksi.filter(x=>x.transferDompetId!==id);next.transferDompet=next.transferDompet.filter(x=>x.id!==id);next.uangFisik.stok=stokSetelahStatus(lama,next);
+ if(simpanKandidatKeuangan(next)){renderSemua();pesanDenganUrungkan('Perpindahan dan biaya admin dihapus.',lama);}
+});}
+function barisTransferDompet(t,selezione=false){const row=el('div','wallet-transfer-row ledger-entry'+(t.aktif===false?' is-inactive':''));row.dataset.transferId=t.id;
+ const head=el('div','ledger-row-head');if(selezione)head.append(pilihanRiwayat('transfer:'+t.id,t.catatan||'Perpindahan uang'));head.append(el('strong',null,namaDompet(t.dariId)+' → '+namaDompet(t.keId)));row.append(head,el('div','muted',tglIndo(t.tanggal)+' · Tujuan menerima '+rp(t.jumlah)+(t.biaya?' · admin '+rp(t.biaya):' · tanpa admin')));
+ row.append(el('div','muted',t.catatPengeluaran?'Masuk pengeluaran laporan: '+rp(t.jumlah+t.biaya)+'. Saldo total hanya berkurang admin.':'Perpindahan saja; pengeluaran laporan hanya admin '+rp(t.biaya)+'.'));if(t.catatan)row.append(el('div','muted',t.catatan));if(t.tunai)row.append(el('div','muted','Pecahan fisik tersimpan'+(t.aktif===false?' · tidak dihitung':' · ikut disesuaikan')));row.append(statusCatatanNode(t));
+ const aksi=el('div','aksi');const edit=el('button','ghost kecil','Edit'),status=el('button','ghost kecil',t.aktif===false?'Aktifkan':'Nonaktifkan'),hapus=el('button','del kecil','Hapus');edit.type=status.type=hapus.type='button';edit.onclick=()=>bukaTransferDompet(t.id);status.onclick=()=>bukaStatusCatatan(['transfer:'+t.id],t.aktif===false);hapus.onclick=()=>hapusTransferDompet(t.id);aksi.append(edit,status,hapus);row.append(aksi);return row;
 }
 function renderDompet() {
   const saldo=saldoSemuaDompet(), jumlahSaldo=[...saldo.values()].reduce((a,b)=>a+b,0);$('walletTotal').textContent=rp(jumlahSaldo);
   $('walletUnassignedInfo').textContent='Catat pemasukan untuk menambah saldo, atau pilih dompet saat mencatat pengeluaran.';
   const aktif=db.dompet.filter(w=>!w.arsip),arsip=db.dompet.filter(w=>w.arsip);
-  const render=(list,id)=>{const box=$(id);box.replaceChildren();list.forEach(w=>{const row=el('div','wallet-entry'),top=el('div','wallet-entry-top'),icon=el('span','wallet-symbol');icon.classList.add('wallet-brand-symbol');icon.replaceChildren(badgePenyedia(penyediaDompet(w),w.jenis));const nama=el('div','wallet-entry-title');nama.append(el('b',null,w.nama),el('small',null,(w.jenis==='bank'?'Rekening bank':w.jenis==='saving'?'Tabungan':'E-wallet')+(penyediaDompet(w)&&w.nama!==penyediaDompet(w).nama?' · '+penyediaDompet(w).nama:'')));top.append(icon,nama,el('span','wallet-entry-amount',rp(saldo.get(w.id))));const aksi=el('div','aksi'),edit=el('button','ghost kecil','Edit nama'),archive=el('button','ghost kecil',w.arsip?'Pulihkan':'Arsipkan');edit.type=archive.type='button';edit.onclick=()=>bukaDompet(w.id);archive.onclick=()=>arsipDompet(w.id);const tambah=el('button','ghost kecil','+ Tambah saldo');tambah.type='button';tambah.onclick=()=>mulaiPemasukan('nontunai',w.id);if(!w.arsip)aksi.appendChild(tambah);aksi.append(edit,archive);row.append(top,aksi);box.appendChild(row)})};
+  const render=(list,id)=>{const box=$(id);box.replaceChildren();list.forEach(w=>{const row=el('div','wallet-entry'),top=el('div','wallet-entry-top'),icon=el('span','wallet-symbol');icon.classList.add('wallet-brand-symbol');icon.replaceChildren(badgePenyedia(penyediaDompet(w),w.jenis));const nama=el('div','wallet-entry-title');nama.append(el('b',null,w.nama),el('small',null,(w.jenis==='bank'?'Rekening bank':w.jenis==='saving'?'Tabungan':'E-wallet')+(penyediaDompet(w)&&w.nama!==penyediaDompet(w).nama?' · '+penyediaDompet(w).nama:'')));top.append(icon,nama,el('span','wallet-entry-amount',rp(saldo.get(w.id))));const aksi=el('div','aksi'),edit=el('button','ghost kecil','Edit nama'),archive=el('button','ghost kecil',w.arsip?'Pulihkan':'Arsipkan');edit.type=archive.type='button';edit.onclick=()=>bukaDompet(w.id);archive.onclick=()=>arsipDompet(w.id);const tambah=el('button','ghost kecil','+ Tambah saldo');tambah.type='button';tambah.onclick=()=>mulaiPemasukan('nontunai',w.id);if(!w.arsip){const tarik=el('button','ghost kecil','Tarik tunai');tarik.type='button';tarik.dataset.withdrawSource=w.id;tarik.onclick=()=>bukaTarikTunai(w.id);aksi.append(tambah,tarik);}aksi.append(edit,archive);row.append(top,aksi);box.appendChild(row)})};
   render(aktif,'walletList');render(arsip,'walletArchivedList');
   if(!aktif.length){const kosong=el('div','wallet-empty'),icon=el('span','wallet-symbol');icon.innerHTML=ikonDompet('wallet');kosong.append(icon,el('b',null,'Uangmu, tempatnya masing-masing'),el('p',null,'Tambahkan dompet pertama. Setelah itu pilih dompet saat mencatat transaksi.'));$('walletList').appendChild(kosong)}
-  $('walletArchived').hidden=!arsip.length;$('walletArchivedTitle').textContent='Diarsipkan ('+arsip.length+')';$('btnWalletTransfer').disabled=aktif.length<2;$('walletTransferHint').textContent=aktif.length<2?'Transfer tersedia setelah ada dua dompet aktif.':'Transfer memindahkan saldo antar dompet; biaya admin dicatat terpisah.';
+  $('walletArchived').hidden=!arsip.length;$('walletArchivedTitle').textContent='Diarsipkan ('+arsip.length+')';$('btnWalletTransfer').disabled=false;$('btnCashToWallet').disabled=false;$('btnWalletToCash').disabled=false;$('walletTransferHint').textContent=aktif.length?'Pindahkan uang antara Tunai dan Wallet atau antar dompet. Saldo total tidak berkurang dua kali.':'Tambahkan satu wallet atau rekening untuk memindahkan uang tunai.';
   const transfers=urutTerbaru(db.transferDompet);$('walletTransferDetails').hidden=!transfers.length;$('walletTransferList').replaceChildren();transfers.slice(0,5).forEach(t=>$('walletTransferList').appendChild(barisTransferDompet(t)));
   ['i','e'].forEach(prefix=>{renderPilihanDompet(prefix);perbaruiDigitalUi(prefix)});
 }
-function renderRiwayatTransfer() {
-  let dari=$('rDari').value,sampai=$('rSampai').value;if(dari&&sampai&&dari>sampai)[dari,sampai]=[sampai,dari];const cari=$('rCari').value.trim().toLowerCase();
-  const list=$('rTipe').value!=='semua'?[]:db.transferDompet.filter(t=>(!dari||t.tanggal>=dari)&&(!sampai||t.tanggal<=sampai)&&(!cari||[namaDompet(t.dariId),namaDompet(t.keId),t.catatan].some(s=>s.toLowerCase().includes(cari))));
-  $('walletHistory').hidden=!list.length;$('walletHistoryList').replaceChildren();urutTerbaru(list).forEach(t=>$('walletHistoryList').appendChild(barisTransferDompet(t)));
-  return list.length;
-}
-$('btnWalletAdd').onclick=()=>bukaDompet();$('btnWalletTransfer').onclick=()=>bukaTransferDompet();$('btnWalletHelp').onclick=()=>bantuan('dompet');
+function renderRiwayatTransfer(){ $('walletHistory').hidden=true;return transferSesuaiFilter().length; }
+$('btnWalletAdd').onclick=()=>bukaDompet();$('btnWalletTransfer').onclick=()=>bukaTransferDompet();$('btnCashToWallet').onclick=()=>bukaTransferDompet(null,TUNAI_ID);$('btnWalletToCash').onclick=()=>bukaTarikTunai();$('btnWalletHelp').onclick=()=>bantuan('dompet');
 ['i','e'].forEach(prefix=>{
   $(prefix+'DigitalSelect').onchange=()=>perbaruiDigitalUi(prefix);$(prefix+'DigitalAdd').onclick=()=>bukaDompet(null,prefix);$(prefix+'DigitalHelp').onclick=()=>bantuan('dompet');
 });
@@ -4819,7 +4848,7 @@ $('rbTipe').onchange = isiKategoriBerulang;
 $('rbSatuan').onchange = () => tampilkanSatuanLain($('rbSatuan'), $('rbSatuanLain'));
 $('btnBerulang').onclick = () => {
   const nama = $('rbNama').value.trim();
-  const qty = Number($('rbQty').value) || 0;
+  const qty = angkaJumlah($('rbQty').value) || 0;
   const harga = angkaUang($('rbHarga').value) || 0;
   const satuan = satuanDariForm($('rbSatuan'), $('rbSatuanLain'));
   if (!nama) return gagalIsi('Nama transaksi berulang wajib diisi.', 'rbNama');
@@ -4980,7 +5009,7 @@ function bukaEditKeranjang(i) {
   if (error) error.remove();
   editKeranjangIndex = i;
   $('kNama').value = it.nama;
-  $('kQty').value = jumlah(it.qty);
+  $('kQty').value = teksJumlahInput(it.qty);
   isiSatuanSelect($('kSatuan'), it.satuan || '');
   $('kSatuanLain').value = $('kSatuan').value === '__custom__' ? it.satuan : '';
   tampilkanSatuanLain($('kSatuan'), $('kSatuanLain'));
@@ -5260,7 +5289,7 @@ function tampilkanDraftScan(barang, total) {
     const namaWrap = bidang('Nama barang', nama);
     namaWrap.style.gridColumn = '1 / -1';
     row.appendChild(namaWrap);
-    const qty = el('input'); qty.type = 'text'; qty.inputMode = 'decimal'; qty.value = jumlah(item.qty);
+    const qty = el('input'); qty.type = 'text'; qty.inputMode = 'decimal'; qty.value = teksJumlahInput(item.qty);
     qty.oninput = () => { item.qty = angkaJumlah(qty.value); };
     const satuan = el('select'); isiSatuanSelect(satuan, item.satuan);
     item._satuanCustom = satuan.value === '__custom__';
@@ -5581,7 +5610,7 @@ $('btnWish').onclick = () => {
 function renderPengingat() {
   const sekarang = new Date();
   const jamMenit = String(sekarang.getHours()).padStart(2, '0') + ':' + String(sekarang.getMinutes()).padStart(2, '0');
-  const sudahCatat = db.transaksi.some(x => x.tanggal === hariIni());
+  const sudahCatat = db.transaksi.some(x => catatanAktif(x)&&x.tanggal === hariIni());
   const tampil = !!set.pengingat && jamMenit >= set.pengingat && !sudahCatat && set.ditutup !== hariIni();
   $('bannerPengingat').style.display = tampil ? 'flex' : 'none';
   if (tampil && set.notifHari !== hariIni() && 'Notification' in window && Notification.permission === 'granted' && navigator.serviceWorker) {
@@ -5624,20 +5653,13 @@ $('btnTutupBanner').onclick = () => {
 // ===== RENDER BERANDA & RIWAYAT =====
 function renderBeranda() {
   $('saldo').textContent = rp(saldoTotal());
-  $('totMasuk').textContent = rp(sum(db.transaksi, 'masuk'));
-  $('totKeluar').textContent = rp(sum(db.transaksi, 'keluar'));
+  const laporan=transaksiLaporan();$('totMasuk').textContent=rp(sum(laporan,'masuk'));$('totKeluar').textContent=rp(sum(laporan,'keluar'));const pokok=laporan.filter(x=>x.transferPokok&&catatanAktif(x)).reduce((a,x)=>a+x.total,0);$('transferReportNote').hidden=!pokok;$('transferReportNote').textContent='Pengeluaran laporan termasuk pindah saldo '+rp(pokok)+'. Pokok ini masih milikmu di tempat lain; saldo total hanya berkurang belanja dan biaya admin.';
 }
 
-function renderRiwayat() {
-  const jumlahTransfer = renderRiwayatTransfer();
-  const p = filterTr({ dari: $('rDari').value, sampai: $('rSampai').value, tipe: $('rTipe').value, cari: $('rCari').value });
-  $('masuk').textContent = rp(sum(p, 'masuk'));
-  $('keluar').textContent = rp(sum(p, 'keluar'));
-  $('rRingkas').textContent = 'Ditemukan ' + p.length + ' transaksi' + (jumlahTransfer ? ' dan ' + jumlahTransfer + ' transfer' : '') + ' sesuai filter.';
-  const box = $('rList');
-  box.innerHTML = '';
-  if (!p.length) box.appendChild(el('p', 'kosong', jumlahTransfer ? 'Transfer ditampilkan pada rincian di bawah.' : 'Tidak ada yang cocok.'));
-  urutTerbaru(p).forEach(x => box.appendChild(baris(x)));
+function renderRiwayat(){let a=$('rDari').value,b=$('rSampai').value;if(a&&b&&a>b)[a,b]=[b,a];$('rPeriodInfo').textContent=a||b?(a?'Dari '+tglIndo(a):'Semua catatan')+(b?' sampai '+tglIndo(b):' dan seterusnya'):'Menampilkan semua tanggal.';const p=filterTr({dari:$('rDari').value,sampai:$('rSampai').value,tipe:$('rTipe').value,cari:$('rCari').value,status:$('rStatus').value}),transfers=transferSesuaiFilter();
+ $('masuk').textContent=rp(sum(p,'masuk'));$('keluar').textContent=rp(sum(p,'keluar'));$('rRingkas').textContent=p.filter(x=>!x.transferDompetId).length+' transaksi dan '+transfers.length+' perpindahan sesuai filter. Nonaktif tetap tersimpan dan tidak masuk perhitungan.';
+ const rows=[...p.filter(x=>!x.transferDompetId).map(x=>({x,key:'tr:'+x.id,tanggal:x.tanggal,ts:x.ts})),...transfers.map(x=>({x,key:'transfer:'+x.id,tanggal:x.tanggal,ts:x.ts}))];const terlihat=new Set(rows.map(r=>r.key));for(const key of pilihanLedger)if(!terlihat.has(key))pilihanLedger.delete(key);ledgerTerlihat=[...terlihat];
+ const box=$('rList');box.replaceChildren();if(!rows.length)box.append(el('p','kosong','Tidak ada catatan yang cocok. Coba ubah tanggal, tipe, atau status.'));urutTerbaru(rows).forEach(r=>box.append(r.key.startsWith('transfer:')?barisTransferDompet(r.x,true):baris(r.x)));$('walletHistory').hidden=true;perbaruiPilihanLedger();
 }
 
 // ===== GRAFIK: SVG native, data numerik terpisah dari data tersimpan =====
@@ -5646,7 +5668,7 @@ function nodeGrafik(tag,attrs={},teks) { const n=document.createElementNS(NS_GRA
 function svgGrafik(w,h,label) { const s=nodeGrafik('svg',{viewBox:`0 0 ${w} ${h}`,role:'img','aria-label':label,focusable:'false'});s.append(nodeGrafik('title',{},label));return s; }
 function angkaPendek(n) { const a=Math.abs(n),b=a>=1e12?[1e12,'T']:a>=1e9?[1e9,'M']:a>=1e6?[1e6,'jt']:a>=1e3?[1e3,'rb']:[1,''];return (n/b[0]).toLocaleString('id-ID',{maximumFractionDigits:1})+b[1]; }
 function tanggalGrafikValid(t) { if(!/^\d{4}-\d{2}-\d{2}$/.test(String(t)))return false;const d=new Date(t+'T12:00:00Z');return Number.isFinite(d.getTime())&&d.toISOString().slice(0,10)===t; }
-function dataGrafikAman() { let dilewati=0;const list=[];for(const t of db.transaksi){const nilai=Number(t.total);if(!tanggalGrafikValid(t.tanggal)||!['masuk','keluar'].includes(t.tipe)||!Number.isFinite(nilai)||nilai<0||nilai>Number.MAX_SAFE_INTEGER){dilewati++;continue;}list.push({...t,total:nilai,kategori:String(t.kategori||'Lainnya')});}return {list,dilewati}; }
+function dataGrafikAman({laporan=true}={}){let dilewati=0;const list=[];for(const t of (laporan?transaksiLaporan():db.transaksi)){if(!catatanAktif(t))continue;const nilai=Number(t.total);if(!tanggalGrafikValid(t.tanggal)||!['masuk','keluar'].includes(t.tipe)||!Number.isFinite(nilai)||nilai<0||nilai>Number.MAX_SAFE_INTEGER){dilewati++;continue;}list.push({...t,total:nilai,kategori:String(t.kategori||'Lainnya')});}return {list,dilewati};}
 function rentangDataGrafik(list) { let a=$('gDari').value,b=$('gSampai').value;if(a&&b&&a>b)[a,b]=[b,a];const t=list.filter(x=>(!a||x.tanggal>=a)&&(!b||x.tanggal<=b));const dates=t.map(x=>x.tanggal).sort();const mulai=a||dates[0]||geser(b||hariIni(),-29),akhir=b||dates.at(-1)||(mulai>hariIni()?mulai:hariIni());return {mulai,akhir,list:t}; }
 function aturRentangGrafik(mode,render=true) { const hari=hariIni();let a='',b=hari;if(mode==='semua')b='';else if(mode==='bulan')a=hari.slice(0,7)+'-01';else if(mode==='6bulan')a=tambahBulan(hari.slice(0,7)+'-01',-5);else if(['7','30'].includes(mode))a=geser(hari,1-Number(mode));else return;if(a)$('gDari').value=a;else $('gDari').value='';$('gSampai').value=b;if(render)renderGrafik(); }
 function kumpulkanGrafik(list,mulai,akhir,bulanan=false) {
@@ -5676,22 +5698,53 @@ function gambarKategoriGrafik(entries) {
   ringkasEntriGrafik(entries).forEach(([nama,v],i)=>{const length=v/total*C,circle=nodeGrafik('circle',{cx:120,cy:106,r:73,fill:'none',stroke:PAL[i%PAL.length],'stroke-width':25,'stroke-dasharray':`${length} ${C-length}`,'stroke-dashoffset':-offset,transform:'rotate(-90 120 106)'});circle.append(nodeGrafik('title',{},nama+': '+rp(v)));s.append(circle);offset+=length;const row=el('div','chart-rank-label chart-category-label'),left=el('span','legend'),sw=el('span','sw');sw.style.background=PAL[i%PAL.length];left.append(sw,el('span',null,nama));row.append(left,el('b',null,rp(v)));$('legendDonut').append(row);});
   s.append(nodeGrafik('text',{x:120,y:100,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},'Total keluar'),nodeGrafik('text',{x:120,y:123,'text-anchor':'middle','font-size':20,'font-weight':750,fill:'currentColor'},'Rp '+angkaPendek(total)));$('donut').append(s);
 }
-function gambarSaldoGrafik(groups,awal) {
-  const points=[{label:'Awal',nilai:awal}];let total=awal;groups.forEach(g=>{total+=g.m-g.k;points.push({label:g.label,nilai:total});});
-  $('gSaldoInfo').textContent='Saldo awal rentang '+rp(awal)+' → akhir rentang '+rp(total)+'.';
-  const W=Math.max(250,Math.min(700,$('gSaldoChart').clientWidth||Math.min(innerWidth-72,548))),H=255,L=64,R=14,T=22,B=H-44,s=svgGrafik(W,H,'Perubahan saldo dari '+rp(awal)+' menjadi '+rp(total)),min=Math.min(0,...points.map(d=>d.nilai)),max=Math.max(1,...points.map(d=>d.nilai)),range=max-min||1;
+function transferGrafikAman() {
+  const ids=new Set([TUNAI_ID,...db.dompet.map(w=>w.id)]);
+  return db.transferDompet.filter(t=>t.aktif!==false&&tanggalGrafikValid(t.tanggal)&&Number.isFinite(t.jumlah)&&t.jumlah>0&&t.jumlah<=Number.MAX_SAFE_INTEGER&&ids.has(t.dariId)&&ids.has(t.keId)&&t.dariId!==t.keId);
+}
+function dataSaldoGrafik(mulai,akhir,list=dataGrafikAman({laporan:false}).list,transfer=transferGrafikAman(),dompet=db.dompet) {
+  // Stok pecahan tidak ditambahkan lagi ke saldo uang.
+  const groups=kumpulkanGrafik([],mulai,akhir).groups;
+  const snapshot=tanggal=>{
+    const transaksi=list.filter(t=>t.tanggal<=tanggal),pindah=transfer.filter(t=>t.tanggal<=tanggal);
+    const total=bulatDompet(transaksi.reduce((s,t)=>s+(t.tipe==='masuk'?t.total:-t.total),0));
+    const wallet=bulatDompet([...saldoSemuaDompet(transaksi,pindah,dompet).values()].reduce((s,n)=>s+n,0));
+    const tunai=saldoTunaiKandidat(transaksi,pindah,dompet);
+    return {tanggal,tunai,wallet,total,belum:bulatDompet(total-tunai-wallet)};
+  };
+  return [{label:'Awal',...snapshot(geser(mulai,-1))},...groups.map((g,i)=>{
+    const tanggal=i+1<groups.length?geser(groups[i+1].t,-1):akhir;
+    return {label:tglIndo(tanggal).slice(0,5),...snapshot(tanggal)};
+  })];
+}
+function gambarSaldoGrafik(points) {
+  const awal=points[0],akhir=points.at(-1);
+  $('gSaldoInfo').textContent='Tunai: '+rp(awal.tunai)+' → '+rp(akhir.tunai)+'\nWallet: '+rp(awal.wallet)+' → '+rp(akhir.wallet)+'\nSaldo total akhir: '+rp(akhir.total)+'.';
+  $('gSaldoNote').textContent='Wallet mencakup semua rekening dan e-wallet, termasuk yang diarsipkan. Titik menunjukkan saldo pada akhir periode.'+(points.some(p=>p.belum!==0)?' Saldo non-tunai tanpa dompet belum masuk kedua garis; rinciannya ada di tabel.':'');
+  const W=Math.max(250,Math.min(700,$('gSaldoChart').clientWidth||Math.min(innerWidth-72,548))),H=265,L=60,R=22,T=22,B=H-44;
+  const s=svgGrafik(W,H,'Perubahan saldo Tunai dan Wallet. Akhir rentang: Tunai '+rp(akhir.tunai)+', Wallet '+rp(akhir.wallet)+'.');
+  const values=points.flatMap(p=>[p.tunai,p.wallet]),min=Math.min(0,...values),max=Math.max(1,...values),range=max-min||1;
   const x=i=>L+i*(W-L-R)/Math.max(1,points.length-1),y=v=>B-(v-min)/range*(B-T);
   for(let i=0;i<=4;i++){const nilai=min+range*i/4,pos=y(nilai);s.append(nodeGrafik('line',{x1:L,y1:pos,x2:W-R,y2:pos,stroke:'var(--line)','stroke-dasharray':'3 5'}),nodeGrafik('text',{x:L-8,y:pos+4,'font-size':12,'text-anchor':'end',fill:'var(--muted)'},angkaPendek(nilai)));}
-  s.append(nodeGrafik('line',{x1:L,y1:y(0),x2:W-R,y2:y(0),stroke:'var(--muted)','stroke-opacity':.5}),nodeGrafik('polyline',{points:points.map((d,i)=>x(i)+','+y(d.nilai)).join(' '),fill:'none',stroke:'var(--ghostink)','stroke-width':3,'stroke-linejoin':'round'}));
-  const every=Math.max(1,Math.ceil(points.length/6));points.forEach((d,i)=>{const dot=nodeGrafik('circle',{cx:x(i),cy:y(d.nilai),r:4,fill:'var(--ghostink)'});dot.append(nodeGrafik('title',{},d.label+': '+rp(d.nilai)));s.append(dot);if(i%every===0||i===points.length-1)s.append(nodeGrafik('text',{x:x(i),y:B+24,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},d.label));});$('gSaldoChart').replaceChildren(s);tabelGrafik('gSaldoData',['Periode','Saldo'],points.map(d=>[d.label,rp(d.nilai)]));
+  s.append(nodeGrafik('line',{x1:L,y1:y(0),x2:W-R,y2:y(0),stroke:'var(--muted)','stroke-opacity':.5}));
+  for(const [key,nama,color,dash] of [['tunai','Tunai','var(--saldo-tunai)',''],['wallet','Wallet','var(--saldo-wallet)','7 5']]){
+    const line=nodeGrafik('polyline',{points:points.map((d,i)=>x(i)+','+y(d[key])).join(' '),fill:'none',stroke:color,'stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round','data-seri':key});
+    if(dash)line.setAttribute('stroke-dasharray',dash);s.append(line);
+    points.forEach((d,i)=>{const attrs=key==='tunai'?{cx:x(i),cy:y(d[key]),r:4}:{x:x(i)-3,y:y(d[key])-3,width:6,height:6};const dot=nodeGrafik(key==='tunai'?'circle':'rect',{...attrs,fill:color});dot.append(nodeGrafik('title',{},nama+' · '+(i===0?'Sebelum rentang, ':'Akhir periode, ')+tglIndo(d.tanggal)+': '+rp(d[key])));s.append(dot);});
+  }
+  const every=Math.max(1,Math.ceil((points.length-1)/(W<380?3:5)));
+  points.forEach((d,i)=>{if(i%every===0||i===points.length-1){if(i!==points.length-1&&i>0&&points.length-1-i<every*.65)return;s.append(nodeGrafik('text',{x:x(i),y:B+24,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},d.label));}});
+  $('gSaldoChart').replaceChildren(s);
+  const belum=points.some(p=>p.belum!==0);
+  tabelGrafik('gSaldoData',['Periode','Tunai','Wallet',...(belum?['Belum dipilih']:[]),'Total'],points.map((p,i)=>[(i===0?'Sebelum rentang · ':'Sampai ')+tglIndo(p.tanggal),rp(p.tunai),rp(p.wallet),...(belum?[rp(p.belum)]:[]),rp(p.total)]));
 }
 function renderGrafik() {
-  const aman=dataGrafikAman(),r=rentangDataGrafik(aman.list),m=sum(r.list,'masuk'),k=sum(r.list,'keluar'),bucket=kumpulkanGrafik(r.list,r.mulai,r.akhir);
+  const aman=dataGrafikAman(),transfer=transferGrafikAman(),r=rentangDataGrafik([...aman.list,...transfer]);r.list=aman.list.filter(t=>t.tanggal>=r.mulai&&t.tanggal<=r.akhir);const m=sum(r.list,'masuk'),k=sum(r.list,'keluar'),bucket=kumpulkanGrafik(r.list,r.mulai,r.akhir);
   $('gDataWarning').hidden=!aman.dilewati;$('gDataWarning').textContent=aman.dilewati+' catatan dengan tanggal atau nominal tidak valid tidak ditampilkan di grafik. Periksa catatan tersebut di Riwayat; datanya tetap tersimpan.';
-  $('gPeriodInfo').textContent=tglIndo(r.mulai)+' – '+tglIndo(r.akhir)+' · '+r.list.length+' transaksi';$('gTotalMasuk').textContent=rp(m);$('gTotalKeluar').textContent=rp(k);$('gSelisih').textContent=rp(m-k);$('gFlowInfo').textContent=bucket.label+' Perpindahan saldo antar dompet tidak dihitung sebagai pemasukan baru.';
+  $('gPeriodInfo').textContent=tglIndo(r.mulai)+' – '+tglIndo(r.akhir)+' · '+r.list.length+' transaksi';$('gTotalMasuk').textContent=rp(m);$('gTotalKeluar').textContent=rp(k);$('gSelisih').textContent=rp(m-k);$('gFlowInfo').textContent=bucket.label+' Nonaktif tidak dihitung. Pindah saldo masuk pengeluaran hanya jika dipilih; grafik saldo memakai perubahan uang yang sebenarnya.';
   gambarBatangGrafik('chart7',bucket.groups,'Pemasukan dan pengeluaran pada rentang pilihan');tabelGrafik('gFlowData',['Periode','Masuk','Keluar'],bucket.groups.map(d=>[d.label,rp(d.m),rp(d.k)]));
   gambarKategoriGrafik(entriGrafik(r.list,t=>t.kategori));
-  const awal=aman.list.filter(t=>t.tanggal<r.mulai).reduce((a,t)=>a+(t.tipe==='masuk'?t.total:-t.total),0);gambarSaldoGrafik(bucket.groups,awal);
+  gambarSaldoGrafik(dataSaldoGrafik(r.mulai,r.akhir,dataGrafikAman({laporan:false}).list,transfer));
   const monthStart=tambahBulan(r.akhir.slice(0,7)+'-01',-5),monthList=r.list.filter(t=>t.tanggal>=monthStart),months=kumpulkanGrafik(monthList,monthStart,r.akhir,true).groups;gambarBatangGrafik('gMonthChart',months,'Perbandingan pemasukan dan pengeluaran per bulan');tabelGrafik('gMonthData',['Bulan','Masuk','Keluar'],months.map(d=>[d.label,rp(d.m),rp(d.k)]));
   gambarPeringkatGrafik('gPaymentChart',entriGrafik(r.list,t=>t.cara==='tunai'||t.tunai?'Tunai':t.dompetId?namaDompet(t.dompetId):'Non-tunai tanpa dompet'));
 }
@@ -5708,6 +5761,7 @@ function renderCompare() {
 
 function renderSemua() {
   renderDompet();
+  renderKeamananLedger();
   renderPanduanStatus();
   renderTempo();
   renderTunai();
@@ -5772,9 +5826,15 @@ function catatLagi(id) {
 }
 
 // Filter
-$('btnHariIni').onclick = () => { $('rDari').value = hariIni(); $('rSampai').value = hariIni(); renderRiwayat(); };
-$('btnSemuaTanggal').onclick = () => { $('rDari').value = ''; $('rSampai').value = ''; renderRiwayat(); };
-['rDari','rSampai','rTipe'].forEach(id => $(id).onchange = renderRiwayat);
+function aturRentangRiwayat(mode){
+ const hari=hariIni();let a='',b=hari;
+ if(mode==='hari')a=hari;else if(mode==='7'||mode==='30')a=geser(hari,1-Number(mode));else if(mode==='bulan')a=hari.slice(0,7)+'-01';else if(mode==='6bulan')a=tambahBulan(hari.slice(0,7)+'-01',-5);else if(mode==='semua')b='';else{if(mode==='custom')$('rDari').focus();return;}
+ $('rDari').value=a;$('rSampai').value=b;$('rRentang').value=mode;renderRiwayat();
+}
+$('rRentang').onchange=()=>aturRentangRiwayat($('rRentang').value);
+$('btnHariIni').onclick=()=>aturRentangRiwayat('hari');$('btnSemuaTanggal').onclick=()=>aturRentangRiwayat('semua');
+['rDari','rSampai'].forEach(id=>$(id).onchange=()=>{$('rRentang').value='custom';renderRiwayat();});
+['rTipe','rStatus'].forEach(id=>$(id).onchange=renderRiwayat);
 $('rCari').oninput = renderRiwayat;
 $('cmpA').onchange = renderCompare;
 $('cmpB').onchange = renderCompare;
@@ -5784,99 +5844,12 @@ function unduh(nama, isi, tipe) {
   unduhBlob(nama, new Blob([isi], { type: tipe }));
 }
 
-$('btnExcel').onclick = () => {
-  const esc2 = v => '"' + String(v).replace(/"/g, '""') + '"';
-  const baris = [['Tanggal','Tipe','Transaksi','Kategori','Barang','Jumlah','Satuan','Harga per Satuan','Subtotal','Tag','Dompet']];
-  [...db.transaksi].sort((x,y) => x.tanggal.localeCompare(y.tanggal)).forEach(x => {
-    x.items.forEach(i => baris.push([tglIndo(x.tanggal), x.tipe === 'masuk' ? 'Pemasukan' : 'Pengeluaran',
-      x.judul, x.kategori, i.nama, i.qty, i.satuan || '', i.harga, subtotalItem(i), (x.tags || []).join(' '), x.dompetId ? namaDompet(x.dompetId) : '']));
-  });
-  urutTerbaru(db.transferDompet).forEach(t => baris.push([tglIndo(t.tanggal),'Transfer',t.catatan || 'Transfer antar dompet','Perpindahan uang','',1,'',t.jumlah,t.jumlah,'',namaDompet(t.dariId) + ' → ' + namaDompet(t.keId)]));
-  baris.push([]);
-  baris.push(['', '', '', '', '', '', '', 'Saldo total', saldoTotal(), '']);
-  const isi = '\uFEFF' + baris.map(r => r.map(esc2).join(';')).join('\r\n');
-  unduh('catatan-keuangan.csv', isi, 'text/csv;charset=utf-8');
-};
+$('btnExcel').onclick=()=>eksporLedgerCsv();
 
-$('btnBackup').onclick = () => {
-  const isi = JSON.stringify({
-    versi: 3, transaksi: db.transaksi, wishlist: db.wishlist, budgets: db.budgets, berulang: db.berulang, uangFisik: db.uangFisik, dompet: db.dompet, transferDompet: db.transferDompet, tampilan: tampilanBackup(), katKustom: katKustom()
-  }, null, 2);
-  unduh('backup-keuangan-' + hariIni() + '.json', isi, 'application/json');
-  set.backupTerakhir = hariIni();
-  simpanSet();
-  renderSemua();
-};
+$('btnBackup').onclick=()=>{unduh('backup-keuangan-'+hariIni()+'.json',JSON.stringify(buatBackupObjek(),null,2),'application/json');set.backupTerakhir=hariIni();try{simpanSet();}catch(_){}renderSemua();};
 
 $('btnImport').onclick = () => $('fileImport').click();
-$('fileImport').onchange = async e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const dbSebelumImport = JSON.parse(JSON.stringify(db));
-  try {
-    const masuk = JSON.parse(await file.text());
-    const listTr = Array.isArray(masuk) ? masuk : (masuk.transaksi || null);
-    const listW = Array.isArray(masuk) ? [] : (masuk.wishlist || []);
-    const listB = Array.isArray(masuk) ? [] : (masuk.berulang || []);
-    const budgetMasuk = Array.isArray(masuk) ? {} : (masuk.budgets || {});
-    if (!Array.isArray(listTr)) throw new Error('format');
-    const idTr = new Set(db.transaksi.map(x => x.id));
-    const idW = new Set(db.wishlist.map(x => x.id));
-    const idB = new Set(db.berulang.map(x => x.id));
-    const idDompet = new Set(db.dompet.map(w => w.id));
-    normalDompet(masuk.dompet).forEach(w => { if (!idDompet.has(w.id)) { db.dompet.push(w); idDompet.add(w.id); } });
-    const idTransfer = new Set(db.transferDompet.map(t => t.id));
-    normalTransferDompet(masuk.transferDompet).forEach(t => { if (!idTransfer.has(t.id)) { db.transferDompet.push(t); idTransfer.add(t.id); } });
-    let tambah = 0;
-    listTr.forEach(x => {
-      if (x && x.tanggal && !idTr.has(String(x.id))) {
-        const n = normal(x);
-        db.transaksi.push(n); idTr.add(n.id); tambah++;
-      }
-    });
-    const errorDompet = cekSaldoDompet();
-    if (errorDompet) throw new Error('dompet: ' + errorDompet);
-    normalWish(listW).forEach(w => {
-      if (!idW.has(w.id)) { db.wishlist.push(w); idW.add(w.id); }
-    });
-    normalBerulang(listB).forEach(r => {
-      if (!idB.has(r.id)) { db.berulang.push(r); idB.add(r.id); }
-    });
-    if (!Array.isArray(masuk) && masuk.tampilan && typeof masuk.tampilan === 'object') {
-      const { bg, aksen, beranda, ...tanpaLatar } = masuk.tampilan;
-      tampilan = { ...tampilan, ...tanpaLatar };
-      simpanTampilan();
-      terapkanTampilan();
-    }
-    if (!Array.isArray(masuk) && masuk.katKustom) {
-      ['keluar', 'masuk'].forEach(t => {
-        (masuk.katKustom[t] || []).forEach(k => {
-          const nama = String(k).trim();
-          if (nama && !katKustom()[t].some(x => x.toLowerCase() === nama.toLowerCase())) katKustom()[t].push(nama);
-        });
-      });
-      simpanSet();
-      terapkanKatKustom();
-      refreshKategoriSelect();
-      renderKatKustom();
-    }
-    if (!Array.isArray(masuk) && masuk.uangFisik && masuk.uangFisik.stok) {
-      db.uangFisik = { aktif: !!masuk.uangFisik.aktif, stok: { ...stokKosong(), ...masuk.uangFisik.stok } };
-    }
-    Object.entries(budgetMasuk).forEach(([k, b]) => {
-      if (!db.budgets[k] && b && b.limit) db.budgets[k] = { limit: Number(b.limit), periode: b.periode === 'bulan' ? 'bulan' : 'minggu' };
-    });
-    if (!simpan()) { db = dbSebelumImport; renderSemua(); e.target.value = ''; return; }
-    isiPecahan('st', db.uangFisik.stok);
-    renderSemua();
-    alert('Import selesai. ' + tambah + ' transaksi baru ditambahkan (duplikat dilewati).');
-  } catch (err) {
-    db = dbSebelumImport;
-    renderSemua();
-    alert(err.message?.startsWith('dompet: ') ? 'Import dibatalkan. ' + err.message.slice(8) : 'File backup tidak valid.');
-  }
-  e.target.value = '';
-};
+$('fileImport').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>30000000)throw Error('Pilih backup di bawah 30 MB.');const raw=JSON.parse(await file.text());bukaImporLedger(raw);}catch(err){beriPesan('Backup belum dibuka: '+err.message,true);}finally{e.target.value='';}};
 
 // ===== TAMPILAN (TEMA, KACA, LATAR) =====
 
@@ -6659,7 +6632,7 @@ function bukaEditBerulang(id) {
   $('ebNama').value = r.nama;
   $('ebTipe').value = r.tipe;
   isiKategoriSelect($('ebKat'), r.tipe, r.kategori);
-  $('ebQty').value = r.qty;
+  $('ebQty').value = teksJumlahInput(r.qty);
   isiSatuanSelect($('ebSatuan'), r.satuan || '', true);
   $('ebSatuanLain').value = $('ebSatuan').value === '__custom__' ? r.satuan : '';
   tampilkanSatuanLain($('ebSatuan'), $('ebSatuanLain'));
@@ -6676,7 +6649,7 @@ $('btnEbSimpan').onclick = () => {
   const r = db.berulang.find(d => d.id === editBerulangId);
   if (!r) { $('dlgBerulang').close(); return; }
   const nama = $('ebNama').value.trim();
-  const qty = Number($('ebQty').value) || 0;
+  const qty = angkaJumlah($('ebQty').value) || 0;
   const harga = angkaUang($('ebHarga').value) || 0;
   const satuan = satuanDariForm($('ebSatuan'), $('ebSatuanLain'));
   const mulai = $('ebMulai').value;
@@ -6936,7 +6909,7 @@ function jadwalkanDriveOtomatis() {
 
 function buatBackupObjek() {
   return {
-    versi: 3,
+    versi: 4, fiturData:4,
     transaksi: db.transaksi,
     wishlist: db.wishlist,
     budgets: db.budgets,
@@ -7230,11 +7203,7 @@ function rentangMinggu(a, b) {
     ' – ' + HARI_S[B.getDay()] + ' ' + B.getDate() + ' ' + BULAN_S[B.getMonth()] + ' ' + B.getFullYear();
 }
 // Ringkasan mengikuti seluruh pengeluaran pada riwayat, termasuk setoran Tabungan.
-function totalMinggu(dari, sampai) {
-  return db.transaksi
-    .filter(x => x.tipe === 'keluar' && x.tanggal >= dari && x.tanggal <= sampai)
-    .reduce((s, x) => s + x.total, 0);
-}
+function totalMinggu(dari,sampai){return sum(transaksiLaporan().filter(x=>x.tanggal>=dari&&x.tanggal<=sampai),'keluar');}
 
 function renderMingguan() {
   const senin = seninMinggu(hariIni());
@@ -7244,8 +7213,8 @@ function renderMingguan() {
   const lalu = totalMinggu(mingguLalu.dari, mingguLalu.sampai);
 
   const perKat = new Map();
-  db.transaksi
-    .filter(x => x.tipe === 'keluar' && x.tanggal >= mingguIni.dari && x.tanggal <= mingguIni.sampai)
+  transaksiLaporan()
+    .filter(x => catatanAktif(x)&&x.tipe === 'keluar' && x.tanggal >= mingguIni.dari && x.tanggal <= mingguIni.sampai)
     .forEach(x => perKat.set(x.kategori, (perKat.get(x.kategori) || 0) + x.total));
   const terbesar = [...perKat].sort((a, b) => b[1] - a[1])[0];
   const infoKat = terbesar ? ' Kategori terbesar: ' + terbesar[0] + ' (' + rp(terbesar[1]) + ').' : '';
@@ -7319,7 +7288,7 @@ $('btnGayaOk').onclick = () => $('dlgGaya').close();
 $('dlgGaya').addEventListener('close', () => { if (tampilan.gaya === 'orbit') putarIntroOrbit();cobaGerakGaya(); });
 
 const BANTUAN = {
-  dompet: { judul:'Cara pakai: Wallet', teks:'1. Di Catat transaksi, isi nominal lalu pilih Wallet / non-tunai dan nama dompet, misalnya DANA atau rekening BCA. Jika belum ada, tekan + Tambah dompet. Cukup nama dan jenis; nominal tidak perlu diisi ulang.\n\n2. Untuk uang yang sudah dimiliki, pilih Pemasukan → Saldo awal. Catat sekali saja. Pemasukan menambah saldo dompet; pengeluaran menguranginya.\n\n3. Di Beranda → Uangku → Wallet, tombol + Tambah saldo membuka formulir pemasukan yang sama.\n\n4. Transfer antar dompet memindahkan uang sendiri. Hanya biaya admin menjadi pengeluaran. Saldo Wallet sudah termasuk dalam total saldo aplikasi.\n\nCatatan lama tanpa pilihan dompet tetap aman dan ditampilkan sebagai Belum dipilih. Gunakan Edit di Riwayat untuk menentukan tujuan tanpa membuat pemasukan ganda.' },
+  dompet: { judul:'Cara pakai: Wallet', teks:'1. Di Catat transaksi, isi nominal lalu pilih Wallet / non-tunai dan nama dompet, misalnya DANA atau rekening BCA. Jika belum ada, tekan + Tambah dompet. Cukup nama dan jenis; nominal tidak perlu diisi ulang.\n\n2. Untuk uang yang sudah dimiliki, pilih Pemasukan → Saldo awal. Catat sekali saja. Pemasukan menambah saldo dompet; pengeluaran menguranginya.\n\n3. Di Beranda → Uangku → Wallet, tombol + Tambah saldo membuka formulir pemasukan yang sama.\n\n4. Gunakan Pindahkan uang untuk Tunai ke Wallet, tarik tunai, atau antar wallet. Centang Masukkan pokok ke laporan pengeluaran jika ingin mencatatnya sebagai pengeluaran. Biaya admin selalu pengeluaran. Pokok tetap uangmu di tempat lain; saldo total tidak dikurangi dua kali.\n\nCatatan lama tanpa pilihan dompet tetap aman dan ditampilkan sebagai Belum dipilih. Gunakan Edit di Riwayat untuk menentukan tujuan tanpa membuat pemasukan ganda.' },
   tunai: { judul:'Cara pakai: Tunai', teks:'1. Isi nominal transaksi lalu pilih Tunai. Langsung simpan; tidak wajib mengisi jumlah lembar atau kembalian. Saldo tunai otomatis mengikuti pemasukan dan pengeluaran.\n\n2. Untuk saldo pertama, tekan + Tambah saldo di Beranda atau pilih Pemasukan → Saldo awal. Masukkan uang yang sudah dimiliki sekali saja.\n\n3. Rincian uang fisik disembunyikan di Beranda → Tunai → Rincian uang fisik. Aktifkan ON jika ingin menyimpan jumlah lembar/keping. Mematikan fitur tidak menghapus pecahan yang pernah disimpan.\n\n4. Saat mencatat transaksi, Catat rincian tunai bisa diaktifkan jika ingin mengetahui pembayaran dan kembalian. Ikut uang fisik ON menyesuaikan pecahan saat disimpan; OFF hanya mencatat pembayaran. Isi otomatis memberi saran yang perlu diperiksa.\n\nMengatur pecahan hanya mencatat lembar uang; tidak menambah saldo. Jika berbeda dengan saldo tunai, periksa stok dan catatan transaksi. Saat mengedit transaksi lama, periksa pratinjau perubahan pecahan.' },
   berulang: { judul: 'Cara pakai: Transaksi berulang', teks:
     '1. Isi nama, jumlah, satuan, harga per satuan, periode (bulan atau minggu), dan tanggal mulai.\n2. Saat jatuh tempo, muncul di kartu Perlu dicatat.\n3. Tekan Catat, periksa nominal, pilih Tunai atau Wallet, lalu Simpan transaksi. Saldo dan jadwal berubah setelah simpan berhasil. Jadwal dicatat dari yang paling lama.\n4. Lewati hanya untuk jadwal yang tidak ingin dicatat; saldo tidak berubah.\n\nEdit dan Hapus di sini hanya mengubah jadwal, bukan transaksi yang sudah tersimpan.' },
@@ -7426,7 +7395,7 @@ function siapkanCatatan(data,pesan) {
     const items=(data.items||[]).map(i=>({...i})), pertama=items[0];
     if ($('tipe').value==='masuk') isiUang($('iNominalMasuk'),items.length?items.reduce((s,i)=>s+subtotalItem(i),0):'');
     else if (pertama) {
-      keranjang=items.slice(1);$('iNama').value=pertama.nama;$('iQty').value=jumlah(pertama.qty);
+      keranjang=items.slice(1);$('iNama').value=pertama.nama;$('iQty').value=teksJumlahInput(pertama.qty);
       isiSatuanSelect($('iSatuan'),pertama.satuan||'');
       $('iSatuanLain').value=$('iSatuan').value==='__custom__'?pertama.satuan||'':'';
       $('iModeHarga').value=pertama.hargaTotal!=null?'total':'satuan';modeHargaSebelumnya=$('iModeHarga').value;
@@ -7573,6 +7542,105 @@ function pasangDesainRuang(){
   [['tabMoneyCash','cash'],['tabMoneyDigital','wallet']].forEach(([id,nama])=>{const simbol=document.createElement('span');simbol.className='ui-icon';simbol.setAttribute('aria-hidden','true');simbol.innerHTML=ikonRuang(nama);$(id).prepend(simbol);});
   document.documentElement.dataset.uiReady='1';sinkronDesainRuang(halamanAktif);
 }
+
+// ===== PERPINDAHAN TUNAI + STATUS CATATAN (data fitur 4) =====
+function cloneKeuangan(value){return JSON.parse(JSON.stringify(value));}
+function normalStatusCatatan(x){
+  if(x.aktif!==undefined&&typeof x.aktif!=='boolean')throw Error('Status catatan tidak valid.');
+  const log=Array.isArray(x.riwayatStatus)?x.riwayatStatus:[];
+  if(log.length>100||log.some(l=>!l||typeof l.aktif!=='boolean'||!Number.isFinite(l.waktu)||l.waktu<0))throw Error('Riwayat status tidak valid.');
+  return {aktif:x.aktif!==false,alasanNonaktif:String(x.alasanNonaktif||'').slice(0,240),riwayatStatus:log.slice(-30).map(l=>({aktif:l.aktif,waktu:l.waktu,alasan:String(l.alasan||'').slice(0,240)}))};
+}
+function catatanAktif(x,transfer=db.transferDompet){return x?.aktif!==false&&(!x?.transferDompetId||transfer.find(t=>t.id===x.transferDompetId)?.aktif!==false);}
+function transaksiPokokTransfer(t){return {id:'__pokok__'+t.id,ts:t.ts,tanggal:t.tanggal,tipe:'keluar',judul:'Pindah saldo '+namaDompet(t.dariId)+' → '+namaDompet(t.keId),kategori:'Pindah saldo',items:[{nama:'Pokok perpindahan saldo',qty:1,satuan:'',harga:t.jumlah,hargaTotal:t.jumlah}],total:t.jumlah,tags:['pindah saldo'],dompetId:t.dariId===TUNAI_ID?null:t.dariId,cara:t.dariId===TUNAI_ID?'tunai':'nontunai',transferDompetId:t.id,transferPokok:true,...normalStatusCatatan(t)};}
+function transaksiLaporan(transaksi=db.transaksi,transfer=db.transferDompet){return [...transaksi,...transfer.filter(t=>t.catatPengeluaran).map(transaksiPokokTransfer)];}
+function saldoTunaiKandidat(transaksi=db.transaksi,transfer=db.transferDompet,dompet=db.dompet){
+  const aktif=transaksi.filter(x=>catatanAktif(x,transfer)),total=aktif.reduce((s,x)=>s+(x.tipe==='masuk'?x.total:-x.total),0),digital=[...saldoSemuaDompet(transaksi,transfer,dompet).values()].reduce((s,x)=>s+x,0),neto=aktif.filter(x=>!x.dompetId&&x.cara!=='tunai'&&!x.tunai).reduce((s,x)=>s+(x.tipe==='masuk'?x.total:-x.total),0),alokasi=dompet.reduce((s,w)=>s+(Number(w.saldoAwal)||0),0),belum=neto>0?Math.max(0,neto-alokasi):neto;return bulatDompet(total-digital-belum);
+}
+function saldoSumber(id,transaksi=db.transaksi,transfer=db.transferDompet){return id===TUNAI_ID?saldoTunaiKandidat(transaksi,transfer):saldoDompet(id,transaksi,transfer);}
+function validasiPecahanTransfer(t){
+ if(!t.tunai)return '';if(t.dariId!==TUNAI_ID&&t.keId!==TUNAI_ID)return 'Pecahan tunai hanya untuk perpindahan yang memakai Tunai.';
+ const valid=p=>p&&DENOM.every(d=>Number.isSafeInteger(Number(p[d]||0))&&Number(p[d]||0)>=0);
+ if(t.tunai.lacakDompet!==true)return 'Pilihan pelacakan pecahan transfer tidak valid.';
+ if(t.dariId===TUNAI_ID){if(!valid(t.tunai.bayar)||!valid(t.tunai.kembali)||sumPecahan(t.tunai.bayar)-sumPecahan(t.tunai.kembali)!==t.jumlah+t.biaya)return 'Pecahan diberikan dikurangi kembalian harus sama dengan pokok dan biaya admin.';}
+ else if(!valid(t.tunai.diterima)||sumPecahan(t.tunai.diterima)!==t.jumlah)return 'Pecahan diterima harus sama dengan jumlah tarik tunai.';return '';
+}
+function pengaruhPecahan(data){const total=stokKosong();for(const x of [...data.transaksi,...data.transferDompet]){
+ if(!catatanAktif(x,data.transferDompet)||!tunaiMengubahStok(x))continue;for(const d of DENOM){const v=x.tunai;total[d]+=v.diterima?Number(v.diterima[d]||0):Number(v.kembali?.[d]||0)-Number(v.bayar?.[d]||0);}}
+ return total;
+}
+function stokSetelahStatus(sebelum,sesudah){const a=pengaruhPecahan(sebelum),b=pengaruhPecahan(sesudah),stock={...sebelum.uangFisik.stok};for(const d of DENOM)stock[d]=Number(stock[d]||0)+b[d]-a[d];return stock;}
+function simpanKandidatKeuangan(next,{pemulihan=false}={}){
+ const error=cekSaldoDompet(next.transaksi,next.transferDompet,next.dompet);if(error){beriPesan(error,true);return false;}
+ if(DENOM.some(d=>!Number.isSafeInteger(Number(next.uangFisik.stok[d]||0))||Number(next.uangFisik.stok[d]||0)<0)){beriPesan('Pecahan fisik akan kurang atau tidak valid. Aktif/nonaktifkan juga catatan terkait, atau periksa stok dompet dahulu.',true);return false;}
+ const before=db;db=next;if(!simpan({pemulihan})){db=before;return false;}isiPecahan('st',db.uangFisik.stok);return true;
+}
+function pesanDenganUrungkan(teks,sebelum){
+ beriPesan(teks);const expected=JSON.stringify(db);const token={expected,sebelum:cloneKeuangan(sebelum)};urungkanLedger=token;const b=el('button','ledger-undo','Urungkan');b.type='button';
+ b.onclick=()=>{if(urungkanLedger!==token||JSON.stringify(db)!==token.expected)return beriPesan('Catatan sudah berubah. Gunakan Aktifkan/Nonaktifkan di Riwayat agar perubahan baru tetap aman.',true);const lama=cloneKeuangan(db);if(simpanKandidatKeuangan(cloneKeuangan(token.sebelum))){urungkanLedger=null;renderSemua();beriPesan('Perubahan diurungkan.');}};
+ $('pesanSingkat').append(b);clearTimeout(timerPesan);timerPesan=setTimeout(()=>{$('pesanSingkat').style.display='none';},12000);
+}
+function statusCatatanNode(x){const wrap=el('div','ledger-status');if(!catatanAktif(x)){wrap.append(el('span','ledger-badge','NONAKTIF · tidak dihitung'));if(x.alasanNonaktif)wrap.append(el('span','muted',x.alasanNonaktif));}
+ if(x.riwayatStatus?.length){const details=el('details','ledger-log');details.append(el('summary',null,'Perubahan status'));[...x.riwayatStatus].reverse().slice(0,6).forEach(l=>details.append(el('p','muted',new Date(l.waktu).toLocaleString('id-ID')+' · '+(l.aktif?'Diaktifkan':'Dinonaktifkan')+(l.alasan?' · '+l.alasan:''))));wrap.append(details);}return wrap;
+}
+function pilihanRiwayat(key,nama){const label=el('label','ledger-select'),input=el('input');input.type='checkbox';input.checked=pilihanLedger.has(key);input.setAttribute('aria-label','Pilih '+nama);input.dataset.ledgerKey=key;input.onchange=()=>{if(input.checked)pilihanLedger.add(key);else pilihanLedger.delete(key);perbaruiPilihanLedger();};label.append(input);return label;}
+function perbaruiPilihanLedger(){const n=pilihanLedger.size;$('ledgerSelectedCount').textContent=n?n+' dipilih':'Pilih untuk mengubah status sekaligus';$('ledgerSelectAll').checked=!!ledgerTerlihat.length&&ledgerTerlihat.every(k=>pilihanLedger.has(k));$('ledgerSelectAll').indeterminate=n>0&&!$('ledgerSelectAll').checked;$('ledgerDisable').disabled=$('ledgerEnable').disabled=$('ledgerClear').disabled=!n;}
+function cocokCariTransfer(t,q){if(!t)return false;const linked=db.transaksi.filter(x=>x.transferDompetId===t.id);return [namaDompet(t.dariId),namaDompet(t.keId),t.catatan,'pindah saldo','transfer',...(t.catatPengeluaran?[transaksiPokokTransfer(t).judul]:[]),...linked.flatMap(x=>[x.judul,x.kategori,...x.items.map(i=>i.nama)])].some(v=>String(v||'').toLowerCase().includes(q));}
+function transferSesuaiFilter(){let a=$('rDari').value,b=$('rSampai').value;if(a&&b&&a>b)[a,b]=[b,a];const q=$('rCari').value.trim().toLowerCase(),type=$('rTipe').value,status=$('rStatus').value;return db.transferDompet.filter(t=>(!a||t.tanggal>=a)&&(!b||t.tanggal<=b)&&(type==='semua'||type==='transfer'||(type==='keluar'&&(t.catatPengeluaran||t.biaya>0)))&&(status==='semua'||(status==='nonaktif'?t.aktif===false:t.aktif!==false))&&(!q||cocokCariTransfer(t,q)));}
+
+function akarStatus(key,data=db){const transfer=key.startsWith('transfer:'),id=key.slice(transfer?9:3),x=(transfer?data.transferDompet:data.transaksi).find(x=>x.id===id);if(!x)return null;if(!transfer&&x.transferDompetId)return akarStatus('transfer:'+x.transferDompetId,data);return {key:(transfer?'transfer:':'tr:')+id,x,transfer};}
+function kandidatStatus(keys,aktif,alasan){const before=cloneKeuangan(db),next=cloneKeuangan(db),seen=new Set();let jumlah=0;
+ for(const key of keys){const root=akarStatus(key,next);if(!root||seen.has(root.key))continue;seen.add(root.key);if((root.x.aktif!==false)===aktif)continue;const log={waktu:Date.now(),aktif,alasan:aktif?'':alasan};const apply=x=>{x.aktif=aktif;x.alasanNonaktif=aktif?'':alasan;x.riwayatStatus=[...(x.riwayatStatus||[]),log].slice(-30);};apply(root.x);if(root.transfer)next.transaksi.filter(x=>x.transferDompetId===root.x.id).forEach(apply);jumlah++;}
+ next.uangFisik.stok=stokSetelahStatus(before,next);return {before,next,jumlah};
+}
+function bukaStatusCatatan(keys,aktif){const roots=[...new Set(keys.map(k=>akarStatus(k)?.key).filter(Boolean))];if(!roots.length)return beriPesan('Pilih catatan terlebih dahulu.');statusDraft={keys:roots,aktif};$('ledgerStatusTitle').textContent=aktif?'Aktifkan catatan?':'Nonaktifkan catatan?';$('ledgerStatusDescription').textContent=roots.length+' catatan dipilih. '+(aktif?'Saldo, anggaran, grafik, dan stok pecahan terkait akan dihitung kembali.':'Catatan tetap tersimpan. Nominalnya dikeluarkan dari saldo, anggaran, grafik, dan stok pecahan terkait. Perpindahan dan biaya admin selalu diubah bersama.');$('ledgerReasonWrap').hidden=aktif;$('ledgerReason').value='';$('ledgerStatusError').textContent='';previewStatusLedger();$('dlgStatusCatatan').showModal();}
+function previewStatusLedger(){if(!statusDraft)return;const k=kandidatStatus(statusDraft.keys,statusDraft.aktif,$('ledgerReason').value.trim()),error=cekSaldoDompet(k.next.transaksi,k.next.transferDompet,k.next.dompet),stokKurang=DENOM.some(d=>k.next.uangFisik.stok[d]<0),net=data=>data.transaksi.filter(x=>catatanAktif(x,data.transferDompet)).reduce((s,x)=>s+(x.tipe==='masuk'?x.total:-x.total),0);$('ledgerStatusPreview').textContent='Saldo total: '+rp(net(k.before))+' → '+rp(net(k.next))+'. '+(error|| (stokKurang?'Ada pecahan yang sudah digunakan. Pilih juga transaksi terkait atau sesuaikan stok dahulu.':''));}
+function simpanStatusLedger(){if(!statusDraft)return;const k=kandidatStatus(statusDraft.keys,statusDraft.aktif,$('ledgerReason').value.trim());if(!k.jumlah){$('dlgStatusCatatan').close();return beriPesan('Status catatan yang dipilih sudah sesuai.');}if(!simpanKandidatKeuangan(k.next)){$('ledgerStatusError').textContent=$('pesanSingkat')?.textContent||'Perubahan belum tersimpan.';return;}$('dlgStatusCatatan').close();const aktif=statusDraft.aktif;statusDraft=null;pilihanLedger.clear();renderSemua();pesanDenganUrungkan(k.jumlah+' catatan '+(aktif?'diaktifkan.':'dinonaktifkan; data tetap tersimpan.'),k.before);}
+function simpanTransferDariForm(){
+ if(!$('dlgTransferDompet').open)return;const t=dataTransferForm();const fail=transferGagal;
+ if($('transferTrack').checked&&(t.dariId===TUNAI_ID||t.keId===TUNAI_ID)&&(!pecahanValid('tpb')||(t.dariId===TUNAI_ID&&!pecahanValid('tpk'))))return fail('Jumlah lembar harus angka bulat 0 atau lebih.');
+ if(!t.dariId||!t.keId)return fail('Pilih rekening / e-wallet sumber dan tujuan terlebih dahulu.');if((transferMode==='tarik'&&(t.dariId===TUNAI_ID||t.keId!==TUNAI_ID))||(transferMode==='setor'&&t.dariId!==TUNAI_ID))return fail('Arah perpindahan tidak sesuai. Tutup formulir lalu pilih tombol yang sesuai.');if(t.dariId===t.keId)return fail('Sumber dan tujuan harus berbeda.');
+ if(!tanggalGrafikValid(t.tanggal)||!Number.isFinite(t.jumlah)||t.jumlah<=0||!Number.isFinite(t.biaya)||t.biaya<0||t.jumlah+t.biaya>Number.MAX_SAFE_INTEGER)return fail('Isi tanggal dan nominal yang valid. Jumlah harus lebih dari 0, biaya 0 atau lebih.');
+ if(db.dompet.some(w=>w.arsip&&(w.id===t.dariId||w.id===t.keId)))return fail('Pulihkan dompet yang diarsipkan sebelum mengubah perpindahan.');
+ t.id=transferEditId||transferDraftId;const k=kandidatTransferDompet(t),error=cekSaldoDompet(k.transaksi,k.transfer);if(error)return fail(error);
+ const before=cloneKeuangan(db),next=cloneKeuangan(db);next.transaksi=k.transaksi;next.transferDompet=k.transfer;next.uangFisik.stok=stokSetelahStatus(before,next);
+ if(!simpanKandidatKeuangan(next))return fail($('pesanSingkat')?.textContent||'Perpindahan belum tersimpan.');$('dlgTransferDompet').close();renderSemua();pesanDenganUrungkan('Perpindahan tersimpan. Saldo dan laporan diperbarui.',before);
+}
+function isiPecahanTransferOtomatis(){const t=dataTransferForm(),old=db.transferDompet.find(x=>x.id===transferEditId),stok=old?.aktif===false?db.uangFisik.stok:stokSetelahEdit(old||{},null);if(!(t.jumlah>0))return transferGagal('Isi nominal dahulu.');
+ if(t.dariId===TUNAI_ID){const p=cariPembayaran(t.jumlah+t.biaya,stok);if(!p)return transferGagal('Stok pecahan belum cocok atau kurang. Isi lembar secara manual, atau gunakan saldo tanpa mengikuti pecahan.');isiPecahan('tpb',p.bayar);isiPecahan('tpk',p.kembali);}
+ else {const p=cariPecahan(t.jumlah,null);if(!p)return transferGagal('Nominal tidak dapat dibagi ke pecahan yang tersedia. Matikan penyesuaian lembar atau isi jumlah yang sesuai.');isiPecahan('tpb',p);isiPecahan('tpk',null);}previewTransferDompet();
+}
+function renderKeamananLedger(){const box=$('ledgerSecurity');box.hidden=!financeMuatError;if(!financeMuatError)return;box.replaceChildren(el('b',null,'Data lama dilindungi.'),el('p',null,financeMuatError+' Jangan bersihkan data browser; pulihkan backup melalui Data & backup.'));const raw=el('button','ghost kecil','Unduh data asli');raw.type='button';raw.onclick=()=>{let txt='';try{txt=localStorage.getItem(KEY)||'';}catch(_){}unduh('keuangan-data-asli-'+hariIni()+'.json',txt,'application/json');};box.append(raw);}
+function eksporLedgerCsv(){const rows=[['Tanggal','Tipe','Transaksi','Kategori','Barang','Jumlah','Satuan','Harga per Satuan','Subtotal','Tag','Dompet','Status','Dihitung dalam laporan','Alasan nonaktif']];
+ for(const x of urutTerbaru(db.transaksi)){for(const i of x.items)rows.push([tglIndo(x.tanggal),x.tipe==='masuk'?'Pemasukan':'Pengeluaran',x.judul,x.kategori,i.nama,i.qty,i.satuan||'',i.harga,subtotalItem(i),(x.tags||[]).join(' '),x.dompetId?namaDompet(x.dompetId):x.cara==='tunai'?'Tunai':'',catatanAktif(x)?'Aktif':'Nonaktif',catatanAktif(x)?'Ya':'Tidak',x.alasanNonaktif||'']);}
+ for(const t of urutTerbaru(db.transferDompet))rows.push([tglIndo(t.tanggal),t.catatPengeluaran?'Pengeluaran pindah saldo':'Perpindahan saldo',t.catatan||'Pindah saldo','Pindah saldo','Pokok perpindahan',1,'',t.jumlah,t.jumlah,'',namaDompet(t.dariId)+' → '+namaDompet(t.keId),t.aktif===false?'Nonaktif':'Aktif',t.aktif!==false&&t.catatPengeluaran?'Ya':'Tidak',t.alasanNonaktif||'']);
+ rows.push([],['Saldo total aktual',saldoTotal()],['Pemasukan laporan',sum(transaksiLaporan(),'masuk')],['Pengeluaran laporan',sum(transaksiLaporan(),'keluar')]);const escCsv=v=>'"'+String(typeof v==='string'&&/^[=+@\-\t\r]/.test(v)?"'"+v:v).replace(/"/g,'""')+'"';unduh('catatan-keuangan.csv','\uFEFF'+rows.map(r=>r.map(escCsv).join(';')).join('\r\n'),'text/csv;charset=utf-8');
+}
+let importLedgerDraft=null;
+function validasiBackupLedger(raw){if(!raw||typeof raw!=='object')throw Error('Pilih file backup keuangan.');if(!Array.isArray(raw)&&Number(raw.versi||0)>4)throw Error('Versi backup lebih baru dan belum didukung.');const records=Array.isArray(raw)?raw:raw.transaksi;if(!Array.isArray(records)||records.length>100000)throw Error('Daftar transaksi tidak valid.');const data={fiturData:4,transaksi:records.map(normal),wishlist:normalWish(Array.isArray(raw)?[]:raw.wishlist||[]),budgets:Array.isArray(raw)?{}:raw.budgets||{},berulang:normalBerulang(Array.isArray(raw)?[]:raw.berulang||[]),dompet:normalDompet(raw.dompet),transferDompet:normalTransferDompet(raw.transferDompet),uangFisik:{aktif:!!raw.uangFisik?.aktif,stok:{...stokKosong(),...raw.uangFisik?.stok}}};
+ for(const key of ['transaksi','dompet','transferDompet']){const ids=new Set();for(const x of data[key]){if(!x.id||ids.has(x.id)||(key==='dompet'&&x.id===TUNAI_ID))throw Error('ID '+key+' kosong atau ganda.');ids.add(x.id);}}
+ if(data.transaksi.some(x=>!tanggalGrafikValid(x.tanggal)||!Number.isFinite(x.total)||x.total<0||x.total>Number.MAX_SAFE_INTEGER))throw Error('Ada tanggal atau nominal transaksi tidak valid.');for(const d of DENOM)if(!Number.isSafeInteger(Number(data.uangFisik.stok[d]))||Number(data.uangFisik.stok[d])<0)throw Error('Stok uang fisik tidak valid.');const e=cekSaldoDompet(data.transaksi,data.transferDompet,data.dompet);if(e)throw Error(e);return data;
+}
+function bukaImporLedger(raw){const data=validasiBackupLedger(raw);importLedgerDraft={raw,data};$('ledgerImportSummary').textContent=data.transaksi.length+' transaksi, '+data.transferDompet.length+' perpindahan, '+data.transaksi.filter(x=>x.aktif===false).length+' transaksi nonaktif. Status aktif/nonaktif ikut dipulihkan.';$('ledgerImportMode').value=financeMuatError||(!db.transaksi.length&&!db.transferDompet.length)?'pulihkan':'gabung';$('ledgerImportError').textContent='';$('dlgImportLedger').showModal();}
+function kandidatImportLedger(incoming,mode){if(mode==='pulihkan')return cloneKeuangan(incoming);const next=cloneKeuangan(db);for(const key of ['dompet','transaksi','transferDompet','wishlist','berulang']){const ids=new Set(next[key].map(x=>x.id));for(const x of incoming[key])if(!ids.has(x.id)){next[key].push(cloneKeuangan(x));ids.add(x.id);}}for(const [key,b]of Object.entries(incoming.budgets))if(!next.budgets[key])next.budgets[key]=cloneKeuangan(b);next.uangFisik.stok=stokSetelahStatus(db,next);return next;}
+function terapkanImportLedger(){if(!importLedgerDraft)return;const mode=$('ledgerImportMode').value,doImport=()=>{let next;try{next=kandidatImportLedger(importLedgerDraft.data,mode);}catch(e){$('ledgerImportError').textContent=e.message;return;}if(!simpanKandidatKeuangan(next,{pemulihan:mode==='pulihkan'})){$('ledgerImportError').textContent=$('pesanSingkat')?.textContent||'Belum dipulihkan.';return;}const raw=importLedgerDraft.raw;importLedgerDraft=null;$('dlgImportLedger').close();pilihanLedger.clear();
+ if(!Array.isArray(raw)){try{if(raw.katKustom){for(const type of ['keluar','masuk'])for(const k of raw.katKustom[type]||[]){const nama=String(k).trim();if(nama&&!katKustom()[type].some(x=>x.toLowerCase()===nama.toLowerCase()))katKustom()[type].push(nama);}simpanSet();terapkanKatKustom();refreshKategoriSelect();}if(raw.tampilan&&typeof raw.tampilan==='object'){const {bg,aksen,beranda,...safe}=raw.tampilan;tampilan={...tampilan,...safe};simpanTampilan();terapkanTampilan();}}catch(_){beriPesan('Catatan dipulihkan; sebagian setelan tampilan belum tersimpan.',true);}}
+ renderSemua();beriPesan(mode==='pulihkan'?'Backup dipulihkan, termasuk status nonaktif dan pecahan uang.':'Backup digabung. ID yang sudah ada dipertahankan; stok disesuaikan hanya untuk catatan baru.');};
+ if(mode==='pulihkan')konfirmasiDompet('Ganti catatan dengan backup?','Seluruh data keuangan saat ini akan diganti, termasuk status dan pecahan. Unduh backup saat ini jika masih diperlukan.',doImport);else doImport();
+}
+// Event bindings are installed before the first full render.
+buatGridDenom('transferPaidGrid','tpb');buatGridDenom('transferChangeGrid','tpk');
+$('btnTransferSwap').onclick=tukarArahTransfer;
+$('transferDariJenis').onchange=()=>ubahPilihanTransfer('jenisDari');$('transferKeJenis').onchange=()=>ubahPilihanTransfer('jenisKe');$('transferDari').onchange=()=>ubahPilihanTransfer('dari');$('transferKe').onchange=()=>ubahPilihanTransfer('ke');
+$('transferAutoUnits').onclick=isiPecahanTransferOtomatis;
+$('ledgerSelectAll').onchange=()=>{pilihanLedger=$('ledgerSelectAll').checked?new Set(ledgerTerlihat):new Set();renderRiwayat();};$('ledgerClear').onclick=()=>{pilihanLedger.clear();renderRiwayat();};$('ledgerDisable').onclick=()=>bukaStatusCatatan([...pilihanLedger],false);$('ledgerEnable').onclick=()=>bukaStatusCatatan([...pilihanLedger],true);
+$('ledgerReason').oninput=previewStatusLedger;$('ledgerStatusSave').onclick=simpanStatusLedger;$('ledgerStatusCancel').onclick=()=>{$('dlgStatusCatatan').close();statusDraft=null;};
+$('ledgerImportSave').onclick=terapkanImportLedger;$('ledgerImportCancel').onclick=()=>{$('dlgImportLedger').close();importLedgerDraft=null;};
+BANTUAN.statusCatatan={judul:'Cara pakai: aktif/nonaktif',teks:'Aktif: dihitung di saldo, grafik, anggaran, dan target. Nonaktif: catatan tetap tersimpan, namun pengaruh nominal dan pecahannya dibatalkan. Pilih filter Nonaktif untuk menemukannya lagi, lalu Aktifkan jika diperlukan. Mengubah status transfer juga mengubah biaya adminnya. Jika ada saldo atau stok yang akan minus, pilih juga catatan terkait atau periksa stok dahulu.'};
+$('ledgerStatusHelp').onclick=()=>bantuan('statusCatatan');
+window.addEventListener('storage',e=>{if(e.key===KEY&&e.newValue!==financeSnapshot)beriPesan('Data berubah di tab lain. Simpanan dari tab ini diblokir agar tidak menimpa; muat ulang untuk data terbaru.',true);});
+BANTUAN.dompet.teks+='\n\nPindahkan uang: pilih Tunai sebagai sumber untuk isi wallet, atau sebagai tujuan untuk tarik tunai. Centang Masukkan pokok ke laporan pengeluaran bila ingin dicatat sebagai pengeluaran. Saldo gabungan hanya berkurang biaya admin. Riwayat menyediakan Nonaktifkan/Aktifkan dan pilihan massal.';
+window.KeuanganLedger={getData:()=>cloneKeuangan(db),normal,normalTransferDompet,catatanAktif,transaksiLaporan,filterTr,sum,saldoTotal,ringkasanUang,saldoSemuaDompet,cekSaldoDompet,saldoTunaiKandidat,stokSetelahStatus,kandidatStatus,bukaStatusCatatan,simpanStatusLedger,bukaTransferDompet,dataTransferForm,simpanTransferDariForm,kandidatTransferDompet,validasiBackupLedger,kandidatImportLedger,bukaImporLedger,terapkanImportLedger,buatBackupObjek,totalMinggu,pakaiBudget,terkumpul,dataGrafikAman,renderSemua,TUNAI_ID};
 
 // ===== INISIALISASI =====
 pasangLabelForm();
