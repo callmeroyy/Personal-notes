@@ -1,0 +1,21 @@
+{
+  "name": "Catatan Keuangan",
+  "short_name": "Keuangan",
+  "description": "Catatan keuangan pribadi yang bekerja langsung di perangkat.",
+  "lang": "id-ID",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#e8eef8",
+  "theme_color": "#4f46e5",
+  "categories": ["finance", "productivity"],
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

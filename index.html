@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#4f46e5">
+<meta name="description" content="Catatan keuangan pribadi yang bekerja langsung di perangkat, termasuk dompet, anggaran, target, grafik, dan backup.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
 <title>Catatan Keuangan</title>
 <style>
   :root{
@@ -2237,6 +2240,12 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
   <p class="save-status" id="statusSimpan" aria-live="polite"></p>
 
+  <div class="card" id="cardProyeksi">
+    <h2>Proyeksi 30 hari</h2>
+    <p class="sub">Perkiraan dari saldo sekarang dan jadwal transaksi berulang.</p>
+    <p id="teksProyeksi" style="margin:0;font-size:15px;line-height:1.6"></p>
+    <details id="detailProyeksi" style="display:none"><summary>Lihat jadwal terdekat</summary><div id="listProyeksi"></div></details>
+  </div>
   <div class="card" id="cardMingguan">
     <h2 id="judulMingguan">Ringkasan minggu ini</h2>
     <p id="teksMingguan" style="margin:0;font-size:15px;line-height:1.5;white-space:pre-line"></p>
@@ -2550,6 +2559,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
   <div class="card">
     <h2>Data & backup</h2>
+    <p class="muted" id="storageStatus" role="status">Memeriksa ruang penyimpanan…</p>
     <label class="field-label" for="sBackupIngat">Ingatkan backup tiap berapa hari?</label>
     <input type="number" id="sBackupIngat" min="1" max="3650" step="1" inputmode="numeric" placeholder="Contoh: 7" aria-describedby="infoBackupIngat">
     <p class="muted setting-help" id="infoBackupIngat">Isi jumlah hari sendiri, misalnya 3 atau 14. Kosongkan untuk mematikan.</p>
@@ -3213,7 +3223,7 @@ const urutTerbaru = list => [...list].sort((a,b) => b.tanggal.localeCompare(a.ta
 const harianTipe = (tgl, tipe) => sum(db.transaksi.filter(x => x.tanggal === tgl), tipe);
 const terkumpul=wid=>db.transaksi.filter(x=>catatanAktif(x)&&x.wishId===wid&&x.tipe==='keluar').reduce((s,x)=>s+x.total,0);
 
-function pakaiBudget(kat,per){const today=hariIni(),awal=per==='bulan'?today.slice(0,7)+'-01':geser(today,-6);return transaksiLaporan().filter(x=>catatanAktif(x)&&x.tipe==='keluar'&&x.kategori===kat&&x.tanggal>=awal&&x.tanggal<=today).reduce((s,x)=>s+x.total,0);}
+function pakaiBudget(kat,per){const today=hariIni(),awal=per==='bulan'?today.slice(0,7)+'-01':seninMinggu(today);return transaksiLaporan().filter(x=>catatanAktif(x)&&x.tipe==='keluar'&&x.kategori===kat&&x.tanggal>=awal&&x.tanggal<=today).reduce((s,x)=>s+x.total,0);}
 
 function isiKategoriSelect(selectEl, tipe, pilih) {
   selectEl.innerHTML = '';
@@ -4774,6 +4784,38 @@ function pendingBerulang() {
   return out.sort((a, b) => a.tgl.localeCompare(b.tgl));
 }
 
+function renderProyeksi() {
+  const mulai = hariIni();
+  const akhir = geser(mulai, 30);
+  const jadwal = [];
+  db.berulang.forEach(r => {
+    occurrences(r, akhir).forEach(tanggal => {
+      if (tanggal >= mulai && (!r.terakhir || tanggal > r.terakhir)) {
+        jadwal.push({ r, tanggal, total: r.qty * r.harga });
+      }
+    });
+  });
+  jadwal.sort((a, b) => a.tanggal.localeCompare(b.tanggal));
+  const masuk = jadwal.filter(x => x.r.tipe === 'masuk').reduce((n, x) => n + x.total, 0);
+  const keluar = jadwal.filter(x => x.r.tipe === 'keluar').reduce((n, x) => n + x.total, 0);
+  const perkiraan = saldoTotal() + masuk - keluar;
+  $('teksProyeksi').textContent = jadwal.length
+    ? 'Perkiraan saldo ' + tglIndo(akhir) + ': ' + rp(perkiraan) + ' · jadwal masuk ' + rp(masuk) + ' · jadwal keluar ' + rp(keluar) + '.'
+    : 'Belum ada jadwal berulang dalam 30 hari. Tambahkan transaksi berulang agar proyeksi dapat dihitung.';
+  $('teksProyeksi').className = perkiraan < 0 ? 'merah' : '';
+  $('detailProyeksi').style.display = jadwal.length ? '' : 'none';
+  const box = $('listProyeksi');
+  box.replaceChildren();
+  jadwal.slice(0, 8).forEach(({ r, tanggal, total }) => {
+    const row = el('div', 'row');
+    const info = el('div');
+    info.append(el('b', r.tipe === 'masuk' ? 'hijau' : 'merah', r.nama), el('div', 'muted', tglIndo(tanggal) + ' · ' + r.kategori));
+    row.append(info, el('b', r.tipe === 'masuk' ? 'hijau' : 'merah', (r.tipe === 'masuk' ? '+' : '−') + rp(total)));
+    box.appendChild(row);
+  });
+  if (jadwal.length > 8) box.appendChild(el('p', 'muted', 'Dan ' + (jadwal.length - 8) + ' jadwal lainnya.'));
+}
+
 function catatBerulang(r, tgl) {
   if (r.terakhir && tgl <= r.terakhir) return beriPesan('Jadwal ini sudah dicatat atau dilewati.');
   const pertama = pendingBerulang().find(p => p.r.id === r.id);
@@ -5764,6 +5806,7 @@ function renderSemua() {
   renderKeamananLedger();
   renderPanduanStatus();
   renderTempo();
+  renderProyeksi();
   renderTunai();
   renderMingguan();
   renderKatKustom();
@@ -5778,6 +5821,7 @@ function renderSemua() {
   renderGrafik();
   renderCompare();
   if(document.documentElement.dataset.uiReady) hiasJudulRuang();
+  renderStorageStatus();
 }
 
 let halamanAktif = 'beranda';
@@ -5842,6 +5886,31 @@ $('cmpB').onchange = renderCompare;
 // ===== EXPORT & IMPORT =====
 function unduh(nama, isi, tipe) {
   unduhBlob(nama, new Blob([isi], { type: tipe }));
+}
+
+function formatUkuran(byte) {
+  if (!Number.isFinite(byte) || byte < 0) return 'tidak diketahui';
+  if (byte < 1024) return byte + ' B';
+  const unit = ['KB','MB','GB'];
+  let nilai = byte / 1024, i = 0;
+  while (nilai >= 1024 && i < unit.length - 1) { nilai /= 1024; i++; }
+  return nilai.toLocaleString('id-ID', { maximumFractionDigits: 1 }) + ' ' + unit[i];
+}
+
+async function renderStorageStatus() {
+  const box = $('storageStatus');
+  if (!navigator.storage?.estimate) {
+    box.textContent = 'Informasi kapasitas penyimpanan tidak tersedia di browser ini.';
+    return;
+  }
+  try {
+    const { usage, quota } = await navigator.storage.estimate();
+    const persisten = navigator.storage.persisted ? await navigator.storage.persisted() : false;
+    const pct = quota ? Math.round((usage || 0) / quota * 100) : 0;
+    box.textContent = 'Penyimpanan aplikasi: ' + formatUkuran(usage || 0) + (quota ? ' dari sekitar ' + formatUkuran(quota) + ' (' + pct + '%).' : '.') + (persisten ? ' Browser telah memberi perlindungan penyimpanan tambahan.' : ' Backup berkala tetap disarankan.');
+  } catch (_) {
+    box.textContent = 'Kapasitas penyimpanan belum dapat diperiksa.';
+  }
 }
 
 $('btnExcel').onclick=()=>eksporLedgerCsv();
@@ -7683,6 +7752,9 @@ document.addEventListener('visibilitychange', () => {
 
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost', '127.0.0.1'].includes(location.hostname))) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+if (navigator.storage?.persist) {
+  navigator.storage.persist().then(renderStorageStatus).catch(() => {});
 }
 </script>
 </body>

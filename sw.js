@@ -1,6 +1,6 @@
-const CACHE = 'catatan-keuangan-v7';
+const CACHE = 'catatan-keuangan-v8';
 const CACHE_PREFIX = 'catatan-keuangan-';
-const APP_PAGES = ['./', './index.html'];
+const APP_PAGES = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
 
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
@@ -16,6 +16,19 @@ self.addEventListener('install', event => {
       }
     }));
     await self.skipWaiting();
+  })());
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil((async () => {
+    const pages = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const aktif = pages.find(client => new URL(client.url).origin === self.location.origin);
+    if (aktif) {
+      await aktif.focus();
+      return;
+    }
+    await self.clients.openWindow('./');
   })());
 });
 
