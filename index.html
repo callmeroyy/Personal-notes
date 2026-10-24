@@ -1664,19 +1664,37 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   @keyframes gaya-dialog-in{from{opacity:0;scale:.98}to{opacity:1;scale:1}}
   @keyframes gaya-preview{0%{scale:.75;rotate:-15deg;opacity:.4}60%{scale:1.12;rotate:6deg}100%{scale:1;rotate:0deg;opacity:1}}
   @keyframes gaya-reveal{0%{opacity:0}25%{opacity:.23}100%{opacity:0}}
+  /* Micro-interaction fungsional: cepat, ringan, dan tidak menggeser layout. */
+  html[data-gerak]:not([data-gerak="mati"]) .toast-note.motion-show{animation:motion-toast-in .28s cubic-bezier(.2,.75,.3,1) both}
+  html[data-gerak]:not([data-gerak="mati"]) .motion-list-item{animation:motion-row-in .34s cubic-bezier(.2,.7,.3,1) both;animation-delay:min(calc(var(--motion-index,0) * 32ms),224ms)}
+  html[data-gerak]:not([data-gerak="mati"]) button.motion-success{animation:motion-success .48s cubic-bezier(.2,.8,.3,1)}
+  html[data-gerak]:not([data-gerak="mati"]) button.motion-busy::before{content:"";display:inline-block;width:.9em;height:.9em;margin-right:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-.12em;animation:motion-spin .7s linear infinite}
+  html[data-gerak]:not([data-gerak="mati"]) svg.motion-chart{animation:motion-chart-in .42s ease-out both}
+  html[data-gerak]:not([data-gerak="mati"]) svg.motion-chart rect{transform-box:fill-box;transform-origin:center bottom;animation:motion-chart-bar .52s cubic-bezier(.2,.75,.3,1) both}
+  html[data-gerak]:not([data-gerak="mati"]) .chart-rank-track>span{transform-origin:left center;animation:motion-progress .48s cubic-bezier(.2,.75,.3,1) both}
+  @keyframes motion-toast-in{from{opacity:0;transform:translate(-50%,10px) scale(.98)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+  @keyframes motion-row-in{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+  @keyframes motion-success{0%,100%{scale:1}45%{scale:1.035;box-shadow:0 0 0 5px color-mix(in srgb,var(--ok) 20%,transparent)}}
+  @keyframes motion-spin{to{rotate:360deg}}
+  @keyframes motion-chart-in{from{opacity:.25;translate:0 6px}to{opacity:1;translate:0 0}}
+  @keyframes motion-chart-bar{from{opacity:.25;scale:1 0}to{opacity:1;scale:1 1}}
+  @keyframes motion-progress{from{scale:0 1}to{scale:1 1}}
   /* Ringan menghentikan loop. Mati dan preferensi perangkat menghentikan semua animasi gaya. */
   html:is([data-gerak="ringan"],[data-gerak="mati"]) :is(#styleAmbient .ambient-mark,#heroScene *,#styleSignatureArt,.pixel-mob,.spider-mask),
   html:is([data-gerak="ringan"],[data-gerak="mati"]) #styleDecor::before,
   html:is([data-gerak="ringan"],[data-gerak="mati"]) #styleDecor::after{animation:none !important}
   html[data-gerak="mati"] :is(.page,dialog,#styleSelected svg){animation:none !important}
   html[data-gerak="mati"] button{transition:none !important}
+  html[data-gerak="mati"] :is(.toast-note,.motion-list-item,button.motion-success,svg.motion-chart,svg.motion-chart rect,.chart-rank-track>span),
+  html[data-gerak="mati"] button.motion-busy::before{animation:none !important}
   html:is([data-gerak="ringan"],[data-gerak="mati"]) #orbitIntro,
   html[data-gerak="mati"] #styleReveal{display:none !important}
   html[data-gerak-jeda] :is(#styleAmbient .ambient-mark,#heroScene *,#styleSignatureArt,.pixel-mob,.spider-mask),
   html[data-gerak-jeda] #styleDecor::before,html[data-gerak-jeda] #styleDecor::after{animation-play-state:paused !important}
   @media(prefers-reduced-motion:reduce){
     #styleReveal,#orbitIntro{display:none !important}
-    html[data-gaya] :is(.page,dialog,#styleSelected svg,#styleAmbient .ambient-mark,#heroScene *,#styleSignatureArt,.pixel-mob,.spider-mask),
+    html[data-gaya] :is(.page,dialog,#styleSelected svg,#styleAmbient .ambient-mark,#heroScene *,#styleSignatureArt,.pixel-mob,.spider-mask,.toast-note,.motion-list-item,button.motion-success,svg.motion-chart,svg.motion-chart rect,.chart-rank-track>span),
+    html[data-gaya] button.motion-busy::before,
     html[data-gaya] #styleDecor::before,html[data-gaya] #styleDecor::after{animation:none !important}
     html[data-gaya] button{transition:none !important}
   }
@@ -3135,6 +3153,48 @@ let fotoForm = null;
 let fotoAktifId = null;
 let timerPesan = null;
 let penyimpananBerhasil = true;
+const nilaiAnimasi = new WeakMap();
+const rafAnimasi = new WeakMap();
+
+function gerakInteraksiAktif() {
+  return document.documentElement.dataset.gerak !== 'mati' &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function animasikanAngka(node, nilai) {
+  const target = Number(nilai) || 0;
+  const awal = nilaiAnimasi.get(node);
+  nilaiAnimasi.set(node, target);
+  const rafLama = rafAnimasi.get(node);
+  if (rafLama) cancelAnimationFrame(rafLama);
+  if (awal === undefined || awal === target || !gerakInteraksiAktif()) {
+    node.textContent = rp(target);
+    return;
+  }
+  const mulai = performance.now();
+  const durasi = document.documentElement.dataset.gerak === 'ringan' ? 220 : 420;
+  const langkah = waktu => {
+    const p = Math.min(1, (waktu - mulai) / durasi);
+    const halus = 1 - Math.pow(1 - p, 3);
+    node.textContent = rp(Math.round(awal + (target - awal) * halus));
+    if (p < 1) rafAnimasi.set(node, requestAnimationFrame(langkah));
+    else rafAnimasi.delete(node);
+  };
+  rafAnimasi.set(node, requestAnimationFrame(langkah));
+}
+
+function animasiSukses(node) {
+  if (!node || !gerakInteraksiAktif()) return;
+  node.classList.remove('motion-success');
+  void node.offsetWidth;
+  node.classList.add('motion-success');
+  setTimeout(() => node.classList.remove('motion-success'), 520);
+}
+
+function siapkanAnimasiGrafik(svg) {
+  if (svg && gerakInteraksiAktif()) svg.classList.add('motion-chart');
+  return svg;
+}
 
 function beriPesan(teks, kesalahan = false) {
   let box = $('pesanSingkat');
@@ -3147,8 +3207,11 @@ function beriPesan(teks, kesalahan = false) {
   box.textContent = teks;
   box.setAttribute('role', kesalahan ? 'alert' : 'status');
   box.style.display = 'block';
+  box.classList.remove('motion-show');
+  void box.offsetWidth;
+  if (gerakInteraksiAktif()) box.classList.add('motion-show');
   clearTimeout(timerPesan);
-  timerPesan = setTimeout(() => { box.style.display = 'none'; }, 4500);
+  timerPesan = setTimeout(() => { box.style.display = 'none'; box.classList.remove('motion-show'); }, 4500);
 }
 
 function pesanForm(teks, fokus) {
@@ -5239,6 +5302,7 @@ $('btnSimpan').onclick = () => {
   resetCatatan();
   renderSemua();
   pesanForm('');
+  animasiSukses($('btnSimpan'));
   beriPesan(target ? 'Setoran tersimpan dari ' + (digital.dompetId ? namaDompet(digital.dompetId) : 'Tunai') + '. Target tabungan diperbarui.' : berulang ? 'Transaksi tersimpan. Jadwal berulang diperbarui.' : 'Transaksi tersimpan. Lihat hasilnya di tab Riwayat.');
   if (tipe === 'keluar') cekBudget(kat);
 };
@@ -5694,14 +5758,14 @@ $('btnTutupBanner').onclick = () => {
 
 // ===== RENDER BERANDA & RIWAYAT =====
 function renderBeranda() {
-  $('saldo').textContent = rp(saldoTotal());
-  const laporan=transaksiLaporan();$('totMasuk').textContent=rp(sum(laporan,'masuk'));$('totKeluar').textContent=rp(sum(laporan,'keluar'));const pokok=laporan.filter(x=>x.transferPokok&&catatanAktif(x)).reduce((a,x)=>a+x.total,0);$('transferReportNote').hidden=!pokok;$('transferReportNote').textContent='Pengeluaran laporan termasuk pindah saldo '+rp(pokok)+'. Pokok ini masih milikmu di tempat lain; saldo total hanya berkurang belanja dan biaya admin.';
+  animasikanAngka($('saldo'), saldoTotal());
+  const laporan=transaksiLaporan();animasikanAngka($('totMasuk'),sum(laporan,'masuk'));animasikanAngka($('totKeluar'),sum(laporan,'keluar'));const pokok=laporan.filter(x=>x.transferPokok&&catatanAktif(x)).reduce((a,x)=>a+x.total,0);$('transferReportNote').hidden=!pokok;$('transferReportNote').textContent='Pengeluaran laporan termasuk pindah saldo '+rp(pokok)+'. Pokok ini masih milikmu di tempat lain; saldo total hanya berkurang belanja dan biaya admin.';
 }
 
 function renderRiwayat(){let a=$('rDari').value,b=$('rSampai').value;if(a&&b&&a>b)[a,b]=[b,a];$('rPeriodInfo').textContent=a||b?(a?'Dari '+tglIndo(a):'Semua catatan')+(b?' sampai '+tglIndo(b):' dan seterusnya'):'Menampilkan semua tanggal.';const p=filterTr({dari:$('rDari').value,sampai:$('rSampai').value,tipe:$('rTipe').value,cari:$('rCari').value,status:$('rStatus').value}),transfers=transferSesuaiFilter();
  $('masuk').textContent=rp(sum(p,'masuk'));$('keluar').textContent=rp(sum(p,'keluar'));$('rRingkas').textContent=p.filter(x=>!x.transferDompetId).length+' transaksi dan '+transfers.length+' perpindahan sesuai filter. Nonaktif tetap tersimpan dan tidak masuk perhitungan.';
  const rows=[...p.filter(x=>!x.transferDompetId).map(x=>({x,key:'tr:'+x.id,tanggal:x.tanggal,ts:x.ts})),...transfers.map(x=>({x,key:'transfer:'+x.id,tanggal:x.tanggal,ts:x.ts}))];const terlihat=new Set(rows.map(r=>r.key));for(const key of pilihanLedger)if(!terlihat.has(key))pilihanLedger.delete(key);ledgerTerlihat=[...terlihat];
- const box=$('rList');box.replaceChildren();if(!rows.length)box.append(el('p','kosong','Tidak ada catatan yang cocok. Coba ubah tanggal, tipe, atau status.'));urutTerbaru(rows).forEach(r=>box.append(r.key.startsWith('transfer:')?barisTransferDompet(r.x,true):baris(r.x)));$('walletHistory').hidden=true;perbaruiPilihanLedger();
+ const box=$('rList');box.replaceChildren();if(!rows.length)box.append(el('p','kosong','Tidak ada catatan yang cocok. Coba ubah tanggal, tipe, atau status.'));urutTerbaru(rows).forEach((r,i)=>{const node=r.key.startsWith('transfer:')?barisTransferDompet(r.x,true):baris(r.x);node.classList.add('motion-list-item');node.style.setProperty('--motion-index',Math.min(i,7));box.append(node);});$('walletHistory').hidden=true;perbaruiPilihanLedger();
 }
 
 // ===== GRAFIK: SVG native, data numerik terpisah dari data tersimpan =====
@@ -5728,7 +5792,7 @@ function gambarBatangGrafik(id,groups,label) {
   const W=Math.max(250,Math.min(700,box.clientWidth||Math.min(innerWidth-72,548))),H=255,L=54,R=10,T=22,B=H-42,area=B-T,max=Math.max(1,...groups.flatMap(d=>[d.m,d.k])),s=svgGrafik(W,H,label);
   for(let i=0;i<=4;i++){const y=B-area*i/4;s.append(nodeGrafik('line',{x1:L,y1:y,x2:W-R,y2:y,stroke:'var(--line)','stroke-dasharray':'3 5'}),nodeGrafik('text',{x:L-8,y:y+4,'text-anchor':'end','font-size':12,fill:'var(--muted)'},angkaPendek(max*i/4)));}
   const gw=(W-L-R)/groups.length,bw=Math.min(34,gw*.29);
-  groups.forEach((d,i)=>{const x=L+gw*i+gw/2-bw-2;[[d.m,'var(--ok)',x,'Pemasukan'],[d.k,'var(--bad)',x+bw+4,'Pengeluaran']].forEach(([nilai,warna,left,tipe])=>{const h=nilai/max*area,rect=nodeGrafik('rect',{x:left,y:B-h,width:bw,height:h,rx:3,fill:warna,opacity:.9});rect.append(nodeGrafik('title',{},`${d.label}: ${tipe} ${rp(nilai)}`));s.append(rect);});if(i%Math.max(1,Math.ceil(groups.length/6))===0)s.append(nodeGrafik('text',{x:L+gw*i+gw/2,y:B+22,'text-anchor':'middle','font-size':11,fill:'var(--muted)'},d.label));});box.append(s);
+  groups.forEach((d,i)=>{const x=L+gw*i+gw/2-bw-2;[[d.m,'var(--ok)',x,'Pemasukan'],[d.k,'var(--bad)',x+bw+4,'Pengeluaran']].forEach(([nilai,warna,left,tipe])=>{const h=nilai/max*area,rect=nodeGrafik('rect',{x:left,y:B-h,width:bw,height:h,rx:3,fill:warna,opacity:.9});rect.append(nodeGrafik('title',{},`${d.label}: ${tipe} ${rp(nilai)}`));s.append(rect);});if(i%Math.max(1,Math.ceil(groups.length/6))===0)s.append(nodeGrafik('text',{x:L+gw*i+gw/2,y:B+22,'text-anchor':'middle','font-size':11,fill:'var(--muted)'},d.label));});box.append(siapkanAnimasiGrafik(s));
 }
 function entriGrafik(list,key) { const map=new Map();list.filter(t=>t.tipe==='keluar').forEach(t=>{const k=key(t);map.set(k,(map.get(k)||0)+t.total);});return [...map].filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]); }
 function ringkasEntriGrafik(entries) { if(entries.length<=10)return entries;return [...entries.slice(0,9),['Lainnya ('+(entries.length-9)+')',entries.slice(9).reduce((a,[,v])=>a+v,0)]]; }
@@ -5738,7 +5802,7 @@ function gambarKategoriGrafik(entries) {
   const total=entries.reduce((a,[,v])=>a+v,0);if(!total){pesanGrafikKosong('donut');return;}
   const s=svgGrafik(240,220,'Pengeluaran per kategori, total '+rp(total)),C=2*Math.PI*73;let offset=0;
   ringkasEntriGrafik(entries).forEach(([nama,v],i)=>{const length=v/total*C,circle=nodeGrafik('circle',{cx:120,cy:106,r:73,fill:'none',stroke:PAL[i%PAL.length],'stroke-width':25,'stroke-dasharray':`${length} ${C-length}`,'stroke-dashoffset':-offset,transform:'rotate(-90 120 106)'});circle.append(nodeGrafik('title',{},nama+': '+rp(v)));s.append(circle);offset+=length;const row=el('div','chart-rank-label chart-category-label'),left=el('span','legend'),sw=el('span','sw');sw.style.background=PAL[i%PAL.length];left.append(sw,el('span',null,nama));row.append(left,el('b',null,rp(v)));$('legendDonut').append(row);});
-  s.append(nodeGrafik('text',{x:120,y:100,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},'Total keluar'),nodeGrafik('text',{x:120,y:123,'text-anchor':'middle','font-size':20,'font-weight':750,fill:'currentColor'},'Rp '+angkaPendek(total)));$('donut').append(s);
+  s.append(nodeGrafik('text',{x:120,y:100,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},'Total keluar'),nodeGrafik('text',{x:120,y:123,'text-anchor':'middle','font-size':20,'font-weight':750,fill:'currentColor'},'Rp '+angkaPendek(total)));$('donut').append(siapkanAnimasiGrafik(s));
 }
 function transferGrafikAman() {
   const ids=new Set([TUNAI_ID,...db.dompet.map(w=>w.id)]);
@@ -5776,7 +5840,7 @@ function gambarSaldoGrafik(points) {
   }
   const every=Math.max(1,Math.ceil((points.length-1)/(W<380?3:5)));
   points.forEach((d,i)=>{if(i%every===0||i===points.length-1){if(i!==points.length-1&&i>0&&points.length-1-i<every*.65)return;s.append(nodeGrafik('text',{x:x(i),y:B+24,'text-anchor':'middle','font-size':12,fill:'var(--muted)'},d.label));}});
-  $('gSaldoChart').replaceChildren(s);
+  $('gSaldoChart').replaceChildren(siapkanAnimasiGrafik(s));
   const belum=points.some(p=>p.belum!==0);
   tabelGrafik('gSaldoData',['Periode','Tunai','Wallet',...(belum?['Belum dipilih']:[]),'Total'],points.map((p,i)=>[(i===0?'Sebelum rentang · ':'Sampai ')+tglIndo(p.tanggal),rp(p.tunai),rp(p.wallet),...(belum?[rp(p.belum)]:[]),rp(p.total)]));
 }
@@ -7150,8 +7214,27 @@ $('sDriveAuto').onchange = () => {
       : tokenDriveAktif() ? 'Auto simpan Drive aktif.' : 'Auto simpan aktif. Tekan Simpan ke Drive untuk menghubungkan.'
     : 'Auto simpan Drive dimatikan.');
 };
-$('btnDriveSimpan').onclick = () => simpanKeDrive().then(() => jadwalkanDriveOtomatis()).catch(errorDrive);
-$('btnDriveAmbil').onclick = () => ambilDariDrive().catch(errorDrive);
+async function aksiDriveDenganLoading(button, teks, tugas) {
+  if (button.disabled) return;
+  const label = button.textContent;
+  button.disabled = true;
+  button.classList.add('motion-busy');
+  button.setAttribute('aria-busy', 'true');
+  button.textContent = teks;
+  try {
+    await tugas();
+    animasiSukses(button);
+  } catch (e) {
+    errorDrive(e);
+  } finally {
+    button.disabled = false;
+    button.classList.remove('motion-busy');
+    button.removeAttribute('aria-busy');
+    button.textContent = label;
+  }
+}
+$('btnDriveSimpan').onclick = () => aksiDriveDenganLoading($('btnDriveSimpan'), 'Menyimpan…', async () => { await simpanKeDrive(); jadwalkanDriveOtomatis(); });
+$('btnDriveAmbil').onclick = () => aksiDriveDenganLoading($('btnDriveAmbil'), 'Mengambil…', ambilDariDrive);
 renderDriveStatus();
 window.addEventListener('online', () => { driveAutoError = ''; jadwalkanDriveOtomatis(); });
 
