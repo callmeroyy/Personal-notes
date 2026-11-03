@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" id="financeApp" data-ui="ruang">
 <head>
 <meta charset="UTF-8">
@@ -2146,21 +2146,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   #transferSetup p{margin-top:0;line-height:1.6}
   #transferSetup button{margin-bottom:0}
   #dlgTransferDompet{overscroll-behavior:contain;scroll-padding-block:18px}
-.reminder-sync-head{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-.reminder-sync-status{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
-.reminder-sync-dot{width:9px;height:9px;border-radius:50%;background:#9ca3af;box-shadow:0 0 0 4px color-mix(in srgb,#9ca3af 15%,transparent)}
-.reminder-sync-dot.online{background:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 16%,transparent)}
-.reminder-form-grid{display:grid;grid-template-columns:1.3fr .8fr .8fr;gap:10px;margin-top:14px}
-.reminder-form-grid .wide{grid-column:1/-1}
-.reminder-alarm-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--soft)}
-.reminder-cloud-list{display:grid;gap:9px;margin-top:14px}
-.reminder-cloud-item{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
-.reminder-cloud-time{min-width:70px;text-align:center;padding:8px;border-radius:12px;background:var(--soft);font-weight:800;color:var(--accent)}
-.reminder-cloud-copy{min-width:0;flex:1}
-.reminder-cloud-copy strong,.reminder-cloud-copy span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.reminder-cloud-copy span{font-size:12px;color:var(--muted);margin-top:3px}
-.reminder-empty{padding:18px;text-align:center;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}
-@media(max-width:680px){.reminder-form-grid{grid-template-columns:1fr 1fr}.reminder-form-grid .wide,.reminder-form-grid .title{grid-column:1/-1}}
 </style>
 
 </head>
@@ -2423,7 +2408,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
         <button class="sec" id="btnScan" type="button">📷 Kamera</button>
         <button class="ghost" id="btnScanGaleri" type="button">🖼️ Galeri</button>
       </div>
-      <button class="ghost" id="btnAiCam" type="button" style="margin-top:4px;border:1.5px dashed var(--ghostink);font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px">ðŸ¤– Deteksi Barang Kamera (AI)</button>
+      <button class="ghost" id="btnAiCam" type="button" style="margin-top:4px;border:1.5px dashed var(--ghostink);font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px">&#x1F916; Deteksi Barang Kamera (AI)</button>
       <button class="ghost" id="btnTambahKrj">+ Tambah barang lain</button>
       <input type="file" id="fileScan" accept="image/*" capture="environment" style="display:none">
       <input type="file" id="fileScanGaleri" accept="image/*" style="display:none">
@@ -2590,27 +2575,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <button class="ghost" id="btnNotif">Izinkan notifikasi HP</button>
     <p class="muted" id="notifStatus"></p>
     <p class="muted">Pengingat diperiksa saat web terbuka. Tanpa server, notifikasi tidak dikirim ketika web tertutup.</p>
-  </div>
-  <div class="card" id="cloudReminderCard">
-    <div class="reminder-sync-head">
-      <div>
-        <h2 style="margin-bottom:4px">Pengingat APK</h2>
-        <p class="muted" style="margin:0">Buat alarm di web lalu sinkronkan ke aplikasi Fokusku.</p>
-      </div>
-      <button class="ghost kecil" id="btnReminderLogin" type="button">Hubungkan Google</button>
-    </div>
-    <p class="reminder-sync-status" id="reminderSyncStatus" role="status"><span class="reminder-sync-dot" id="reminderSyncDot"></span><span>Belum terhubung</span></p>
-    <div id="reminderCloudArea" hidden>
-      <div class="reminder-form-grid">
-        <input class="title wide" id="reminderTitle" maxlength="120" placeholder="Apa yang perlu diingat?" aria-label="Judul pengingat">
-        <select id="reminderType" aria-label="Jenis pengingat"><option value="Jadwal Kuliah">Jadwal kuliah</option><option value="Tugas">Tugas</option></select>
-        <input type="date" id="reminderDate" aria-label="Tanggal pengingat">
-        <input type="time" id="reminderTime" aria-label="Jam pengingat">
-        <label class="reminder-alarm-row wide" for="reminderAlarm"><span><b>Alarm penuh</b><small class="muted" style="display:block">Berbunyi dan tampil di layar HP</small></span><input type="checkbox" id="reminderAlarm" checked></label>
-        <button class="wide" id="btnReminderAdd" type="button">Simpan & kirim ke APK</button>
-      </div>
-      <div class="reminder-cloud-list" id="reminderCloudList"></div>
-    </div>
   </div>
   <div class="card">
     <h2>Data & backup</h2>
@@ -2983,13 +2947,13 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 <!-- DIALOG DETEKSI BARANG KAMERA AI -->
 <dialog id="dlgAiCam" style="max-width:540px;width:calc(100% - 24px);padding:14px;border-radius:18px;border:1px solid var(--detline);background:var(--card);color:var(--ink);max-height:calc(100dvh - 32px);overflow:auto">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-    <h2 style="margin:0;font-size:16px;display:flex;align-items:center;gap:6px">ðŸ¤– Deteksi Barang Kamera AI</h2>
-    <button type="button" class="ghost kecil" id="btnAiCamTutup" style="margin:0;padding:4px 8px;border-radius:8px">âœ•</button>
+    <h2 style="margin:0;font-size:16px;display:flex;align-items:center;gap:6px">&#x1F916; Deteksi Barang Kamera AI</h2>
+    <button type="button" class="ghost kecil" id="btnAiCamTutup" style="margin:0;padding:4px 8px;border-radius:8px">&times;</button>
   </div>
   
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-    <span id="aiCamStatus" class="muted" style="font-size:12px;font-weight:600">â³ Menyiapkan AI...</span>
-    <button type="button" class="ghost kecil" id="btnAiCamSettings" style="margin:0;padding:3px 8px;font-size:11px">âš™ï¸ Sensitivitas</button>
+    <span id="aiCamStatus" class="muted" style="font-size:12px;font-weight:600">&#x23F3; Menyiapkan AI...</span>
+    <button type="button" class="ghost kecil" id="btnAiCamSettings" style="margin:0;padding:3px 8px;font-size:11px">&#x2699;&#xFE0F; Sensitivitas</button>
   </div>
 
   <div id="aiCamSettingsPanel" style="display:none;background:var(--keranjangbg);padding:10px;border-radius:12px;border:1px solid var(--keranjangline);margin-bottom:10px;font-size:12px">
@@ -3000,19 +2964,19 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <div class="muted" style="font-size:11px;margin-bottom:6px">Turunkan % agar benda di sekitar (kursi, botol, laptop jauh) lebih mudah terdeteksi.</div>
     <div id="aiCamChips" style="display:flex;flex-wrap:wrap;gap:4px">
       <span class="pill active" data-cat="all" style="cursor:pointer;padding:2px 8px;font-size:11px">Semua</span>
-      <span class="pill active" data-cat="electronic" style="cursor:pointer;padding:2px 8px;font-size:11px">ðŸ“± Gadget</span>
-      <span class="pill active" data-cat="food" style="cursor:pointer;padding:2px 8px;font-size:11px">ðŸ” Makanan</span>
-      <span class="pill active" data-cat="accessories" style="cursor:pointer;padding:2px 8px;font-size:11px">ðŸŽ’ Aksesoris</span>
-      <span class="pill active" data-cat="furniture" style="cursor:pointer;padding:2px 8px;font-size:11px">ðŸª‘ Perabot</span>
-      <span class="pill active" data-cat="kitchen" style="cursor:pointer;padding:2px 8px;font-size:11px">ðŸ½ï¸ Dapur</span>
-      <span class="pill" data-cat="person" style="cursor:pointer;padding:2px 8px;font-size:11px">ðŸ‘¤ Orang</span>
+      <span class="pill active" data-cat="electronic" style="cursor:pointer;padding:2px 8px;font-size:11px">&#x1F4F1; Gadget</span>
+      <span class="pill active" data-cat="food" style="cursor:pointer;padding:2px 8px;font-size:11px">&#x1F354; Makanan</span>
+      <span class="pill active" data-cat="accessories" style="cursor:pointer;padding:2px 8px;font-size:11px">&#x1F392; Aksesoris</span>
+      <span class="pill active" data-cat="furniture" style="cursor:pointer;padding:2px 8px;font-size:11px">&#x1FA91; Perabot</span>
+      <span class="pill active" data-cat="kitchen" style="cursor:pointer;padding:2px 8px;font-size:11px">&#x1F37D;&#xFE0F; Dapur</span>
+      <span class="pill" data-cat="person" style="cursor:pointer;padding:2px 8px;font-size:11px">&#x1F464; Orang</span>
     </div>
   </div>
 
   <div style="position:relative;width:100%;min-height:240px;max-height:340px;background:#050b14;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid var(--detline)">
     <div style="position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;pointer-events:none;z-index:5">
       <span id="aiCamLiveCount" style="background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);color:#38bdf8;padding:3px 9px;border-radius:14px;font-size:11px;font-weight:700">0 Barang</span>
-      <span id="aiCamFacing" style="background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);color:#cbd5e1;padding:3px 9px;border-radius:14px;font-size:11px">Belakang ðŸ”„</span>
+      <span id="aiCamFacing" style="background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);color:#cbd5e1;padding:3px 9px;border-radius:14px;font-size:11px">Belakang &#x1F504;</span>
     </div>
     <video id="aiCamVideo" autoplay playsinline muted style="width:100%;height:100%;max-height:340px;object-fit:contain;display:none"></video>
     <img id="aiCamPhoto" alt="Freeze preview" style="width:100%;height:100%;max-height:340px;object-fit:contain;display:none">
@@ -3024,20 +2988,21 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
-    <button type="button" class="ghost kecil" id="btnAiCamSwitch" style="margin:0;padding:6px 4px;font-size:11px">ðŸ”„ Putar</button>
-    <button type="button" class="ghost kecil" id="btnAiCamFreeze" style="margin:0;padding:6px 4px;font-size:11px">â¸ï¸ Bekukan</button>
-    <button type="button" class="ghost kecil" id="btnAiCamTorch" style="margin:0;padding:6px 4px;font-size:11px">ðŸ’¡ Senter</button>
+    <button type="button" class="ghost kecil" id="btnAiCamSwitch" style="margin:0;padding:6px 4px;font-size:11px">&#x1F504; Putar</button>
+    <button type="button" class="ghost kecil" id="btnAiCamFreeze" style="margin:0;padding:6px 4px;font-size:11px">&#x23F8;&#xFE0F; Bekukan</button>
+    <button type="button" class="ghost kecil" id="btnAiCamTorch" style="margin:0;padding:6px 4px;font-size:11px">&#x1F4A1; Senter</button>
   </div>
   <div style="display:flex;gap:6px;margin-bottom:10px">
-    <button type="button" class="sec kecil" id="btnAiCamAmbil" style="flex:1;margin:0;font-size:12px">ðŸ–¼ï¸ Pilih / Ambil Foto</button>
+    <button type="button" class="sec kecil" id="btnAiCamAmbil" style="flex:1;margin:0;font-size:12px">&#x1F5BC;&#xFE0F; Pilih / Ambil Foto</button>
     <input type="file" id="aiCamFileInput" accept="image/*" style="display:none">
   </div>
 
   <div style="display:flex;gap:8px">
     <button type="button" class="sec" id="btnAiCamBatal" style="margin:0;flex:1">Batal</button>
-    <button type="button" id="btnAiCamTerapkan" style="margin:0;flex:2;font-weight:700" disabled>ðŸ“¥ Masukkan ke Keranjang (<span id="aiCamTerapkanCount">0</span>)</button>
+    <button type="button" id="btnAiCamTerapkan" style="margin:0;flex:2;font-weight:700" disabled>&#x1F4E5; Masukkan ke Keranjang (<span id="aiCamTerapkanCount">0</span>)</button>
   </div>
 </dialog>
+
 
 <script>
 const TUNAI_ID='__tunai__';
@@ -5852,144 +5817,6 @@ $('btnTutupBanner').onclick = () => {
   renderPengingat();
 };
 
-// ===== PENGINGAT APK (FIREBASE) =====
-const FIREBASE_REMINDER_CONFIG = {
-  apiKey: 'AIzaSyBzUXUjSe5VrdA15Uaf-uzVCt0HqPsuI2c',
-  authDomain: 'personal-notes-pengingat.firebaseapp.com',
-  projectId: 'personal-notes-pengingat',
-  storageBucket: 'personal-notes-pengingat.firebasestorage.app',
-  messagingSenderId: '780178193799',
-  appId: '1:780178193799:web:1b15af660841e186a1a722'
-};
-let reminderFirebase = null;
-let reminderCloudItems = [];
-let reminderCloudStop = null;
-
-function setReminderCloudStatus(teks, online=false) {
-  const box = $('reminderSyncStatus');
-  box.lastElementChild.textContent = teks;
-  $('reminderSyncDot').classList.toggle('online', online);
-}
-
-function formatReminderCloudDate(date) {
-  return new Intl.DateTimeFormat('id-ID', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}).format(date);
-}
-
-function renderReminderCloudList() {
-  const box = $('reminderCloudList');
-  box.replaceChildren();
-  if (!reminderCloudItems.length) {
-    box.append(el('div','reminder-empty','Belum ada pengingat tersinkron.'));
-    return;
-  }
-  reminderCloudItems.forEach(item => {
-    const row = el('div','reminder-cloud-item');
-    const when = el('div','reminder-cloud-time');
-    when.append(el('div','',String(item.waktu.getHours()).padStart(2,'0')+':'+String(item.waktu.getMinutes()).padStart(2,'0')));
-    when.append(el('small','',String(item.waktu.getDate()).padStart(2,'0')+'/'+String(item.waktu.getMonth()+1).padStart(2,'0')));
-    const copy = el('div','reminder-cloud-copy');
-    copy.append(el('strong','',item.judul));
-    copy.append(el('span','',item.jenis+' · '+formatReminderCloudDate(item.waktu)+(item.alarmAktif?' · Alarm penuh':' · Notifikasi')));
-    const hapus = el('button','ghost kecil','Hapus');
-    hapus.type = 'button';
-    hapus.onclick = () => hapusReminderCloud(item.id);
-    row.append(when,copy,hapus);
-    box.append(row);
-  });
-}
-
-async function initFirebaseReminders() {
-  try {
-    setReminderCloudStatus('Menyiapkan sinkronisasi…');
-    const [appApi, authApi, dbApi] = await Promise.all([
-      import('https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js'),
-      import('https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js'),
-      import('https://www.gstatic.com/firebasejs/13.1.0/firebase-firestore.js')
-    ]);
-    const app = appApi.getApps().length ? appApi.getApp() : appApi.initializeApp(FIREBASE_REMINDER_CONFIG);
-    reminderFirebase = {appApi,authApi,dbApi,auth:authApi.getAuth(app),db:dbApi.getFirestore(app)};
-    authApi.onAuthStateChanged(reminderFirebase.auth, user => {
-      if (reminderCloudStop) { reminderCloudStop(); reminderCloudStop = null; }
-      $('reminderCloudArea').hidden = !user;
-      $('btnReminderLogin').textContent = user ? 'Lepas akun' : 'Hubungkan Google';
-      if (!user) {
-        reminderCloudItems = [];
-        renderReminderCloudList();
-        setReminderCloudStatus('Belum terhubung');
-        return;
-      }
-      setReminderCloudStatus(user.email || 'Sinkronisasi aktif', true);
-      const col = dbApi.collection(reminderFirebase.db,'users',user.uid,'reminders');
-      const q = dbApi.query(col,dbApi.orderBy('scheduledAt','asc'));
-      reminderCloudStop = dbApi.onSnapshot(q, snapshot => {
-        reminderCloudItems = snapshot.docs.map(doc => {
-          const data = doc.data();
-          return {id:doc.id,judul:data.title||'Pengingat',jenis:data.type||'Tugas',waktu:data.scheduledAt.toDate(),alarmAktif:data.alarmEnabled!==false};
-        });
-        renderReminderCloudList();
-      }, error => setReminderCloudStatus('Sinkronisasi gagal: '+error.message));
-    });
-  } catch (error) {
-    setReminderCloudStatus('Firebase belum dapat dimuat: '+error.message);
-  }
-}
-
-async function toggleReminderCloudLogin() {
-  if (!reminderFirebase) return beriPesan('Firebase belum siap. Periksa koneksi internet.',true);
-  try {
-    if (reminderFirebase.auth.currentUser) {
-      await reminderFirebase.authApi.signOut(reminderFirebase.auth);
-    } else {
-      const provider = new reminderFirebase.authApi.GoogleAuthProvider();
-      provider.setCustomParameters({prompt:'select_account'});
-      await reminderFirebase.authApi.signInWithRedirect(reminderFirebase.auth,provider);
-    }
-  } catch (error) {
-    beriPesan('Akun belum terhubung: '+error.message,true);
-  }
-}
-
-async function tambahReminderCloud() {
-  const fb = reminderFirebase, user = fb?.auth.currentUser;
-  if (!fb || !user) return beriPesan('Hubungkan akun Google lebih dulu.',true);
-  const judul = $('reminderTitle').value.trim();
-  const tanggal = $('reminderDate').value;
-  const jam = $('reminderTime').value;
-  if (!judul) return gagalIsi('Judul pengingat wajib diisi.','reminderTitle');
-  if (!tanggal || !jam) return beriPesan('Pilih tanggal dan jam pengingat.',true);
-  const waktu = new Date(tanggal+'T'+jam+':00');
-  if (!Number.isFinite(waktu.getTime()) || waktu <= new Date()) return beriPesan('Pilih waktu yang belum lewat.',true);
-  const id = String(Math.floor(Date.now()%2147480000));
-  const ref = fb.dbApi.doc(fb.db,'users',user.uid,'reminders',id);
-  try {
-    await fb.dbApi.setDoc(ref,{
-      title:judul,
-      type:$('reminderType').value,
-      scheduledAt:fb.dbApi.Timestamp.fromDate(waktu),
-      alarmEnabled:$('reminderAlarm').checked,
-      source:'web',
-      updatedAt:fb.dbApi.serverTimestamp()
-    });
-    $('reminderTitle').value='';
-    beriPesan('Pengingat dikirim ke APK. Buka Fokusku agar alarm dijadwalkan.');
-  } catch (error) { beriPesan('Pengingat belum tersimpan: '+error.message,true); }
-}
-
-async function hapusReminderCloud(id) {
-  const fb = reminderFirebase, user = fb?.auth.currentUser;
-  if (!fb || !user) return;
-  try {
-    await fb.dbApi.deleteDoc(fb.dbApi.doc(fb.db,'users',user.uid,'reminders',id));
-    beriPesan('Pengingat dihapus dari web dan APK.');
-  } catch (error) { beriPesan('Pengingat belum dapat dihapus: '+error.message,true); }
-}
-
-$('btnReminderLogin').onclick = toggleReminderCloudLogin;
-$('btnReminderAdd').onclick = tambahReminderCloud;
-const awalReminder = new Date(Date.now()+3600000);
-$('reminderDate').value = tglStr(awalReminder);
-$('reminderTime').value = String(awalReminder.getHours()).padStart(2,'0')+':'+String(awalReminder.getMinutes()).padStart(2,'0');
-
 // ===== RENDER BERANDA & RIWAYAT =====
 function renderBeranda() {
   animasikanAngka($('saldo'), saldoTotal());
@@ -8056,7 +7883,6 @@ simpan();
 pasangDesainRuang();
 goto('beranda');
 if (asalDriveValid()) loadGis().catch(() => {});
-initFirebaseReminders();
 setInterval(() => {
   if (document.visibilityState === 'visible') { renderPengingat(); renderBackupBanner(); renderDriveStatus(); }
 }, 30000);
@@ -8076,74 +7902,75 @@ if (navigator.storage?.persist) {
 }
 
 
+
 const AI_COCO_DICT = {
   // Elektronik & Gadget (Biru)
-  'cell phone': { name: 'HP / Smartphone', cat: 'electronic', icon: '📱', price: 2500000, color: '#38bdf8' },
-  'laptop': { name: 'Laptop', cat: 'electronic', icon: '💻', price: 7000000, color: '#38bdf8' },
-  'mouse': { name: 'Mouse Komputer', cat: 'electronic', icon: '🖱️', price: 75000, color: '#38bdf8' },
-  'keyboard': { name: 'Keyboard', cat: 'electronic', icon: '⌨️', price: 150000, color: '#38bdf8' },
-  'tv': { name: 'Monitor / TV', cat: 'electronic', icon: '🖥️', price: 1800000, color: '#38bdf8' },
-  'remote': { name: 'Remot TV / AC', cat: 'electronic', icon: '🎛️', price: 35000, color: '#38bdf8' },
-  'microwave': { name: 'Microwave', cat: 'electronic', icon: '📻', price: 900000, color: '#38bdf8' },
-  'oven': { name: 'Oven', cat: 'electronic', icon: '🍳', price: 750000, color: '#38bdf8' },
-  'toaster': { name: 'Pemanggang Roti', cat: 'electronic', icon: '🍞', price: 250000, color: '#38bdf8' },
-  'refrigerator': { name: 'Kulkas', cat: 'electronic', icon: '🧊', price: 2500000, color: '#38bdf8' },
-  'clock': { name: 'Jam Meja / Dinding', cat: 'electronic', icon: '⏰', price: 45000, color: '#38bdf8' },
-  'hair drier': { name: 'Pengering Rambut', cat: 'electronic', icon: '💨', price: 120000, color: '#38bdf8' },
+  'cell phone': { name: 'HP / Smartphone', cat: 'electronic', icon: '\u{1F4F1}', price: 2500000, color: '#38bdf8' },
+  'laptop': { name: 'Laptop', cat: 'electronic', icon: '\u{1F4BB}', price: 7000000, color: '#38bdf8' },
+  'mouse': { name: 'Mouse Komputer', cat: 'electronic', icon: '\u{1F5B1}\u{FE0F}', price: 75000, color: '#38bdf8' },
+  'keyboard': { name: 'Keyboard', cat: 'electronic', icon: '\u{2328}\u{FE0F}', price: 150000, color: '#38bdf8' },
+  'tv': { name: 'Monitor / TV', cat: 'electronic', icon: '\u{1F5A5}\u{FE0F}', price: 1800000, color: '#38bdf8' },
+  'remote': { name: 'Remot TV / AC', cat: 'electronic', icon: '\u{1F39B}\u{FE0F}', price: 35000, color: '#38bdf8' },
+  'microwave': { name: 'Microwave', cat: 'electronic', icon: '\u{1F4FB}', price: 900000, color: '#38bdf8' },
+  'oven': { name: 'Oven', cat: 'electronic', icon: '\u{1F373}', price: 750000, color: '#38bdf8' },
+  'toaster': { name: 'Pemanggang Roti', cat: 'electronic', icon: '\u{1F35E}', price: 250000, color: '#38bdf8' },
+  'refrigerator': { name: 'Kulkas', cat: 'electronic', icon: '\u{1F9CA}', price: 2500000, color: '#38bdf8' },
+  'clock': { name: 'Jam Meja / Dinding', cat: 'electronic', icon: '\u{23F0}', price: 45000, color: '#38bdf8' },
+  'hair drier': { name: 'Pengering Rambut', cat: 'electronic', icon: '\u{1F4A8}', price: 120000, color: '#38bdf8' },
 
   // Makanan & Minuman (Hijau)
-  'bottle': { name: 'Botol Minuman', cat: 'food', icon: '🧴', price: 6000, color: '#34d399' },
-  'cup': { name: 'Cangkir / Gelas Kopi', cat: 'food', icon: '☕', price: 15000, color: '#34d399' },
-  'wine glass': { name: 'Gelas Kaca / Cangkir', cat: 'food', icon: '🍷', price: 25000, color: '#34d399' },
-  'bowl': { name: 'Mangkuk Makanan', cat: 'food', icon: '🥣', price: 20000, color: '#34d399' },
-  'banana': { name: 'Pisang', cat: 'food', icon: '🍌', price: 3000, color: '#34d399' },
-  'apple': { name: 'Apel', cat: 'food', icon: '🍎', price: 5000, color: '#34d399' },
-  'sandwich': { name: 'Roti / Sandwich', cat: 'food', icon: '🥪', price: 12000, color: '#34d399' },
-  'orange': { name: 'Jeruk', cat: 'food', icon: '🍊', price: 4000, color: '#34d399' },
-  'broccoli': { name: 'Brokoli', cat: 'food', icon: '🥦', price: 8000, color: '#34d399' },
-  'carrot': { name: 'Wortel', cat: 'food', icon: '🥕', price: 5000, color: '#34d399' },
-  'hot dog': { name: 'Hot Dog / Sosis', cat: 'food', icon: '🌭', price: 15000, color: '#34d399' },
-  'pizza': { name: 'Pizza', cat: 'food', icon: '🍕', price: 65000, color: '#34d399' },
-  'donut': { name: 'Donat', cat: 'food', icon: '🍩', price: 8000, color: '#34d399' },
-  'cake': { name: 'Kue / Tart', cat: 'food', icon: '🍰', price: 25000, color: '#34d399' },
+  'bottle': { name: 'Botol Minuman', cat: 'food', icon: '\u{1F9F4}', price: 6000, color: '#34d399' },
+  'cup': { name: 'Cangkir / Gelas Kopi', cat: 'food', icon: '\u{2615}', price: 15000, color: '#34d399' },
+  'wine glass': { name: 'Gelas Kaca / Cangkir', cat: 'food', icon: '\u{1F377}', price: 25000, color: '#34d399' },
+  'bowl': { name: 'Mangkuk Makanan', cat: 'food', icon: '\u{1F963}', price: 20000, color: '#34d399' },
+  'banana': { name: 'Pisang', cat: 'food', icon: '\u{1F34C}', price: 3000, color: '#34d399' },
+  'apple': { name: 'Apel', cat: 'food', icon: '\u{1F34E}', price: 5000, color: '#34d399' },
+  'sandwich': { name: 'Roti / Sandwich', cat: 'food', icon: '\u{1F96A}', price: 12000, color: '#34d399' },
+  'orange': { name: 'Jeruk', cat: 'food', icon: '\u{1F34A}', price: 4000, color: '#34d399' },
+  'broccoli': { name: 'Brokoli', cat: 'food', icon: '\u{1F966}', price: 8000, color: '#34d399' },
+  'carrot': { name: 'Wortel', cat: 'food', icon: '\u{1F955}', price: 5000, color: '#34d399' },
+  'hot dog': { name: 'Hot Dog / Sosis', cat: 'food', icon: '\u{1F32D}', price: 15000, color: '#34d399' },
+  'pizza': { name: 'Pizza', cat: 'food', icon: '\u{1F355}', price: 65000, color: '#34d399' },
+  'donut': { name: 'Donat', cat: 'food', icon: '\u{1F369}', price: 8000, color: '#34d399' },
+  'cake': { name: 'Kue / Tart', cat: 'food', icon: '\u{1F370}', price: 25000, color: '#34d399' },
 
   // Dapur & Alat Makan (Teal)
-  'fork': { name: 'Garpu', cat: 'kitchen', icon: '🍴', price: 5000, color: '#2dd4bf' },
-  'knife': { name: 'Pisau', cat: 'kitchen', icon: '🔪', price: 15000, color: '#2dd4bf' },
-  'spoon': { name: 'Sendok', cat: 'kitchen', icon: '🥄', price: 5000, color: '#2dd4bf' },
-  'sink': { name: 'Wastafel', cat: 'kitchen', icon: '🚰', price: 300000, color: '#2dd4bf' },
+  'fork': { name: 'Garpu', cat: 'kitchen', icon: '\u{1F374}', price: 5000, color: '#2dd4bf' },
+  'knife': { name: 'Pisau', cat: 'kitchen', icon: '\u{1F52A}', price: 15000, color: '#2dd4bf' },
+  'spoon': { name: 'Sendok', cat: 'kitchen', icon: '\u{1F944}', price: 5000, color: '#2dd4bf' },
+  'sink': { name: 'Wastafel', cat: 'kitchen', icon: '\u{1F6B0}', price: 300000, color: '#2dd4bf' },
 
   // Tas, Aksesoris & Pribadi (Kuning)
-  'backpack': { name: 'Tas Ransel', cat: 'accessories', icon: '🎒', price: 150000, color: '#fbbf24' },
-  'handbag': { name: 'Tas Tangan / Totebag', cat: 'accessories', icon: '👜', price: 120000, color: '#fbbf24' },
-  'umbrella': { name: 'Payung', cat: 'accessories', icon: '☂️', price: 45000, color: '#fbbf24' },
-  'tie': { name: 'Dasi', cat: 'accessories', icon: '👔', price: 35000, color: '#fbbf24' },
-  'suitcase': { name: 'Koper', cat: 'accessories', icon: '🧳', price: 450000, color: '#fbbf24' },
-  'book': { name: 'Buku / Catatan', cat: 'accessories', icon: '📚', price: 35000, color: '#fbbf24' },
-  'scissors': { name: 'Gunting', cat: 'accessories', icon: '✂️', price: 12000, color: '#fbbf24' },
-  'toothbrush': { name: 'Sikat Gigi', cat: 'accessories', icon: '🪥', price: 8000, color: '#fbbf24' },
+  'backpack': { name: 'Tas Ransel', cat: 'accessories', icon: '\u{1F392}', price: 150000, color: '#fbbf24' },
+  'handbag': { name: 'Tas Tangan / Totebag', cat: 'accessories', icon: '\u{1F45C}', price: 120000, color: '#fbbf24' },
+  'umbrella': { name: 'Payung', cat: 'accessories', icon: '\u{2602}\u{FE0F}', price: 45000, color: '#fbbf24' },
+  'tie': { name: 'Dasi', cat: 'accessories', icon: '\u{1F454}', price: 35000, color: '#fbbf24' },
+  'suitcase': { name: 'Koper', cat: 'accessories', icon: '\u{1F9F3}', price: 45000, color: '#fbbf24' },
+  'book': { name: 'Buku / Catatan', cat: 'accessories', icon: '\u{1F4DA}', price: 35000, color: '#fbbf24' },
+  'scissors': { name: 'Gunting', cat: 'accessories', icon: '\u{2702}\u{FE0F}', price: 12000, color: '#fbbf24' },
+  'toothbrush': { name: 'Sikat Gigi', cat: 'accessories', icon: '\u{1FAA5}', price: 8000, color: '#fbbf24' },
 
   // Perabotan & Ruangan (Ungu)
-  'chair': { name: 'Kursi', cat: 'furniture', icon: '🪑', price: 120000, color: '#a78bfa' },
-  'couch': { name: 'Sofa', cat: 'furniture', icon: '🛋️', price: 1500000, color: '#a78bfa' },
-  'potted plant': { name: 'Tanaman Hias / Pot', cat: 'furniture', icon: '🪴', price: 35000, color: '#a78bfa' },
-  'bed': { name: 'Tempat Tidur', cat: 'furniture', icon: '🛏️', price: 2000000, color: '#a78bfa' },
-  'dining table': { name: 'Meja', cat: 'furniture', icon: '🪑', price: 450000, color: '#a78bfa' },
-  'toilet': { name: 'Toilet', cat: 'furniture', icon: '🚽', price: 800000, color: '#a78bfa' },
-  'vase': { name: 'Vas Bunga', cat: 'furniture', icon: '🏺', price: 40000, color: '#a78bfa' },
+  'chair': { name: 'Kursi', cat: 'furniture', icon: '\u{1FA91}', price: 120000, color: '#a78bfa' },
+  'couch': { name: 'Sofa', cat: 'furniture', icon: '\u{1F6CB}\u{FE0F}', price: 1500000, color: '#a78bfa' },
+  'potted plant': { name: 'Tanaman Hias / Pot', cat: 'furniture', icon: '\u{1FAB4}', price: 35000, color: '#a78bfa' },
+  'bed': { name: 'Tempat Tidur', cat: 'furniture', icon: '\u{1F6CF}\u{FE0F}', price: 2000000, color: '#a78bfa' },
+  'dining table': { name: 'Meja', cat: 'furniture', icon: '\u{1FA91}', price: 450000, color: '#a78bfa' },
+  'toilet': { name: 'Toilet', cat: 'furniture', icon: '\u{1F6BD}', price: 800000, color: '#a78bfa' },
+  'vase': { name: 'Vas Bunga', cat: 'furniture', icon: '\u{1F3FA}', price: 40000, color: '#a78bfa' },
 
   // Mainan & Hobi
-  'teddy bear': { name: 'Boneka', cat: 'accessories', icon: '🧸', price: 65000, color: '#f472b6' },
-  'sports ball': { name: 'Bola Olahraga', cat: 'accessories', icon: '⚽', price: 85000, color: '#f472b6' },
-  'skateboard': { name: 'Skateboard', cat: 'accessories', icon: '🛹', price: 350000, color: '#f472b6' },
+  'teddy bear': { name: 'Boneka', cat: 'accessories', icon: '\u{1F9F8}', price: 65000, color: '#f472b6' },
+  'sports ball': { name: 'Bola Olahraga', cat: 'accessories', icon: '\u{26BD}', price: 85000, color: '#f472b6' },
+  'skateboard': { name: 'Skateboard', cat: 'accessories', icon: '\u{1F6F9}', price: 350000, color: '#f472b6' },
 
   // Kendaraan
-  'bicycle': { name: 'Sepeda', cat: 'accessories', icon: '🚲', price: 1200000, color: '#cbd5e1' },
-  'motorcycle': { name: 'Motor', cat: 'accessories', icon: '🏍️', price: 15000000, color: '#cbd5e1' },
-  'car': { name: 'Mobil', cat: 'accessories', icon: '🚗', price: 150000000, color: '#cbd5e1' },
+  'bicycle': { name: 'Sepeda', cat: 'accessories', icon: '\u{1F6B2}', price: 1200000, color: '#cbd5e1' },
+  'motorcycle': { name: 'Motor', cat: 'accessories', icon: '\u{1F3CD}\u{FE0F}', price: 15000000, color: '#cbd5e1' },
+  'car': { name: 'Mobil', cat: 'accessories', icon: '\u{1F697}', price: 150000000, color: '#cbd5e1' },
 
   // Orang
-  'person': { name: 'Orang / Manusia', cat: 'person', icon: '👤', price: 0, color: '#94a3b8' }
+  'person': { name: 'Orang / Manusia', cat: 'person', icon: '\u{1F464}', price: 0, color: '#94a3b8' }
 };
 
 let aiModel = null;
@@ -8175,24 +8002,24 @@ function muatAiDetector() {
 
 async function bukaAiCam() {
   $('dlgAiCam').showModal();
-  $('aiCamStatus').textContent = '⏳ Menyiapkan AI Multi-Objek...';
+  $('aiCamStatus').textContent = '\u{23F3} Menyiapkan AI Multi-Objek...';
   $('aiCamVideo').style.display = 'none';
   $('aiCamPhoto').style.display = 'none';
   $('aiCamCanvas').getContext('2d').clearRect(0, 0, $('aiCamCanvas').width, $('aiCamCanvas').height);
   $('btnAiCamTerapkan').disabled = true;
   $('aiCamTerapkanCount').textContent = '0';
   aiCamIsFrozen = false;
-  $('btnAiCamFreeze').textContent = '⏸️ Bekukan';
+  $('btnAiCamFreeze').textContent = '\u{23F8}\u{FE0F} Bekukan';
 
   try {
     await muatAiDetector();
     if (!aiModel) {
       aiModel = await cocoSsd.load({ base: 'lite_mobilenet_v2' });
     }
-    $('aiCamStatus').textContent = '✅ AI Siap! Membuka kamera...';
+    $('aiCamStatus').textContent = '\u{2705} AI Siap! Membuka kamera...';
     await mulaiKameraAi();
   } catch (err) {
-    $('aiCamStatus').textContent = '❌ ' + (err.message || 'Gagal memuat AI');
+    $('aiCamStatus').textContent = '\u{274C} ' + (err.message || 'Gagal memuat AI');
   }
 }
 
@@ -8214,12 +8041,12 @@ async function mulaiKameraAi() {
     $('aiCamVideo').onloadedmetadata = () => {
       $('aiCamCanvas').width = $('aiCamVideo').videoWidth;
       $('aiCamCanvas').height = $('aiCamVideo').videoHeight;
-      $('aiCamStatus').textContent = '🎥 Kamera Aktif — Memindai Barang Sekitar';
-      $('aiCamFacing').textContent = aiCamFacing === 'environment' ? 'Belakang 🔄' : 'Depan 🔄';
+      $('aiCamStatus').textContent = '\u{1F3A5} Kamera Aktif — Memindai Barang Sekitar';
+      $('aiCamFacing').textContent = aiCamFacing === 'environment' ? 'Belakang \u{1F504}' : 'Depan \u{1F504}';
       aiCamLoop();
     };
   } catch (err) {
-    $('aiCamStatus').textContent = '⚠️ Akses kamera gagal. Gunakan tombol Pilih Foto.';
+    $('aiCamStatus').textContent = '\u{26A0}\u{FE0F} Akses kamera gagal. Gunakan tombol Pilih Foto.';
   }
 }
 
@@ -8263,7 +8090,7 @@ function gambarKotakAi(preds) {
 
   preds.forEach(p => {
     const [x, y, w, h] = p.bbox;
-    const info = AI_COCO_DICT[p.class] || { name: p.class, icon: '📦', color: '#38bdf8' };
+    const info = AI_COCO_DICT[p.class] || { name: p.class, icon: '\u{1F4E6}', color: '#38bdf8' };
     const label = `${info.icon} ${info.name} (${Math.round(p.score * 100)}%)`;
 
     ctx.strokeStyle = info.color;
@@ -8301,7 +8128,7 @@ function updateHudAi(preds) {
 
   box.innerHTML = '';
   Object.entries(counts).forEach(([cls, qty]) => {
-    const info = AI_COCO_DICT[cls] || { name: cls, icon: '📦', color: '#93c5fd' };
+    const info = AI_COCO_DICT[cls] || { name: cls, icon: '\u{1F4E6}', color: '#93c5fd' };
     const tag = document.createElement('span');
     tag.style.cssText = `padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(59,130,246,0.15);border:1px solid ${info.color};color:${info.color};display:inline-flex;align-items:center;gap:3px`;
     tag.textContent = `${info.icon} ${qty}x ${info.name}`;
@@ -8360,11 +8187,11 @@ $('btnAiCamFreeze').onclick = () => {
   if (!aiCamIsLive) return;
   aiCamIsFrozen = !aiCamIsFrozen;
   if (aiCamIsFrozen) {
-    $('btnAiCamFreeze').textContent = '▶️ Lanjut';
-    $('aiCamStatus').textContent = '⏸️ Layar Dibekukan — Periksa Barang';
+    $('btnAiCamFreeze').textContent = '\u{25B6}\u{FE0F} Lanjut';
+    $('aiCamStatus').textContent = '\u{23F8}\u{FE0F} Layar Dibekukan — Periksa Barang';
   } else {
-    $('btnAiCamFreeze').textContent = '⏸️ Bekukan';
-    $('aiCamStatus').textContent = '🎥 Kamera Aktif — Memindai';
+    $('btnAiCamFreeze').textContent = '\u{23F8}\u{FE0F} Bekukan';
+    $('aiCamStatus').textContent = '\u{1F3A5} Kamera Aktif — Memindai';
     aiCamLoop();
   }
 };
@@ -8377,7 +8204,7 @@ $('btnAiCamTorch').onclick = async () => {
   try {
     aiCamTorchOn = !aiCamTorchOn;
     await track.applyConstraints({ advanced: [{ torch: aiCamTorchOn }] });
-    $('btnAiCamTorch').textContent = aiCamTorchOn ? '💡 Senter: ON' : '💡 Senter';
+    $('btnAiCamTorch').textContent = aiCamTorchOn ? '\u{1F4A1} Senter: ON' : '\u{1F4A1} Senter';
   } catch (_) {
     beriPesan('Lampu senter tidak didukung browser ini.', true);
   }
@@ -8402,13 +8229,13 @@ $('aiCamFileInput').onchange = e => {
     img.onload = async () => {
       $('aiCamCanvas').width = img.naturalWidth;
       $('aiCamCanvas').height = img.naturalHeight;
-      $('aiCamStatus').textContent = '🔍 Memindai foto...';
+      $('aiCamStatus').textContent = '\u{1F50D} Memindai foto...';
       try {
         const raw = await aiModel.detect(img, 30, aiCamMinConf);
         prosesPrediksiAi(raw);
-        $('aiCamStatus').textContent = `✅ ${aiCamPredictions.length} barang terdeteksi dari foto.`;
+        $('aiCamStatus').textContent = `\u{2705} ${aiCamPredictions.length} barang terdeteksi dari foto.`;
       } catch (err) {
-        $('aiCamStatus').textContent = '❌ Gagal memindai: ' + err.message;
+        $('aiCamStatus').textContent = '\u{274C} Gagal memindai: ' + err.message;
       }
     };
     img.src = ev.target.result;
@@ -8454,7 +8281,7 @@ $('btnAiCamTerapkan').onclick = () => {
   tutupAiCam();
 };
 
-// Dukungan Import URL Hash (dari web camera-detect eksternal bila ada)
+// Dukungan Import URL Hash
 (function cekImportUrl() {
   try {
     const hash = location.hash;
