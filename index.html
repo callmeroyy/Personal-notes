@@ -2146,6 +2146,61 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   #transferSetup p{margin-top:0;line-height:1.6}
   #transferSetup button{margin-bottom:0}
   #dlgTransferDompet{overscroll-behavior:contain;scroll-padding-block:18px}
+
+  /* ===== ANIMASI LEMBUT & MINIMALIS (SUBTLE UI POLISH) ===== */
+  button {
+    transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.12s ease, opacity 0.12s ease, background 0.12s ease;
+  }
+  button:active:not(:disabled) {
+    transform: scale(0.975);
+  }
+  input, select {
+    transition: border-color 0.16s ease, box-shadow 0.16s ease;
+  }
+  input:focus, select:focus {
+    box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.12);
+  }
+  dialog[open] {
+    animation: softDialogPop 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  dialog::backdrop {
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    animation: softBackdropFade 0.22s ease forwards;
+  }
+  @keyframes softDialogPop {
+    0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes softBackdropFade {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  .cart-entry {
+    animation: softItemSlide 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes softItemSlide {
+    0% { opacity: 0; transform: translateY(6px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .toast-note {
+    animation: softToastSlide 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  }
+  @keyframes softToastSlide {
+    0% { opacity: 0; transform: translate(-50%, 12px) scale(0.96); }
+    100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    button, dialog[open], .cart-entry, .toast-note {
+      animation: none !important;
+      transition: none !important;
+      transform: none !important;
+    }
+  }
 </style>
 
 </head>
