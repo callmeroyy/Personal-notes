@@ -2944,8 +2944,90 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <button class="sec" id="btnFotoTutup">Tutup</button>
 </dialog>
 
-<!-- DIALOG DETEKSI BARANG KAMERA AI -->
-<dialog id="dlgAiCam" style="max-width:540px;width:calc(100% - 24px);padding:14px;border-radius:18px;border:1px solid var(--detline);background:var(--card);color:var(--ink);max-height:calc(100dvh - 32px);overflow:auto">
+<!-- DIALOG DETEKSI BARANG KAMERA AI DENGAN ANIMASI LEMBUT -->
+<style>
+  #dlgAiCam[open] {
+    animation: aiCamPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    border: 1px solid var(--detline);
+    box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+  #dlgAiCam::backdrop {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(15, 23, 42, 0.65);
+    animation: aiCamFadeIn 0.28s ease forwards;
+  }
+  @keyframes aiCamPop {
+    0% { opacity: 0; transform: scale(0.92) translateY(16px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes aiCamFadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  .ai-scan-laser {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2.5px;
+    background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.25) 20%, #38bdf8 50%, rgba(52, 211, 153, 0.85) 75%, transparent 100%);
+    box-shadow: 0 0 15px 3px rgba(56, 189, 248, 0.65);
+    pointer-events: none;
+    z-index: 6;
+    animation: aiLaserSweep 3.2s ease-in-out infinite alternate;
+  }
+  @keyframes aiLaserSweep {
+    0% { top: 3%; opacity: 0.25; }
+    50% { opacity: 0.95; }
+    100% { top: 96%; opacity: 0.25; }
+  }
+  .ai-pulse-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 7px #22c55e;
+    margin-right: 5px;
+    vertical-align: middle;
+    animation: aiPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes aiPulse {
+    0%, 100% { transform: scale(0.85); opacity: 0.55; }
+    50% { transform: scale(1.35); opacity: 1; box-shadow: 0 0 11px #22c55e; }
+  }
+  .ai-cam-tag {
+    animation: aiTagPop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .ai-cam-tag:hover {
+    transform: translateY(-1px) scale(1.02);
+  }
+  @keyframes aiTagPop {
+    0% { opacity: 0; transform: translateY(6px) scale(0.92); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  #dlgAiCam button {
+    transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.16s ease, background 0.16s ease;
+  }
+  #dlgAiCam button:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+  #dlgAiCam button:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  #btnAiCam {
+    transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease;
+  }
+  #btnAiCam:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(67, 56, 202, 0.15);
+  }
+  #btnAiCam:active {
+    transform: scale(0.98);
+  }
+</style>
+<dialog id="dlgAiCam" style="max-width:540px;width:calc(100% - 24px);padding:14px;border-radius:18px;background:var(--card);color:var(--ink);max-height:calc(100dvh - 32px);overflow:auto">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
     <h2 style="margin:0;font-size:16px;display:flex;align-items:center;gap:6px">&#x1F916; Deteksi Barang Kamera AI</h2>
     <button type="button" class="ghost kecil" id="btnAiCamTutup" style="margin:0;padding:4px 8px;border-radius:8px">&times;</button>
@@ -2974,8 +3056,9 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
 
   <div style="position:relative;width:100%;min-height:240px;max-height:340px;background:#050b14;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:1px solid var(--detline)">
+    <div class="ai-scan-laser" id="aiCamLaser" style="display:none"></div>
     <div style="position:absolute;top:8px;left:8px;right:8px;display:flex;justify-content:space-between;pointer-events:none;z-index:5">
-      <span id="aiCamLiveCount" style="background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);color:#38bdf8;padding:3px 9px;border-radius:14px;font-size:11px;font-weight:700">0 Barang</span>
+      <span id="aiCamLiveCount" style="background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);color:#38bdf8;padding:3px 9px;border-radius:14px;font-size:11px;font-weight:700"><span class="ai-pulse-dot"></span>0 Barang</span>
       <span id="aiCamFacing" style="background:rgba(15,23,42,0.85);backdrop-filter:blur(6px);color:#cbd5e1;padding:3px 9px;border-radius:14px;font-size:11px">Belakang &#x1F504;</span>
     </div>
     <video id="aiCamVideo" autoplay playsinline muted style="width:100%;height:100%;max-height:340px;object-fit:contain;display:none"></video>
@@ -7945,14 +8028,14 @@ const AI_COCO_DICT = {
   'handbag': { name: 'Tas Tangan / Totebag', cat: 'accessories', icon: '\u{1F45C}', price: 120000, color: '#fbbf24' },
   'umbrella': { name: 'Payung', cat: 'accessories', icon: '\u{2602}\u{FE0F}', price: 45000, color: '#fbbf24' },
   'tie': { name: 'Dasi', cat: 'accessories', icon: '\u{1F454}', price: 35000, color: '#fbbf24' },
-  'suitcase': { name: 'Koper', cat: 'accessories', icon: '\u{1F9F3}', price: 45000, color: '#fbbf24' },
+  'suitcase': { name: 'Koper', cat: 'accessories', icon: '\u{1F9F3}', price: 450000, color: '#fbbf24' },
   'book': { name: 'Buku / Catatan', cat: 'accessories', icon: '\u{1F4DA}', price: 35000, color: '#fbbf24' },
   'scissors': { name: 'Gunting', cat: 'accessories', icon: '\u{2702}\u{FE0F}', price: 12000, color: '#fbbf24' },
   'toothbrush': { name: 'Sikat Gigi', cat: 'accessories', icon: '\u{1FAA5}', price: 8000, color: '#fbbf24' },
 
   // Perabotan & Ruangan (Ungu)
   'chair': { name: 'Kursi', cat: 'furniture', icon: '\u{1FA91}', price: 120000, color: '#a78bfa' },
-  'couch': { name: 'Sofa', cat: 'furniture', icon: '\u{1F6CB}\u{FE0F}', price: 1500000, color: '#a78bfa' },
+  'couch': { name: 'Sofa', cat: 'furniture', icon: '\u{1F6CB}\u{FE0F}', price: 150000, color: '#a78bfa' },
   'potted plant': { name: 'Tanaman Hias / Pot', cat: 'furniture', icon: '\u{1FAB4}', price: 35000, color: '#a78bfa' },
   'bed': { name: 'Tempat Tidur', cat: 'furniture', icon: '\u{1F6CF}\u{FE0F}', price: 2000000, color: '#a78bfa' },
   'dining table': { name: 'Meja', cat: 'furniture', icon: '\u{1FA91}', price: 450000, color: '#a78bfa' },
@@ -8005,6 +8088,7 @@ async function bukaAiCam() {
   $('aiCamStatus').textContent = '\u{23F3} Menyiapkan AI Multi-Objek...';
   $('aiCamVideo').style.display = 'none';
   $('aiCamPhoto').style.display = 'none';
+  $('aiCamLaser').style.display = 'none';
   $('aiCamCanvas').getContext('2d').clearRect(0, 0, $('aiCamCanvas').width, $('aiCamCanvas').height);
   $('btnAiCamTerapkan').disabled = true;
   $('aiCamTerapkanCount').textContent = '0';
@@ -8035,6 +8119,7 @@ async function mulaiKameraAi() {
     $('aiCamVideo').srcObject = aiCamStream;
     $('aiCamVideo').style.display = 'block';
     $('aiCamPhoto').style.display = 'none';
+    $('aiCamLaser').style.display = 'block';
     aiCamIsLive = true;
     aiCamIsFrozen = false;
 
@@ -8046,6 +8131,7 @@ async function mulaiKameraAi() {
       aiCamLoop();
     };
   } catch (err) {
+    $('aiCamLaser').style.display = 'none';
     $('aiCamStatus').textContent = '\u{26A0}\u{FE0F} Akses kamera gagal. Gunakan tombol Pilih Foto.';
   }
 }
@@ -8056,6 +8142,7 @@ function tutupAiCam() {
     aiCamStream.getTracks().forEach(t => t.stop());
     aiCamStream = null;
   }
+  $('aiCamLaser').style.display = 'none';
   $('aiCamVideo').style.display = 'none';
   $('aiCamPhoto').style.display = 'none';
   $('dlgAiCam').close();
@@ -8093,27 +8180,60 @@ function gambarKotakAi(preds) {
     const info = AI_COCO_DICT[p.class] || { name: p.class, icon: '\u{1F4E6}', color: '#38bdf8' };
     const label = `${info.icon} ${info.name} (${Math.round(p.score * 100)}%)`;
 
+    // 1. Kotak sudut lembut dengan neon glow
     ctx.strokeStyle = info.color;
-    ctx.lineWidth = Math.max(3, Math.round(c.width / 200));
+    ctx.lineWidth = Math.max(3, Math.round(c.width / 220));
     ctx.shadowColor = info.color;
-    ctx.shadowBlur = 6;
-    ctx.strokeRect(x, y, w, h);
+    ctx.shadowBlur = 8;
+
+    // Draw rounded rect
+    const r = Math.min(10, w / 4, h / 4);
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, r);
+      ctx.stroke();
+    } else {
+      ctx.strokeRect(x, y, w, h);
+    }
     ctx.shadowBlur = 0;
 
-    ctx.font = `bold ${Math.max(12, Math.round(c.width / 38))}px sans-serif`;
+    // 2. Aksesori Sudut Futuristik (Corner Brackets)
+    const len = Math.min(14, w / 4, h / 4);
+    ctx.lineWidth = Math.max(4, Math.round(c.width / 180));
+    ctx.strokeStyle = '#ffffff';
+    // Top-Left corner
+    ctx.beginPath();
+    ctx.moveTo(x, y + len); ctx.lineTo(x, y); ctx.lineTo(x + len, y);
+    // Top-Right corner
+    ctx.moveTo(x + w - len, y); ctx.lineTo(x + w, y); ctx.lineTo(x + w, y + len);
+    // Bottom-Left corner
+    ctx.moveTo(x, y + h - len); ctx.lineTo(x, y + h); ctx.lineTo(x + len, y + h);
+    // Bottom-Right corner
+    ctx.moveTo(x + w - len, y + h); ctx.lineTo(x + w, y + h); ctx.lineTo(x + w, y + h - len);
+    ctx.stroke();
+
+    // 3. Label Tag Pill Lembut
+    ctx.font = `bold ${Math.max(12, Math.round(c.width / 38))}px -apple-system, sans-serif`;
     const txtW = ctx.measureText(label).width;
-    const boxH = Math.max(20, Math.round(c.width / 26));
+    const boxH = Math.max(22, Math.round(c.width / 26));
+    const tagY = Math.max(0, y - boxH - 2);
 
     ctx.fillStyle = info.color;
-    ctx.fillRect(x, Math.max(0, y - boxH), txtW + 12, boxH);
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(x, tagY, txtW + 14, boxH, 6);
+      ctx.fill();
+    } else {
+      ctx.fillRect(x, tagY, txtW + 14, boxH);
+    }
 
     ctx.fillStyle = '#0f172a';
-    ctx.fillText(label, x + 6, Math.max(14, y - 5));
+    ctx.fillText(label, x + 7, tagY + boxH - 6);
   });
 }
 
 function updateHudAi(preds) {
-  $('aiCamLiveCount').textContent = preds.length + ' Barang';
+  $('aiCamLiveCount').innerHTML = `<span class="ai-pulse-dot"></span>${preds.length} Barang`;
   $('aiCamTerapkanCount').textContent = preds.length;
   $('btnAiCamTerapkan').disabled = preds.length === 0;
 
@@ -8130,7 +8250,8 @@ function updateHudAi(preds) {
   Object.entries(counts).forEach(([cls, qty]) => {
     const info = AI_COCO_DICT[cls] || { name: cls, icon: '\u{1F4E6}', color: '#93c5fd' };
     const tag = document.createElement('span');
-    tag.style.cssText = `padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;background:rgba(59,130,246,0.15);border:1px solid ${info.color};color:${info.color};display:inline-flex;align-items:center;gap:3px`;
+    tag.className = 'ai-cam-tag';
+    tag.style.cssText = `padding:3px 8px;border-radius:8px;font-size:11px;font-weight:600;background:rgba(59,130,246,0.12);border:1px solid ${info.color};color:${info.color};display:inline-flex;align-items:center;gap:4px;box-shadow:0 1px 4px rgba(0,0,0,0.08)`;
     tag.textContent = `${info.icon} ${qty}x ${info.name}`;
     box.appendChild(tag);
   });
@@ -8187,9 +8308,11 @@ $('btnAiCamFreeze').onclick = () => {
   if (!aiCamIsLive) return;
   aiCamIsFrozen = !aiCamIsFrozen;
   if (aiCamIsFrozen) {
+    $('aiCamLaser').style.display = 'none';
     $('btnAiCamFreeze').textContent = '\u{25B6}\u{FE0F} Lanjut';
     $('aiCamStatus').textContent = '\u{23F8}\u{FE0F} Layar Dibekukan — Periksa Barang';
   } else {
+    $('aiCamLaser').style.display = 'block';
     $('btnAiCamFreeze').textContent = '\u{23F8}\u{FE0F} Bekukan';
     $('aiCamStatus').textContent = '\u{1F3A5} Kamera Aktif — Memindai';
     aiCamLoop();
@@ -8221,6 +8344,7 @@ $('aiCamFileInput').onchange = e => {
     aiCamStream.getTracks().forEach(t => t.stop());
     aiCamStream = null;
   }
+  $('aiCamLaser').style.display = 'none';
   $('aiCamVideo').style.display = 'none';
 
   const reader = new FileReader();
@@ -8306,7 +8430,6 @@ $('btnAiCamTerapkan').onclick = () => {
     }
   } catch (_) {}
 })();
-
 </script>
 </body>
 </html>
