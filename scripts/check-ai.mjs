@@ -28,6 +28,7 @@ let result = (await response.json()).data;
 assert.equal(result.amount,50000);
 assert.equal(result.walletId,'dana-1');
 assert.equal(result.category,'Transport');
+assert.deepEqual(result.missing,[]);
 
 let retryCount = 0;
 const retryEnv = { AI:{ run:async (_model, options) => {
@@ -42,6 +43,16 @@ response = await call({ task:'parse_transaction', payload:{
 assert.equal(response.status,200);
 assert.equal(retryCount,2);
 assert.equal((await response.json()).data.amount,25000);
+
+const noisyMissingEnv = { AI:{ run:async () => ({ response:{
+  type:'keluar', date:'2026-11-05', title:'Beli makan', category:'Makan', amount:25000,
+  paymentMethod:'tunai', walletId:'', tags:[], missing:['nominal','tanggal','dompet'], confidence:.9
+} }) } };
+response = await call({ task:'parse_transaction', payload:{
+  text:'Hari ini beli makan 25000 tunai', today:'2026-11-05',
+  categories:{ expense:['Makan','Lainnya'], income:['Gaji','Lainnya'] }, wallets:[]
+} }, noisyMissingEnv);
+assert.deepEqual((await response.json()).data.missing,[]);
 
 let plainRetryCount = 0;
 const plainRetryEnv = { AI:{ run:async (_model, options) => {

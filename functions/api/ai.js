@@ -166,24 +166,39 @@ function parseContext(payload) {
   return { text, today, categories:{ expense, income }, wallets };
 }
 function validateParsed(raw, context) {
+  const typeValid = ['masuk','keluar'].includes(raw?.type);
   const type = raw?.type === 'masuk' ? 'masuk' : 'keluar';
   const allowed = type === 'masuk' ? context.categories.income : context.categories.expense;
-  const missing = cleanList(raw?.missing, 7, 30);
+  const canonicalMissing = { jenis:'type',tipe:'type',tanggal:'date',nama:'title',judul:'title',kategori:'category',nominal:'amount',jumlah:'amount',pembayaran:'paymentMethod',cara:'paymentMethod',dompet:'wallet',walletId:'wallet' };
+  let missing = cleanList(raw?.missing, 7, 30)
+    .map(item => canonicalMissing[item] || item)
+    .filter(item => ['type','date','title','category','amount','paymentMethod','wallet'].includes(item));
+  const addMissing = item => { if (!missing.includes(item)) missing.push(item); };
+  const clearMissing = item => { missing = missing.filter(value => value !== item); };
+  if (!typeValid) addMissing('type'); else clearMissing('type');
   let category = cleanText(raw?.category, 60);
-  if (!allowed.includes(category)) { category = allowed.includes('Lainnya') ? 'Lainnya' : allowed[0]; missing.push('category'); }
+  if (!allowed.includes(category)) { category = allowed.includes('Lainnya') ? 'Lainnya' : allowed[0]; addMissing('category'); }
+  else clearMissing('category');
   let amount = safeNumber(raw?.amount, { min:1 });
-  if (amount === null) { amount = 0; missing.push('amount'); }
+  if (amount === null) { amount = 0; addMissing('amount'); } else clearMissing('amount');
   let date = cleanText(raw?.date, 10);
-  if (!validDate(date)) { date = context.today; missing.push('date'); }
+  if (!validDate(date)) { date = context.today; addMissing('date'); } else clearMissing('date');
+  const title = cleanText(raw?.title,80);
+  if (!title) addMissing('title'); else clearMissing('title');
   let paymentMethod = ['tunai','nontunai'].includes(raw?.paymentMethod) ? raw.paymentMethod : 'unknown';
-  if (paymentMethod === 'unknown') missing.push('paymentMethod');
+  if (paymentMethod === 'unknown') addMissing('paymentMethod'); else clearMissing('paymentMethod');
   let walletId = cleanText(raw?.walletId, 100);
-  if (paymentMethod !== 'nontunai' || !context.wallets.some(wallet => wallet.id === walletId)) {
-    if (paymentMethod === 'nontunai' && walletId) missing.push('wallet');
+  if (paymentMethod !== 'nontunai') {
+    clearMissing('wallet');
     walletId = '';
+  } else if (!context.wallets.some(wallet => wallet.id === walletId)) {
+    addMissing('wallet');
+    walletId = '';
+  } else {
+    clearMissing('wallet');
   }
   return {
-    type, date, title:cleanText(raw?.title,80), category, amount, paymentMethod, walletId,
+    type, date, title, category, amount, paymentMethod, walletId,
     tags:cleanList(raw?.tags,3,30), missing:[...new Set(missing)],
     confidence:Math.max(0,Math.min(1,Number(raw?.confidence)||0))
   };
