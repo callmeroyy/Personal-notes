@@ -8188,7 +8188,8 @@ async function panggilAsistenAi(task, payload) {
     const error = new Error('Batas 20 permintaan AI per hari di perangkat ini sudah tercapai.'); error.code = 'RATE_LIMITED'; throw error;
   }
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 20000);
+  const batasTunggu = task === 'financial_insight' ? 45000 : 25000;
+  const timer = setTimeout(() => controller.abort(), batasTunggu);
   try {
     const response = await fetch('/api/ai', {
       method: 'POST', credentials: 'omit', signal: controller.signal,
@@ -8347,7 +8348,7 @@ $('btnAiInsight').onclick = async () => {
   if (ringkasan.transactionCount < 3) return statusAi($('aiInsightStatus'), 'Perlu sedikitnya 3 transaksi aktif pada periode ini agar insight tidak menyesatkan.', { error:true });
   if (!await mintaPersetujuanAi()) return statusAi($('aiInsightStatus'), 'Permintaan dibatalkan. Data tidak dikirim.');
   $('btnAiInsight').disabled = true;
-  statusAi($('aiInsightStatus'), 'AI sedang mencari pola dari ringkasan…', { loading:true });
+  statusAi($('aiInsightStatus'), 'AI sedang mencari pola dari ringkasan… biasanya 10–30 detik.', { loading:true });
   try {
     const data = await panggilAsistenAi('financial_insight', ringkasan);
     tampilkanInsightAi(data);
