@@ -43,6 +43,20 @@ assert.equal(response.status,200);
 assert.equal(retryCount,2);
 assert.equal((await response.json()).data.amount,25000);
 
+let plainRetryCount = 0;
+const plainRetryEnv = { AI:{ run:async (_model, options) => {
+  plainRetryCount += 1;
+  if (options.response_format) throw new Error('JSON mode unavailable');
+  return { response:'{"type":"keluar","date":"2026-11-05","title":"Makan siang","category":"Makan","amount":25000,"paymentMethod":"tunai","walletId":"","tags":[],"missing":[],"confidence":0.9}' };
+} } };
+response = await call({ task:'parse_transaction', payload:{
+  text:'Hari ini makan siang 25 ribu tunai', today:'2026-11-05',
+  categories:{ expense:['Makan','Lainnya'], income:['Gaji','Lainnya'] }, wallets:[]
+} }, plainRetryEnv);
+assert.equal(response.status,200);
+assert.equal(plainRetryCount,3);
+assert.equal((await response.json()).data.category,'Makan');
+
 const insightEnv = { AI:{ run:async () => ({ response:{ insights:[{
   kind:'warning', title:'Makan meningkat', detail:'Pengeluaran makan naik.', evidence:'Rp500.000 dibanding Rp300.000.',
   action:{ type:'create_budget', category:'Makan', amount:450000 }, confidence:.9

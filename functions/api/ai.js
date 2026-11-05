@@ -1,4 +1,4 @@
-const MODEL = '@cf/meta/llama-3.1-8b-instruct';
+const MODEL = '@cf/meta/llama-3.1-8b-instruct-fp8';
 const MAX_BODY_BYTES = 40_000;
 
 const PARSE_SCHEMA = {
@@ -114,13 +114,23 @@ async function runStructuredAi(env, messages, schema, maxTokens, temperature) {
       { ...messages[0], content:`${messages[0].content} Keluarkan satu objek JSON valid yang tepat mengikuti skema ini: ${JSON.stringify(schema)}` },
       ...messages.slice(1)
     ];
-    const result = await env.AI.run(MODEL, {
-      messages:fallbackMessages,
-      response_format:{ type:'json_object' },
-      temperature,
-      max_tokens:maxTokens
-    });
-    return parseModelResponse(result);
+    try {
+      const result = await env.AI.run(MODEL, {
+        messages:fallbackMessages,
+        response_format:{ type:'json_object' },
+        temperature,
+        max_tokens:maxTokens
+      });
+      return parseModelResponse(result);
+    } catch (jsonError) {
+      console.warn('JSON mode retry', cleanText(jsonError?.message || jsonError, 160));
+      const result = await env.AI.run(MODEL, {
+        messages:fallbackMessages,
+        temperature,
+        max_tokens:maxTokens
+      });
+      return parseModelResponse(result);
+    }
   }
 }
 
