@@ -2203,6 +2203,40 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   }
 </style>
 
+<style>
+  .ai-entry-button{
+    width:100%;margin:0 0 12px;padding:13px 15px;border:1.5px solid color-mix(in srgb,var(--pri) 48%,var(--line));
+    border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--pri) 12%,var(--card)),color-mix(in srgb,var(--ok) 8%,var(--card)));
+    color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;box-shadow:none
+  }
+  .ai-entry-button:hover{transform:translateY(-1px);box-shadow:0 8px 24px color-mix(in srgb,var(--pri) 14%,transparent)}
+  .ai-entry-button strong{display:block;font-size:15px}.ai-entry-button small{display:block;margin-top:3px;color:var(--muted);font-weight:500;line-height:1.35}
+  .ai-spark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--pri) 16%,var(--card));font-size:18px}
+  .ai-insight-card{position:relative;overflow:hidden;border-color:color-mix(in srgb,var(--pri) 28%,var(--line))}
+  .ai-insight-card::after{content:"";position:absolute;width:150px;height:150px;right:-70px;top:-80px;border-radius:50%;background:color-mix(in srgb,var(--pri) 9%,transparent);pointer-events:none}
+  .ai-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.ai-card-title{display:flex;align-items:center;gap:9px}.ai-card-title h2{margin:0}
+  .ai-badge{font-size:10px;line-height:1;padding:5px 7px;border-radius:99px;background:color-mix(in srgb,var(--pri) 14%,var(--card));color:var(--pri);font-weight:800;letter-spacing:.04em}
+  .ai-period-row{display:flex;align-items:center;gap:8px;margin:12px 0;flex-wrap:wrap}.ai-period-row select{margin:0;flex:1;min-width:140px}.ai-period-row button{margin:0;width:auto;min-width:145px}
+  .ai-result-list{display:grid;gap:10px;margin-top:12px}.ai-result{padding:12px 13px;border:1px solid var(--line);border-radius:13px;background:color-mix(in srgb,var(--card) 92%,var(--bg));position:relative}
+  .ai-result[data-kind="warning"]{border-left:4px solid var(--bad)}.ai-result[data-kind="positive"]{border-left:4px solid var(--ok)}.ai-result[data-kind="tip"]{border-left:4px solid var(--pri)}
+  .ai-result h3{font-size:14px;margin:0 0 5px}.ai-result p{margin:0;line-height:1.5;font-size:13px}.ai-evidence{color:var(--muted);margin-top:5px!important}.ai-result .ghost{margin:9px 0 0;width:auto;padding:7px 10px}
+  .ai-card-note{margin:8px 0 0;font-size:11px;color:var(--muted);line-height:1.45}.ai-card-status{margin:8px 0 0;min-height:18px;font-size:13px;color:var(--muted)}
+  .ai-dialog{max-width:610px;width:calc(100% - 24px);padding:18px}.ai-dialog h2{display:flex;align-items:center;gap:8px;margin:0 0 7px}.ai-dialog textarea{min-height:110px;resize:vertical;margin-bottom:5px;width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);background:var(--input);color:var(--ink);font:inherit;outline:none}.ai-dialog textarea:focus{border-color:var(--pri2);box-shadow:0 0 0 4px rgba(99,102,241,.15)}
+  .ai-dialog-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}.ai-char-count{font-size:11px;color:var(--muted)}
+  .ai-privacy-note{padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--pri) 7%,var(--card));border:1px solid color-mix(in srgb,var(--pri) 20%,var(--line));font-size:12px;line-height:1.5;color:var(--muted);margin:10px 0}
+  .ai-status{min-height:20px;margin:8px 0;font-size:13px;color:var(--muted)}.ai-status.is-error{color:var(--bad)}
+  .ai-preview{border-top:1px solid var(--line);margin-top:13px;padding-top:14px}.ai-preview h3{margin:0 0 9px;font-size:15px}
+  .ai-preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ai-preview-grid .field-wrap{margin:0}.ai-preview-grid .field-wide{grid-column:1/-1}.ai-preview-grid input,.ai-preview-grid select{margin:0}
+  .ai-missing{font-size:12px;line-height:1.5;padding:9px 11px;border-radius:10px;background:color-mix(in srgb,var(--bad) 8%,var(--card));color:var(--muted);margin:10px 0}
+  .ai-dialog-actions{display:flex;gap:8px;margin-top:12px}.ai-dialog-actions button{margin:0}.ai-dialog-actions .ghost{flex:.7}.ai-dialog-actions button:not(.ghost){flex:1.3}
+  .ai-consent-list{padding-left:20px;color:var(--muted);font-size:13px;line-height:1.55}.ai-consent-list li+li{margin-top:5px}
+  .ai-loading{display:inline-flex;align-items:center;gap:7px}.ai-loading::before{content:"";width:13px;height:13px;border:2px solid color-mix(in srgb,var(--pri) 25%,transparent);border-top-color:var(--pri);border-radius:50%;animation:ai-spin .7s linear infinite}
+  .ui-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+  @keyframes ai-spin{to{transform:rotate(360deg)}}
+  @media(max-width:560px){.ai-preview-grid{grid-template-columns:1fr}.ai-preview-grid .field-wide{grid-column:auto}.ai-period-row button{width:100%}.ai-dialog-actions{flex-direction:column}.ai-dialog-actions .ghost,.ai-dialog-actions button:not(.ghost){flex:auto}}
+  @media(prefers-reduced-motion:reduce){.ai-entry-button:hover{transform:none}.ai-loading::before{animation-duration:1.4s}}
+</style>
+
 </head>
 <body><div id="ledgerSecurity" class="ledger-notice ledger-security" role="alert" hidden></div>
 <a class="ui-skip" href="#appMain">Langsung ke isi</a>
@@ -2323,6 +2357,20 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <h2 id="judulMingguan">Ringkasan minggu ini</h2>
     <p id="teksMingguan" style="margin:0;font-size:15px;line-height:1.5;white-space:pre-line"></p>
   </div>
+  <section class="card ai-insight-card" id="cardAiInsight" aria-labelledby="aiInsightTitle">
+    <div class="ai-card-head">
+      <div><div class="ai-card-title"><span class="ai-spark" aria-hidden="true">&#x2728;</span><h2 id="aiInsightTitle">Insight AI</h2><span class="ai-badge">BETA</span></div>
+      <p class="sub">Temukan pola pengeluaran tanpa mengirim foto struk atau data Google Drive.</p></div>
+    </div>
+    <div class="ai-period-row">
+      <label class="ui-sr-only" for="aiInsightPeriod">Periode insight</label>
+      <select id="aiInsightPeriod"><option value="7">7 hari terakhir</option><option value="30" selected>30 hari terakhir</option><option value="90">3 bulan terakhir</option></select>
+      <button type="button" id="btnAiInsight">Buat insight</button>
+    </div>
+    <p class="ai-card-status" id="aiInsightStatus" role="status" aria-live="polite">AI hanya berjalan saat kamu menekan tombol.</p>
+    <div class="ai-result-list" id="aiInsightResults" aria-live="polite"></div>
+    <details><summary>Privasi &amp; batasan</summary><p class="ai-card-note">Yang dikirim hanya angka ringkasan, kategori, dan tanggal tanpa foto, token Drive, atau nama dompet. AI dapat keliru; saran tidak mengubah data tanpa konfirmasi.</p></details>
+  </section>
   <section class="card wallet-section" id="homeMoney" aria-labelledby="homeMoneyTitle">
     <div class="money-title"><h2 id="homeMoneyTitle">Uangku</h2><span class="muted">Tunai &amp; dompet digital</span></div>
     <div id="moneyTabs" role="tablist" aria-label="Jenis dompet">
@@ -2388,6 +2436,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 
   <div class="card" id="cardCatat">
     <h2>Catat transaksi<button class="kecil ghost" onclick="bantuan('catat')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
+    <button class="ai-entry-button" id="btnAiSmart" type="button" aria-haspopup="dialog" aria-controls="dlgAiSmart"><span><strong>&#x2728; Catat dengan AI</strong><small>Tulis seperti “beli bensin 50 ribu pakai DANA”</small></span><span class="ai-spark" aria-hidden="true">AI</span></button>
     <div class="draft-toolbar"><p class="muted" id="draftStatus" role="status">Isian disimpan otomatis di perangkat ini.</p><button class="ghost kecil" id="btnBuangDraf" type="button" hidden>Buang draf</button></div>
     <p class="muted" id="catatContext" hidden></p>
     <div class="grid2">
@@ -2997,6 +3046,45 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <div class="preview"><img id="imgFoto" alt="Foto struk"></div>
   <button class="del" id="btnFotoHapus">Hapus foto</button>
   <button class="sec" id="btnFotoTutup">Tutup</button>
+</dialog>
+
+<dialog id="dlgAiConsent" class="ai-dialog" aria-labelledby="aiConsentTitle">
+  <h2 id="aiConsentTitle"><span class="ai-spark" aria-hidden="true">&#x2728;</span>Aktifkan Asisten AI?</h2>
+  <p class="muted">AI berjalan melalui Cloudflare hanya saat kamu memintanya.</p>
+  <ul class="ai-consent-list">
+    <li>Smart Input mengirim kalimat yang kamu ketik, kategori, dan nama dompet agar hasil bisa dicocokkan.</li>
+    <li>Insight mengirim angka ringkasan, kategori, dan tanggal—bukan foto struk, token Drive, atau file backup.</li>
+    <li>Hasil selalu berupa saran dan tidak pernah tersimpan otomatis.</li>
+  </ul>
+  <p class="ai-privacy-note">Jangan masukkan PIN, kata sandi, nomor kartu, atau informasi akun bank. Persetujuan disimpan hanya di browser ini dan dapat dihapus bersama data situs.</p>
+  <div class="ai-dialog-actions"><button type="button" class="ghost" id="btnAiConsentCancel">Belum sekarang</button><button type="button" id="btnAiConsentAccept">Saya mengerti, lanjutkan</button></div>
+</dialog>
+
+<dialog id="dlgAiSmart" class="ai-dialog" aria-labelledby="aiSmartTitle">
+  <h2 id="aiSmartTitle"><span class="ai-spark" aria-hidden="true">&#x2728;</span>Catat dengan AI</h2>
+  <p class="muted">Ceritakan satu transaksi. AI akan menyiapkan draf yang tetap bisa kamu periksa dan ubah.</p>
+  <label class="field-label" for="aiSmartText">Transaksi kamu</label>
+  <textarea id="aiSmartText" maxlength="500" placeholder="Contoh: Kemarin beli bensin 50 ribu pakai DANA"></textarea>
+  <div class="ai-dialog-toolbar"><span class="ai-char-count" id="aiSmartCount">0/500</span><button type="button" class="ghost kecil" id="btnAiSmartExample">Pakai contoh</button></div>
+  <p class="ai-privacy-note">Jangan tulis PIN, kata sandi, atau nomor rekening. AI tidak akan menyimpan transaksi sebelum kamu mengonfirmasi drafnya.</p>
+  <button type="button" id="btnAiSmartAnalyze">Buat draf AI</button>
+  <p class="ai-status" id="aiSmartStatus" role="status" aria-live="polite"></p>
+  <section class="ai-preview" id="aiSmartPreview" hidden aria-labelledby="aiSmartPreviewTitle">
+    <h3 id="aiSmartPreviewTitle">Periksa draf AI</h3>
+    <div class="ai-preview-grid">
+      <div class="field-wrap"><label class="field-label" for="aiDraftType">Jenis</label><select id="aiDraftType"><option value="keluar">Pengeluaran</option><option value="masuk">Pemasukan</option></select></div>
+      <div class="field-wrap"><label class="field-label" for="aiDraftDate">Tanggal</label><input type="date" id="aiDraftDate"></div>
+      <div class="field-wrap field-wide"><label class="field-label" for="aiDraftTitle">Nama transaksi</label><input type="text" id="aiDraftTitle" maxlength="80"></div>
+      <div class="field-wrap"><label class="field-label" for="aiDraftCategory">Kategori</label><select id="aiDraftCategory"></select></div>
+      <div class="field-wrap"><label class="field-label" for="aiDraftAmount">Nominal (Rp)</label><input type="text" id="aiDraftAmount" data-uang inputmode="numeric"></div>
+      <div class="field-wrap"><label class="field-label" for="aiDraftPayment">Pembayaran</label><select id="aiDraftPayment"><option value="">Pilih pembayaran</option><option value="tunai">Tunai</option><option value="nontunai">Wallet / non-tunai</option></select></div>
+      <div class="field-wrap" id="aiDraftWalletWrap" hidden><label class="field-label" for="aiDraftWallet">Dompet</label><select id="aiDraftWallet"><option value="">Tanpa dompet tertentu</option></select></div>
+    </div>
+    <p class="ai-missing" id="aiSmartMissing" hidden></p>
+    <p class="ai-card-note">Periksa kembali nominal, tanggal, kategori, dan dompet. AI bisa salah membaca maksud kalimat.</p>
+    <div class="ai-dialog-actions"><button type="button" class="ghost" id="btnAiSmartRetry">Ulangi analisis</button><button type="button" id="btnAiSmartUse">Gunakan sebagai draf</button></div>
+  </section>
+  <button type="button" class="sec" id="btnAiSmartClose">Tutup</button>
 </dialog>
 
 <!-- DIALOG DETEKSI BARANG KAMERA AI DENGAN ANIMASI LEMBUT -->
@@ -7810,9 +7898,10 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 function susunBeranda() {
   const catat = $('cardCatat');
   document.querySelector('.pixel-mobs').after($('cardMingguan'));
-  $('cardMingguan').after($('btnBerandaCatat'));
+  $('cardMingguan').after($('cardAiInsight'));
+  $('cardAiInsight').after($('homeMoney'));
+  $('homeMoney').after($('btnBerandaCatat'));
   $('btnBerandaCatat').after($('btnLanjutDraf'));
-  $('cardMingguan').after($('homeMoney'));
   pilihTabUang(set.tabUang, false);
   $('catat').appendChild(catat);
 
@@ -8038,6 +8127,234 @@ if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localho
 if (navigator.storage?.persist) {
   navigator.storage.persist().then(renderStorageStatus).catch(() => {});
 }
+
+// ===== ASISTEN KEUANGAN AI: Smart Input + Insight (Cloudflare Pages Function) =====
+const AI_CONSENT_KEY = 'catatan-ai-consent-v1';
+const AI_USAGE_KEY = 'catatan-ai-pemakaian-v1';
+const AI_DAILY_LIMIT = 20;
+let aiConsentSession = false;
+let aiConsentResolve = null;
+let aiSmartLast = null;
+
+function persetujuanAiAktif() {
+  if (aiConsentSession) return true;
+  try { return localStorage.getItem(AI_CONSENT_KEY) === 'setuju'; }
+  catch (_) { return false; }
+}
+function mintaPersetujuanAi() {
+  if (persetujuanAiAktif()) return Promise.resolve(true);
+  if (aiConsentResolve) return new Promise(resolve => {
+    const lama = aiConsentResolve;
+    aiConsentResolve = nilai => { lama(nilai); resolve(nilai); };
+  });
+  return new Promise(resolve => {
+    aiConsentResolve = resolve;
+    $('dlgAiConsent').showModal();
+  });
+}
+function selesaikanPersetujuanAi(setuju) {
+  if (setuju) {
+    aiConsentSession = true;
+    try { localStorage.setItem(AI_CONSENT_KEY, 'setuju'); } catch (_) {}
+  }
+  if ($('dlgAiConsent').open) $('dlgAiConsent').close();
+  const selesai = aiConsentResolve; aiConsentResolve = null;
+  if (selesai) selesai(setuju);
+}
+$('btnAiConsentAccept').onclick = () => selesaikanPersetujuanAi(true);
+$('btnAiConsentCancel').onclick = () => selesaikanPersetujuanAi(false);
+$('dlgAiConsent').addEventListener('cancel', e => { e.preventDefault(); selesaikanPersetujuanAi(false); });
+
+function pemakaianAiHariIni() {
+  try {
+    const data = JSON.parse(localStorage.getItem(AI_USAGE_KEY) || '{}');
+    return data.tanggal === hariIni() && Number.isSafeInteger(data.jumlah) ? data : { tanggal: hariIni(), jumlah: 0 };
+  } catch (_) { return { tanggal: hariIni(), jumlah: 0 }; }
+}
+function tambahPemakaianAi() {
+  const data = pemakaianAiHariIni(); data.jumlah++;
+  try { localStorage.setItem(AI_USAGE_KEY, JSON.stringify(data)); } catch (_) {}
+}
+function pesanErrorAi(error) {
+  if (error?.name === 'AbortError') return 'AI membutuhkan waktu terlalu lama. Coba lagi beberapa saat.';
+  if (error?.code === 'AI_NOT_CONFIGURED') return 'Layanan AI belum aktif di Cloudflare. Coba lagi setelah konfigurasi selesai.';
+  if (error?.code === 'RATE_LIMITED' || error?.status === 429) return 'Batas pemakaian sementara tercapai. Tunggu sebentar lalu coba lagi.';
+  if (!navigator.onLine) return 'Perangkat sedang offline. Fitur manual tetap bisa digunakan.';
+  return error?.message || 'AI belum berhasil memproses permintaan.';
+}
+async function panggilAsistenAi(task, payload) {
+  const pemakaian = pemakaianAiHariIni();
+  if (pemakaian.jumlah >= AI_DAILY_LIMIT) {
+    const error = new Error('Batas 20 permintaan AI per hari di perangkat ini sudah tercapai.'); error.code = 'RATE_LIMITED'; throw error;
+  }
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 20000);
+  try {
+    const response = await fetch('/api/ai', {
+      method: 'POST', credentials: 'omit', signal: controller.signal,
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ task, payload })
+    });
+    let hasil = {};
+    try { hasil = await response.json(); } catch (_) {}
+    if (!response.ok) {
+      const error = new Error(hasil.error || 'Permintaan AI gagal.');
+      error.code = hasil.code || ''; error.status = response.status; throw error;
+    }
+    tambahPemakaianAi();
+    return hasil.data;
+  } finally { clearTimeout(timer); }
+}
+function statusAi(elemen, teks, { error=false, loading=false }={}) {
+  elemen.textContent = teks;
+  elemen.classList.toggle('is-error', error);
+  elemen.classList.toggle('ai-loading', loading);
+}
+function daftarDompetAi() {
+  return db.dompet.filter(w => !w.arsip).slice(0, 30).map(w => ({ id: w.id, name: String(w.nama).slice(0, 80), kind: w.jenis || 'wallet' }));
+}
+
+function isiPilihanKategoriAi(tipe, pilihan='') {
+  const select = $('aiDraftCategory');
+  select.replaceChildren();
+  (KAT[tipe] || KAT.keluar).forEach(nama => select.add(new Option(nama, nama)));
+  select.value = (KAT[tipe] || []).includes(pilihan) ? pilihan : 'Lainnya';
+}
+function isiPilihanDompetAi(pilihan='') {
+  const select = $('aiDraftWallet');
+  select.replaceChildren(new Option('Tanpa dompet tertentu', ''));
+  daftarDompetAi().forEach(w => select.add(new Option(w.name, w.id)));
+  select.value = daftarDompetAi().some(w => w.id === pilihan) ? pilihan : '';
+}
+function perbaruiPembayaranAi() {
+  $('aiDraftWalletWrap').hidden = $('aiDraftPayment').value !== 'nontunai';
+}
+function labelBidangAi(nama) {
+  return ({ type:'jenis transaksi', date:'tanggal', title:'nama transaksi', category:'kategori', amount:'nominal', paymentMethod:'cara pembayaran', wallet:'dompet' })[nama] || nama;
+}
+function tampilkanDrafAi(data) {
+  aiSmartLast = data;
+  $('aiDraftType').value = data.type === 'masuk' ? 'masuk' : 'keluar';
+  isiPilihanKategoriAi($('aiDraftType').value, data.category);
+  $('aiDraftDate').value = /^\d{4}-\d{2}-\d{2}$/.test(data.date || '') ? data.date : hariIni();
+  $('aiDraftTitle').value = String(data.title || '').slice(0, 80);
+  isiUang($('aiDraftAmount'), Number(data.amount) > 0 ? Number(data.amount) : '');
+  $('aiDraftPayment').value = ['tunai','nontunai'].includes(data.paymentMethod) ? data.paymentMethod : '';
+  isiPilihanDompetAi(data.walletId || '');
+  perbaruiPembayaranAi();
+  const kurang = Array.isArray(data.missing) ? data.missing.map(labelBidangAi) : [];
+  $('aiSmartMissing').hidden = !kurang.length;
+  $('aiSmartMissing').textContent = kurang.length ? 'Perlu dilengkapi atau diperiksa: ' + kurang.join(', ') + '.' : '';
+  $('aiSmartPreview').hidden = false;
+  statusAi($('aiSmartStatus'), 'Draf berhasil dibuat. Periksa semua isian sebelum digunakan.');
+}
+async function analisisSmartAi() {
+  const teks = $('aiSmartText').value.trim();
+  $('aiSmartPreview').hidden = true;
+  if (teks.length < 3) return statusAi($('aiSmartStatus'), 'Tulis satu transaksi terlebih dahulu.', { error:true });
+  if (!await mintaPersetujuanAi()) return statusAi($('aiSmartStatus'), 'Permintaan dibatalkan. Data tidak dikirim.');
+  $('btnAiSmartAnalyze').disabled = true; $('btnAiSmartRetry').disabled = true;
+  statusAi($('aiSmartStatus'), 'AI sedang membaca transaksi…', { loading:true });
+  try {
+    const data = await panggilAsistenAi('parse_transaction', {
+      text: teks.slice(0, 500), today: hariIni(),
+      categories: { expense: KAT.keluar.slice(0, 30), income: KAT.masuk.slice(0, 30) },
+      wallets: daftarDompetAi()
+    });
+    tampilkanDrafAi(data);
+  } catch (error) { statusAi($('aiSmartStatus'), pesanErrorAi(error), { error:true }); }
+  finally { $('btnAiSmartAnalyze').disabled = false; $('btnAiSmartRetry').disabled = false; }
+}
+$('btnAiSmart').onclick = () => {
+  $('aiSmartPreview').hidden = true; statusAi($('aiSmartStatus'), '');
+  $('aiSmartCount').textContent = $('aiSmartText').value.length + '/500';
+  $('dlgAiSmart').showModal(); setTimeout(() => $('aiSmartText').focus(), 60);
+};
+$('aiSmartText').oninput = () => $('aiSmartCount').textContent = $('aiSmartText').value.length + '/500';
+$('btnAiSmartExample').onclick = () => { $('aiSmartText').value = 'Kemarin beli bensin 50 ribu pakai DANA'; $('aiSmartText').oninput(); $('aiSmartText').focus(); };
+$('btnAiSmartAnalyze').onclick = analisisSmartAi;
+$('btnAiSmartRetry').onclick = analisisSmartAi;
+$('btnAiSmartClose').onclick = () => $('dlgAiSmart').close();
+$('aiDraftType').onchange = () => isiPilihanKategoriAi($('aiDraftType').value);
+$('aiDraftPayment').onchange = perbaruiPembayaranAi;
+$('btnAiSmartUse').onclick = () => {
+  const tipe = $('aiDraftType').value;
+  const kategori = $('aiDraftCategory').value;
+  const tanggal = $('aiDraftDate').value;
+  const judul = $('aiDraftTitle').value.trim();
+  const jumlah = angkaUang($('aiDraftAmount').value);
+  const cara = $('aiDraftPayment').value;
+  if (!['masuk','keluar'].includes(tipe)) return statusAi($('aiSmartStatus'), 'Pilih jenis transaksi.', { error:true });
+  if (!tanggalGrafikValid(tanggal)) return statusAi($('aiSmartStatus'), 'Tanggal transaksi belum valid.', { error:true });
+  if (!(KAT[tipe] || []).includes(kategori)) return statusAi($('aiSmartStatus'), 'Pilih kategori yang tersedia.', { error:true });
+  if (!Number.isSafeInteger(jumlah) || jumlah <= 0) return statusAi($('aiSmartStatus'), 'Nominal harus berupa angka lebih dari nol.', { error:true });
+  if (!['tunai','nontunai'].includes(cara)) return statusAi($('aiSmartStatus'), 'Pilih Tunai atau Wallet / non-tunai.', { error:true });
+  const dompetId = cara === 'nontunai' && daftarDompetAi().some(w => w.id === $('aiDraftWallet').value) ? $('aiDraftWallet').value : null;
+  const nama = judul || kategori;
+  const data = { tipe, tanggal, judul:nama, kategori, cara, dompetId, tags:Array.isArray(aiSmartLast?.tags)?aiSmartLast.tags.slice(0,3):[], items:[{ nama, qty:1, satuan:'', harga:jumlah, hargaTotal:jumlah }] };
+  $('dlgAiSmart').close();
+  siapkanCatatan(data, 'Draf AI siap. Periksa sekali lagi lalu tekan Simpan transaksi.');
+};
+
+function ringkasanUntukInsight(hari) {
+  const sampai = hariIni(), dari = geser(sampai, -(hari - 1));
+  const sebelumSampai = geser(dari, -1), sebelumDari = geser(dari, -hari);
+  const semua = transaksiLaporan().filter(x => catatanAktif(x));
+  const kini = semua.filter(x => x.tanggal >= dari && x.tanggal <= sampai);
+  const sebelum = semua.filter(x => x.tanggal >= sebelumDari && x.tanggal <= sebelumSampai);
+  const kategori = new Map();
+  kini.filter(x => x.tipe === 'keluar').forEach(x => kategori.set(x.kategori, (kategori.get(x.kategori) || 0) + x.total));
+  const byCategory = [...kategori].sort((a,b) => b[1]-a[1]).slice(0,20).map(([category, amount]) => ({ category, amount }));
+  const budgets = Object.entries(db.budgets).slice(0,20).map(([category,b]) => ({ category, period:b.periode, limit:Number(b.limit)||0, spent:pakaiBudget(category,b.periode) }));
+  const largest = [...kini].filter(x => x.tipe === 'keluar').sort((a,b) => b.total-a.total).slice(0,5).map(x => ({ date:x.tanggal, category:x.kategori, amount:x.total }));
+  return {
+    periodDays: hari, from:dari, to:sampai, transactionCount:kini.length, balance:saldoTotal(),
+    current:{ income:sum(kini,'masuk'), expense:sum(kini,'keluar') },
+    previous:{ income:sum(sebelum,'masuk'), expense:sum(sebelum,'keluar') },
+    byCategory, budgets, largestExpenses:largest, categories:KAT.keluar.slice(0,30)
+  };
+}
+function terapkanAksiInsight(action) {
+  if (action?.type === 'open_history') { goto('riwayat'); return; }
+  if (action?.type !== 'create_budget' || !KAT.keluar.includes(action.category) || !(Number(action.amount) > 0)) return;
+  const jumlah = Math.round(Number(action.amount));
+  konfirmasiDompet('Buat batas anggaran?', 'Tetapkan batas bulanan '+action.category+' sebesar '+rp(jumlah)+'? Saran AI dapat kamu ubah atau hapus lagi melalui Fitur lain → Rencana keuangan.', () => {
+    const lama = db.budgets[action.category];
+    db.budgets[action.category] = { limit:jumlah, periode:'bulan' };
+    if (!simpan()) { if (lama) db.budgets[action.category]=lama; else delete db.budgets[action.category]; return; }
+    renderSemua(); beriPesan('Batas anggaran '+action.category+' tersimpan setelah konfirmasi.');
+  });
+}
+function tampilkanInsightAi(data) {
+  const box = $('aiInsightResults'); box.replaceChildren();
+  const daftar = Array.isArray(data.insights) ? data.insights.slice(0,3) : [];
+  if (!daftar.length) { box.append(el('p','muted','Belum ada pola yang cukup kuat untuk ditampilkan.')); return; }
+  daftar.forEach(item => {
+    const kartu = el('article','ai-result'); kartu.dataset.kind = ['warning','positive','tip'].includes(item.kind) ? item.kind : 'tip';
+    kartu.append(el('h3',null,String(item.title||'Insight keuangan')),el('p',null,String(item.detail||'')));
+    if (item.evidence) kartu.append(el('p','ai-evidence',String(item.evidence)));
+    if (item.action?.type && item.action.type !== 'none') {
+      const tombol = el('button','ghost kecil',item.action.type === 'create_budget' ? 'Tinjau batas anggaran' : 'Buka riwayat');
+      tombol.type='button'; tombol.onclick=()=>terapkanAksiInsight(item.action); kartu.append(tombol);
+    }
+    box.append(kartu);
+  });
+}
+$('btnAiInsight').onclick = async () => {
+  const hari = Number($('aiInsightPeriod').value) || 30;
+  const ringkasan = ringkasanUntukInsight(hari);
+  $('aiInsightResults').replaceChildren();
+  if (ringkasan.transactionCount < 3) return statusAi($('aiInsightStatus'), 'Perlu sedikitnya 3 transaksi aktif pada periode ini agar insight tidak menyesatkan.', { error:true });
+  if (!await mintaPersetujuanAi()) return statusAi($('aiInsightStatus'), 'Permintaan dibatalkan. Data tidak dikirim.');
+  $('btnAiInsight').disabled = true;
+  statusAi($('aiInsightStatus'), 'AI sedang mencari pola dari ringkasan…', { loading:true });
+  try {
+    const data = await panggilAsistenAi('financial_insight', ringkasan);
+    tampilkanInsightAi(data);
+    statusAi($('aiInsightStatus'), 'Selesai dianalisis. Saran AI bukan kepastian dan tidak mengubah data otomatis.');
+  } catch (error) { statusAi($('aiInsightStatus'), pesanErrorAi(error), { error:true }); }
+  finally { $('btnAiInsight').disabled = false; }
+};
 
 
 

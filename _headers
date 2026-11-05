@@ -12,3 +12,8 @@
 
 /manifest.webmanifest
   Cache-Control: public, max-age=3600
+
+/api/*
+  Cache-Control: no-store, private, max-age=0
+  X-Content-Type-Options: nosniff
+  X-Robots-Tag: noindex, nofollow
