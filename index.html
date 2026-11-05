@@ -2223,6 +2223,8 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   .ai-card-note{margin:8px 0 0;font-size:11px;color:var(--muted);line-height:1.45}.ai-card-status{margin:8px 0 0;min-height:18px;font-size:13px;color:var(--muted)}
   .ai-dialog{max-width:610px;width:calc(100% - 24px);padding:18px}.ai-dialog h2{display:flex;align-items:center;gap:8px;margin:0 0 7px}.ai-dialog textarea{min-height:110px;resize:vertical;margin-bottom:5px;width:100%;padding:12px 13px;border-radius:12px;border:1px solid var(--line);background:var(--input);color:var(--ink);font:inherit;outline:none}.ai-dialog textarea:focus{border-color:var(--pri2);box-shadow:0 0 0 4px rgba(99,102,241,.15)}
   .ai-dialog-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}.ai-char-count{font-size:11px;color:var(--muted)}
+  .ai-voice-row{display:flex;align-items:center;gap:10px;margin:7px 0 4px}.ai-voice-btn{width:auto;margin:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;position:relative}.ai-voice-icon{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--pri) 12%,var(--card));font-size:13px;position:relative}.ai-voice-meta{font-size:11px;line-height:1.4;color:var(--muted)}
+  .ai-voice-btn.is-listening{border-color:color-mix(in srgb,var(--bad) 55%,var(--line));color:var(--bad);background:color-mix(in srgb,var(--bad) 7%,var(--card))}.ai-voice-btn.is-listening .ai-voice-icon::after{content:"";position:absolute;inset:-4px;border:2px solid color-mix(in srgb,var(--bad) 55%,transparent);border-radius:50%;animation:ai-voice-pulse 1.25s ease-out infinite}.ai-voice-status{min-height:17px;margin:0 0 8px;font-size:12px;color:var(--muted)}.ai-voice-status.is-error{color:var(--bad)}
   .ai-privacy-note{padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--pri) 7%,var(--card));border:1px solid color-mix(in srgb,var(--pri) 20%,var(--line));font-size:12px;line-height:1.5;color:var(--muted);margin:10px 0}
   .ai-status{min-height:20px;margin:8px 0;font-size:13px;color:var(--muted)}.ai-status.is-error{color:var(--bad)}
   .ai-preview{border-top:1px solid var(--line);margin-top:13px;padding-top:14px}.ai-preview h3{margin:0 0 9px;font-size:15px}
@@ -2233,8 +2235,9 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   .ai-loading{display:inline-flex;align-items:center;gap:7px}.ai-loading::before{content:"";width:13px;height:13px;border:2px solid color-mix(in srgb,var(--pri) 25%,transparent);border-top-color:var(--pri);border-radius:50%;animation:ai-spin .7s linear infinite}
   .ui-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
   @keyframes ai-spin{to{transform:rotate(360deg)}}
-  @media(max-width:560px){.ai-preview-grid{grid-template-columns:1fr}.ai-preview-grid .field-wide{grid-column:auto}.ai-period-row button{width:100%}.ai-dialog-actions{flex-direction:column}.ai-dialog-actions .ghost,.ai-dialog-actions button:not(.ghost){flex:auto}}
-  @media(prefers-reduced-motion:reduce){.ai-entry-button:hover{transform:none}.ai-loading::before{animation-duration:1.4s}}
+  @keyframes ai-voice-pulse{0%{transform:scale(.88);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+  @media(max-width:560px){.ai-preview-grid{grid-template-columns:1fr}.ai-preview-grid .field-wide{grid-column:auto}.ai-period-row button{width:100%}.ai-dialog-actions{flex-direction:column}.ai-dialog-actions .ghost,.ai-dialog-actions button:not(.ghost){flex:auto}.ai-voice-row{align-items:stretch;flex-direction:column}.ai-voice-btn{width:100%}}
+  @media(prefers-reduced-motion:reduce){.ai-entry-button:hover{transform:none}.ai-loading::before{animation-duration:1.4s}.ai-voice-btn.is-listening .ai-voice-icon::after{animation:none}}
 </style>
 
 </head>
@@ -2436,7 +2439,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 
   <div class="card" id="cardCatat">
     <h2>Catat transaksi<button class="kecil ghost" onclick="bantuan('catat')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
-    <button class="ai-entry-button" id="btnAiSmart" type="button" aria-haspopup="dialog" aria-controls="dlgAiSmart"><span><strong>&#x2728; Catat dengan AI</strong><small>Tulis seperti “beli bensin 50 ribu pakai DANA”</small></span><span class="ai-spark" aria-hidden="true">AI</span></button>
+    <button class="ai-entry-button" id="btnAiSmart" type="button" aria-haspopup="dialog" aria-controls="dlgAiSmart"><span><strong>&#x2728; Catat dengan AI</strong><small>Tulis atau ucapkan “beli bensin 50 ribu pakai DANA”</small></span><span class="ai-spark" aria-hidden="true">AI</span></button>
     <div class="draft-toolbar"><p class="muted" id="draftStatus" role="status">Isian disimpan otomatis di perangkat ini.</p><button class="ghost kecil" id="btnBuangDraf" type="button" hidden>Buang draf</button></div>
     <p class="muted" id="catatContext" hidden></p>
     <div class="grid2">
@@ -3065,8 +3068,10 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <p class="muted">Ceritakan satu transaksi. AI akan menyiapkan draf yang tetap bisa kamu periksa dan ubah.</p>
   <label class="field-label" for="aiSmartText">Transaksi kamu</label>
   <textarea id="aiSmartText" maxlength="500" placeholder="Contoh: Kemarin beli bensin 50 ribu pakai DANA"></textarea>
+  <div class="ai-voice-row"><button type="button" class="ghost ai-voice-btn" id="btnAiVoice" aria-pressed="false" aria-describedby="aiVoiceHelp"><span class="ai-voice-icon" aria-hidden="true">&#x1F399;&#xFE0F;</span><span id="aiVoiceLabel">Ucapkan transaksi</span></button><span class="ai-voice-meta" id="aiVoiceHelp">Bahasa Indonesia · maksimal 30 detik</span></div>
+  <p class="ai-voice-status" id="aiVoiceStatus" role="status" aria-live="polite"></p>
   <div class="ai-dialog-toolbar"><span class="ai-char-count" id="aiSmartCount">0/500</span><button type="button" class="ghost kecil" id="btnAiSmartExample">Pakai contoh</button></div>
-  <p class="ai-privacy-note">Jangan tulis PIN, kata sandi, atau nomor rekening. AI tidak akan menyimpan transaksi sebelum kamu mengonfirmasi drafnya.</p>
+  <p class="ai-privacy-note">Jangan tulis atau ucapkan PIN, kata sandi, atau nomor rekening. Pengenalan suara diproses oleh layanan browser; aplikasi ini tidak menyimpan rekaman audio. AI tidak menyimpan transaksi sebelum kamu mengonfirmasi drafnya.</p>
   <button type="button" id="btnAiSmartAnalyze">Buat draf AI</button>
   <p class="ai-status" id="aiSmartStatus" role="status" aria-live="polite"></p>
   <section class="ai-preview" id="aiSmartPreview" hidden aria-labelledby="aiSmartPreviewTitle">
@@ -8135,6 +8140,112 @@ const AI_DAILY_LIMIT = 20;
 let aiConsentSession = false;
 let aiConsentResolve = null;
 let aiSmartLast = null;
+const PengenalSuaraAi = window.SpeechRecognition || window.webkitSpeechRecognition;
+let aiVoiceRecognition = null;
+let aiVoiceTimer = null;
+
+function statusSuaraAi(teks='', error=false) {
+  $('aiVoiceStatus').textContent = teks;
+  $('aiVoiceStatus').classList.toggle('is-error', error);
+}
+function modeTombolSuaraAi(aktif, menunggu=false) {
+  const tombol = $('btnAiVoice');
+  tombol.classList.toggle('is-listening', aktif);
+  tombol.setAttribute('aria-pressed', aktif ? 'true' : 'false');
+  $('aiVoiceLabel').textContent = aktif ? (menunggu ? 'Menunggu izin mikrofon…' : 'Hentikan rekaman') : 'Ucapkan transaksi';
+  $('aiSmartText').readOnly = aktif;
+  $('btnAiSmartAnalyze').disabled = aktif;
+  $('btnAiSmartExample').disabled = aktif;
+}
+function dukunganSuaraAi() {
+  const didukung = Boolean(PengenalSuaraAi) && window.isSecureContext;
+  $('btnAiVoice').disabled = !didukung;
+  $('aiVoiceHelp').textContent = didukung
+    ? 'Bahasa Indonesia · maksimal 30 detik'
+    : 'Input suara belum didukung browser ini. Gunakan Chrome, Edge, atau Safari terbaru.';
+  return didukung;
+}
+function akhiriSuaraAi(diam=false) {
+  const pengenal = aiVoiceRecognition;
+  if (!pengenal) return;
+  pengenal._diam = diam;
+  pengenal._manual = true;
+  clearTimeout(aiVoiceTimer); aiVoiceTimer = null;
+  try { diam ? pengenal.abort() : pengenal.stop(); } catch (_) {}
+  if (diam) {
+    if (aiVoiceRecognition === pengenal) aiVoiceRecognition = null;
+    modeTombolSuaraAi(false);
+    statusSuaraAi();
+  }
+}
+function mulaiSuaraAi() {
+  if (aiVoiceRecognition) return akhiriSuaraAi(false);
+  if (!dukunganSuaraAi()) return statusSuaraAi('Browser atau koneksi ini belum mendukung input suara.', true);
+  const pengenal = new PengenalSuaraAi();
+  const teksAwal = $('aiSmartText').value.trim();
+  let hasilFinal = '';
+  pengenal.lang = 'id-ID';
+  pengenal.continuous = true;
+  pengenal.interimResults = true;
+  pengenal.maxAlternatives = 1;
+  pengenal._diam = false;
+  pengenal._manual = false;
+  pengenal._gagal = false;
+  aiVoiceRecognition = pengenal;
+  modeTombolSuaraAi(true, true);
+  statusSuaraAi('Izinkan mikrofon jika browser meminta izin.');
+  pengenal.onstart = () => {
+    if (aiVoiceRecognition !== pengenal) return;
+    modeTombolSuaraAi(true);
+    statusSuaraAi('Mendengarkan… ucapkan satu transaksi dengan jelas.');
+    clearTimeout(aiVoiceTimer);
+    aiVoiceTimer = setTimeout(() => akhiriSuaraAi(false), 30000);
+  };
+  pengenal.onresult = event => {
+    let sementara = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const bagian = String(event.results[i][0]?.transcript || '').trim();
+      if (!bagian) continue;
+      if (event.results[i].isFinal) hasilFinal = (hasilFinal + ' ' + bagian).trim();
+      else sementara = (sementara + ' ' + bagian).trim();
+    }
+    const gabungan = [teksAwal, hasilFinal, sementara].filter(Boolean).join(' ').replace(/\s+/g,' ').trim();
+    $('aiSmartText').value = gabungan.slice(0, 500);
+    $('aiSmartText').dispatchEvent(new Event('input', { bubbles:true }));
+    if (gabungan.length >= 500) {
+      pengenal._batas = true;
+      statusSuaraAi('Batas 500 karakter tercapai. Rekaman dihentikan agar teks tidak terpotong lagi.');
+      akhiriSuaraAi(false);
+    }
+  };
+  pengenal.onerror = event => {
+    if (pengenal._diam && event.error === 'aborted') return;
+    pengenal._gagal = true;
+    const pesan = ({
+      'not-allowed':'Izin mikrofon ditolak. Aktifkan izin mikrofon untuk situs ini lalu coba lagi.',
+      'service-not-allowed':'Layanan pengenal suara diblokir oleh browser.',
+      'audio-capture':'Mikrofon tidak ditemukan atau sedang dipakai aplikasi lain.',
+      'no-speech':'Belum terdengar suara. Coba lagi dan bicara lebih dekat ke mikrofon.',
+      'network':'Pengenalan suara membutuhkan koneksi internet yang stabil.',
+      'language-not-supported':'Bahasa Indonesia belum didukung oleh pengenal suara browser ini.'
+    })[event.error] || 'Input suara belum berhasil. Coba lagi atau ketik transaksi secara manual.';
+    statusSuaraAi(pesan, true);
+  };
+  pengenal.onend = () => {
+    clearTimeout(aiVoiceTimer); aiVoiceTimer = null;
+    if (aiVoiceRecognition === pengenal) aiVoiceRecognition = null;
+    modeTombolSuaraAi(false);
+    if (pengenal._diam || pengenal._gagal || pengenal._batas) return;
+    const adaTeksBaru = $('aiSmartText').value.trim() !== teksAwal;
+    statusSuaraAi(adaTeksBaru ? 'Hasil suara sudah menjadi teks. Periksa sebelum membuat draf AI.' : 'Rekaman dihentikan. Belum ada ucapan yang terbaca.');
+  };
+  try { pengenal.start(); }
+  catch (_) {
+    aiVoiceRecognition = null;
+    modeTombolSuaraAi(false);
+    statusSuaraAi('Mikrofon belum dapat dimulai. Tutup aplikasi lain yang memakai mikrofon lalu coba lagi.', true);
+  }
+}
 
 function persetujuanAiAktif() {
   if (aiConsentSession) return true;
@@ -8267,15 +8378,23 @@ async function analisisSmartAi() {
   finally { $('btnAiSmartAnalyze').disabled = false; $('btnAiSmartRetry').disabled = false; }
 }
 $('btnAiSmart').onclick = () => {
+  akhiriSuaraAi(true);
   $('aiSmartPreview').hidden = true; statusAi($('aiSmartStatus'), '');
+  statusSuaraAi(); dukunganSuaraAi();
   $('aiSmartCount').textContent = $('aiSmartText').value.length + '/500';
   $('dlgAiSmart').showModal(); setTimeout(() => $('aiSmartText').focus(), 60);
 };
-$('aiSmartText').oninput = () => $('aiSmartCount').textContent = $('aiSmartText').value.length + '/500';
+$('aiSmartText').oninput = () => {
+  $('aiSmartCount').textContent = $('aiSmartText').value.length + '/500';
+  if (aiSmartLast) { aiSmartLast = null; $('aiSmartPreview').hidden = true; }
+};
 $('btnAiSmartExample').onclick = () => { $('aiSmartText').value = 'Kemarin beli bensin 50 ribu pakai DANA'; $('aiSmartText').oninput(); $('aiSmartText').focus(); };
+$('btnAiVoice').onclick = mulaiSuaraAi;
 $('btnAiSmartAnalyze').onclick = analisisSmartAi;
 $('btnAiSmartRetry').onclick = analisisSmartAi;
-$('btnAiSmartClose').onclick = () => $('dlgAiSmart').close();
+$('btnAiSmartClose').onclick = () => { akhiriSuaraAi(true); $('dlgAiSmart').close(); };
+$('dlgAiSmart').addEventListener('close', () => akhiriSuaraAi(true));
+dukunganSuaraAi();
 $('aiDraftType').onchange = () => isiPilihanKategoriAi($('aiDraftType').value);
 $('aiDraftPayment').onchange = perbaruiPembayaranAi;
 $('btnAiSmartUse').onclick = () => {

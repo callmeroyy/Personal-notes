@@ -9,7 +9,7 @@ Aplikasi keuangan pribadi berbasis web yang berjalan langsung di browser. Data u
 - Anggaran, transaksi berulang, dan target tabungan
 - Grafik, rekap gambar/PDF, CSV, serta backup JSON
 - Foto dan OCR struk
-- Smart Input dan insight keuangan melalui Workers AI
+- Smart Input lewat teks atau suara bahasa Indonesia dan insight keuangan melalui Workers AI
 - Backup opsional ke Google Drive
 - PWA/offline melalui service worker
 
@@ -51,6 +51,6 @@ Jika hostname custom domain tidak berubah, penyimpanan browser tetap berada pada
 
 ## Privasi dan backup
 
-Transaksi tersimpan di browser perangkat. Smart Input hanya mengirim kalimat yang dimasukkan pengguna beserta daftar kategori/dompet; Insight mengirim ringkasan angka tanpa foto struk, token Drive, atau file backup. Hasil AI selalu menjadi saran dan harus dikonfirmasi sebelum mengubah data.
+Transaksi tersimpan di browser perangkat. Smart Input hanya mengirim kalimat yang dimasukkan pengguna beserta daftar kategori/dompet; Insight mengirim ringkasan angka tanpa foto struk, token Drive, atau file backup. Input suara memakai API pengenal ucapan browser dengan bahasa `id-ID`; aplikasi tidak menyimpan rekaman audio dan hasil ucapan tetap harus diperiksa sebagai teks. Hasil AI selalu menjadi saran dan harus dikonfirmasi sebelum mengubah data.
 
 Backup Google Drive menggunakan scope `drive.file`, sehingga aplikasi hanya dapat mengakses file yang dibuatnya sendiri. Tetap simpan backup JSON berkala sebelum mengganti perangkat, browser, atau domain.

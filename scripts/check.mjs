@@ -33,5 +33,7 @@ for (const file of ['manifest.webmanifest', 'icon.svg', 'sw.js', '_headers']) {
 
 if (manifest.start_url !== './' || manifest.scope !== './') gagal('Manifest harus aman untuk subpath hosting.');
 if (!sw.includes("'./manifest.webmanifest'") || !sw.includes("'./icon.svg'")) gagal('Aset PWA belum masuk cache service worker.');
+if (!html.includes('window.webkitSpeechRecognition') || !html.includes("pengenal.lang = 'id-ID'")) gagal('Input suara bahasa Indonesia belum terpasang.');
+if (!html.includes('aplikasi ini tidak menyimpan rekaman audio')) gagal('Pemberitahuan privasi input suara belum tersedia.');
 
 if (!process.exitCode) console.log(`OK: sintaks, ${ids.length} ID, referensi DOM, manifest, dan cache PWA valid.`);
