@@ -3068,7 +3068,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <p class="muted">Ceritakan satu transaksi. AI akan menyiapkan draf yang tetap bisa kamu periksa dan ubah.</p>
   <label class="field-label" for="aiSmartText">Transaksi kamu</label>
   <textarea id="aiSmartText" maxlength="500" placeholder="Contoh: Kemarin beli bensin 50 ribu pakai DANA"></textarea>
-  <div class="ai-voice-row"><button type="button" class="ghost ai-voice-btn" id="btnAiVoice" aria-pressed="false" aria-describedby="aiVoiceHelp"><span class="ai-voice-icon" aria-hidden="true">&#x1F399;&#xFE0F;</span><span id="aiVoiceLabel">Ucapkan transaksi</span></button><span class="ai-voice-meta" id="aiVoiceHelp">Bahasa Indonesia · maksimal 30 detik</span></div>
+  <div class="ai-voice-row"><button type="button" class="ghost ai-voice-btn" id="btnAiVoice" aria-pressed="false" aria-describedby="aiVoiceHelp"><span class="ai-voice-icon" aria-hidden="true">&#x1F399;&#xFE0F;</span><span id="aiVoiceLabel">Ucapkan transaksi</span></button><span class="ai-voice-meta" id="aiVoiceHelp">Satu transaksi · maksimal 30 detik</span></div>
   <p class="ai-voice-status" id="aiVoiceStatus" role="status" aria-live="polite"></p>
   <div class="ai-dialog-toolbar"><span class="ai-char-count" id="aiSmartCount">0/500</span><button type="button" class="ghost kecil" id="btnAiSmartExample">Pakai contoh</button></div>
   <p class="ai-privacy-note">Jangan tulis atau ucapkan PIN, kata sandi, atau nomor rekening. Pengenalan suara diproses oleh layanan browser; aplikasi ini tidak menyimpan rekaman audio. AI tidak menyimpan transaksi sebelum kamu mengonfirmasi drafnya.</p>
@@ -8161,7 +8161,7 @@ function dukunganSuaraAi() {
   const didukung = Boolean(PengenalSuaraAi) && window.isSecureContext;
   $('btnAiVoice').disabled = !didukung;
   $('aiVoiceHelp').textContent = didukung
-    ? 'Bahasa Indonesia · maksimal 30 detik'
+    ? 'Satu transaksi · maksimal 30 detik'
     : 'Input suara belum didukung browser ini. Gunakan Chrome, Edge, atau Safari terbaru.';
   return didukung;
 }
@@ -8184,13 +8184,17 @@ function mulaiSuaraAi() {
   const pengenal = new PengenalSuaraAi();
   const teksAwal = $('aiSmartText').value.trim();
   let hasilFinal = '';
+  const bisaPantauAudio = 'onaudiostart' in pengenal;
+  const bisaPantauSuara = 'onspeechstart' in pengenal;
   pengenal.lang = 'id-ID';
-  pengenal.continuous = true;
-  pengenal.interimResults = true;
+  pengenal.continuous = false;
+  pengenal.interimResults = false;
   pengenal.maxAlternatives = 1;
   pengenal._diam = false;
   pengenal._manual = false;
   pengenal._gagal = false;
+  pengenal._audioTersambung = false;
+  pengenal._suaraTerdeteksi = false;
   aiVoiceRecognition = pengenal;
   modeTombolSuaraAi(true, true);
   statusSuaraAi('Izinkan mikrofon jika browser meminta izin.');
@@ -8200,6 +8204,20 @@ function mulaiSuaraAi() {
     statusSuaraAi('Mendengarkan… ucapkan satu transaksi dengan jelas.');
     clearTimeout(aiVoiceTimer);
     aiVoiceTimer = setTimeout(() => akhiriSuaraAi(false), 30000);
+  };
+  pengenal.onaudiostart = () => {
+    if (aiVoiceRecognition !== pengenal) return;
+    pengenal._audioTersambung = true;
+    statusSuaraAi('Mikrofon aktif. Ucapkan satu transaksi dengan jelas.');
+  };
+  pengenal.onspeechstart = () => {
+    if (aiVoiceRecognition !== pengenal) return;
+    pengenal._suaraTerdeteksi = true;
+    statusSuaraAi('Suara terdeteksi. Lanjutkan sampai transaksi selesai.');
+  };
+  pengenal.onspeechend = () => {
+    if (aiVoiceRecognition !== pengenal || pengenal._gagal) return;
+    statusSuaraAi('Suara diterima. Mengubahnya menjadi teks…');
   };
   pengenal.onresult = event => {
     let sementara = '';
@@ -8224,12 +8242,16 @@ function mulaiSuaraAi() {
     const pesan = ({
       'not-allowed':'Browser menolak akses mikrofon. Periksa izin mikrofon untuk situs dan aplikasi browser, lalu buka ulang halaman.',
       'service-not-allowed':'Layanan pengenal suara diblokir atau tidak tersedia. Buka situs langsung di Chrome, Edge, atau Safari terbaru.',
-      'audio-capture':'Mikrofon tidak ditemukan atau sedang dipakai aplikasi lain.',
-      'no-speech':'Belum terdengar suara. Coba lagi dan bicara lebih dekat ke mikrofon.',
+      'audio-capture':'Browser tidak menerima audio dari mikrofon. Tutup aplikasi lain yang memakai mikrofon lalu coba lagi.',
+      'no-speech':'Mikrofon aktif, tetapi belum mendengar suara. Coba lagi dan mulai bicara segera setelah tombol ditekan.',
       'network':'Pengenalan suara membutuhkan koneksi internet yang stabil.',
       'language-not-supported':'Bahasa Indonesia belum didukung oleh pengenal suara browser ini.'
     })[event.error] || 'Input suara belum berhasil. Coba lagi atau ketik transaksi secara manual.';
     statusSuaraAi(pesan, true);
+  };
+  pengenal.onnomatch = () => {
+    pengenal._gagal = true;
+    statusSuaraAi('Suara terdengar, tetapi belum dapat diubah menjadi teks. Coba lagi dengan satu kalimat yang jelas.', true);
   };
   pengenal.onend = () => {
     clearTimeout(aiVoiceTimer); aiVoiceTimer = null;
@@ -8237,7 +8259,10 @@ function mulaiSuaraAi() {
     modeTombolSuaraAi(false);
     if (pengenal._diam || pengenal._gagal || pengenal._batas) return;
     const adaTeksBaru = $('aiSmartText').value.trim() !== teksAwal;
-    statusSuaraAi(adaTeksBaru ? 'Hasil suara sudah menjadi teks. Periksa sebelum membuat draf AI.' : 'Rekaman dihentikan. Belum ada ucapan yang terbaca.');
+    if (adaTeksBaru) return statusSuaraAi('Hasil suara sudah menjadi teks. Periksa sebelum membuat draf AI.');
+    if (bisaPantauAudio && !pengenal._audioTersambung) return statusSuaraAi('Browser berhenti sebelum audio mikrofon tersambung. Tutup aplikasi lain yang memakai mikrofon lalu coba lagi.', true);
+    if (bisaPantauSuara && !pengenal._suaraTerdeteksi) return statusSuaraAi('Mikrofon aktif, tetapi belum mendengar suara. Tekan lagi lalu mulai bicara segera.', true);
+    statusSuaraAi('Belum ada ucapan yang berhasil diubah menjadi teks. Coba lagi dengan satu kalimat yang jelas.', true);
   };
   try { pengenal.start(); }
   catch (_) {

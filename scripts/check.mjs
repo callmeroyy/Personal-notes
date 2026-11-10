@@ -36,6 +36,8 @@ if (manifest.start_url !== './' || manifest.scope !== './') gagal('Manifest haru
 if (!sw.includes("'./manifest.webmanifest'") || !sw.includes("'./icon.svg'")) gagal('Aset PWA belum masuk cache service worker.');
 if (!html.includes('window.webkitSpeechRecognition') || !html.includes("pengenal.lang = 'id-ID'")) gagal('Input suara bahasa Indonesia belum terpasang.');
 if (!html.includes('aplikasi ini tidak menyimpan rekaman audio')) gagal('Pemberitahuan privasi input suara belum tersedia.');
+if (!html.includes('pengenal.continuous = false') || !html.includes('pengenal.interimResults = false')) gagal('Input suara harus memakai mode satu ucapan yang kompatibel di perangkat seluler.');
+if (!html.includes('pengenal.onaudiostart') || !html.includes('pengenal.onspeechstart')) gagal('Status koneksi audio dan deteksi ucapan belum tersedia.');
 if (!headers.includes('microphone=(self)')) gagal('Permissions-Policy harus mengizinkan mikrofon untuk origin situs sendiri.');
 if (headers.includes('microphone=()')) gagal('Permissions-Policy masih memblokir mikrofon untuk semua origin.');
 
