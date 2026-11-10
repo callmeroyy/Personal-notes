@@ -3,6 +3,7 @@ import vm from 'node:vm';
 
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
+const headers = fs.readFileSync(new URL('../_headers', import.meta.url), 'utf8');
 const manifest = JSON.parse(fs.readFileSync(new URL('../manifest.webmanifest', import.meta.url), 'utf8'));
 
 const gagal = pesan => {
@@ -35,5 +36,7 @@ if (manifest.start_url !== './' || manifest.scope !== './') gagal('Manifest haru
 if (!sw.includes("'./manifest.webmanifest'") || !sw.includes("'./icon.svg'")) gagal('Aset PWA belum masuk cache service worker.');
 if (!html.includes('window.webkitSpeechRecognition') || !html.includes("pengenal.lang = 'id-ID'")) gagal('Input suara bahasa Indonesia belum terpasang.');
 if (!html.includes('aplikasi ini tidak menyimpan rekaman audio')) gagal('Pemberitahuan privasi input suara belum tersedia.');
+if (!headers.includes('microphone=(self)')) gagal('Permissions-Policy harus mengizinkan mikrofon untuk origin situs sendiri.');
+if (headers.includes('microphone=()')) gagal('Permissions-Policy masih memblokir mikrofon untuk semua origin.');
 
-if (!process.exitCode) console.log(`OK: sintaks, ${ids.length} ID, referensi DOM, manifest, dan cache PWA valid.`);
+if (!process.exitCode) console.log(`OK: sintaks, ${ids.length} ID, referensi DOM, manifest, cache PWA, dan izin mikrofon valid.`);
