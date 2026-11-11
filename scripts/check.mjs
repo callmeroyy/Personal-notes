@@ -4,6 +4,7 @@ import vm from 'node:vm';
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const sw = fs.readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
 const headers = fs.readFileSync(new URL('../_headers', import.meta.url), 'utf8');
+const transcribe = fs.readFileSync(new URL('../functions/api/transcribe.js', import.meta.url), 'utf8');
 const manifest = JSON.parse(fs.readFileSync(new URL('../manifest.webmanifest', import.meta.url), 'utf8'));
 
 const gagal = pesan => {
@@ -34,10 +35,11 @@ for (const file of ['manifest.webmanifest', 'icon.svg', 'sw.js', '_headers']) {
 
 if (manifest.start_url !== './' || manifest.scope !== './') gagal('Manifest harus aman untuk subpath hosting.');
 if (!sw.includes("'./manifest.webmanifest'") || !sw.includes("'./icon.svg'")) gagal('Aset PWA belum masuk cache service worker.');
-if (!html.includes('window.webkitSpeechRecognition') || !html.includes("pengenal.lang = 'id-ID'")) gagal('Input suara bahasa Indonesia belum terpasang.');
+if (!html.includes('navigator.mediaDevices?.getUserMedia') || !html.includes('new MediaRecorder')) gagal('Perekaman suara lintas browser belum terpasang.');
+if (!html.includes("fetch('/api/transcribe'") || !transcribe.includes("language:'id'")) gagal('Transkripsi bahasa Indonesia melalui Cloudflare belum terpasang.');
 if (!html.includes('aplikasi ini tidak menyimpan rekaman audio')) gagal('Pemberitahuan privasi input suara belum tersedia.');
-if (!html.includes('pengenal.continuous = false') || !html.includes('pengenal.interimResults = false')) gagal('Input suara harus memakai mode satu ucapan yang kompatibel di perangkat seluler.');
-if (!html.includes('pengenal.onaudiostart') || !html.includes('pengenal.onspeechstart')) gagal('Status koneksi audio dan deteksi ucapan belum tersedia.');
+if (!html.includes('setTimeout(() => akhiriSuaraAi(false), 20000)')) gagal('Batas durasi rekaman suara belum terpasang.');
+if (!html.includes('for (let percobaan = 0; percobaan < 2; percobaan++)')) gagal('Retry sementara untuk permintaan AI belum terpasang.');
 if (!headers.includes('microphone=(self)')) gagal('Permissions-Policy harus mengizinkan mikrofon untuk origin situs sendiri.');
 if (headers.includes('microphone=()')) gagal('Permissions-Policy masih memblokir mikrofon untuk semua origin.');
 

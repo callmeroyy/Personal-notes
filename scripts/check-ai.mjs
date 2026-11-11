@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { onRequest } from '../functions/api/ai.js';
+import { onRequest as onTranscribe } from '../functions/api/transcribe.js';
 
 const call = (body, env={}) => onRequest({
   env,
@@ -86,4 +87,32 @@ assert.equal(result.insights[0].action.type,'create_budget');
 response = await call({ task:'unknown', payload:{} }, parseEnv);
 assert.equal(response.status,400);
 
-console.log('OK: endpoint AI, validasi, no-store, Smart Input, dan Insight valid.');
+const transcribeCall = (audio, env={}, headers={}) => onTranscribe({
+  env,
+  request:new Request('https://personal-notes.example/api/transcribe', {
+    method:'POST',
+    headers:{ 'Content-Type':'audio/wav', Origin:'https://personal-notes.example', ...headers },
+    body:audio
+  })
+});
+
+response = await transcribeCall(new Uint8Array(1024));
+assert.equal(response.status,503);
+assert.equal((await response.json()).code,'AI_NOT_CONFIGURED');
+
+let transcribeModel = '';
+const transcribeEnv = { AI:{ run:async (model, options) => {
+  transcribeModel = model;
+  assert.equal(options.language,'id');
+  assert.ok(options.audio.length > 1000);
+  return { text:'beli makan dua puluh ribu tunai' };
+} } };
+response = await transcribeCall(new Uint8Array(1024), transcribeEnv);
+assert.equal(response.status,200);
+assert.equal(transcribeModel,'@cf/openai/whisper-large-v3-turbo');
+assert.equal((await response.json()).data.text,'beli makan dua puluh ribu tunai');
+
+response = await transcribeCall(new Uint8Array(1024), transcribeEnv, { Origin:'https://example.org' });
+assert.equal(response.status,403);
+
+console.log('OK: endpoint AI, transkripsi suara, validasi, no-store, Smart Input, dan Insight valid.');
