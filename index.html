@@ -9685,31 +9685,26 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
     '3. Jika pengguna menanyakan pertanyaan bebas, umum, atau random (seperti sains, cerita, sejarah, resep, coding, saran hidup, teka-teki, dll.), jawab dengan wawasan luas, antusias, dan akurat!\n' +
     '4. Jangan gunakan markdown yang berlebihan.';
 
-  const contents = [];
-  contents.push({
-    role: 'user',
-    parts: [{ text: 'Instruksi Asisten:\n' + systemInstruction }]
-  });
-  contents.push({
-    role: 'model',
-    parts: [{ text: 'Halo! Saya memahami instruksi dan siap membantu, baik menganalisis catatan keuanganmu maupun menjawab segala pertanyaan bebas lainnya.' }]
-  });
-
+  let historyText = '';
   if (Array.isArray(history) && history.length) {
-    history.slice(-6).forEach(h => {
+    const lastTurns = history.slice(-6).map(h => {
+      const role = h.role === 'assistant' ? 'Asisten' : 'Pengguna';
       const text = String(h.text || h.content || '').trim();
-      if (!text) return;
-      contents.push({
-        role: h.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text }]
-      });
-    });
+      return text ? `${role}: ${text}` : '';
+    }).filter(Boolean);
+    if (lastTurns.length) {
+      historyText = 'Riwayat percakapan sebelumnya:\n' + lastTurns.join('\n') + '\n\n';
+    }
   }
 
-  contents.push({
-    role: 'user',
-    parts: [{ text: message }]
-  });
+  const promptUtuh = `${systemInstruction}\n\n${historyText}Pertanyaan pengguna saat ini:\n${message}`;
+
+  const contents = [
+    {
+      role: 'user',
+      parts: [{ text: promptUtuh }]
+    }
+  ];
 
   let lastErrorMsg = '';
 
