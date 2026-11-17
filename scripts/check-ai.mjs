@@ -84,6 +84,24 @@ result = (await response.json()).data;
 assert.equal(result.insights.length,1);
 assert.equal(result.insights[0].action.type,'create_budget');
 
+const chatEnv = { AI:{ run:async () => ({ response:{
+  reply:'Total pengeluaranmu dalam 30 hari terakhir adalah Rp900.000 dengan pengeluaran terbesar di kategori Makan.',
+  followUpSuggestions:['Kategori apa yang paling banyak?','Berapa sisa saldo saya?']
+} }) } };
+response = await call({ task:'financial_chat', payload:{
+  message:'Berapa total pengeluaranku?',
+  history:[],
+  financialContext:{
+    today:'2026-11-05', balance:1000000,
+    summary30d:{ income:2000000, expense:900000, net:1100000 },
+    topCategories:[{ category:'Makan', amount:500000 }]
+  }
+} }, chatEnv);
+assert.equal(response.status,200);
+result = (await response.json()).data;
+assert.match(result.reply, /Rp900\.000/);
+assert.equal(result.followUpSuggestions.length, 2);
+
 response = await call({ task:'unknown', payload:{} }, parseEnv);
 assert.equal(response.status,400);
 

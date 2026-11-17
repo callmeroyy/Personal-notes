@@ -2238,6 +2238,28 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   @keyframes ai-voice-pulse{0%{transform:scale(.88);opacity:.9}100%{transform:scale(1.35);opacity:0}}
   @media(max-width:560px){.ai-preview-grid{grid-template-columns:1fr}.ai-preview-grid .field-wide{grid-column:auto}.ai-period-row button{width:100%}.ai-dialog-actions{flex-direction:column}.ai-dialog-actions .ghost,.ai-dialog-actions button:not(.ghost){flex:auto}.ai-voice-row{align-items:stretch;flex-direction:column}.ai-voice-btn{width:100%}}
   @media(prefers-reduced-motion:reduce){.ai-entry-button:hover{transform:none}.ai-loading::before{animation-duration:1.4s}.ai-voice-btn.is-listening .ai-voice-icon::after{animation:none}}
+  .ai-chat-dialog{max-width:640px;width:calc(100% - 24px);height:calc(100dvh - 36px);max-height:700px;display:flex;flex-direction:column;padding:16px;border-radius:20px;background:var(--card);color:var(--ink)}
+  .ai-chat-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--line);flex-shrink:0}
+  .ai-chat-body{flex:1;overflow-y:auto;padding:12px 2px;display:flex;flex-direction:column;gap:12px;overscroll-behavior:contain}
+  .ai-msg{display:flex;flex-direction:column;max-width:86%;word-break:break-word;animation:aiMsgFade .25s ease}
+  .ai-msg.user{align-self:flex-end;align-items:flex-end}
+  .ai-msg.assistant{align-self:flex-start;align-items:flex-start}
+  .ai-msg-bubble{padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.55}
+  .ai-msg.user .ai-msg-bubble{background:var(--pri);color:#fff;border-bottom-right-radius:4px}
+  .ai-msg.assistant .ai-msg-bubble{background:color-mix(in srgb,var(--card) 92%,var(--bg));border:1px solid var(--line);border-bottom-left-radius:4px;color:var(--ink)}
+  .ai-msg-time{font-size:10.5px;color:var(--muted);margin-top:3px;padding:0 4px}
+  .ai-chat-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+  .ai-chip{font-size:11.5px;padding:5px 11px;border-radius:99px;background:color-mix(in srgb,var(--pri) 12%,var(--card));border:1px solid color-mix(in srgb,var(--pri) 25%,var(--line));color:var(--pri);cursor:pointer;transition:all .15s}
+  .ai-chip:hover{background:color-mix(in srgb,var(--pri) 22%,var(--card));transform:translateY(-1px)}
+  .ai-chat-empty{text-align:center;padding:24px 12px;color:var(--muted);margin:auto 0}
+  .ai-chat-empty-icon{font-size:34px;margin-bottom:8px}
+  .ai-chat-empty h3{font-size:16px;color:var(--ink);margin:0 0 6px}
+  .ai-chat-empty p{font-size:13px;line-height:1.5;margin:0 0 14px}
+  .ai-chat-footer{flex-shrink:0;border-top:1px solid var(--line);padding-top:10px}
+  .ai-chat-input-row{display:flex;gap:8px;align-items:center}
+  .ai-chat-input-row input{flex:1;margin:0;padding:10px 14px;border-radius:14px;border:1px solid var(--line);background:var(--input);color:var(--ink);font:inherit;font-size:13.5px}
+  .ai-chat-input-row button{margin:0;width:auto;padding:10px 18px;border-radius:14px;flex-shrink:0}
+  @keyframes aiMsgFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 </style>
 
 </head>
@@ -2361,14 +2383,15 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
   <section class="card ai-insight-card" id="cardAiInsight" aria-labelledby="aiInsightTitle">
     <div class="ai-card-head">
-      <div><div class="ai-card-title"><span class="ai-spark" aria-hidden="true">&#x2728;</span><h2 id="aiInsightTitle">Insight AI</h2><span class="ai-badge">BETA</span></div></div>
+      <div><div class="ai-card-title"><span class="ai-spark" aria-hidden="true">&#x2728;</span><h2 id="aiInsightTitle">Asisten &amp; Insight AI</h2><span class="ai-badge">BETA</span></div></div>
+      <button type="button" class="ghost kecil" id="btnBukaAiChat" style="margin:0;width:auto;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-color:var(--pri);color:var(--pri)"><span>&#x1F4AC;</span><strong>Tanya AI</strong></button>
     </div>
     <div class="ai-period-row">
       <label class="ui-sr-only" for="aiInsightPeriod">Periode insight</label>
       <select id="aiInsightPeriod"><option value="7">7 hari terakhir</option><option value="30" selected>30 hari terakhir</option><option value="90">3 bulan terakhir</option></select>
-      <button type="button" id="btnAiInsight">Buat insight</button>
+      <button type="button" id="btnAiInsight">Analisis pola</button>
     </div>
-    <p class="ai-card-status" id="aiInsightStatus" role="status" aria-live="polite">AI hanya berjalan saat kamu menekan tombol.</p>
+    <p class="ai-card-status" id="aiInsightStatus" role="status" aria-live="polite">Tanya langsung kondisi keuanganmu atau pilih periode untuk analisis pola.</p>
     <div class="ai-result-list" id="aiInsightResults" aria-live="polite"></div>
     <details><summary>Privasi &amp; batasan</summary><p class="ai-card-note">Yang dikirim hanya angka ringkasan, kategori, dan tanggal tanpa foto, token Drive, atau nama dompet. AI dapat keliru; saran tidak mengubah data tanpa konfirmasi.</p></details>
   </section>
@@ -3072,6 +3095,30 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <div class="ai-dialog-actions"><button type="button" class="ghost" id="btnAiSmartRetry">Ulangi proses</button><button type="button" id="btnAiSmartUse">Gunakan sebagai draf</button></div>
   </section>
   <button type="button" class="sec" id="btnAiSmartClose">Tutup</button>
+</dialog>
+
+<dialog id="dlgAiChat" class="ai-dialog ai-chat-dialog" aria-labelledby="aiChatTitle">
+  <div class="ai-chat-header">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="ai-spark" aria-hidden="true">&#x2728;</span>
+      <div>
+        <h2 id="aiChatTitle" style="margin:0;font-size:16px;font-weight:700">Tanya AI Keuangan</h2>
+        <p class="muted" style="margin:0;font-size:11.5px">Mengakses data saldo, transaksi &amp; anggaranmu</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button type="button" class="ghost kecil" id="btnAiChatClear" style="width:auto;margin:0;padding:4px 8px;font-size:11px">Hapus riwayat</button>
+      <button type="button" class="ghost kecil" id="btnAiChatClose" aria-label="Tutup" style="width:auto;margin:0;padding:4px 9px">&#x2715;</button>
+    </div>
+  </div>
+  <div class="ai-chat-body" id="aiChatMessages" role="log" aria-live="polite"></div>
+  <div class="ai-chat-footer">
+    <form id="formAiChat" onsubmit="return false;" class="ai-chat-input-row">
+      <input type="text" id="aiChatInput" placeholder="Tanyakan kondisi keuanganmu…" maxlength="500" autocomplete="off">
+      <button type="submit" id="btnAiChatSend">Kirim</button>
+    </form>
+    <p class="ai-card-note" style="margin:6px 0 0;font-size:11px;text-align:center">AI menganalisis angka dari catatanmu secara aman. Selalu verifikasi keputusan keuangan penting.</p>
+  </div>
 </dialog>
 
 <!-- DIALOG DETEKSI BARANG KAMERA AI DENGAN ANIMASI LEMBUT -->
@@ -8850,6 +8897,228 @@ $('btnAiInsight').onclick = async () => {
     statusAi($('aiInsightStatus'), 'Selesai dianalisis. Saran AI bukan kepastian dan tidak mengubah data otomatis.');
   } catch (error) { statusAi($('aiInsightStatus'), pesanErrorAi(error), { error:true }); }
   finally { $('btnAiInsight').disabled = false; }
+};
+
+// ===== ASISTEN KEUANGAN AI: Tanya AI & Riwayat Obrolan =====
+const AI_CHAT_HISTORY_KEY = 'catatan_ai_chat_v1';
+
+function muatRiwayatAiChat() {
+  try {
+    const raw = localStorage.getItem(AI_CHAT_HISTORY_KEY);
+    return Array.isArray(JSON.parse(raw)) ? JSON.parse(raw) : [];
+  } catch (_) { return []; }
+}
+
+function simpanRiwayatAiChat(daftar) {
+  try {
+    localStorage.setItem(AI_CHAT_HISTORY_KEY, JSON.stringify(daftar.slice(-40)));
+  } catch (_) {}
+}
+
+function siapkanKonteksAiChat() {
+  const uang = ringkasanUang();
+  const dompetMap = saldoSemuaDompet(db.transaksi);
+  const daftarDompet = db.dompet.filter(w => !w.arsip).map(w => ({
+    name: String(w.nama || ''),
+    balance: Math.round(dompetMap.get(w.id) || 0)
+  }));
+
+  const sampai = hariIni();
+  const dari = geser(sampai, -29);
+  const semua = transaksiLaporan().filter(x => catatanAktif(x));
+  const kini = semua.filter(x => x.tanggal >= dari && x.tanggal <= sampai);
+
+  const totalMasuk = sum(kini, 'masuk');
+  const totalKeluar = sum(kini, 'keluar');
+
+  const katMap = new Map();
+  kini.filter(x => x.tipe === 'keluar').forEach(x => {
+    katMap.set(x.kategori, (katMap.get(x.kategori) || 0) + x.total);
+  });
+  const topKategori = [...katMap.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([cat, amount]) => ({ category: cat, amount: Math.round(amount) }));
+
+  const daftarBudget = Object.entries(db.budgets || {}).slice(0, 15).map(([cat, b]) => {
+    const limit = Number(b.limit) || 0;
+    const spent = pakaiBudget(cat, b.periode);
+    return {
+      category: cat,
+      period: b.periode === 'minggu' ? 'minggu' : 'bulan',
+      limit,
+      spent,
+      remaining: Math.max(0, limit - spent)
+    };
+  });
+
+  const riwayatTerbaru = semua
+    .slice(0, 12)
+    .map(x => ({
+      date: x.tanggal,
+      title: String(x.judul || x.nama || 'Transaksi').slice(0, 50),
+      category: x.kategori || 'Lainnya',
+      type: x.tipe === 'masuk' ? 'masuk' : 'keluar',
+      amount: Math.round(x.total),
+      payment: x.cara === 'tunai' || x.tunai ? 'tunai' : 'nontunai'
+    }));
+
+  return {
+    today: sampai,
+    balance: Math.round(uang.total),
+    cashBalance: Math.round(uang.tunai),
+    wallets: daftarDompet,
+    summary30d: {
+      income: Math.round(totalMasuk),
+      expense: Math.round(totalKeluar),
+      net: Math.round(totalMasuk - totalKeluar)
+    },
+    topCategories: topKategori,
+    budgets: daftarBudget,
+    recentTransactions: riwayatTerbaru
+  };
+}
+
+function renderPesanAiChat() {
+  const box = $('aiChatMessages');
+  if (!box) return;
+  box.replaceChildren();
+  const riwayat = muatRiwayatAiChat();
+
+  if (!riwayat.length) {
+    const empty = el('div', 'ai-chat-empty');
+    empty.append(
+      el('div', 'ai-chat-empty-icon', '🤖'),
+      el('h3', null, 'Halo! Saya Asisten Keuangan AI'),
+      el('p', 'muted', 'Saya memiliki akses langsung ke ringkasan saldo, pemasukan, pengeluaran, dompet, dan anggaranmu saat ini. Silakan tanyakan apa saja!')
+    );
+    const chipsWrap = el('div', 'ai-chat-chips');
+    chipsWrap.style.justifyContent = 'center';
+    const starters = [
+      'Berapa total pengeluaran dan pemasukanku bulan ini?',
+      'Kategori apa yang paling banyak pengeluarannya?',
+      'Berapa sisa saldo di semua dompetku?',
+      'Apakah anggaran bulananku masih aman?'
+    ];
+    starters.forEach(q => {
+      const chip = el('button', 'ai-chip', q);
+      chip.type = 'button';
+      chip.onclick = () => kirimPesanAiChat(q);
+      chipsWrap.appendChild(chip);
+    });
+    empty.appendChild(chipsWrap);
+    box.appendChild(empty);
+    return;
+  }
+
+  riwayat.forEach((msg, idx) => {
+    const wrap = el('div', 'ai-msg ' + (msg.role === 'user' ? 'user' : 'assistant'));
+    const bubble = el('div', 'ai-msg-bubble', msg.text);
+    bubble.style.whiteSpace = 'pre-line';
+    wrap.appendChild(bubble);
+
+    if (msg.ts) {
+      const d = new Date(msg.ts);
+      const jam = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+      wrap.appendChild(el('span', 'ai-msg-time', jam));
+    }
+
+    if (idx === riwayat.length - 1 && msg.role === 'assistant' && Array.isArray(msg.suggestions) && msg.suggestions.length) {
+      const chips = el('div', 'ai-chat-chips');
+      msg.suggestions.forEach(s => {
+        const btn = el('button', 'ai-chip', s);
+        btn.type = 'button';
+        btn.onclick = () => kirimPesanAiChat(s);
+        chips.appendChild(btn);
+      });
+      wrap.appendChild(chips);
+    }
+
+    box.appendChild(wrap);
+  });
+
+  box.scrollTop = box.scrollHeight;
+}
+
+async function kirimPesanAiChat(pertanyaanKustom = null) {
+  const input = $('aiChatInput');
+  const teks = String(pertanyaanKustom || input.value || '').trim();
+  if (!teks) return;
+
+  if (!await mintaPersetujuanAi()) {
+    beriPesan('Persetujuan AI diperlukan untuk mengirim pertanyaan.', true);
+    return;
+  }
+
+  const riwayat = muatRiwayatAiChat();
+  const userMsg = { id: uid(), role: 'user', text: teks, ts: Date.now() };
+  riwayat.push(userMsg);
+  simpanRiwayatAiChat(riwayat);
+  input.value = '';
+  renderPesanAiChat();
+
+  const sendBtn = $('btnAiChatSend');
+  sendBtn.disabled = true;
+  input.disabled = true;
+
+  const box = $('aiChatMessages');
+  const typingEl = el('div', 'ai-msg assistant');
+  typingEl.id = 'aiChatTyping';
+  typingEl.append(el('div', 'ai-msg-bubble ai-loading', 'Asisten AI sedang menganalisis datamu…'));
+  box.appendChild(typingEl);
+  box.scrollTop = box.scrollHeight;
+
+  try {
+    const context = siapkanKonteksAiChat();
+    const historyPayload = riwayat.slice(-6).map(m => ({ role: m.role, content: m.text }));
+    const data = await panggilAsistenAi('financial_chat', {
+      message: teks,
+      history: historyPayload,
+      financialContext: context
+    });
+
+    typingEl.remove();
+    const replyText = String(data?.reply || 'Maaf, saya belum dapat menjawab pertanyaan tersebut.').trim();
+    const suggestions = Array.isArray(data?.followUpSuggestions) ? data.followUpSuggestions : [];
+
+    riwayat.push({
+      id: uid(),
+      role: 'assistant',
+      text: replyText,
+      suggestions,
+      ts: Date.now()
+    });
+    simpanRiwayatAiChat(riwayat);
+    renderPesanAiChat();
+  } catch (error) {
+    typingEl.remove();
+    const errText = 'Gagal memproses pertanyaan: ' + pesanErrorAi(error);
+    riwayat.push({ id: uid(), role: 'assistant', text: errText, ts: Date.now() });
+    simpanRiwayatAiChat(riwayat);
+    renderPesanAiChat();
+  } finally {
+    sendBtn.disabled = false;
+    input.disabled = false;
+    setTimeout(() => input.focus(), 60);
+  }
+}
+
+$('btnBukaAiChat').onclick = () => {
+  renderPesanAiChat();
+  $('dlgAiChat').showModal();
+  setTimeout(() => $('aiChatInput').focus(), 80);
+};
+$('btnAiChatClose').onclick = () => $('dlgAiChat').close();
+$('btnAiChatClear').onclick = () => {
+  konfirmasiDompet('Hapus riwayat obrolan AI?', 'Semua riwayat tanya jawab dengan Asisten AI di perangkat ini akan dibersihkan.', () => {
+    localStorage.removeItem(AI_CHAT_HISTORY_KEY);
+    renderPesanAiChat();
+    beriPesan('Riwayat obrolan AI telah dibersihkan.');
+  });
+};
+$('formAiChat').onsubmit = e => {
+  e.preventDefault();
+  kirimPesanAiChat();
 };
 
 
