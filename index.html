@@ -2460,7 +2460,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
         <p class="muted" id="iDigitalPreview" aria-live="polite"></p>
         <button class="ghost kecil" id="iDigitalAdd" type="button">+ Tambah dompet</button>
       </div>
-      <div class="wallet-form-actions"><button type="button" class="ghost kecil" id="iDigitalHelp" aria-haspopup="dialog" aria-controls="dlgBantuan">Cara pakai dompet</button></div>
+      <div class="wallet-form-actions"><button type="button" class="ghost kecil" id="iDigitalHelp" aria-haspopup="dialog" aria-controls="dlgBantuan">Cara pakai dompet</button><span class="muted" id="iDigitalInfo" hidden></span></div>
     </div>
     <details id="iCashOptions" class="quick-extra"><summary>Rincian pembayaran tunai (opsional)</summary>
     <button type="button" class="ghost kecil cash-help" id="btnCashHelp" aria-haspopup="dialog" aria-controls="dlgBantuan" style="display:none">Cara pakai tunai</button>
@@ -2868,7 +2868,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
         <p class="muted" id="eDigitalPreview" aria-live="polite"></p>
         <button class="ghost kecil" id="eDigitalAdd" type="button">+ Tambah dompet</button>
       </div>
-      <div class="wallet-form-actions"><button type="button" class="ghost kecil" id="eDigitalHelp" aria-haspopup="dialog" aria-controls="dlgBantuan">Cara pakai dompet</button><span class="muted" id="eDigitalInfo">Pilih dompet tujuan. Nominal cukup diisi sekali.</span></div>
+      <div class="wallet-form-actions"><button type="button" class="ghost kecil" id="eDigitalHelp" aria-haspopup="dialog" aria-controls="dlgBantuan">Cara pakai dompet</button><span class="muted" id="eDigitalInfo" hidden></span></div>
     </div>
     <button type="button" class="ghost kecil cash-help" id="btnECashHelp" aria-haspopup="dialog" aria-controls="dlgBantuan" style="display:none">Cara pakai tunai</button>
   <div class="cash-track" id="eCashDetailsWrap" style="display:none"><span>Catat rincian tunai?</span><button type="button" id="btnECashDetails" aria-pressed="false" aria-label="Catat rincian pembayaran tunai">OFF · Cukup total</button></div>
@@ -4958,7 +4958,8 @@ function perbaruiDigitalUi(prefix) {
   $(prefix + 'DigitalWrap').style.display = nontunai ? '' : 'none'; $(prefix + 'DigitalDetail').hidden = !aktif;
   const tipe = $(edit ? 'eTipe' : 'tipe').value;
   $(prefix + 'DigitalLabel').textContent = tipe === 'masuk' ? 'Masuk ke dompet' : 'Dibayar dari dompet';
-  $(prefix + 'DigitalInfo').textContent = 'Nominal cukup diisi sekali. Saldo dompet berubah setelah disimpan.';
+  const info = $(prefix + 'DigitalInfo');
+  if (info) info.textContent = '';
   const id = $(prefix + 'DigitalSelect').value, w = db.dompet.find(w => w.id === id);
   $(prefix + 'DigitalBalance').textContent = w ? 'Saldo ' + w.nama + ' sekarang: ' + rp(saldoDompet(id)) : 'Pilih tempat uang diterima atau dibayarkan.';
   const balance=$(prefix+'DigitalBalance');balance.classList.add('wallet-selected-balance');if(w){const text=balance.textContent;balance.replaceChildren(badgePenyedia(penyediaDompet(w),w.jenis),el('span',null,text));}
