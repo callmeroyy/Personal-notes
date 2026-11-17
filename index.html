@@ -2875,6 +2875,19 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <p class="muted setting-help" id="infoBuram" aria-live="polite"></p>
     <button class="ghost" id="btnBgHapus">Hapus latar</button>
   </div>
+
+  <div class="card" id="cardAiSettings">
+    <h2>Asisten AI &amp; Google Gemini</h2>
+    <p class="muted" style="margin-bottom:12px">Secara default, Asisten AI menganalisis data keuangan, saldo, pengeluaran, anggaran, dan tips secara lokal on-device. Hubungkan API Key Google Gemini gratis untuk bertanya bebas/random tentang apa saja tanpa batas.</p>
+    <div class="field-wrap">
+      <label class="field-label" for="sGeminiKey">Google Gemini API Key (Opsional)</label>
+      <input type="password" id="sGeminiKey" placeholder="Tempel AIzaSy..." autocomplete="off" style="font-family:monospace;font-size:13px">
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px">
+      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="font-size:12px;color:var(--pri);font-weight:600">Dapatkan API Key Gratis di Google AI Studio ↗</a>
+      <button type="button" class="ghost kecil" id="btnSimpanGeminiSetelan" style="width:auto;margin:0">Simpan kunci</button>
+    </div>
+  </div>
 </section>
 
 <footer class="copy"><span><strong>Buatan Roy</strong> ✦ catatan kecil, rencana besar.</span><span><span class="ui-icon" data-ruang-icon="lock" aria-hidden="true"></span>Data tersimpan di browser ini</span></footer>
@@ -3147,6 +3160,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       </div>
     </div>
     <div style="display:flex;gap:6px;align-items:center">
+      <button type="button" class="ghost kecil" id="btnAiChatKey" title="Pengaturan Kunci Google Gemini AI" style="width:auto;margin:0;padding:4px 8px;font-size:11px">🔑 Kunci AI</button>
       <button type="button" class="ghost kecil" id="btnAiChatClear" style="width:auto;margin:0;padding:4px 8px;font-size:11px">Hapus riwayat</button>
       <button type="button" class="ghost kecil" id="btnAiChatClose" aria-label="Tutup" style="width:auto;margin:0;padding:4px 9px">&#x2715;</button>
     </div>
@@ -3158,6 +3172,32 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <button type="submit" id="btnAiChatSend">Kirim</button>
     </form>
     <p class="ai-card-note" style="margin:6px 0 0;font-size:11px;text-align:center">AI menganalisis angka dari catatanmu secara aman. Selalu verifikasi keputusan keuangan penting.</p>
+  </div>
+</dialog>
+
+<!-- DIALOG PENGATURAN KUNCI GOOGLE GEMINI AI -->
+<dialog id="dlgGeminiKey" class="ai-dialog" aria-labelledby="geminiKeyTitle" style="max-width:480px;border-radius:20px;padding:20px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:20px" aria-hidden="true">🔑</span>
+      <h2 id="geminiKeyTitle" style="margin:0;font-size:16px;font-weight:700">Kunci Google Gemini AI</h2>
+    </div>
+    <button type="button" class="ghost kecil" id="btnCloseGeminiKey" aria-label="Tutup" style="width:auto;margin:0;padding:4px 9px">&#x2715;</button>
+  </div>
+  <p class="muted" style="font-size:12.5px;line-height:1.55;margin:0 0 12px">
+    Aktifkan AI cerdas untuk menjawab <strong>semua pertanyaan random / bebas</strong> (sains, cerita, pengetahuan umum, resep, saran hidup) di samping catatan keuanganmu.
+  </p>
+  <div style="background:var(--ghostbg, rgba(0,0,0,.03));padding:10px 12px;border-radius:12px;border:1px solid var(--line);margin-bottom:12px;font-size:12px;line-height:1.5">
+    <div><strong>Status:</strong> <span id="geminiKeyStatus">Belum terpasang</span></div>
+    <div style="margin-top:4px"><a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--pri);font-weight:600">Dapatkan API Key Gratis di Google AI Studio ↗</a> (Gratis, tanpa kartu kredit)</div>
+  </div>
+  <div class="field-wrap" style="margin-bottom:12px">
+    <label class="field-label" for="geminiApiKeyInput">API Key Gemini</label>
+    <input type="password" id="geminiApiKeyInput" placeholder="Tempel AIzaSy..." autocomplete="off" style="font-family:monospace;font-size:13px">
+  </div>
+  <div class="ai-dialog-actions" style="display:flex;gap:8px">
+    <button type="button" class="ghost" id="btnDeleteGeminiKey" style="flex:1">Hapus Kunci</button>
+    <button type="button" id="btnSaveGeminiKey" style="flex:1.5">Simpan Kunci</button>
   </div>
 </dialog>
 
@@ -9315,7 +9355,183 @@ function jawabFinansialLokal(pertanyaan, context) {
     };
   }
 
+  // 13. Hitung Matematika Instan
+  const mathClean = q.replace(/[x×]/g, '*').replace(/[:÷]/g, '/').replace(/,/g, '.').replace(/\s+/g, '');
+  if (/^[\d\+\-\*\/\(\)\.]+$/.test(mathClean) && /[\+\-\*\/]/.test(mathClean)) {
+    try {
+      const val = (new Function('return (' + mathClean + ')'))();
+      if (typeof val === 'number' && Number.isFinite(val)) {
+        const fmt = Number.isInteger(val) ? val.toLocaleString('id-ID') : val.toFixed(2).replace('.', ',');
+        return {
+          reply: '🔢 **Hasil Perhitungan:**\n\n`' + q + '` = **' + fmt + '**',
+          followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Berapa total pengeluaranku bulan ini?']
+        };
+      }
+    } catch (_) {}
+  }
+
+  // 14. Waktu & Tanggal
+  if (/\b(jam\s*berapa|pukul\s*berapa|sekarang\s*jam|waktu\s*sekarang)\b/i.test(q)) {
+    const now = new Date();
+    const jam = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    return {
+      reply: '🕒 Waktu saat ini di perangkatmu adalah pukul **' + jam + ' WIB**.',
+      followUpSuggestions: ['Hari ini tanggal berapa?', 'Berapa total pengeluaran hari ini?']
+    };
+  }
+  if (/\b(tanggal\s*berapa|hari\s*apa|hari\s*ini\s*tanggal)\b/i.test(q)) {
+    return {
+      reply: '📅 Hari ini adalah **' + tglIndo(hariIni()) + '**.',
+      followUpSuggestions: ['Jam berapa sekarang?', 'Tampilkan transaksi terbaru']
+    };
+  }
+
+  // 15. Edukasi Finansial Dasar
+  if (/\b(apa\s*itu\s*inflasi|arti\s*inflasi)\b/i.test(q)) {
+    return {
+      reply: '📉 **Inflasi** adalah kenaikan harga barang dan jasa secara umum dan terus-menerus, yang menyebabkan nilai riil uang menurun dari waktu ke waktu.\n\n💡 *Tips:* Menyimpan uang hanya di rekening biasa akan tergerus inflasi. Pertimbangkan instrumen investasi seperti reksadana pasar uang atau emas untuk menjaga daya beli.',
+      followUpSuggestions: ['Apa itu reksadana?', 'Beri tips berhemat']
+    };
+  }
+  if (/\b(apa\s*itu\s*dana\s*darurat|fungsi\s*dana\s*darurat)\b/i.test(q)) {
+    return {
+      reply: '🛡️ **Dana Darurat** adalah dana simpanan khusus yang hanya digunakan saat kondisi darurat tak terduga (misal sakit, PHK, perbaikan mendadak).\n\n💡 *Idealnya:* Siapkan minimal 3 hingga 6 kali total pengeluaran bulananmu dan simpan di tempat yang sangat likuid.',
+      followUpSuggestions: ['Berapa total pengeluaranku bulan ini?', 'Beri tips berhemat']
+    };
+  }
+  if (/\b(apa\s*itu\s*reksadana|arti\s*reksadana)\b/i.test(q)) {
+    return {
+      reply: '📈 **Reksadana** adalah wadah penghimpun dana masyarakat pemodal untuk diinvestasikan dalam portofolio efek (seperti saham, obligasi, atau pasar uang) oleh Manajer Investasi profesional.',
+      followUpSuggestions: ['Apa itu inflasi?', 'Apa itu dana darurat?']
+    };
+  }
+  if (/\b(apa\s*itu\s*saham|arti\s*saham)\b/i.test(q)) {
+    return {
+      reply: '🏢 **Saham** adalah bukti kepemilikan nilai sebuah perusahaan. Dengan membeli saham, kamu menjadi bagian dari pemilik perusahaan tersebut dan berhak atas dividen serta potensi keuntungan kenaikan harga (capital gain).',
+      followUpSuggestions: ['Apa itu reksadana?', 'Apa itu dana darurat?']
+    };
+  }
+
   return null;
+}
+
+const GEMINI_KEY_STORAGE = 'catatan_gemini_key';
+
+function muatGeminiKey() {
+  try {
+    return localStorage.getItem(GEMINI_KEY_STORAGE) || '';
+  } catch (_) { return ''; }
+}
+
+function simpanGeminiKey(key) {
+  try {
+    const k = String(key || '').trim();
+    if (k) localStorage.setItem(GEMINI_KEY_STORAGE, k);
+    else localStorage.removeItem(GEMINI_KEY_STORAGE);
+    sinkronkanTampilanGeminiKey();
+  } catch (_) {}
+}
+
+function sinkronkanTampilanGeminiKey() {
+  const k = muatGeminiKey();
+  const inp1 = $('geminiApiKeyInput');
+  const inp2 = $('sGeminiKey');
+  const st = $('geminiKeyStatus');
+  if (inp1) inp1.value = k;
+  if (inp2) inp2.value = k;
+  if (st) {
+    if (k) {
+      st.textContent = '✅ Aktif (' + k.slice(0, 6) + '...' + k.slice(-4) + ')';
+      st.style.color = 'var(--ok, #16a34a)';
+    } else {
+      st.textContent = '⚪ Belum terpasang (hanya analisis lokal)';
+      st.style.color = 'var(--muted)';
+    }
+  }
+}
+
+function bukaDialogGeminiKey() {
+  sinkronkanTampilanGeminiKey();
+  sinkronisasiStatusDialog();
+  $('dlgGeminiKey').showModal();
+}
+
+async function tanyaGeminiLangsung(apiKey, message, history, context) {
+  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + encodeURIComponent(apiKey);
+  
+  const walletsStr = context.wallets && context.wallets.length
+    ? context.wallets.map(w => w.name + ': ' + rp(w.balance)).join(', ')
+    : 'Belum ada dompet aktif';
+
+  const systemInstruction = 'Kamu adalah Asisten AI pribadi yang ramah, santun, cerdas, dan bijak di aplikasi Catatan Keuangan.\n\n' +
+    'Data ringkasan keuangan pengguna saat ini:\n' +
+    '• Total Saldo: ' + rp(context.balance) + ' (Kas Tunai: ' + rp(context.cashBalance) + ')\n' +
+    '• Dompet / Rekening: ' + walletsStr + '\n' +
+    '• Pengeluaran 30 hari: ' + rp(context.summary30d.expense) + '\n' +
+    '• Pemasukan 30 hari: ' + rp(context.summary30d.income) + ' (Net: ' + rp(context.summary30d.net) + ')\n' +
+    '• Kategori Terbesar: ' + (context.topCategories.map(c => c.category + ': ' + rp(c.amount)).join(', ') || 'Belum ada data') + '\n\n' +
+    'Instruksi:\n' +
+    '1. Jawab pertanyaan pengguna dalam bahasa Indonesia yang ramah, terstruktur, dan nyaman dibaca di layar HP.\n' +
+    '2. Jika pengguna menanyakan kondisi keuangannya, berikan analisis akurat sesuai data di atas dalam format Rupiah (Rp).\n' +
+    '3. Jika pengguna menanyakan pertanyaan bebas, umum, atau random (seperti sains, cerita, sejarah, resep, coding, saran hidup, teka-teki, dll.), jawab dengan wawasan luas, antusias, dan akurat!\n' +
+    '4. Jangan gunakan markdown yang berlebihan.';
+
+  const contents = [];
+  contents.push({
+    role: 'user',
+    parts: [{ text: 'Instruksi Asisten:\n' + systemInstruction }]
+  });
+  contents.push({
+    role: 'model',
+    parts: [{ text: 'Halo! Saya memahami instruksi dan siap membantu, baik menganalisis catatan keuanganmu maupun menjawab segala pertanyaan bebas lainnya.' }]
+  });
+
+  if (Array.isArray(history) && history.length) {
+    history.slice(-6).forEach(h => {
+      const text = String(h.text || h.content || '').trim();
+      if (!text) return;
+      contents.push({
+        role: h.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text }]
+      });
+    });
+  }
+
+  contents.push({
+    role: 'user',
+    parts: [{ text: message }]
+  });
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 35000);
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents,
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 1000
+        }
+      }),
+      signal: controller.signal
+    });
+
+    if (!res.ok) {
+      const errJson = await res.json().catch(() => ({}));
+      const msg = errJson.error?.message || ('HTTP ' + res.status);
+      throw new Error('Gemini API: ' + msg);
+    }
+
+    const data = await res.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!reply) throw new Error('Respons dari model Gemini kosong.');
+    return reply.trim();
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function kirimPesanAiChat(pertanyaanKustom = null) {
@@ -9338,6 +9554,10 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
     goto('grafik');
     return;
   }
+  if (teks === '🔑 Masukkan Kunci Gemini' || teks === '🔑 Kunci AI') {
+    bukaDialogGeminiKey();
+    return;
+  }
 
   const riwayat = muatRiwayatAiChat();
   const userMsg = { id: uid(), role: 'user', text: teks, ts: Date.now() };
@@ -9358,11 +9578,16 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
     });
     simpanRiwayatAiChat(riwayat);
     renderPesanAiChat();
-    setTimeout(() => input.focus(), 60);
+    setTimeout(() => {
+      if (document.activeElement === input) return;
+      input.focus({ preventScroll: true });
+    }, 60);
     return;
   }
 
-  if (!await mintaPersetujuanAi()) {
+  const geminiKey = muatGeminiKey();
+
+  if (!geminiKey && !await mintaPersetujuanAi()) {
     beriPesan('Persetujuan AI diperlukan untuk mengirim pertanyaan.', true);
     return;
   }
@@ -9378,17 +9603,25 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
   box.scrollTop = box.scrollHeight;
 
   try {
-    const historyPayload = riwayat.slice(-4).map(m => ({ role: m.role, content: m.text }));
-    const data = await panggilAsistenAi('financial_chat', {
-      message: teks,
-      history: historyPayload,
-      financialContext: context
-    });
+    let replyText = '';
+    let suggestions = [];
+
+    if (geminiKey) {
+      replyText = await tanyaGeminiLangsung(geminiKey, teks, riwayat, context);
+      suggestions = ['Tanya hal lain', 'Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat'];
+    } else {
+      const historyPayload = riwayat.slice(-4).map(m => ({ role: m.role, content: m.text }));
+      const data = await panggilAsistenAi('financial_chat', {
+        message: teks,
+        history: historyPayload,
+        financialContext: context
+      });
+
+      replyText = String(data?.reply || 'Saya telah memeriksa catatanmu, silakan tanyakan detail spesifik yang ingin kamu ketahui.').trim();
+      suggestions = Array.isArray(data?.followUpSuggestions) ? data.followUpSuggestions : [];
+    }
 
     typingEl.remove();
-    const replyText = String(data?.reply || 'Saya telah memeriksa catatanmu, silakan tanyakan detail spesifik yang ingin kamu ketahui.').trim();
-    const suggestions = Array.isArray(data?.followUpSuggestions) ? data.followUpSuggestions : [];
-
     riwayat.push({
       id: uid(),
       role: 'assistant',
@@ -9400,20 +9633,20 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
     renderPesanAiChat();
   } catch (error) {
     typingEl.remove();
-    const fallbackText = 'Saya belum dapat terhubung ke server AI saat ini.\n\n' +
-      'Namun seluruh data catatan keuanganmu tetap bisa saya analisis secara instan di perangkat ini:\n' +
-      '• 💰 Sisa saldo semua dompet & kas tunai\n' +
-      '• 📉 Total pengeluaran & pos terboros\n' +
-      '• 📈 Pemasukan & status arus kas\n' +
-      '• 🎯 Status batas anggaran (budget)\n' +
-      '• 📝 5 riwayat transaksi terakhir\n' +
-      '• 💡 Tips dan saran berhemat\n\n' +
-      'Silakan pilih pertanyaan di bawah atau tanyakan detail keuanganmu!';
+    const isGemini = Boolean(geminiKey);
+    const fallbackText = isGemini
+      ? 'Gagal menghubungi Google Gemini API: ' + (error.message || 'Koneksi terputus') + '.\n\nPeriksa kembali API Key kamu di tombol 🔑 Kunci AI.'
+      : '🤖 Pertanyaan ini di luar lingkup analisis catatan keuangan lokal.\n\n' +
+        'Untuk bertanya **bebas / random tentang apa saja** (sains, cerita, pengetahuan umum, resep, tips hidup), hubungkan **Google Gemini AI (Gratis)**.\n\n' +
+        'Cukup dapatkan API Key gratis di Google AI Studio (tanpa kartu kredit) lalu simpan dengan tombol di bawah!';
+
     riwayat.push({
       id: uid(),
       role: 'assistant',
       text: fallbackText,
-      suggestions: ['Berapa sisa saldo di semua dompetku?', 'Kategori apa yang paling banyak pengeluarannya?', 'Apakah anggaran bulananku masih aman?', 'Beri tips berhemat'],
+      suggestions: geminiKey
+        ? ['Coba tanyakan lagi', 'Berapa sisa saldo di semua dompetku?']
+        : ['🔑 Masukkan Kunci Gemini', 'Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat'],
       ts: Date.now()
     });
     simpanRiwayatAiChat(riwayat);
@@ -9430,11 +9663,44 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
 
 $('btnBukaAiChat').onclick = () => {
   renderPesanAiChat();
+  sinkronkanTampilanGeminiKey();
   sinkronisasiStatusDialog();
   $('dlgAiChat').showModal();
   if (window.innerWidth > 640) {
     setTimeout(() => $('aiChatInput')?.focus({ preventScroll: true }), 80);
   }
+};
+$('btnAiChatKey').onclick = () => bukaDialogGeminiKey();
+$('btnCloseGeminiKey').onclick = () => {
+  $('dlgGeminiKey').close();
+  sinkronisasiStatusDialog();
+};
+$('dlgGeminiKey').addEventListener('close', sinkronisasiStatusDialog);
+
+$('btnSaveGeminiKey').onclick = () => {
+  const val = $('geminiApiKeyInput').value.trim();
+  if (!val) {
+    beriPesan('Tempelkan API Key Google Gemini terlebih dahulu.', true);
+    return;
+  }
+  simpanGeminiKey(val);
+  beriPesan('API Key Google Gemini berhasil disimpan!');
+  $('dlgGeminiKey').close();
+  sinkronisasiStatusDialog();
+};
+
+$('btnDeleteGeminiKey').onclick = () => {
+  simpanGeminiKey('');
+  $('geminiApiKeyInput').value = '';
+  beriPesan('API Key Gemini telah dihapus.');
+  $('dlgGeminiKey').close();
+  sinkronisasiStatusDialog();
+};
+
+$('btnSimpanGeminiSetelan').onclick = () => {
+  const val = $('sGeminiKey').value.trim();
+  simpanGeminiKey(val);
+  beriPesan(val ? 'API Key Google Gemini berhasil disimpan!' : 'API Key Gemini telah dikosongkan.');
 };
 $('btnAiChatClose').onclick = () => {
   $('dlgAiChat').close();
