@@ -2352,7 +2352,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 
   <div class="card" id="cardProyeksi">
     <h2>Proyeksi 30 hari</h2>
-    <p class="sub">Perkiraan dari saldo sekarang dan jadwal transaksi berulang.</p>
     <p id="teksProyeksi" style="margin:0;font-size:15px;line-height:1.6"></p>
     <details id="detailProyeksi" style="display:none"><summary>Lihat jadwal terdekat</summary><div id="listProyeksi"></div></details>
   </div>
@@ -2362,8 +2361,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
   <section class="card ai-insight-card" id="cardAiInsight" aria-labelledby="aiInsightTitle">
     <div class="ai-card-head">
-      <div><div class="ai-card-title"><span class="ai-spark" aria-hidden="true">&#x2728;</span><h2 id="aiInsightTitle">Insight AI</h2><span class="ai-badge">BETA</span></div>
-      <p class="sub">Temukan pola pengeluaran tanpa mengirim foto struk atau data Google Drive.</p></div>
+      <div><div class="ai-card-title"><span class="ai-spark" aria-hidden="true">&#x2728;</span><h2 id="aiInsightTitle">Insight AI</h2><span class="ai-badge">BETA</span></div></div>
     </div>
     <div class="ai-period-row">
       <label class="ui-sr-only" for="aiInsightPeriod">Periode insight</label>
@@ -2380,12 +2378,11 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <button type="button" class="money-tab" id="tabMoneyCash" role="tab" aria-selected="true" aria-controls="panelMoneyCash" tabindex="0">Tunai</button>
       <button type="button" class="money-tab" id="tabMoneyDigital" role="tab" aria-selected="false" aria-controls="panelMoneyDigital" tabindex="-1">Wallet</button>
     </div>
-    <p class="muted money-swipe-hint">Ketuk tab atau geser untuk berpindah.</p>
     <p class="wallet-dialog-note" id="homeAllocationInfo" hidden></p>
     <div id="moneyPanels">
       <div id="panelMoneyCash" role="tabpanel" aria-labelledby="tabMoneyCash" tabindex="0">
         <div class="wallet-heading"><h3>Tunai</h3><button type="button" class="ghost kecil" id="btnHomeCashHelp">Cara pakai</button></div>
-        <div class="wallet-summary"><span>Saldo tunai</span><b id="homeCashTotal">Rp0</b><small>Mengikuti pemasukan dan pengeluaran tunai. Tidak perlu mengisi jumlah lembar uang.</small></div>
+        <div class="wallet-summary"><span>Saldo tunai</span><b id="homeCashTotal">Rp0</b></div>
         <div class="wallet-actions"><button type="button" id="btnHomeCashAdd">+ Tambah saldo</button><button type="button" class="ghost" id="btnHomeCashRecord">Catat tunai</button><button type="button" class="ghost" id="btnCashToWallet">Tunai → Wallet</button></div>
         <details id="homeCashDetails" class="quick-extra">
           <summary>Rincian uang fisik <span class="muted">(opsional)</span></summary>
@@ -2402,8 +2399,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <div id="panelMoneyDigital" role="tabpanel" aria-labelledby="tabMoneyDigital" tabindex="0" hidden>
 <div class="wallet-section" id="cardDompetDigital">
     <div class="wallet-heading"><h3>Rekening &amp; e-wallet</h3><button type="button" class="ghost kecil" id="btnWalletHelp">Cara pakai</button></div>
-    <p class="muted" style="margin:0;line-height:1.5">Pisahkan uang di rekening dan e-wallet sesuai yang kamu miliki.</p>
-    <div class="wallet-summary"><span>Jumlah saldo di dompet</span><b id="walletTotal">Rp0</b><small>Bagian dari saldo total, tidak dijumlahkan dua kali.</small></div>
+    <div class="wallet-summary"><span>Jumlah saldo di dompet</span><b id="walletTotal">Rp0</b></div>
     <p class="muted" id="walletUnassignedInfo" style="line-height:1.5"></p>
     <div id="walletList"></div>
     <div class="wallet-actions"><button type="button" id="btnWalletAdd">+ Tambah dompet</button><button type="button" class="ghost" id="btnWalletTransfer">Pindahkan saldo</button><button type="button" class="ghost" id="btnWalletToCash">Tarik tunai</button></div>
@@ -2432,7 +2428,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 
   <div class="card" id="cardTempo" style="display:none">
     <h2>Perlu dicatat</h2>
-    <p class="sub">Periksa nominal dan pilih Tunai atau Wallet sebelum menyimpan.</p>
     <div id="listTempo"></div>
     <button id="btnCatatSemua">Catat berikutnya</button>
   </div>
@@ -2465,7 +2460,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
         <p class="muted" id="iDigitalPreview" aria-live="polite"></p>
         <button class="ghost kecil" id="iDigitalAdd" type="button">+ Tambah dompet</button>
       </div>
-      <div class="wallet-form-actions"><button type="button" class="ghost kecil" id="iDigitalHelp" aria-haspopup="dialog" aria-controls="dlgBantuan">Cara pakai dompet</button><span class="muted" id="iDigitalInfo">Pilih dompet tujuan. Nominal cukup diisi sekali.</span></div>
+      <div class="wallet-form-actions"><button type="button" class="ghost kecil" id="iDigitalHelp" aria-haspopup="dialog" aria-controls="dlgBantuan">Cara pakai dompet</button></div>
     </div>
     <details id="iCashOptions" class="quick-extra"><summary>Rincian pembayaran tunai (opsional)</summary>
     <button type="button" class="ghost kecil cash-help" id="btnCashHelp" aria-haspopup="dialog" aria-controls="dlgBantuan" style="display:none">Cara pakai tunai</button>
@@ -2510,7 +2505,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
         <option value="satuan">Harga per satuan (misalnya per kg)</option>
       </select>
       <input type="text" id="iHarga" data-uang placeholder="Contoh: 12.000" inputmode="decimal">
-      <p class="muted" id="iHargaInfo" style="margin:-4px 0 10px">Contoh: telur 0,5 kg, bayar Rp12.000 → ketik 12000, titik muncul otomatis. Tidak perlu menghitung harga per kg.</p>
+      <p class="muted" id="iHargaInfo" style="margin:-4px 0 10px"></p>
       <div class="grid2" id="pilihanScan">
         <button class="sec" id="btnScan" type="button">📷 Kamera</button>
         <button class="ghost" id="btnScanGaleri" type="button">🖼️ Galeri</button>
@@ -2529,7 +2524,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       </details>
       <div id="scanDraft" class="keranjang" hidden>
         <strong>Periksa hasil scan</strong>
-        <p class="muted" style="margin:6px 0 10px">Ubah nama, jumlah, satuan, atau harga total yang keliru. Tekan Hapus barang ini jika hasilnya salah.</p>
         <div id="scanDraftList"></div>
         <p class="muted" id="scanDraftTotal" role="status"></p>
         <button type="button" id="btnPakaiScan">Gunakan hasil scan</button>
@@ -2541,17 +2535,16 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     </div>
 
     <input type="file" id="fFoto" accept="image/*" capture="environment">
-    <p class="muted" id="fotoStatus" style="margin:0 0 10px">Foto struk (opsional) disimpan di HP, dikecilkan otomatis.</p>
+    <p class="muted" id="fotoStatus" style="margin:0 0 10px"></p>
 
     <button id="btnSimpan" disabled>Simpan transaksi</button>
     <p class="form-error" id="pesanForm" role="alert" style="display:none"></p>
     <button class="sec" id="btnKosongkan">Kosongkan keranjang</button>
-    <p class="muted" id="petunjukBarang" style="margin:6px 0 0">Satu barang? Langsung simpan. Beberapa barang? Tekan “Tambah barang lain” setiap selesai mengisi satu barang.</p>
+    <p class="muted" id="petunjukBarang" style="margin:0" hidden></p>
   </div>
 
   <div class="card" id="cardBerulang">
     <h2>Transaksi berulang<button class="kecil ghost" onclick="bantuan('berulang')" style="width:auto;padding:2px 10px;margin:0 0 0 8px;font-size:13px;border-radius:99px">?</button></h2>
-    <p class="sub">Contoh: uang kos, kuota, atau uang saku. Muncul di "Perlu dicatat" saat tanggalnya tiba.</p>
     <input type="text" id="rbNama" placeholder="Contoh: Uang kos">
     <div class="grid2">
       <select id="rbTipe">
@@ -2598,7 +2591,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <input type="text" id="wTarget" data-uang placeholder="Contoh: 5.000.000" inputmode="decimal">
       <div><input type="date" id="wTgl" title="Tenggat (opsional)"></div>
     </div>
-    <p class="muted" style="margin:-4px 0 8px">Tenggat opsional. Kalau diisi, aplikasi menghitung setoran per minggu.</p>
     <button class="sec" id="btnWish">Tambah target</button>
     <div id="listWish"></div>
   </div>
@@ -2607,7 +2599,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 <!-- CATAT TRANSAKSI -->
 <section id="catat" class="page">
   <button class="ghost catat-back" id="btnKembaliCatat" type="button">← Kembali</button>
-  <p class="muted catat-intro">Draf belum masuk saldo. Tekan Simpan transaksi setelah isian lengkap.</p>
 </section>
 
 <!-- RIWAYAT -->
@@ -2637,13 +2628,13 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <button class="sec" id="btnRekapRiwayat">🖼️ Cetak rekap sesuai filter (gambar)</button>
   </div>
   <div class="card"><div class="ledger-bulk" role="group" aria-label="Pilih dan ubah status catatan"><label><input id="ledgerSelectAll" type="checkbox">Pilih yang tampil</label><span id="ledgerSelectedCount" class="muted"></span><div class="aksi"><button type="button" class="ghost kecil" id="ledgerDisable">Nonaktifkan pilihan</button><button type="button" class="ghost kecil" id="ledgerEnable">Aktifkan pilihan</button><button type="button" class="ghost kecil" id="ledgerClear">Batal pilih</button><button type="button" class="ghost kecil" id="ledgerStatusHelp">Cara pakai status</button></div></div><div id="rList"></div>
-    <details id="walletHistory" hidden><summary>Transfer antar dompet</summary><p class="muted">Pilih apakah pokok perpindahan masuk laporan pengeluaran. Saldo total hanya berkurang biaya admin.</p><div id="walletHistoryList"></div></details></div>
+    <details id="walletHistory" hidden><summary>Transfer antar dompet</summary><div id="walletHistoryList"></div></details></div>
 </section>
 
 <!-- GRAFIK -->
 <section id="grafik" class="page">
   <div class="card chart-filter">
-    <h2>Grafik keuangan</h2><p class="sub">Lihat uang masuk, uang keluar, dan perubahan saldo.</p>
+    <h2>Grafik keuangan</h2>
     <label class="field-label" for="gRentang">Periode grafik</label>
     <select id="gRentang"><option value="7">7 hari terakhir</option><option value="30" selected>30 hari terakhir</option><option value="bulan">Bulan ini</option><option value="6bulan">6 bulan terakhir</option><option value="semua">Semua tanggal</option><option value="custom">Tanggal sendiri</option></select>
     <div class="grid2"><div><span class="muted">Dari</span><input type="date" id="gDari"></div><div><span class="muted">Sampai</span><input type="date" id="gSampai"></div></div>
@@ -2661,9 +2652,9 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
   <details class="chart-more" id="gExtraCharts">
     <summary><strong>Grafik lainnya</strong><span>Saldo berjalan, perbandingan bulanan, dan sumber pembayaran</span></summary>
-    <div class="card"><h2>Perubahan saldo</h2><p class="sub">Saldo sebelum tanggal awal ikut dihitung. Pokok perpindahan tetap milikmu; biaya admin mengurangi saldo total.</p><p class="chart-balance" id="gSaldoInfo"></p><div class="saldo-legend" id="gSaldoLegend" aria-label="Keterangan garis saldo"><span><i class="saldo-key" aria-hidden="true"></i>Tunai</span><span><i class="saldo-key saldo-key-wallet" aria-hidden="true"></i>Wallet</span></div><div class="svgbox chart-plot" id="gSaldoChart"></div><p class="sub" id="gSaldoNote"></p><details class="chart-data"><summary>Lihat angka saldo</summary><div id="gSaldoData"></div></details></div>
-    <div class="card"><h2>Perbandingan bulanan</h2><p class="sub">Pemasukan dan pengeluaran pada rentang pilihan, sampai 6 bulan terakhir.</p><div class="legend chart-legend"><span class="sw" style="background:var(--ok)"></span>Pemasukan <span class="sw" style="background:var(--bad)"></span>Pengeluaran</div><div class="svgbox chart-plot" id="gMonthChart"></div><details class="chart-data"><summary>Lihat angka bulanan</summary><div id="gMonthData"></div></details></div>
-    <div class="card"><h2>Pengeluaran dibayar dari mana?</h2><p class="sub">Bandingkan penggunaan tunai, rekening, dan e-wallet. Biaya admin termasuk pengeluaran; nominal transfer tidak dihitung dua kali.</p><div id="gPaymentChart"></div></div>
+    <div class="card"><h2>Perubahan saldo</h2><p class="chart-balance" id="gSaldoInfo"></p><div class="saldo-legend" id="gSaldoLegend" aria-label="Keterangan garis saldo"><span><i class="saldo-key" aria-hidden="true"></i>Tunai</span><span><i class="saldo-key saldo-key-wallet" aria-hidden="true"></i>Wallet</span></div><div class="svgbox chart-plot" id="gSaldoChart"></div><p class="sub" id="gSaldoNote"></p><details class="chart-data"><summary>Lihat angka saldo</summary><div id="gSaldoData"></div></details></div>
+    <div class="card"><h2>Perbandingan bulanan</h2><div class="legend chart-legend"><span class="sw" style="background:var(--ok)"></span>Pemasukan <span class="sw" style="background:var(--bad)"></span>Pengeluaran</div><div class="svgbox chart-plot" id="gMonthChart"></div><details class="chart-data"><summary>Lihat angka bulanan</summary><div id="gMonthData"></div></details></div>
+    <div class="card"><h2>Pengeluaran dibayar dari mana?</h2><div id="gPaymentChart"></div></div>
   </details>
   <div class="card">
     <h2>Bandingkan dua hari</h2><div class="grid2"><div><span class="muted">Hari A</span><input type="date" id="cmpA"></div><div><span class="muted">Hari B</span><input type="date" id="cmpB"></div></div><div id="hasilCmp"></div>
@@ -2677,24 +2668,22 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <h2>Pengingat harian</h2>
     <label class="field-label" for="sPengingat">Jam pengingat</label>
     <input type="time" id="sPengingat" aria-describedby="infoJamPengingat">
-    <p class="muted setting-help" id="infoJamPengingat">Pilih jam dan menit bebas. Kosongkan atau tekan Matikan jika tidak ingin diingatkan.</p>
+    <p class="muted setting-help" id="infoJamPengingat"></p>
     <button class="ghost kecil" id="btnPengingatMati" type="button">Matikan pengingat</button>
     <button class="ghost" id="btnNotif">Izinkan notifikasi HP</button>
     <p class="muted" id="notifStatus"></p>
-    <p class="muted">Pengingat diperiksa saat web terbuka. Tanpa server, notifikasi tidak dikirim ketika web tertutup.</p>
   </div>
   <div class="card">
     <h2>Data & backup</h2>
     <p class="muted" id="storageStatus" role="status">Memeriksa ruang penyimpanan…</p>
     <label class="field-label" for="sBackupIngat">Ingatkan backup tiap berapa hari?</label>
     <input type="number" id="sBackupIngat" min="1" max="3650" step="1" inputmode="numeric" placeholder="Contoh: 7" aria-describedby="infoBackupIngat">
-    <p class="muted setting-help" id="infoBackupIngat">Isi jumlah hari sendiri, misalnya 3 atau 14. Kosongkan untuk mematikan.</p>
+    <p class="muted setting-help" id="infoBackupIngat"></p>
     <button class="ghost kecil" id="btnBackupMati" type="button">Matikan pengingat backup</button>
     <button id="btnExcel">Export ke Excel (CSV)</button>
     <button class="sec" id="btnBackup">Export backup (JSON)</button>
     <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
     <button class="ghost" id="btnImport">Import backup (JSON)</button>
-    <p class="muted">Simpan file backup secara rutin, misalnya ke Google Drive, sebelum ganti HP.</p>
     <h2 style="margin-top:14px">Google Drive</h2>
     <button id="btnDriveSimpan">☁️ Simpan ke Drive</button>
     <button class="ghost" id="btnDriveAmbil">⬇️ Ambil dari Drive</button>
@@ -2705,7 +2694,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     </select>
     <p class="muted setting-help" id="driveAutoInfo" role="status"></p>
     <p class="muted" id="driveStatus">Belum pernah disimpan ke Drive.</p>
-    <p class="muted">File disimpan sebagai <b>catatan-keuangan-backup.json</b> di Drive kamu. Aplikasi hanya bisa mengakses file yang dibuatnya sendiri.</p>
   </div>
 </section>
 
@@ -2799,7 +2787,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 
   <div class="card">
     <h2>Kategori</h2>
-    <p class="sub">Tambahkan kategori sendiri. Kategori bawaan tidak bisa dihapus. Kalau kategori dihapus, transaksinya pindah ke Lainnya.</p>
     <select id="sKatTipe">
       <option value="keluar">Pengeluaran</option>
       <option value="masuk">Pemasukan</option>
@@ -2816,7 +2803,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <p class="muted setting-help" id="infoLatar" aria-live="polite"></p>
     <div class="setel-prev" id="bgPrev"></div>
     <input type="file" id="fBg" accept="image/*">
-    <p class="muted" id="bgStatus">Pilih foto dari galeri sebagai latar. Foto dikecilkan otomatis dan disimpan di HP ini.</p>
+    <p class="muted" id="bgStatus"></p>
     <div class="setel-row">
       <label class="field-label" for="sBuram">Buram latar</label>
       <b id="buramLabel">0px</b>
@@ -2900,7 +2887,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <p class="muted" id="eCashInfo">Isi jumlah lembar uang, bukan nominal rupiahnya. Contoh belanja Rp57.000: bayar 1 lembar Rp50.000 + 1 lembar Rp5.000 + 1 lembar Rp2.000; kembalian kosong. Rincian boleh dikosongkan jika hanya ingin menandai Tunai.</p>
     <details id="eStokWrap">
       <summary>Isi uang fisik yang ada di dompet</summary>
-      <p class="muted">Isi jumlah lembar yang kamu pegang sekarang, bukan jumlah uang yang dibelanjakan. Contoh: punya dua lembar Rp20.000 → isi 2 pada Rp20.000. Perubahan dompet tersimpan saat kamu menekan Simpan perubahan.</p>
       <div id="eStokGrid" class="grid-denom"></div>
       <p class="muted" id="eStokSummary"></p>
     </details>
@@ -2941,16 +2927,14 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 
 <dialog id="dlgUangFisik" aria-labelledby="cashStockTitle">
   <h2 id="cashStockTitle">Atur uang fisik</h2>
-  <p class="muted" style="line-height:1.6">Isi jumlah lembar atau keping yang ada di dompet sekarang. Contoh: dua lembar Rp20.000 → isi 2 pada Rp20.000.</p>
   <div id="stokGrid" class="grid-denom"></div>
   <p class="wallet-dialog-note" id="cashStockPreview" aria-live="polite"></p>
-  <p class="muted" style="line-height:1.5">Ini mencatat stok uang fisik, tanpa membuat pemasukan baru. Untuk mencatat uang masuk, gunakan Catat transaksi.</p>
   <button type="button" id="btnStokSimpan">Simpan uang fisik</button>
   <button type="button" class="sec" id="btnStockCancel">Batal</button>
 </dialog>
 
 <dialog id="dlgDompet" aria-labelledby="wltTitle">
-  <h2 id="wltTitle">Tambah dompet</h2><p class="muted" style="line-height:1.5">Pilih bank atau e-wallet. Namanya terisi otomatis dan boleh kamu ubah.</p>
+  <h2 id="wltTitle">Tambah dompet</h2>
   <label class="field-label" for="wltJenis">Jenis dompet</label><select id="wltJenis"><option value="wallet">E-wallet</option><option value="bank">Rekening bank</option><option value="saving">Tabungan</option></select>
   <label class="field-label" id="wltProviderLabel" for="wltProviderSearch">Pilih e-wallet</label><input type="search" id="wltProviderSearch" placeholder="Cari DANA, GoPay, OVO…" autocomplete="off">
   <div id="wltProviders" role="group" aria-label="Pilihan bank atau e-wallet" tabindex="0"></div>
@@ -2958,13 +2942,12 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <button type="button" class="ghost kecil" id="wltProviderOther" aria-pressed="false">Lainnya / isi sendiri</button>
   <div id="wltProviderSelected"></div>
   <label class="field-label" for="wltNama">Nama dompet</label><input id="wltNama" type="text" maxlength="40" placeholder="Contoh: BCA pribadi">
-  <p class="wallet-dialog-note" id="wltEditInfo">Saldo diisi melalui Catat transaksi. Nominal cukup dimasukkan sekali.</p>
+  <p class="wallet-dialog-note" id="wltEditInfo"></p>
   <details class="provider-credit"><summary>Tentang pilihan &amp; gambar</summary><p class="muted">Bank nasional, digital, daerah, syariah, dan e-wallet tersedia di sini. BPR atau nama lain bisa diisi melalui Lainnya. Logo dan merek dimiliki masing-masing penyelenggara; gambar yang belum tersedia memakai ikon nama. Seluruh gambar disertakan di file agar bisa tampil offline.</p></details>
   <p id="wltError" role="alert"></p><button type="button" id="btnWltSave">Simpan dompet</button><button type="button" class="sec" id="btnWltCancel">Batal</button>
 </dialog>
 <dialog id="dlgTransferDompet" aria-labelledby="transferTitle">
   <h2 id="transferTitle">Pindahkan uang</h2>
-  <p class="muted" style="line-height:1.5">Pindahkan uang antara Tunai, bank, atau e-wallet. Ini pencatatan saja, bukan transfer uang melalui bank.</p>
   <div id="transferSetup" class="wallet-dialog-note" hidden><p>Belum ada rekening / e-wallet aktif. Tambahkan satu terlebih dahulu dan catat saldo yang sudah kamu miliki.</p><button type="button" id="btnTransferAddWallet">Tambah rekening / e-wallet</button></div><div id="transferFields"><div class="transfer-route">
     <div><label class="field-label" for="transferDariJenis">Dari jenis uang</label><select id="transferDariJenis"></select><div id="transferDariWrap"><label class="field-label" for="transferDari">Rekening / e-wallet sumber</label><select id="transferDari"></select></div><p class="muted" id="transferSourceInfo" aria-live="polite"></p><button type="button" class="ghost kecil" id="btnTransferFundSource" hidden>Catat saldo yang sudah ada</button></div>
     <div><label class="field-label" for="transferKeJenis">Ke jenis uang</label><select id="transferKeJenis"></select><div id="transferKeWrap"><label class="field-label" for="transferKe">Rekening / e-wallet tujuan</label><select id="transferKe"></select></div></div>
@@ -3005,7 +2988,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     </select>
     <input type="date" id="ebMulai">
   </div>
-  <p class="muted">Perubahan berlaku untuk tanggal berikutnya. Catatan yang sudah tercatat tidak ikut berubah.</p>
   <button id="btnEbSimpan">Simpan perubahan</button>
   <button class="sec" id="btnEbBatal">Batal</button>
 </dialog>
@@ -6452,7 +6434,7 @@ function perbaruiGerakGaya() {
   const diam=mode==='mati'||preferensiGerak.matches;
   $('btnCobaGerak').disabled=diam;
   $('btnAnimasiOrbit').disabled=mode!=='penuh'||diam;
-  $('infoGerak').textContent=preferensiGerak.matches ? 'HP-mu meminta pengurangan gerakan. Dekorasi ditampilkan diam.' : mode==='penuh' ? suasanaTenang ? 'Dekorasi Ruang Ide tetap diam. Tombol merespons sentuhan dan perpindahan halaman dibuat lembut.' : 'Dekorasi bergerak pelan, tombol merespons sentuhan, dan halaman masuk dengan lembut.' : mode==='ringan' ? 'Dekorasi diam. Hanya transisi singkat saat membuka halaman atau mengganti gaya.' : 'Seluruh animasi gaya dimatikan. Pilihan ini tersimpan.';
+  $('infoGerak').textContent=preferensiGerak.matches ? 'Pengurangan gerakan sistem aktif.' : mode==='mati' ? 'Animasi dimatikan.' : '';
   if(!gerakPenuh())tutupIntroOrbit();
   if(diam){$('styleReveal').hidden=true;$('styleSelected').classList.remove('coba-gerak');document.querySelectorAll('.page.masuk-halaman').forEach(p=>p.classList.remove('masuk-halaman'));}
 }
@@ -6554,30 +6536,26 @@ function perbaruiSetelanTersedia() {
     $(id).disabled = !tersedia;
     if (infoId) $(infoId).textContent = keterangan;
   };
-  atur('sEfek', glass, 'infoEfek', glass
-    ? 'Bisa dipakai pada gaya Glass. Tanpa efek paling ringan; Ultra HD memakai efek paling kuat.'
-    : 'Hanya bisa dipakai pada gaya Glass. Pilihan efekmu tersimpan untuk saat kembali ke Glass.');
-  atur('sKaca', glass, 'infoKaca', glass
-    ? 'Bisa dipakai pada gaya Glass. Makin kecil angkanya, makin transparan kartu dan navigasi.'
-    : 'Transparansi kaca hanya bisa diatur pada gaya Glass.');
+  atur('sEfek', glass, 'infoEfek', glass ? '' : 'Hanya untuk gaya Glass.');
+  atur('sKaca', glass, 'infoKaca', glass ? '' : 'Hanya untuk gaya Glass.');
   atur('sAdaptif', glass && foto, 'infoAdaptif', glass
-    ? foto ? 'Bisa dipakai pada gaya Glass dengan foto latar.' : 'Pilih foto latar dahulu di bawah agar warna mengikuti foto.'
-    : 'Warna otomatis dari foto hanya bisa dipakai pada gaya Glass dengan foto latar.');
-  atur('sFont', true, 'infoFont', 'Pilihan font bisa dipakai pada semua gaya, termasuk Glass, Blok Pixel, Retro, dan Paper.');
+    ? foto ? '' : 'Perlu foto latar.'
+    : 'Hanya untuk gaya Glass dengan foto latar.');
+  atur('sFont', true, 'infoFont', '');
   atur('sTeks', teksManual, 'infoTeks', teksManual
-    ? 'Warna teks manual bisa dipakai pada Glass, Biasa, dan Berwarna.'
-    : warnaOtomatisAktif ? 'Warna teks sedang mengikuti foto. Matikan warna otomatis untuk memilih sendiri.'
-    : 'Warna teks gaya ini sudah ditentukan agar tetap terbaca. Bisa diatur pada Glass, Biasa, dan Berwarna.');
+    ? ''
+    : warnaOtomatisAktif ? 'Mengikuti foto latar.'
+    : 'Disesuaikan otomatis oleh gaya aktif.');
   $('btnTeksReset').disabled = !teksManual;
   atur('sTema', gaya !== 'retro', 'infoTema', gaya === 'retro'
-    ? 'Retro terminal selalu gelap. Pilihan tema tersimpan untuk gaya lain.'
-    : 'Tema otomatis, terang, dan gelap tersedia pada gaya ini.');
+    ? 'Gaya Retro selalu bertema gelap.'
+    : '');
   atur('fBg', glass, 'infoLatar', glass
-    ? 'Foto latar bisa dipakai pada gaya Glass.'
-    : 'Foto latar hanya tampil pada gaya Glass. Material You dan Minimal Flat masih bisa memakai warna aksen dari foto yang sudah tersimpan.');
+    ? ''
+    : 'Hanya untuk gaya Glass.');
   atur('sBuram', glass && foto, 'infoBuram', glass
-    ? foto ? 'Buram latar bisa diatur pada gaya Glass dengan foto latar.' : 'Pilih foto latar dahulu untuk mengatur buramnya.'
-    : 'Buram latar hanya bisa dipakai pada gaya Glass dengan foto latar.');
+    ? foto ? '' : 'Perlu foto latar.'
+    : 'Hanya untuk gaya Glass dengan foto latar.');
   $('btnBgHapus').disabled = !glass || !foto;
 }
 
@@ -6608,7 +6586,7 @@ function terapkanTampilan() {
   $('layoutIntro').hidden = h.dataset.layout === '1';
   $('layoutIntroTitle').textContent = judulLayout;
   $('layoutIntroText').textContent = infoLayout;
-  $('infoLayout').textContent = infoLayout + ' Berlaku untuk semua gaya tampilan.';
+  $('infoLayout').textContent = '';
   if ($('beranda').style.display && $('beranda').style.display !== 'none')
     $('beranda').style.display = h.dataset.layout === '1' ? 'block' : 'flex';
   h.dataset.gaya = KOLEKSI_GAYA.some(g=>g.id === tampilan.gaya) ? tampilan.gaya : 'glass';
