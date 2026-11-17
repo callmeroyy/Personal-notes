@@ -2238,27 +2238,59 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   @keyframes ai-voice-pulse{0%{transform:scale(.88);opacity:.9}100%{transform:scale(1.35);opacity:0}}
   @media(max-width:560px){.ai-preview-grid{grid-template-columns:1fr}.ai-preview-grid .field-wide{grid-column:auto}.ai-period-row button{width:100%}.ai-dialog-actions{flex-direction:column}.ai-dialog-actions .ghost,.ai-dialog-actions button:not(.ghost){flex:auto}.ai-voice-row{align-items:stretch;flex-direction:column}.ai-voice-btn{width:100%}}
   @media(prefers-reduced-motion:reduce){.ai-entry-button:hover{transform:none}.ai-loading::before{animation-duration:1.4s}.ai-voice-btn.is-listening .ai-voice-icon::after{animation:none}}
-  .ai-chat-dialog{max-width:640px;width:calc(100% - 24px);height:calc(100dvh - 36px);max-height:700px;display:flex;flex-direction:column;padding:16px;border-radius:20px;background:var(--card);color:var(--ink)}
-  .ai-chat-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--line);flex-shrink:0}
-  .ai-chat-body{flex:1;overflow-y:auto;padding:12px 2px;display:flex;flex-direction:column;gap:12px;overscroll-behavior:contain}
-  .ai-msg{display:flex;flex-direction:column;max-width:86%;word-break:break-word;animation:aiMsgFade .25s ease}
+  /* Sembunyikan navigasi bawah ketika ada modal/dialog terbuka */
+  body:has(dialog[open]) nav.bottom,
+  html:has(dialog[open]) nav.bottom,
+  body.has-dialog-open nav.bottom {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  html#financeApp dialog.ai-chat-dialog,
+  dialog.ai-chat-dialog {
+    position: fixed !important;
+    inset: 0 !important;
+    max-width: 580px !important;
+    width: min(580px, calc(100vw - 20px)) !important;
+    width: min(580px, calc(100% - 20px)) !important;
+    height: min(640px, calc(100dvh - 44px)) !important;
+    max-height: calc(100dvh - 36px) !important;
+    min-height: 380px !important;
+    margin: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 14px 16px 12px !important;
+    border-radius: 20px !important;
+    background: var(--ui-solid, var(--card, #fff)) !important;
+    color: var(--ui-ink, var(--ink, #0f172a)) !important;
+    border: 1px solid var(--ui-line, var(--line, rgba(0,0,0,.1))) !important;
+    box-shadow: 0 24px 60px rgba(0,0,0,.35) !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    z-index: 10000 !important;
+  }
+  .ai-chat-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:11px;border-bottom:1px solid var(--ui-line,var(--line,#e2e8f0));flex-shrink:0 !important}
+  .ai-chat-body{flex:1 1 auto !important;min-height:140px !important;overflow-y:auto !important;-webkit-overflow-scrolling:touch;padding:10px 4px !important;display:flex !important;flex-direction:column !important;gap:11px !important;overscroll-behavior:contain}
+  .ai-msg{display:flex;flex-direction:column;max-width:88%;word-break:break-word;animation:aiMsgFade .22s ease-out}
   .ai-msg.user{align-self:flex-end;align-items:flex-end}
   .ai-msg.assistant{align-self:flex-start;align-items:flex-start}
   .ai-msg-bubble{padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.55}
-  .ai-msg.user .ai-msg-bubble{background:var(--pri);color:#fff;border-bottom-right-radius:4px}
-  .ai-msg.assistant .ai-msg-bubble{background:color-mix(in srgb,var(--card) 92%,var(--bg));border:1px solid var(--line);border-bottom-left-radius:4px;color:var(--ink)}
-  .ai-msg-time{font-size:10.5px;color:var(--muted);margin-top:3px;padding:0 4px}
+  .ai-msg.user .ai-msg-bubble{background:var(--ui-cta,var(--pri,#2563eb));color:var(--ui-on-cta,#fff);border-bottom-right-radius:4px}
+  .ai-msg.assistant .ai-msg-bubble{background:var(--ui-soft,color-mix(in srgb,var(--card) 92%,var(--bg)));border:1px solid var(--ui-line,var(--line));border-bottom-left-radius:4px;color:var(--ui-ink,var(--ink))}
+  .ai-msg-time{font-size:10.5px;color:var(--ui-muted,var(--muted));margin-top:3px;padding:0 4px}
   .ai-chat-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
-  .ai-chip{font-size:11.5px;padding:5px 11px;border-radius:99px;background:color-mix(in srgb,var(--pri) 12%,var(--card));border:1px solid color-mix(in srgb,var(--pri) 25%,var(--line));color:var(--pri);cursor:pointer;transition:all .15s}
-  .ai-chip:hover{background:color-mix(in srgb,var(--pri) 22%,var(--card));transform:translateY(-1px)}
-  .ai-chat-empty{text-align:center;padding:24px 12px;color:var(--muted);margin:auto 0}
+  .ai-chip{font-size:11.5px;padding:6px 12px;border-radius:99px;background:var(--ui-soft,color-mix(in srgb,var(--pri) 12%,var(--card)));border:1px solid var(--ui-line,color-mix(in srgb,var(--pri) 25%,var(--line)));color:var(--ui-ink,var(--pri));cursor:pointer;transition:all .15s;font-weight:500}
+  .ai-chip:hover,.ai-chip:active{background:var(--ui-soft,color-mix(in srgb,var(--pri) 22%,var(--card)));transform:translateY(-1px)}
+  .ai-chat-empty{text-align:center;padding:20px 12px;color:var(--ui-muted,var(--muted));margin:auto 0}
   .ai-chat-empty-icon{font-size:34px;margin-bottom:8px}
-  .ai-chat-empty h3{font-size:16px;color:var(--ink);margin:0 0 6px}
-  .ai-chat-empty p{font-size:13px;line-height:1.5;margin:0 0 14px}
-  .ai-chat-footer{flex-shrink:0;border-top:1px solid var(--line);padding-top:10px}
+  .ai-chat-empty h3{font-size:16px;color:var(--ui-ink,var(--ink));margin:0 0 6px;font-weight:700}
+  .ai-chat-empty p{font-size:13px;line-height:1.5;margin:0 0 14px;color:var(--ui-muted,var(--muted))}
+  .ai-chat-footer{flex-shrink:0 !important;border-top:1px solid var(--ui-line,var(--line));padding-top:10px;padding-bottom:2px;background:var(--ui-solid,var(--card))}
   .ai-chat-input-row{display:flex;gap:8px;align-items:center}
-  .ai-chat-input-row input{flex:1;margin:0;padding:10px 14px;border-radius:14px;border:1px solid var(--line);background:var(--input);color:var(--ink);font:inherit;font-size:13.5px}
-  .ai-chat-input-row button{margin:0;width:auto;padding:10px 18px;border-radius:14px;flex-shrink:0}
+  .ai-chat-input-row input{flex:1;margin:0;padding:11px 14px;border-radius:14px;border:1px solid var(--ui-line,var(--line));background:var(--ui-input,var(--input));color:var(--ui-ink,var(--ink));font:inherit;font-size:13.5px}
+  .ai-chat-input-row button{margin:0;width:auto;padding:11px 18px;border-radius:14px;flex-shrink:0}
+  .ai-chat-note{margin:6px 0 0;font-size:11px;text-align:center;color:var(--ui-muted,var(--muted))}
   @keyframes aiMsgFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 </style>
 
@@ -3569,9 +3601,28 @@ document.addEventListener('change', e => {
   if (e.target.matches('[aria-invalid="true"]')) e.target.removeAttribute('aria-invalid');
   e.target.closest('dialog')?.querySelector('.dialog-error')?.remove();
 });
+function sinkronisasiStatusDialog() {
+  const adaBuka = Boolean(document.querySelector('dialog[open]'));
+  document.body.classList.toggle('has-dialog-open', adaBuka);
+  const navBottom = document.querySelector('nav.bottom');
+  if (navBottom) {
+    if (adaBuka) navBottom.style.setProperty('display', 'none', 'important');
+    else navBottom.style.removeProperty('display');
+  }
+}
+if (typeof HTMLDialogElement !== 'undefined' && HTMLDialogElement.prototype.showModal) {
+  const asliShowModal = HTMLDialogElement.prototype.showModal;
+  HTMLDialogElement.prototype.showModal = function() {
+    document.body.classList.add('has-dialog-open');
+    const navBottom = document.querySelector('nav.bottom');
+    if (navBottom) navBottom.style.setProperty('display', 'none', 'important');
+    return asliShowModal.apply(this, arguments);
+  };
+}
 document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('close', () => {
   dialog.querySelector('.dialog-error')?.remove();
   dialog.querySelectorAll('[aria-invalid="true"]').forEach(input => input.removeAttribute('aria-invalid'));
+  sinkronisasiStatusDialog();
 }));
 
 function renderPanduanStatus() {
@@ -9008,12 +9059,18 @@ function renderPesanAiChat() {
     });
     empty.appendChild(chipsWrap);
     box.appendChild(empty);
+    box.scrollTop = 0;
     return;
   }
 
   riwayat.forEach((msg, idx) => {
-    const wrap = el('div', 'ai-msg ' + (msg.role === 'user' ? 'user' : 'assistant'));
-    const bubble = el('div', 'ai-msg-bubble', msg.text);
+    if (!msg || typeof msg !== 'object') return;
+    const role = msg.role === 'user' ? 'user' : 'assistant';
+    const text = String(msg.text || '').trim();
+    if (!text) return;
+
+    const wrap = el('div', 'ai-msg ' + role);
+    const bubble = el('div', 'ai-msg-bubble', text);
     bubble.style.whiteSpace = 'pre-line';
     wrap.appendChild(bubble);
 
@@ -9023,10 +9080,10 @@ function renderPesanAiChat() {
       wrap.appendChild(el('span', 'ai-msg-time', jam));
     }
 
-    if (idx === riwayat.length - 1 && msg.role === 'assistant' && Array.isArray(msg.suggestions) && msg.suggestions.length) {
+    if (idx === riwayat.length - 1 && role === 'assistant' && Array.isArray(msg.suggestions) && msg.suggestions.length) {
       const chips = el('div', 'ai-chat-chips');
       msg.suggestions.forEach(s => {
-        const btn = el('button', 'ai-chip', s);
+        const btn = el('button', 'ai-chip', String(s));
         btn.type = 'button';
         btn.onclick = () => kirimPesanAiChat(s);
         chips.appendChild(btn);
@@ -9244,16 +9301,26 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
   } finally {
     sendBtn.disabled = false;
     input.disabled = false;
-    setTimeout(() => input.focus(), 60);
+    setTimeout(() => {
+      if (document.activeElement === input) return;
+      input.focus({ preventScroll: true });
+    }, 60);
   }
 }
 
 $('btnBukaAiChat').onclick = () => {
   renderPesanAiChat();
+  sinkronisasiStatusDialog();
   $('dlgAiChat').showModal();
-  setTimeout(() => $('aiChatInput').focus(), 80);
+  if (window.innerWidth > 640) {
+    setTimeout(() => $('aiChatInput')?.focus({ preventScroll: true }), 80);
+  }
 };
-$('btnAiChatClose').onclick = () => $('dlgAiChat').close();
+$('btnAiChatClose').onclick = () => {
+  $('dlgAiChat').close();
+  sinkronisasiStatusDialog();
+};
+$('dlgAiChat').addEventListener('close', sinkronisasiStatusDialog);
 $('btnAiChatClear').onclick = () => {
   konfirmasiDompet('Hapus riwayat obrolan AI?', 'Semua riwayat tanya jawab dengan Asisten AI di perangkat ini akan dibersihkan.', () => {
     localStorage.removeItem(AI_CHAT_HISTORY_KEY);

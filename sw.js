@@ -1,4 +1,4 @@
-const CACHE = 'catatan-keuangan-v18';
+const CACHE = 'catatan-keuangan-v19';
 const CACHE_PREFIX = 'catatan-keuangan-';
 const APP_PAGES = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
 
