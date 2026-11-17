@@ -3046,18 +3046,18 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 </dialog>
 
 <dialog id="dlgAiSmart" class="ai-dialog" aria-labelledby="aiSmartTitle">
-  <h2 id="aiSmartTitle"><span class="ai-spark" aria-hidden="true">&#x2728;</span>Catat dengan AI</h2>
-  <p class="muted">Ceritakan satu transaksi. AI akan menyiapkan draf yang tetap bisa kamu periksa dan ubah.</p>
+  <h2 id="aiSmartTitle"><span class="ai-spark" aria-hidden="true">&#x2728;</span>Catat dengan AI & Suara</h2>
+  <p class="muted">Tulis atau ucapkan transaksi bebas. Draf akan disiapkan secara instan langsung di perangkat tanpa kuota AI.</p>
   <label class="field-label" for="aiSmartText">Transaksi kamu</label>
   <textarea id="aiSmartText" maxlength="500" placeholder="Contoh: Kemarin beli bensin 50 ribu pakai DANA"></textarea>
   <div class="ai-voice-row"><button type="button" class="ghost ai-voice-btn" id="btnAiVoice" aria-pressed="false" aria-describedby="aiVoiceHelp"><span class="ai-voice-icon" aria-hidden="true">&#x1F399;&#xFE0F;</span><span id="aiVoiceLabel">Ucapkan transaksi</span></button><span class="ai-voice-meta" id="aiVoiceHelp">Satu transaksi · maksimal 20 detik</span></div>
   <p class="ai-voice-status" id="aiVoiceStatus" role="status" aria-live="polite"></p>
   <div class="ai-dialog-toolbar"><span class="ai-char-count" id="aiSmartCount">0/500</span><button type="button" class="ghost kecil" id="btnAiSmartExample">Pakai contoh</button></div>
-  <p class="ai-privacy-note">Jangan tulis atau ucapkan PIN, kata sandi, atau nomor rekening. Saat mikrofon dipakai, Cloudflare AI mengubah rekaman menjadi teks dan aplikasi ini tidak menyimpan rekaman audio. Transaksi baru tersimpan setelah kamu mengonfirmasi drafnya.</p>
-  <button type="button" id="btnAiSmartAnalyze">Buat draf AI</button>
+  <p class="ai-privacy-note">Pemrosesan teks berjalan 100% lokal di perangkatmu. Saat mikrofon dipakai, Cloudflare AI mengubah rekaman menjadi teks dan aplikasi ini tidak menyimpan rekaman audio. Transaksi baru tersimpan setelah kamu mengonfirmasi drafnya.</p>
+  <button type="button" id="btnAiSmartAnalyze">Buat draf transaksi</button>
   <p class="ai-status" id="aiSmartStatus" role="status" aria-live="polite"></p>
   <section class="ai-preview" id="aiSmartPreview" hidden aria-labelledby="aiSmartPreviewTitle">
-    <h3 id="aiSmartPreviewTitle">Periksa draf AI</h3>
+    <h3 id="aiSmartPreviewTitle">Periksa draf transaksi</h3>
     <div class="ai-preview-grid">
       <div class="field-wrap"><label class="field-label" for="aiDraftType">Jenis</label><select id="aiDraftType"><option value="keluar">Pengeluaran</option><option value="masuk">Pemasukan</option></select></div>
       <div class="field-wrap"><label class="field-label" for="aiDraftDate">Tanggal</label><input type="date" id="aiDraftDate"></div>
@@ -3068,8 +3068,8 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
       <div class="field-wrap" id="aiDraftWalletWrap" hidden><label class="field-label" for="aiDraftWallet">Dompet</label><select id="aiDraftWallet"><option value="">Tanpa dompet tertentu</option></select></div>
     </div>
     <p class="ai-missing" id="aiSmartMissing" hidden></p>
-    <p class="ai-card-note">Periksa kembali nominal, tanggal, kategori, dan dompet. AI bisa salah membaca maksud kalimat.</p>
-    <div class="ai-dialog-actions"><button type="button" class="ghost" id="btnAiSmartRetry">Ulangi analisis</button><button type="button" id="btnAiSmartUse">Gunakan sebagai draf</button></div>
+    <p class="ai-card-note">Periksa kembali nominal, tanggal, kategori, dan dompet sebelum digunakan.</p>
+    <div class="ai-dialog-actions"><button type="button" class="ghost" id="btnAiSmartRetry">Ulangi proses</button><button type="button" id="btnAiSmartUse">Gunakan sebagai draf</button></div>
   </section>
   <button type="button" class="sec" id="btnAiSmartClose">Tutup</button>
 </dialog>
@@ -8400,22 +8400,358 @@ function tampilkanDrafAi(data) {
   $('aiSmartPreview').hidden = false;
   statusAi($('aiSmartStatus'), 'Draf berhasil dibuat. Periksa semua isian sebelum digunakan.');
 }
-async function analisisSmartAi() {
+function parseTransaksiLokal(teks, today = hariIni(), wallets = [], customCats = []) {
+  if (!teks || typeof teks !== 'string') {
+    return {
+      type: 'keluar',
+      date: today,
+      title: '',
+      category: 'Lainnya',
+      amount: 0,
+      paymentMethod: '',
+      walletId: '',
+      missing: ['amount', 'title']
+    };
+  }
+
+  const raw = teks.trim();
+  let cleanTeks = raw;
+
+  // 1. Ekstrak Tanggal
+  let date = today;
+  let tanggalKetemu = false;
+
+  const addDays = (baseStr, days) => {
+    const d = new Date(baseStr + 'T00:00:00');
+    d.setDate(d.getDate() + days);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const dt = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${dt}`;
+  };
+
+  const reKemarinLusa = /\b(kemarin\s+lusa|lusa\s+kemarin)\b/i;
+  const reKemarin = /\b(kemarin|semalam)\b/i;
+  const reHariIni = /\b(hari\s*ini|tadi\s*pagi|siang\s*ini|sore\s*ini|malam\s*ini|barusan|tadi)\b/i;
+  const reIsoDate = /\b(\d{4})[-/](\d{1,2})[-/](\d{1,2})\b/;
+  const reDmyDate = /\b(\d{1,2})[-/](\d{1,2})[-/](\d{4})\b/;
+  const reDmDate = /\b(\d{1,2})[-/](\d{1,2})\b/;
+
+  const bulanMap = {
+    jan: 1, januari: 1, feb: 2, februari: 2, mar: 3, maret: 3, apr: 4, april: 4,
+    mei: 5, jun: 6, juni: 6, jul: 7, juli: 7, ags: 8, agt: 8, agustus: 8,
+    sep: 9, september: 9, okt: 10, oktober: 10, nov: 11, november: 11, des: 12, desember: 12
+  };
+  const bulanRegex = new RegExp(`\\b(?:tgl|tanggal)?\\s*(\\d{1,2})\\s+(${Object.keys(bulanMap).join('|')})(?:\\s+(\\d{4}))?\\b`, 'i');
+  const tglRegex = /\b(?:tgl|tanggal)\s+(\d{1,2})\b/i;
+
+  if (reKemarinLusa.test(cleanTeks)) {
+    date = addDays(today, -2);
+    cleanTeks = cleanTeks.replace(reKemarinLusa, ' ');
+    tanggalKetemu = true;
+  } else if (reKemarin.test(cleanTeks)) {
+    date = addDays(today, -1);
+    cleanTeks = cleanTeks.replace(reKemarin, ' ');
+    tanggalKetemu = true;
+  } else if (reHariIni.test(cleanTeks)) {
+    date = today;
+    cleanTeks = cleanTeks.replace(reHariIni, ' ');
+    tanggalKetemu = true;
+  } else if (reIsoDate.test(cleanTeks)) {
+    const m = cleanTeks.match(reIsoDate);
+    const y = m[1], mo = m[2].padStart(2, '0'), d = m[3].padStart(2, '0');
+    date = `${y}-${mo}-${d}`;
+    cleanTeks = cleanTeks.replace(m[0], ' ');
+    tanggalKetemu = true;
+  } else if (reDmyDate.test(cleanTeks)) {
+    const m = cleanTeks.match(reDmyDate);
+    const d = m[1].padStart(2, '0'), mo = m[2].padStart(2, '0'), y = m[3];
+    date = `${y}-${mo}-${d}`;
+    cleanTeks = cleanTeks.replace(m[0], ' ');
+    tanggalKetemu = true;
+  } else if (bulanRegex.test(cleanTeks)) {
+    const m = cleanTeks.match(bulanRegex);
+    const d = m[1].padStart(2, '0');
+    const mo = String(bulanMap[m[2].toLowerCase()]).padStart(2, '0');
+    const y = m[3] || today.slice(0, 4);
+    date = `${y}-${mo}-${d}`;
+    cleanTeks = cleanTeks.replace(m[0], ' ');
+    tanggalKetemu = true;
+  } else if (reDmDate.test(cleanTeks)) {
+    const m = cleanTeks.match(reDmDate);
+    const d = m[1].padStart(2, '0'), mo = m[2].padStart(2, '0'), y = today.slice(0, 4);
+    date = `${y}-${mo}-${d}`;
+    cleanTeks = cleanTeks.replace(m[0], ' ');
+    tanggalKetemu = true;
+  } else if (tglRegex.test(cleanTeks)) {
+    const m = cleanTeks.match(tglRegex);
+    const d = m[1].padStart(2, '0');
+    const y = today.slice(0, 4), mo = today.slice(5, 7);
+    date = `${y}-${mo}-${d}`;
+    cleanTeks = cleanTeks.replace(m[0], ' ');
+    tanggalKetemu = true;
+  }
+
+  // 2. Ekstrak Nominal
+  let amount = 0;
+  const kataKataJuta = [
+    { re: /\b(setengah|setgh|\b0[,.]5)\s*(?:jt|juta)\b/i, val: 500000 },
+    { re: /\b(seperempat|\b0[,.]25)\s*(?:jt|juta)\b/i, val: 250000 },
+    { re: /\b(satu|1)\s*(?:setengah|\b0[,.]5)\s*(?:jt|juta)\b/i, val: 1500000 },
+    { re: /\b(dua|2)\s*(?:setengah|\b0[,.]5)\s*(?:jt|juta)\b/i, val: 2500000 },
+    { re: /\b(sejuta|satu\s*juta)\b/i, val: 1000000 },
+    { re: /\bdua\s*juta\b/i, val: 2000000 },
+    { re: /\blima\s*ratus\s*ribu\b/i, val: 500000 },
+    { re: /\btiga\s*ratus\s*ribu\b/i, val: 300000 },
+    { re: /\bdua\s*ratus\s*lima\s*puluh\s*ribu\b/i, val: 250000 },
+    { re: /\bdua\s*ratus\s*ribu\b/i, val: 200000 },
+    { re: /\bseratus\s*lima\s*puluh\s*ribu\b/i, val: 150000 },
+    { re: /\bseratus\s*ribu\b/i, val: 100000 },
+    { re: /\blima\s*puluh\s*ribu\b/i, val: 50000 },
+    { re: /\bdua\s*puluh\s*lima\s*ribu\b/i, val: 25000 },
+    { re: /\bdua\s*puluh\s*ribu\b/i, val: 20000 },
+    { re: /\bsepuluh\s*ribu\b/i, val: 10000 },
+    { re: /\blima\s*ribu\b/i, val: 5000 },
+    { re: /\bdua\s*ribu\b/i, val: 2000 },
+    { re: /\bseribu\b/i, val: 1000 }
+  ];
+
+  for (const item of kataKataJuta) {
+    if (item.re.test(cleanTeks)) {
+      amount = item.val;
+      cleanTeks = cleanTeks.replace(item.re, ' ');
+      break;
+    }
+  }
+
+  if (!amount) {
+    const reCompoundJuta = /(?:rp\.?\s*)?(\d+)\s*(?:jt|juta)\s*(\d{1,3})\s*(?:rb|rbu|ribu|k)?\b/i;
+    const matchCompound = cleanTeks.match(reCompoundJuta);
+    if (matchCompound) {
+      const juta = parseInt(matchCompound[1], 10);
+      const ribu = parseInt(matchCompound[2], 10);
+      if (!isNaN(juta) && !isNaN(ribu)) {
+        amount = (juta * 1000000) + (ribu * 1000);
+        cleanTeks = cleanTeks.replace(matchCompound[0], ' ');
+      }
+    }
+  }
+
+  if (!amount) {
+    const reNominalSuffix = /(?:rp\.?\s*)?(\d+(?:[.,]\d+)?)\s*(jt|juta|rb|rbu|ribu|k)\b/i;
+    const matchSuffix = cleanTeks.match(reNominalSuffix);
+    if (matchSuffix) {
+      const numStr = matchSuffix[1].replace(',', '.');
+      const unit = matchSuffix[2].toLowerCase();
+      const num = parseFloat(numStr);
+      if (!isNaN(num)) {
+        if (unit === 'jt' || unit === 'juta') amount = Math.round(num * 1000000);
+        else amount = Math.round(num * 1000);
+        cleanTeks = cleanTeks.replace(matchSuffix[0], ' ');
+      }
+    }
+  }
+
+  if (!amount) {
+    const reRp = /(?:rp\.?|seharga|sebesar|senilai)\s*(\d{1,3}(?:[.,]\d{3})*(?:,-\b)?|\d+)/i;
+    const matchRp = cleanTeks.match(reRp);
+    if (matchRp) {
+      const rawNum = matchRp[1].replace(/[,-]/g, '').replace(/\./g, '');
+      const parsed = parseInt(rawNum, 10);
+      if (!isNaN(parsed) && parsed > 0) {
+        amount = parsed;
+        cleanTeks = cleanTeks.replace(matchRp[0], ' ');
+      }
+    }
+  }
+
+  if (!amount) {
+    const rePlainNum = /\b(\d{1,3}(?:\.\d{3})+|\d{4,9})\b/;
+    const matchPlain = cleanTeks.match(rePlainNum);
+    if (matchPlain) {
+      const candidateStr = matchPlain[1].replace(/\./g, '');
+      const candidate = parseInt(candidateStr, 10);
+      if (candidate >= 500 && !(candidate >= 2020 && candidate <= 2035 && !tanggalKetemu)) {
+        amount = candidate;
+        cleanTeks = cleanTeks.replace(matchPlain[0], ' ');
+      }
+    }
+  }
+
+  // 3. Ekstrak Tipe Transaksi (masuk / keluar)
+  const incomeKeywords = [
+    /\bgaji\b/i, /\buang\s*saku\b/i, /\buang\s*jajan\b/i, /\bpemasukan\b/i,
+    /\bterima\b/i, /\bdapat(?:\s*uang|\s*transferan)?\b/i, /\bditransfer\b/i,
+    /\bbonus\b/i, /\bthr\b/i, /\bcashback\b/i, /\bdividen\b/i,
+    /\bhasil\s*jualan\b/i, /\bpenjualan\b/i, /\bkeuntungan\b/i, /\breimburse\b/i,
+    /\bkembalian\b/i, /\bdikasih\b/i
+  ];
+
+  let type = 'keluar';
+  for (const re of incomeKeywords) {
+    if (re.test(raw)) {
+      type = 'masuk';
+      break;
+    }
+  }
+
+  // 4. Ekstrak Pembayaran & Dompet
+  let paymentMethod = '';
+  let walletId = '';
+
+  let matchedWallet = null;
+  for (const w of wallets) {
+    const wName = String(w.name || '').trim().toLowerCase();
+    if (!wName) continue;
+    const wRegex = new RegExp(`\\b${wName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+    if (wRegex.test(raw)) {
+      matchedWallet = w;
+      cleanTeks = cleanTeks.replace(wRegex, ' ');
+      break;
+    }
+  }
+
+  const reTunai = /\b(tunai|cash|kontan|uang\s*pas)\b/i;
+  const reNonTunaiKeywords = /\b(qris|transfer|debit|kartu\s*kredit|kartu\s*debit|edc|m-?banking|mbanking|e-?wallet|ewallet|dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i;
+
+  if (matchedWallet) {
+    paymentMethod = 'nontunai';
+    walletId = matchedWallet.id;
+  } else if (reTunai.test(raw)) {
+    paymentMethod = 'tunai';
+    cleanTeks = cleanTeks.replace(reTunai, ' ');
+  } else if (reNonTunaiKeywords.test(raw)) {
+    paymentMethod = 'nontunai';
+    const m = raw.match(reNonTunaiKeywords);
+    if (m) cleanTeks = cleanTeks.replace(new RegExp(`\\b${m[0]}\\b`, 'i'), ' ');
+  }
+
+  cleanTeks = cleanTeks.replace(/\b(pakai|pake|lewat|via|menggunakan|dg|dgn)\b/gi, ' ');
+
+  // 5. Ekstrak Kategori
+  let category = 'Lainnya';
+  const kategoriKeluarDict = [
+    {
+      kat: 'Transport',
+      re: /\b(bensin|pertalite|pertamax|solar|shell|parkir|tol\b|ojol|grab|gojek|maxim|angkot|bus\b|busway|transjakarta|kereta|krl\b|mrt\b|lrt\b|tiket\s*(?:kereta|pesawat|bus|kapal|travel)|travel\b|cuci\s*motor|cuci\s*mobil|tambal\s*ban|bengkel|servis\s*motor|servis\s*mobil|ganti\s*oli|helm)\b/i
+    },
+    {
+      kat: 'Makan',
+      re: /\b(makan\b|makanan|sarapan|lunch|dinner|warteg|resto|restoran|nasi|mie\b|bakso|soto|sate|ayam|bebek|burger|pizza|padang|pecel|geprek)\b/i
+    },
+    {
+      kat: 'Minuman',
+      re: /\b(kopi|coffee|cafe\b|kafe|es\s*teh|jus\b|boba|susu\b|air\s*mineral|chatime|janji\s*jiwa|kenangan|minum\b|minuman)\b/i
+    },
+    {
+      kat: 'Jajan',
+      re: /\b(jajan\b|snack|cemilan|roti\b|martabak|gorengan|cilok|seblak|cireng|siomay|batagor|kue\b|donat|pisang\s*goreng)\b/i
+    },
+    {
+      kat: 'Kos',
+      re: /\b(kost?\b|kontrakan|sewa\s*kamar|uang\s*kos|uang\s*kost|iuran\s*kos)\b/i
+    },
+    {
+      kat: 'Kuota/Pulsa',
+      re: /\b(pulsa|kuota|paket\s*data|paket\s*internet|telkomsel|indosat|xl\b|tri\b|smartfren|by\.?u|wifi|indihome|biznet|firstmedia)\b/i
+    },
+    {
+      kat: 'Biaya admin',
+      re: /\b(admin\b|biaya\s*admin|admin\s*bank|potongan\s*bank|biaya\s*transfer)\b/i
+    },
+    {
+      kat: 'Tabungan',
+      re: /\b(tabungan|nabung|simpanan|investasi|reksadana|saham|kripto|crypto|emas\b)\b/i
+    },
+    {
+      kat: 'Belanja',
+      re: /\b(belanja|supermarket|minimarket|indomaret|alfamart|pasar|baju|celana|kaos|sepatu|tas\b|sabun|shampo|odol|skincare|belanjaan|shopee|tokopedia|lazada|tiktok\s*shop)\b/i
+    }
+  ];
+
+  const kategoriMasukDict = [
+    {
+      kat: 'Gaji',
+      re: /\b(gaji|salary|upah|honor|payday)\b/i
+    },
+    {
+      kat: 'Uang saku',
+      re: /\b(uang\s*saku|uang\s*jajan|dikasih\s*ortu|dikasih\s*ayah|dikasih\s*ibu|dikasih\s*mama|dikasih\s*papa|kiriman\s*uang)\b/i
+    },
+    {
+      kat: 'Jualan',
+      re: /\b(jual\b|jualan|hasil\s*jualan|omzet|laku\b|penjualan|profit\s*jualan)\b/i
+    },
+    {
+      kat: 'Saldo awal',
+      re: /\b(saldo\s*awal|modal\s*awal)\b/i
+    }
+  ];
+
+  for (const c of customCats) {
+    if (new RegExp(`\\b${c}\\b`, 'i').test(raw)) {
+      category = c;
+      break;
+    }
+  }
+
+  if (category === 'Lainnya') {
+    const listDict = type === 'masuk' ? kategoriMasukDict : kategoriKeluarDict;
+    for (const item of listDict) {
+      if (item.re.test(raw)) {
+        category = item.kat;
+        break;
+      }
+    }
+  }
+
+  // 6. Ekstrak Judul
+  let title = cleanTeks
+    .replace(/\b(untuk|buat|seharga|sebesar|senilai|rp\.?|di|ke|dari|pada)\b/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (title) {
+    title = title.charAt(0).toUpperCase() + title.slice(1);
+    if (title.length > 80) title = title.slice(0, 80).trim();
+  } else {
+    title = category !== 'Lainnya' ? category : (raw.slice(0, 50).trim() || 'Transaksi');
+  }
+
+  // 7. Missing fields check
+  const missing = [];
+  if (!amount || amount <= 0) missing.push('amount');
+  if (!title) missing.push('title');
+  if (!paymentMethod) missing.push('paymentMethod');
+
+  return {
+    type,
+    date,
+    title,
+    category,
+    amount,
+    paymentMethod,
+    walletId,
+    missing
+  };
+}
+
+function analisisSmartAi() {
   const teks = $('aiSmartText').value.trim();
   $('aiSmartPreview').hidden = true;
-  if (teks.length < 3) return statusAi($('aiSmartStatus'), 'Tulis satu transaksi terlebih dahulu.', { error:true });
-  if (!await mintaPersetujuanAi()) return statusAi($('aiSmartStatus'), 'Permintaan dibatalkan. Data tidak dikirim.');
+  if (teks.length < 2) return statusAi($('aiSmartStatus'), 'Tulis satu transaksi terlebih dahulu.', { error:true });
   $('btnAiSmartAnalyze').disabled = true; $('btnAiSmartRetry').disabled = true;
-  statusAi($('aiSmartStatus'), 'AI sedang membaca transaksi…', { loading:true });
+  statusAi($('aiSmartStatus'), 'Menyiapkan draf…', { loading:true });
   try {
-    const data = await panggilAsistenAi('parse_transaction', {
-      text: teks.slice(0, 500), today: hariIni(),
-      categories: { expense: KAT.keluar.slice(0, 30), income: KAT.masuk.slice(0, 30) },
-      wallets: daftarDompetAi()
-    });
+    const customList = [...(katKustom()?.keluar || []), ...(katKustom()?.masuk || [])];
+    const data = parseTransaksiLokal(teks.slice(0, 500), hariIni(), daftarDompetAi(), customList);
     tampilkanDrafAi(data);
-  } catch (error) { statusAi($('aiSmartStatus'), pesanErrorAi(error), { error:true }); }
-  finally { $('btnAiSmartAnalyze').disabled = false; $('btnAiSmartRetry').disabled = false; }
+    statusAi($('aiSmartStatus'), 'Draf berhasil disiapkan secara instan di perangkat. Periksa sebelum digunakan.');
+  } catch (error) {
+    statusAi($('aiSmartStatus'), 'Gagal memproses transaksi: ' + (error?.message || error), { error:true });
+  } finally {
+    $('btnAiSmartAnalyze').disabled = false; $('btnAiSmartRetry').disabled = false;
+  }
 }
 $('btnAiSmart').onclick = () => {
   akhiriSuaraAi(true);
