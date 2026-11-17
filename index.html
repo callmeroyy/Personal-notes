@@ -9431,7 +9431,14 @@ function muatGeminiKey() {
 
 function muatGeminiModel() {
   try {
-    return localStorage.getItem(GEMINI_MODEL_STORAGE) || '';
+    const m = localStorage.getItem(GEMINI_MODEL_STORAGE) || '';
+    if (!m) return '';
+    // Hapus model non-teks atau model yang terkena limit ketat / sudah pensiun
+    if (m.includes('tts') || m.includes('image') || m.includes('transcribe') || m.includes('embedding') || m.includes('2.5-') || m.includes('1.5-') || (m.includes('gemini-pro') && !m.includes('3.'))) {
+      localStorage.removeItem(GEMINI_MODEL_STORAGE);
+      return '';
+    }
+    return m;
   } catch (_) { return ''; }
 }
 
@@ -9489,12 +9496,41 @@ function bukaDialogGeminiKey() {
 function skorModelGemini(m) {
   const name = (m.name || '').toLowerCase();
 
-  // Model yang dilarang atau sudah dipensiunkan Google
-  if (name.includes('2.5-flash-lite') || name.includes('legacy') || (name.includes('gemini-pro') && !name.includes('1.5') && !name.includes('2.') && !name.includes('3.') && !name.includes('4.'))) {
-    return -500;
+  // 1. Singkirkan model non-teks, audio/TTS (limit 10/hari), gambar, dan utilitas khusus
+  if (
+    name.includes('tts') ||
+    name.includes('image') ||
+    name.includes('transcribe') ||
+    name.includes('embedding') ||
+    name.includes('robotics') ||
+    name.includes('computer-use') ||
+    name.includes('customtools')
+  ) {
+    return -1000;
   }
 
-  // Prioritaskan model generasi tertinggi (3.5 > 3.0 > 2.5 > 2.0 > 1.5)
+  // 2. Singkirkan model yang sudah dipensiunkan Google (2.5, 1.5, legacy pro)
+  if (
+    name.includes('2.5-') ||
+    name.includes('1.5-') ||
+    name.includes('legacy') ||
+    (name.includes('gemini-pro') && !name.includes('3.') && !name.includes('4.'))
+  ) {
+    return -900;
+  }
+
+  // 3. Model eksperimental 4 (kuota free tier sangat terbatas / sering 429)
+  if (name.includes('gemini-4-')) {
+    return -100;
+  }
+
+  // Prioritaskan model teks Flash-Lite generasi 3 (paling stabil, cepat, & kuota melimpah di Free Tier)
+  if (name.includes('gemini-3.5-flash-lite')) return 1000;
+  if (name.includes('gemini-3.1-flash-lite')) return 950;
+  if (name.includes('gemini-3-flash-preview')) return 900;
+  if (name.includes('gemini-3.5-flash')) return 850;
+  if (name.includes('gemini-3.8-flash')) return 800;
+
   const match = name.match(/gemini-(\d+)(?:\.(\d+))?/);
   let major = 1;
   let minor = 0;
@@ -9504,15 +9540,11 @@ function skorModelGemini(m) {
   }
 
   let typeBonus = 0;
-  if (name.includes('flash') && !name.includes('lite')) typeBonus = 35;
-  else if (name.includes('flash-lite')) typeBonus = 30;
+  if (name.includes('flash-lite')) typeBonus = 40;
   else if (name.includes('flash')) typeBonus = 25;
-  else if (name.includes('pro')) typeBonus = 15;
+  else if (name.includes('pro')) typeBonus = 10;
 
-  let expPenalty = 0;
-  if (name.includes('exp') || name.includes('preview')) expPenalty = -5;
-
-  return (major * 100) + (minor * 10) + typeBonus + expPenalty;
+  return (major * 100) + (minor * 10) + typeBonus;
 }
 
 async function dapatkanModelTersedia(apiKey) {
@@ -9554,7 +9586,8 @@ async function dapatkanModelTersedia(apiKey) {
       if (Array.isArray(data.models) && data.models.length > 0) {
         const generatorModels = data.models.filter(m =>
           Array.isArray(m.supportedGenerationMethods) &&
-          m.supportedGenerationMethods.includes('generateContent')
+          m.supportedGenerationMethods.includes('generateContent') &&
+          skorModelGemini(m) > 0
         );
 
         generatorModels.sort((a, b) => skorModelGemini(b) - skorModelGemini(a));
@@ -9574,7 +9607,7 @@ async function dapatkanModelTersedia(apiKey) {
   }
 
   if (lastErr) throw lastErr;
-  throw new Error('Tidak ada model yang dapat diakses dengan API Key ini.');
+  throw new Error('Tidak ada model teks yang dapat diakses dengan API Key ini.');
 }
 
 async function ujiKoneksiGemini(apiKey) {
@@ -9590,14 +9623,14 @@ async function ujiKoneksiGemini(apiKey) {
   let candidates = [...generatorModels];
   let lastError = '';
 
-  for (let i = 0; i < candidates.length; i++) {
+  for (let i = 0; i < Math.min(candidates.length, 5); i++) {
     const rawModel = candidates[i].name;
     const modelPath = rawModel.startsWith('models/') ? rawModel : ('models/' + rawModel);
     const cleanDisplay = rawModel.replace(/^models\//, '');
     const url = 'https://generativelanguage.googleapis.com/' + ver + '/' + modelPath + ':generateContent?key=' + encodeURIComponent(cleanKey);
 
     const ctrl = new AbortController();
-    const tm = setTimeout(() => ctrl.abort(), 12000);
+    const tm = setTimeout(() => ctrl.abort(), 8000);
     try {
       const res = await fetch(url, {
         method: 'POST',
@@ -9617,7 +9650,8 @@ async function ujiKoneksiGemini(apiKey) {
           throw new Error('API Key tidak valid. Pastikan kamu menyalin kunci dengan benar dari aistudio.google.com');
         }
         if (rawMsg.includes('quota') || rawMsg.includes('RESOURCE_EXHAUSTED')) {
-          throw new Error('Batas kuota gratis Google Gemini tercapai sementara. Coba lagi dalam 1 menit.');
+          // Lanjutkan ke kandidat berikutnya jika model ini terbatas
+          continue;
         }
 
         // Jika Google memberikan rekomendasi model spesifik (seperti gemini-3.5-flash-lite)
@@ -9637,7 +9671,7 @@ async function ujiKoneksiGemini(apiKey) {
       simpanGeminiKey(cleanKey, modelPath, ver);
       return { model: cleanDisplay, apiVer: ver };
     } catch (err) {
-      if (err.message.includes('API Key') || err.message.includes('kuota') || i === candidates.length - 1) {
+      if (err.message.includes('API Key') || i === candidates.length - 1) {
         throw err;
       }
     } finally {
@@ -9662,11 +9696,11 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
     modelList.push(savedModel);
   }
 
-  if (!modelList.length) {
-    const info = await dapatkanModelTersedia(cleanKey);
-    apiVer = info.ver;
-    modelList = info.generatorModels.map(m => m.name);
-  }
+  // Siapkan cadangan model generasi 3 yang terbukti aktif di Free Tier
+  const defaultFallbacks = ['models/gemini-3.5-flash-lite', 'models/gemini-3.1-flash-lite', 'models/gemini-3-flash-preview'];
+  defaultFallbacks.forEach(m => {
+    if (!modelList.includes(m)) modelList.push(m);
+  });
 
   const walletsStr = context.wallets && context.wallets.length
     ? context.wallets.map(w => w.name + ': ' + rp(w.balance)).join(', ')
@@ -9714,7 +9748,7 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
     const url = 'https://generativelanguage.googleapis.com/' + apiVer + '/' + modelPath + ':generateContent?key=' + encodeURIComponent(cleanKey);
 
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 35000);
+    const timer = setTimeout(() => controller.abort(), 20000);
 
     try {
       const res = await fetch(url, {
@@ -9738,7 +9772,12 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
         if (rawMsg.includes('API key not valid') || rawMsg.includes('API_KEY_INVALID')) {
           throw new Error('API Key Google Gemini tidak valid. Pastikan kamu menyalin kunci dengan benar dari aistudio.google.com');
         }
+
+        // Jika model ini terkena quota limit (misal TTS atau model tertentu), coba fallback berikutnya
         if (rawMsg.includes('quota') || rawMsg.includes('RESOURCE_EXHAUSTED')) {
+          if (i < modelList.length - 1) {
+            continue;
+          }
           throw new Error('Batas kuota gratis Google Gemini tercapai untuk sementara waktu. Silakan tunggu sekitar 1 menit dan coba kembali.');
         }
 
@@ -9768,7 +9807,7 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
       simpanGeminiKey(cleanKey, modelPath, apiVer);
       return reply.trim();
     } catch (err) {
-      if (err.message.includes('API Key') || err.message.includes('kuota') || i === modelList.length - 1) {
+      if (err.message.includes('API Key') || i === modelList.length - 1) {
         throw err;
       }
     } finally {
