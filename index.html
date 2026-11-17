@@ -2885,7 +2885,10 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px">
       <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="font-size:12px;color:var(--pri);font-weight:600">Dapatkan API Key Gratis di Google AI Studio ↗</a>
-      <button type="button" class="ghost kecil" id="btnSimpanGeminiSetelan" style="width:auto;margin:0">Simpan kunci</button>
+      <div style="display:flex;gap:6px">
+        <button type="button" class="ghost kecil" id="btnUjiGeminiSetelan" style="width:auto;margin:0">Uji kunci</button>
+        <button type="button" class="ghost kecil" id="btnSimpanGeminiSetelan" style="width:auto;margin:0">Simpan kunci</button>
+      </div>
     </div>
   </div>
 </section>
@@ -3195,7 +3198,8 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <label class="field-label" for="geminiApiKeyInput">API Key Gemini</label>
     <input type="password" id="geminiApiKeyInput" placeholder="Tempel AIzaSy..." autocomplete="off" style="font-family:monospace;font-size:13px">
   </div>
-  <div class="ai-dialog-actions" style="display:flex;gap:8px">
+  <div class="ai-dialog-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+    <button type="button" class="ghost" id="btnTestGeminiKey" style="flex:1">Uji Kunci</button>
     <button type="button" class="ghost" id="btnDeleteGeminiKey" style="flex:1">Hapus Kunci</button>
     <button type="button" id="btnSaveGeminiKey" style="flex:1.5">Simpan Kunci</button>
   </div>
@@ -9416,6 +9420,8 @@ function jawabFinansialLokal(pertanyaan, context) {
 }
 
 const GEMINI_KEY_STORAGE = 'catatan_gemini_key';
+const GEMINI_MODEL_STORAGE = 'catatan_gemini_model';
+const GEMINI_VER_STORAGE = 'catatan_gemini_api_ver';
 
 function muatGeminiKey() {
   try {
@@ -9423,25 +9429,49 @@ function muatGeminiKey() {
   } catch (_) { return ''; }
 }
 
-function simpanGeminiKey(key) {
+function muatGeminiModel() {
+  try {
+    return localStorage.getItem(GEMINI_MODEL_STORAGE) || '';
+  } catch (_) { return ''; }
+}
+
+function muatGeminiVer() {
+  try {
+    return localStorage.getItem(GEMINI_VER_STORAGE) || 'v1beta';
+  } catch (_) { return 'v1beta'; }
+}
+
+function simpanGeminiKey(key, model = '', ver = '') {
   try {
     const k = String(key || '').trim();
-    if (k) localStorage.setItem(GEMINI_KEY_STORAGE, k);
-    else localStorage.removeItem(GEMINI_KEY_STORAGE);
+    if (k) {
+      localStorage.setItem(GEMINI_KEY_STORAGE, k);
+      if (model) localStorage.setItem(GEMINI_MODEL_STORAGE, model);
+      if (ver) localStorage.setItem(GEMINI_VER_STORAGE, ver);
+    } else {
+      localStorage.removeItem(GEMINI_KEY_STORAGE);
+      localStorage.removeItem(GEMINI_MODEL_STORAGE);
+      localStorage.removeItem(GEMINI_VER_STORAGE);
+    }
     sinkronkanTampilanGeminiKey();
   } catch (_) {}
 }
 
-function sinkronkanTampilanGeminiKey() {
+function sinkronkanTampilanGeminiKey(statusKustom = null, warnaKustom = null) {
   const k = muatGeminiKey();
+  const m = muatGeminiModel();
   const inp1 = $('geminiApiKeyInput');
   const inp2 = $('sGeminiKey');
   const st = $('geminiKeyStatus');
-  if (inp1) inp1.value = k;
-  if (inp2) inp2.value = k;
+  if (inp1 && document.activeElement !== inp1) inp1.value = k;
+  if (inp2 && document.activeElement !== inp2) inp2.value = k;
   if (st) {
-    if (k) {
-      st.textContent = '✅ Aktif (' + k.slice(0, 6) + '...' + k.slice(-4) + ')';
+    if (statusKustom) {
+      st.innerHTML = statusKustom;
+      if (warnaKustom) st.style.color = warnaKustom;
+    } else if (k) {
+      const modelLabel = m ? ' • ' + m : '';
+      st.textContent = '✅ Aktif (' + k.slice(0, 6) + '...' + k.slice(-4) + modelLabel + ')';
       st.style.color = 'var(--ok, #16a34a)';
     } else {
       st.textContent = '⚪ Belum terpasang (hanya analisis lokal)';
@@ -9456,9 +9486,153 @@ function bukaDialogGeminiKey() {
   $('dlgGeminiKey').showModal();
 }
 
+async function deteksiModelGemini(apiKey, forceRefresh = false) {
+  const cleanKey = String(apiKey || '').trim();
+  if (!cleanKey) return null;
+
+  if (!forceRefresh) {
+    const savedModel = muatGeminiModel();
+    const savedVer = muatGeminiVer();
+    if (savedModel) {
+      return { model: savedModel, apiVer: savedVer, displayName: savedModel };
+    }
+  }
+
+  const endpoints = ['v1beta', 'v1'];
+  for (const ver of endpoints) {
+    try {
+      const ctrl = new AbortController();
+      const tm = setTimeout(() => ctrl.abort(), 8000);
+      const res = await fetch('https://generativelanguage.googleapis.com/' + ver + '/models?key=' + encodeURIComponent(cleanKey), {
+        signal: ctrl.signal
+      });
+      clearTimeout(tm);
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (Array.isArray(data.models) && data.models.length > 0) {
+        const generatorModels = data.models.filter(m =>
+          Array.isArray(m.supportedGenerationMethods) &&
+          m.supportedGenerationMethods.includes('generateContent')
+        );
+        if (generatorModels.length > 0) {
+          const sorted = generatorModels.sort((a, b) => {
+            const score = m => {
+              const n = (m.name || '').toLowerCase();
+              if (n.includes('2.5-flash')) return 100;
+              if (n.includes('2.0-flash') && !n.includes('lite')) return 95;
+              if (n.includes('2.0-flash-lite')) return 90;
+              if (n.includes('1.5-flash-latest')) return 85;
+              if (n.includes('1.5-flash')) return 80;
+              if (n.includes('flash')) return 75;
+              if (n.includes('2.5-pro')) return 65;
+              if (n.includes('2.0-pro')) return 60;
+              if (n.includes('1.5-pro')) return 55;
+              if (n.includes('pro')) return 50;
+              if (n.includes('gemini')) return 40;
+              return 10;
+            };
+            return score(b) - score(a);
+          });
+          const best = sorted[0];
+          const cleanModel = (best.name || '').replace(/^models\//, '');
+          localStorage.setItem(GEMINI_MODEL_STORAGE, cleanModel);
+          localStorage.setItem(GEMINI_VER_STORAGE, ver);
+          return {
+            model: cleanModel,
+            apiVer: ver,
+            displayName: best.displayName || cleanModel
+          };
+        }
+      }
+    } catch (_) {}
+  }
+
+  const defaultModel = 'gemini-2.0-flash';
+  const defaultVer = 'v1beta';
+  localStorage.setItem(GEMINI_MODEL_STORAGE, defaultModel);
+  localStorage.setItem(GEMINI_VER_STORAGE, defaultVer);
+  return { model: defaultModel, apiVer: defaultVer, displayName: defaultModel };
+}
+
+async function ujiKoneksiGemini(apiKey) {
+  const cleanKey = String(apiKey || '').trim();
+  if (!cleanKey) throw new Error('API Key kosong. Silakan tempelkan kuncimu terlebih dahulu.');
+
+  const deteksi = await deteksiModelGemini(cleanKey, true);
+  const candidateList = [
+    { ver: deteksi?.apiVer || 'v1beta', model: deteksi?.model || 'gemini-2.0-flash' },
+    { ver: 'v1beta', model: 'gemini-2.0-flash' },
+    { ver: 'v1beta', model: 'gemini-2.5-flash' },
+    { ver: 'v1', model: 'gemini-1.5-flash' },
+    { ver: 'v1beta', model: 'gemini-1.5-flash-latest' },
+    { ver: 'v1beta', model: 'gemini-1.5-flash' },
+    { ver: 'v1', model: 'gemini-pro' }
+  ];
+
+  const seenPair = new Set();
+  const filteredCandidates = [];
+  for (const c of candidateList) {
+    const key = c.ver + '::' + c.model;
+    if (!seenPair.has(key)) {
+      seenPair.add(key);
+      filteredCandidates.push(c);
+    }
+  }
+
+  let lastError = '';
+
+  for (let i = 0; i < filteredCandidates.length; i++) {
+    const cand = filteredCandidates[i];
+    const url = 'https://generativelanguage.googleapis.com/' + cand.ver + '/models/' + encodeURIComponent(cand.model) + ':generateContent?key=' + encodeURIComponent(cleanKey);
+
+    const ctrl = new AbortController();
+    const tm = setTimeout(() => ctrl.abort(), 12000);
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: 'Halo' }] }],
+          generationConfig: { maxOutputTokens: 10 }
+        }),
+        signal: ctrl.signal
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        const rawMsg = errJson.error?.message || ('HTTP ' + res.status);
+        lastError = rawMsg;
+        if (rawMsg.includes('API key not valid') || rawMsg.includes('API_KEY_INVALID')) {
+          throw new Error('API Key tidak valid. Pastikan kamu menyalin kunci dengan benar dari aistudio.google.com');
+        }
+        if (res.status === 404 || rawMsg.includes('not found') || rawMsg.includes('not supported')) {
+          continue;
+        }
+        throw new Error(rawMsg);
+      }
+
+      const data = await res.json();
+      if (!data.candidates?.[0]) throw new Error('Format balasan API tidak terduga.');
+      simpanGeminiKey(cleanKey, cand.model, cand.ver);
+      return { model: cand.model, apiVer: cand.ver };
+    } catch (err) {
+      if (err.message.includes('API Key') || i === filteredCandidates.length - 1) {
+        throw err;
+      }
+    } finally {
+      clearTimeout(tm);
+    }
+  }
+
+  throw new Error('Gagal menghubungi model: ' + (lastError || 'Tidak ada model yang merespons'));
+}
+
 async function tanyaGeminiLangsung(apiKey, message, history, context) {
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + encodeURIComponent(apiKey);
-  
+  const cleanKey = String(apiKey || '').trim();
+  if (!cleanKey) throw new Error('API Key Google Gemini belum diatur.');
+
+  let target = await deteksiModelGemini(cleanKey, false);
+
   const walletsStr = context.wallets && context.wallets.length
     ? context.wallets.map(w => w.name + ': ' + rp(w.balance)).join(', ')
     : 'Belum ada dompet aktif';
@@ -9502,36 +9676,84 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
     parts: [{ text: message }]
   });
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 35000);
+  const candidateList = [
+    { ver: target?.apiVer || 'v1beta', model: target?.model || 'gemini-2.0-flash' },
+    { ver: 'v1beta', model: 'gemini-2.0-flash' },
+    { ver: 'v1beta', model: 'gemini-2.5-flash' },
+    { ver: 'v1', model: 'gemini-1.5-flash' },
+    { ver: 'v1beta', model: 'gemini-1.5-flash-latest' },
+    { ver: 'v1beta', model: 'gemini-1.5-flash' },
+    { ver: 'v1', model: 'gemini-pro' }
+  ];
 
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents,
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 1000
-        }
-      }),
-      signal: controller.signal
-    });
-
-    if (!res.ok) {
-      const errJson = await res.json().catch(() => ({}));
-      const msg = errJson.error?.message || ('HTTP ' + res.status);
-      throw new Error('Gemini API: ' + msg);
+  const seenPair = new Set();
+  const filteredCandidates = [];
+  for (const c of candidateList) {
+    const key = c.ver + '::' + c.model;
+    if (!seenPair.has(key)) {
+      seenPair.add(key);
+      filteredCandidates.push(c);
     }
-
-    const data = await res.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!reply) throw new Error('Respons dari model Gemini kosong.');
-    return reply.trim();
-  } finally {
-    clearTimeout(timer);
   }
+
+  let lastErrorMsg = '';
+
+  for (let i = 0; i < filteredCandidates.length; i++) {
+    const cand = filteredCandidates[i];
+    const url = 'https://generativelanguage.googleapis.com/' + cand.ver + '/models/' + encodeURIComponent(cand.model) + ':generateContent?key=' + encodeURIComponent(cleanKey);
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 35000);
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1000
+          }
+        }),
+        signal: controller.signal
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        const rawMsg = errJson.error?.message || ('HTTP ' + res.status);
+        lastErrorMsg = rawMsg;
+
+        if (rawMsg.includes('API key not valid') || rawMsg.includes('API_KEY_INVALID')) {
+          throw new Error('API Key Google Gemini tidak valid. Pastikan kamu menyalin kunci dengan benar dari aistudio.google.com');
+        }
+        if (rawMsg.includes('quota') || rawMsg.includes('RESOURCE_EXHAUSTED')) {
+          throw new Error('Batas kuota gratis Google Gemini tercapai untuk sementara waktu. Silakan tunggu sekitar 1 menit dan coba kembali.');
+        }
+
+        if (res.status === 404 || rawMsg.includes('not found') || rawMsg.includes('not supported')) {
+          continue;
+        }
+
+        throw new Error('Gemini API: ' + rawMsg);
+      }
+
+      const data = await res.json();
+      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!reply) throw new Error('Respons dari model Gemini kosong.');
+
+      simpanGeminiKey(cleanKey, cand.model, cand.ver);
+      return reply.trim();
+    } catch (err) {
+      if (err.message.includes('API Key') || err.message.includes('kuota') || i === filteredCandidates.length - 1) {
+        throw err;
+      }
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  throw new Error('Gagal menghubungi model Google Gemini: ' + (lastErrorMsg || 'Model tidak ditemukan'));
 }
 
 async function kirimPesanAiChat(pertanyaanKustom = null) {
@@ -9677,30 +9899,106 @@ $('btnCloseGeminiKey').onclick = () => {
 };
 $('dlgGeminiKey').addEventListener('close', sinkronisasiStatusDialog);
 
-$('btnSaveGeminiKey').onclick = () => {
+$('btnTestGeminiKey').onclick = async () => {
   const val = $('geminiApiKeyInput').value.trim();
   if (!val) {
     beriPesan('Tempelkan API Key Google Gemini terlebih dahulu.', true);
     return;
   }
-  simpanGeminiKey(val);
-  beriPesan('API Key Google Gemini berhasil disimpan!');
-  $('dlgGeminiKey').close();
-  sinkronisasiStatusDialog();
+  const btn = $('btnTestGeminiKey');
+  btn.disabled = true;
+  btn.textContent = 'Menguji…';
+  sinkronkanTampilanGeminiKey('⏳ Sedang menguji koneksi ke Google Gemini…', 'var(--pri)');
+  try {
+    const res = await ujiKoneksiGemini(val);
+    sinkronkanTampilanGeminiKey('✅ Terhubung! Model: <strong>' + res.model + '</strong> (' + res.apiVer + ')', 'var(--ok, #16a34a)');
+    beriPesan('Koneksi Google Gemini berhasil! Model aktif: ' + res.model);
+  } catch (err) {
+    sinkronkanTampilanGeminiKey('❌ Gagal: ' + err.message, 'var(--danger, #dc2626)');
+    beriPesan('Uji kunci gagal: ' + err.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Uji Kunci';
+  }
+};
+
+$('btnSaveGeminiKey').onclick = async () => {
+  const val = $('geminiApiKeyInput').value.trim();
+  if (!val) {
+    beriPesan('Tempelkan API Key Google Gemini terlebih dahulu.', true);
+    return;
+  }
+  const btn = $('btnSaveGeminiKey');
+  btn.disabled = true;
+  btn.textContent = 'Menyimpan…';
+  try {
+    const res = await ujiKoneksiGemini(val);
+    simpanGeminiKey(val, res.model, res.apiVer);
+    beriPesan('API Key Google Gemini aktif! Model: ' + res.model);
+    $('dlgGeminiKey').close();
+    sinkronisasiStatusDialog();
+  } catch (err) {
+    simpanGeminiKey(val);
+    beriPesan('Kunci disimpan. Perhatian: ' + err.message, true);
+    $('dlgGeminiKey').close();
+    sinkronisasiStatusDialog();
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Simpan Kunci';
+  }
 };
 
 $('btnDeleteGeminiKey').onclick = () => {
   simpanGeminiKey('');
   $('geminiApiKeyInput').value = '';
+  $('sGeminiKey').value = '';
   beriPesan('API Key Gemini telah dihapus.');
   $('dlgGeminiKey').close();
   sinkronisasiStatusDialog();
 };
 
-$('btnSimpanGeminiSetelan').onclick = () => {
+$('btnUjiGeminiSetelan').onclick = async () => {
   const val = $('sGeminiKey').value.trim();
-  simpanGeminiKey(val);
-  beriPesan(val ? 'API Key Google Gemini berhasil disimpan!' : 'API Key Gemini telah dikosongkan.');
+  if (!val) {
+    beriPesan('Tempelkan API Key Google Gemini terlebih dahulu di kolom Setelan.', true);
+    return;
+  }
+  const btn = $('btnUjiGeminiSetelan');
+  btn.disabled = true;
+  btn.textContent = 'Menguji…';
+  try {
+    const res = await ujiKoneksiGemini(val);
+    simpanGeminiKey(val, res.model, res.apiVer);
+    beriPesan('✅ Kunci Google Gemini valid! Model: ' + res.model);
+  } catch (err) {
+    beriPesan('Uji kunci gagal: ' + err.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Uji kunci';
+  }
+};
+
+$('btnSimpanGeminiSetelan').onclick = async () => {
+  const val = $('sGeminiKey').value.trim();
+  if (!val) {
+    simpanGeminiKey('');
+    beriPesan('API Key Gemini telah dikosongkan.');
+    return;
+  }
+  const btn = $('btnSimpanGeminiSetelan');
+  btn.disabled = true;
+  btn.textContent = 'Menyimpan…';
+  try {
+    const res = await ujiKoneksiGemini(val);
+    simpanGeminiKey(val, res.model, res.apiVer);
+    beriPesan('API Key Google Gemini berhasil disimpan! Model: ' + res.model);
+  } catch (err) {
+    simpanGeminiKey(val);
+    beriPesan('Kunci disimpan. Perhatian: ' + err.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Simpan kunci';
+  }
 };
 $('btnAiChatClose').onclick = () => {
   $('dlgAiChat').close();
