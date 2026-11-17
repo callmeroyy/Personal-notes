@@ -2247,8 +2247,16 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     pointer-events: none !important;
   }
 
-  html#financeApp dialog.ai-chat-dialog,
-  dialog.ai-chat-dialog {
+  /* Pastikan semua dialog tertutup tersembunyi sepenuhnya */
+  dialog:not([open]),
+  html#financeApp dialog:not([open]),
+  html#financeApp dialog.ai-chat-dialog:not([open]),
+  dialog.ai-chat-dialog:not([open]) {
+    display: none !important;
+  }
+
+  html#financeApp dialog.ai-chat-dialog[open],
+  dialog.ai-chat-dialog[open] {
     position: fixed !important;
     inset: 0 !important;
     max-width: 580px !important;
