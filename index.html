@@ -8378,7 +8378,7 @@ async function panggilAsistenAi(task, payload) {
     const error = new Error('Batas 20 permintaan AI per hari di perangkat ini sudah tercapai.'); error.code = 'RATE_LIMITED'; throw error;
   }
   const controller = new AbortController();
-  const batasTunggu = 45000;
+  const batasTunggu = 60000;
   const timer = setTimeout(() => controller.abort(), batasTunggu);
   try {
     for (let percobaan = 0; percobaan < 2; percobaan++) {
@@ -9040,15 +9040,131 @@ function renderPesanAiChat() {
   box.scrollTop = box.scrollHeight;
 }
 
+function jawabFinansialLokal(pertanyaan, context) {
+  if (!pertanyaan || typeof pertanyaan !== 'string') return null;
+  const q = pertanyaan.trim().toLowerCase();
+  const { balance=0, cashBalance=0, wallets=[], summary30d={ income:0, expense:0, net:0 }, topCategories=[], budgets=[], recentTransactions=[] } = context || {};
+
+  // 1. Tanya Saldo / Dompet
+  const isTanyaSaldo = /\b(saldo(?:ku|mu|nya)?|sisa\s*saldo(?:ku|mu|nya)?|uang(?:ku|mu|nya)?|duit(?:ku|mu|nya)?|dompet(?:ku|mu|nya)?|rekening(?:ku|mu|nya)?|dana|gopay|bca|mandiri|bri|tunai|cash)\b/i.test(q) &&
+    !/\b(tambah|catat|tambahkan)\b/i.test(q);
+
+  if (isTanyaSaldo) {
+    let rincianDompet = wallets && wallets.length
+      ? wallets.map(w => '  • ' + w.name + ': ' + rp(w.balance)).join('\n')
+      : '  • Belum ada dompet digital aktif.';
+    const net = summary30d.net;
+    const statusArus = net >= 0 ? 'surplus ' + rp(net) : 'defisit ' + rp(Math.abs(net));
+    const text = '💰 Rincian Saldo & Dompetmu Saat Ini:\n\n' +
+      '• Total Saldo Keseluruhan: ' + rp(balance) + '\n' +
+      '• Saldo Tunai Fisik: ' + rp(cashBalance) + '\n\n' +
+      '💳 Saldo di Rekening & E-Wallet:\n' + rincianDompet + '\n\n' +
+      '📌 Catatan Arus Kas (30 hari terakhir): ' + statusArus + '.';
+    return {
+      reply: text,
+      followUpSuggestions: ['Berapa total pengeluaranku bulan ini?', 'Kategori apa yang paling banyak pengeluarannya?', 'Apakah anggaran bulananku masih aman?']
+    };
+  }
+
+  // 2. Tanya Kategori Terbanyak / Paling Boros
+  const isTanyaKategori = /\b(kategori|terbanyak|terbesar|paling\s*banyak|paling\s*besar|paling\s*boros|boros)\b/i.test(q);
+  if (isTanyaKategori) {
+    if (!topCategories.length) {
+      return {
+        reply: '📊 Belum ada data pengeluaran yang tercatat dalam 30 hari terakhir untuk dianalisis kategorinya.',
+        followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Berapa total pemasukan saya?']
+      };
+    }
+    const totalKeluar = summary30d.expense || 1;
+    const rincianKat = topCategories.slice(0, 5).map((c, i) => {
+      const pct = Math.round((c.amount / totalKeluar) * 100);
+      return '  ' + (i + 1) + '. ' + c.category + ': ' + rp(c.amount) + ' (' + pct + '%)';
+    }).join('\n');
+    const top1 = topCategories[0];
+    const text = '📊 Kategori Pengeluaran Terbesar (30 Hari Terakhir):\n\n' + rincianKat + '\n\n' +
+      '💡 Pengeluaran paling mendominasi adalah ' + top1.category + ' sebesar ' + rp(top1.amount) + '. Pertimbangkan batas anggaran pada kategori ini agar pengeluaran tetap terkontrol.';
+    return {
+      reply: text,
+      followUpSuggestions: ['Berapa sisa budget untuk ' + top1.category + '?', 'Berapa total pengeluaran dan pemasukanku?', 'Tampilkan transaksi terbaru']
+    };
+  }
+
+  // 3. Tanya Pengeluaran / Belanja
+  const isTanyaPengeluaran = /\b(pengeluaran(?:ku|mu|nya)?|belanja(?:ku|mu|nya)?|biaya(?:ku|mu|nya)?|keluar|ongkos|habis\s*berapa)\b/i.test(q) &&
+    !/\b(masuk|pemasukan)\b/i.test(q);
+  if (isTanyaPengeluaran) {
+    const text = '📉 Ringkasan Pengeluaran (30 Hari Terakhir):\n\n' +
+      '• Total Pengeluaran: ' + rp(summary30d.expense) + '\n' +
+      '• Rata-rata per hari: ' + rp(Math.round(summary30d.expense / 30)) + '\n' +
+      (topCategories.length ? '• Kategori Terbesar: ' + topCategories[0].category + ' (' + rp(topCategories[0].amount) + ')\n\n' : '\n') +
+      '💡 Pemasukan tercatat adalah ' + rp(summary30d.income) + '. Arus kasmu saat ini ' + (summary30d.net >= 0 ? 'surplus (aman)' : 'defisit (perlu hemat)') + '.';
+    return {
+      reply: text,
+      followUpSuggestions: ['Kategori apa yang paling banyak pengeluarannya?', 'Berapa sisa saldo di semua dompetku?', 'Apakah anggaranku masih aman?']
+    };
+  }
+
+  // 4. Tanya Pemasukan / Gaji
+  const isTanyaPemasukan = /\b(pemasukan(?:ku|mu|nya)?|gaji(?:ku|mu|nya)?|uang\s*masuk|penghasilan(?:ku|mu|nya)?|income|dapat\s*uang)\b/i.test(q);
+  if (isTanyaPemasukan) {
+    const net = summary30d.net;
+    const text = '📈 Ringkasan Pemasukan & Arus Kas (30 Hari Terakhir):\n\n' +
+      '• Total Pemasukan: ' + rp(summary30d.income) + '\n' +
+      '• Total Pengeluaran: ' + rp(summary30d.expense) + '\n' +
+      '• Selisih Bersih (Net): ' + (net >= 0 ? '+' : '') + rp(net) + ' (' + (net >= 0 ? 'Surplus 👍' : 'Defisit ⚠️') + ')\n\n' +
+      (net >= 0 ? 'Kondisi keuangan positif. Surplus dapat dialokasikan ke tabungan atau dana darurat.' : 'Pengeluaran melebihi pemasukan. Evaluasi kategori pengeluaran terbesar.');
+    return {
+      reply: text,
+      followUpSuggestions: ['Berapa total pengeluaranku bulan ini?', 'Berapa sisa saldo di semua dompetku?', 'Kategori apa yang paling banyak pengeluarannya?']
+    };
+  }
+
+  // 5. Tanya Anggaran / Budget
+  const isTanyaBudget = /\b(anggaran(?:ku|mu|nya)?|budget(?:ku|mu|nya)?|batas|limit)\b/i.test(q);
+  if (isTanyaBudget) {
+    if (!budgets.length) {
+      return {
+        reply: '🎯 Kamu belum menetapkan batas anggaran (budget) untuk kategori apa pun.\n\nKamu dapat membuat batas anggaran melalui menu Fitur lain → Rencana keuangan.',
+        followUpSuggestions: ['Kategori apa yang paling banyak pengeluarannya?', 'Berapa sisa saldo di semua dompetku?']
+      };
+    }
+    const rincianB = budgets.map(b => {
+      const pct = b.limit > 0 ? Math.round((b.spent / b.limit) * 100) : 0;
+      const statusIcon = pct >= 100 ? '🔴 Overbudget' : (pct >= 80 ? '🟡 Waspada' : '🟢 Aman');
+      return '  • ' + b.category + ' (' + b.period + '): ' + rp(b.spent) + ' dari batas ' + rp(b.limit) + ' (' + pct + '% - ' + statusIcon + ')\n    Sisa limit: ' + rp(b.remaining);
+    }).join('\n\n');
+    return {
+      reply: '🎯 Status Batas Anggaran (Budget):\n\n' + rincianB,
+      followUpSuggestions: ['Berapa total pengeluaran bulan ini?', 'Berapa sisa saldo di semua dompetku?', 'Tampilkan transaksi terbaru']
+    };
+  }
+
+  // 6. Tanya Transaksi Terbaru / Riwayat
+  const isTanyaRiwayat = /\b(terakhir|terbaru|kemarin|riwayat|beli\s*apa)\b/i.test(q);
+  if (isTanyaRiwayat) {
+    if (!recentTransactions.length) {
+      return {
+        reply: 'Belum ada transaksi aktif yang tercatat di riwayatmu.',
+        followUpSuggestions: ['Berapa sisa saldo di semua dompetku?']
+      };
+    }
+    const rincianT = recentTransactions.slice(0, 5).map(t => {
+      const tanda = t.type === 'masuk' ? '+' : '-';
+      return '  • ' + t.date + ' · ' + t.title + ' (' + t.category + ')\n    ' + tanda + rp(t.amount) + ' · ' + t.payment;
+    }).join('\n\n');
+    return {
+      reply: '📝 5 Transaksi Aktif Terakhirmu:\n\n' + rincianT + '\n\nLihat daftar lengkap melalui menu Riwayat.',
+      followUpSuggestions: ['Berapa total pengeluaran bulan ini?', 'Berapa sisa saldo di semua dompetku?', 'Kategori apa yang paling banyak pengeluarannya?']
+    };
+  }
+
+  return null;
+}
+
 async function kirimPesanAiChat(pertanyaanKustom = null) {
   const input = $('aiChatInput');
   const teks = String(pertanyaanKustom || input.value || '').trim();
   if (!teks) return;
-
-  if (!await mintaPersetujuanAi()) {
-    beriPesan('Persetujuan AI diperlukan untuk mengirim pertanyaan.', true);
-    return;
-  }
 
   const riwayat = muatRiwayatAiChat();
   const userMsg = { id: uid(), role: 'user', text: teks, ts: Date.now() };
@@ -9057,20 +9173,39 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
   input.value = '';
   renderPesanAiChat();
 
+  const context = siapkanKonteksAiChat();
+  const jawabanLokal = jawabFinansialLokal(teks, context);
+  if (jawabanLokal) {
+    riwayat.push({
+      id: uid(),
+      role: 'assistant',
+      text: jawabanLokal.reply,
+      suggestions: jawabanLokal.followUpSuggestions,
+      ts: Date.now()
+    });
+    simpanRiwayatAiChat(riwayat);
+    renderPesanAiChat();
+    setTimeout(() => input.focus(), 60);
+    return;
+  }
+
+  if (!await mintaPersetujuanAi()) {
+    beriPesan('Persetujuan AI diperlukan untuk mengirim pertanyaan.', true);
+    return;
+  }
+
   const sendBtn = $('btnAiChatSend');
   sendBtn.disabled = true;
   input.disabled = true;
 
   const box = $('aiChatMessages');
   const typingEl = el('div', 'ai-msg assistant');
-  typingEl.id = 'aiChatTyping';
-  typingEl.append(el('div', 'ai-msg-bubble ai-loading', 'Asisten AI sedang menganalisis datamu…'));
+  typingEl.append(el('div', 'ai-msg-bubble ai-loading', 'Asisten AI sedang berpikir…'));
   box.appendChild(typingEl);
   box.scrollTop = box.scrollHeight;
 
   try {
-    const context = siapkanKonteksAiChat();
-    const historyPayload = riwayat.slice(-6).map(m => ({ role: m.role, content: m.text }));
+    const historyPayload = riwayat.slice(-4).map(m => ({ role: m.role, content: m.text }));
     const data = await panggilAsistenAi('financial_chat', {
       message: teks,
       history: historyPayload,
@@ -9078,7 +9213,7 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
     });
 
     typingEl.remove();
-    const replyText = String(data?.reply || 'Maaf, saya belum dapat menjawab pertanyaan tersebut.').trim();
+    const replyText = String(data?.reply || 'Saya telah memeriksa catatanmu, silakan tanyakan detail spesifik yang ingin kamu ketahui.').trim();
     const suggestions = Array.isArray(data?.followUpSuggestions) ? data.followUpSuggestions : [];
 
     riwayat.push({
@@ -9092,8 +9227,18 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
     renderPesanAiChat();
   } catch (error) {
     typingEl.remove();
-    const errText = 'Gagal memproses pertanyaan: ' + pesanErrorAi(error);
-    riwayat.push({ id: uid(), role: 'assistant', text: errText, ts: Date.now() });
+    const fallbackText = 'Asisten Keuangan telah menyiapkan ringkasan catatanmu:\n\n' +
+      '• Total Saldo: ' + rp(context.balance) + '\n' +
+      '• Pengeluaran (30 hari): ' + rp(context.summary30d.expense) + '\n' +
+      '• Pemasukan (30 hari): ' + rp(context.summary30d.income) + '\n\n' +
+      'Silakan tanyakan hal spesifik seperti "sisa saldo dompet", "kategori terbanyak", atau "cek anggaran".';
+    riwayat.push({
+      id: uid(),
+      role: 'assistant',
+      text: fallbackText,
+      suggestions: ['Berapa sisa saldo di semua dompetku?', 'Berapa total pengeluaranku bulan ini?', 'Kategori apa yang paling banyak pengeluarannya?'],
+      ts: Date.now()
+    });
     simpanRiwayatAiChat(riwayat);
     renderPesanAiChat();
   } finally {

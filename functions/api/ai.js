@@ -275,9 +275,9 @@ async function runChat(env, payload) {
   const message = cleanText(payload?.message, 500);
   if (!message) throw new Error('Pesan pertanyaan tidak boleh kosong.');
 
-  const history = Array.isArray(payload?.history) ? payload.history.slice(-6).map(h => ({
+  const history = Array.isArray(payload?.history) ? payload.history.slice(-4).map(h => ({
     role: h.role === 'assistant' ? 'assistant' : 'user',
-    content: cleanText(h.content || h.text, 500)
+    content: cleanText(h.content || h.text, 300)
   })).filter(h => h.content) : [];
 
   const contextData = payload?.financialContext || {};
@@ -285,8 +285,8 @@ async function runChat(env, payload) {
     today: validDate(contextData.today) ? contextData.today : '',
     balance: safeNumber(contextData.balance, { min: -Number.MAX_SAFE_INTEGER }) ?? 0,
     cashBalance: safeNumber(contextData.cashBalance, { min: -Number.MAX_SAFE_INTEGER }) ?? 0,
-    wallets: Array.isArray(contextData.wallets) ? contextData.wallets.slice(0, 20).map(w => ({
-      name: cleanText(w?.name, 60),
+    wallets: Array.isArray(contextData.wallets) ? contextData.wallets.slice(0, 10).map(w => ({
+      name: cleanText(w?.name, 40),
       balance: safeNumber(w?.balance, { min: -Number.MAX_SAFE_INTEGER }) ?? 0
     })) : [],
     summary30d: {
@@ -294,38 +294,26 @@ async function runChat(env, payload) {
       expense: safeNumber(contextData.summary30d?.expense) ?? 0,
       net: safeNumber(contextData.summary30d?.net, { min: -Number.MAX_SAFE_INTEGER }) ?? 0
     },
-    topCategories: Array.isArray(contextData.topCategories) ? contextData.topCategories.slice(0, 15).map(c => ({
-      category: cleanText(c?.category, 60),
+    topCategories: Array.isArray(contextData.topCategories) ? contextData.topCategories.slice(0, 8).map(c => ({
+      category: cleanText(c?.category, 40),
       amount: safeNumber(c?.amount) ?? 0
     })) : [],
-    budgets: Array.isArray(contextData.budgets) ? contextData.budgets.slice(0, 15).map(b => ({
-      category: cleanText(b?.category, 60),
-      period: b?.period === 'minggu' ? 'minggu' : 'bulan',
+    budgets: Array.isArray(contextData.budgets) ? contextData.budgets.slice(0, 8).map(b => ({
+      category: cleanText(b?.category, 40),
       limit: safeNumber(b?.limit) ?? 0,
       spent: safeNumber(b?.spent) ?? 0,
       remaining: safeNumber(b?.remaining, { min: -Number.MAX_SAFE_INTEGER }) ?? 0
-    })) : [],
-    recentTransactions: Array.isArray(contextData.recentTransactions) ? contextData.recentTransactions.slice(0, 15).map(t => ({
-      date: validDate(t?.date) ? t.date : '',
-      title: cleanText(t?.title, 60),
-      category: cleanText(t?.category, 40),
-      type: t?.type === 'masuk' ? 'masuk' : 'keluar',
-      amount: safeNumber(t?.amount) ?? 0,
-      payment: t?.payment === 'tunai' ? 'tunai' : 'nontunai'
     })) : []
   };
 
-  const systemPrompt = `Kamu adalah "Asisten Keuangan AI" pribadi yang cerdas, ramah, dan solutif di aplikasi Catatan Keuangan.
-Berikut adalah data ringkasan keuangan nyata milik pengguna saat ini:
+  const systemPrompt = `Kamu adalah "Asisten Keuangan AI" pribadi yang cerdas dan ramah di aplikasi Catatan Keuangan.
+Data ringkasan keuangan pengguna saat ini:
 ${JSON.stringify(safeContext)}
 
-Panduan menjawab:
-1. Jawab pertanyaan pengguna secara akurat berdasarkan data keuangan di atas.
-2. Gunakan format mata uang Rupiah yang jelas (contoh: Rp50.000, Rp1.500.000) saat menyebutkan nominal.
-3. Bersikap ramah, ringkas, dan jelas dalam bahasa Indonesia. Jangan mengarang data transaksi atau nominal yang tidak tercatat.
-4. Jika pengguna menanyakan saran berhemat atau evaluasi anggaran, berikan pertimbangan yang realistis berdasarkan data kategori pengeluaran mereka.
-5. Sediakan 1 sampai 3 pertanyaan lanjutan yang relevan di followUpSuggestions agar pengguna bisa memilih pertanyaan berikutnya.
-6. Jawab hanya dalam format JSON sesuai skema.`;
+Instruksi:
+Jawab secara ringkas, ramah, dan solutif berdasarkan data di atas. Gunakan format Rupiah (Rp).
+Keluarkan satu objek JSON valid dengan format tepat:
+{"reply": "teks jawaban", "followUpSuggestions": ["pertanyaan lanjutan 1", "pertanyaan lanjutan 2"]}`;
 
   const messages = [
     { role: 'system', content: systemPrompt },
@@ -333,7 +321,22 @@ Panduan menjawab:
     { role: 'user', content: message }
   ];
 
-  return validateChat(await runStructuredAi(env, messages, CHAT_SCHEMA, 800, 0.3));
+  try {
+    const result = await env.AI.run(MODEL, {
+      messages,
+      response_format: { type: 'json_object' },
+      temperature: 0.3,
+      max_tokens: 380
+    });
+    return validateChat(parseModelResponse(result));
+  } catch (_) {
+    const result = await env.AI.run(MODEL, {
+      messages,
+      temperature: 0.3,
+      max_tokens: 350
+    });
+    return validateChat(parseModelResponse(result));
+  }
 }
 
 export async function onRequest(context) {
