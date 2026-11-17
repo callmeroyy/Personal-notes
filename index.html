@@ -9110,7 +9110,99 @@ function jawabFinansialLokal(pertanyaan, context) {
   const q = pertanyaan.trim().toLowerCase();
   const { balance=0, cashBalance=0, wallets=[], summary30d={ income:0, expense:0, net:0 }, topCategories=[], budgets=[], recentTransactions=[] } = context || {};
 
-  // 1. Tanya Saldo / Dompet
+  // 1. Identitas & Profil AI
+  const isTanyaIdentitas = /\b(siapa\s*(?:sih\s*)?(?:kamu|anda|dirimu|lu|bot)|kamu\s*siapa|nama\s*kamu|kenalan|perkenalkan)\b/i.test(q);
+  if (isTanyaIdentitas) {
+    return {
+      reply: '👋 Halo! Saya **Asisten Keuangan AI** pribadimu di aplikasi Catatan Keuangan.\n\n' +
+        'Saya memiliki akses langsung ke catatan keuanganmu untuk membantumu memantau kondisi finansial secara privat dan instan di perangkat ini:\n' +
+        '• 💰 Memeriksa total saldo, uang tunai, dan rekening / e-wallet\n' +
+        '• 📉 Menganalisis pengeluaran dan kategori paling boros (30 hari)\n' +
+        '• 📈 Memantau pemasukan dan status arus kas (surplus/defisit)\n' +
+        '• 🎯 Mengecek batas anggaran bulanan (budget)\n' +
+        '• 📝 Melihat riwayat transaksi terakhir\n' +
+        '• 💡 Memberikan tips dan strategi berhemat\n\n' +
+        'Data catatanmu tetap aman di browsermu. Ada yang ingin kamu tanyakan atau periksa hari ini?',
+      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Kategori apa yang paling banyak pengeluarannya?', 'Apakah anggaran bulananku masih aman?']
+    };
+  }
+
+  // 2. Sapaan & Salam
+  const isSapaan = /^(halo|hai|hey|hei|pagi|siang|sore|malam|assalamualaikum|tes|ping)\b/i.test(q);
+  if (isSapaan) {
+    return {
+      reply: '👋 Halo! Senang bertemu denganmu. Saya siap membantumu mengecek saldo dompet, ringkasan pengeluaran, anggaran, atau riwayat transaksimu saat ini.\n\nMau mulai cek apa hari ini?',
+      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Berapa total pengeluaran 30 hari terakhir?', 'Kategori apa yang paling boros?']
+    };
+  }
+
+  // 3. Kemampuan & Bantuan
+  const isTanyaBisaApa = /\b(bisa\s*apa|kamu\s*bisa\s*apa|fitur\s*apa|kegunaan|fungsi|bantu\s*apa|cara\s*pakai|panduan)\b/i.test(q);
+  if (isTanyaBisaApa) {
+    return {
+      reply: '✨ Berikut beberapa hal yang bisa kamu tanyakan langsung ke saya:\n\n' +
+        '1. **Saldo & Dompet**: *"Berapa saldo dompetku?"*\n' +
+        '2. **Pengeluaran**: *"Berapa pengeluaranku bulan ini?"*\n' +
+        '3. **Kategori Boros**: *"Kategori apa yang paling boros?"*\n' +
+        '4. **Pemasukan**: *"Berapa total pemasukan 30 hari?"*\n' +
+        '5. **Anggaran**: *"Apakah anggaranku masih aman?"*\n' +
+        '6. **Riwayat**: *"Tampilkan transaksi terakhirku"*\n' +
+        '7. **Tips Hemat**: *"Beri tips berhemat"*\n' +
+        '8. **Navigasi Catat**: *"Catat pengeluaran baru"*\n\n' +
+        'Silakan ketik pertanyaanmu atau pilih tombol pintasan di bawah!',
+      followUpSuggestions: ['Berapa total pengeluaranku?', 'Kategori apa yang paling boros?', 'Beri tips berhemat']
+    };
+  }
+
+  // 4. Aksi Navigasi & Tindakan CRUD
+  const isAksiCatat = /\b(catat|tambah\s*transaksi|tambah\s*pengeluaran|tambah\s*pemasukan|input\s*transaksi)\b/i.test(q);
+  if (isAksiCatat) {
+    return {
+      reply: '✍️ Untuk mencatat transaksi baru, kamu bisa:\n\n' +
+        '1. Menggunakan **Smart Input** di halaman Beranda (bisa via teks biasa atau suara microphone).\n' +
+        '2. Atau langsung mengisi formulir pencatatan lengkap.\n\nKlik pintasan di bawah untuk membuka form catat transaksi.',
+      followUpSuggestions: ['Buka formulir catat', 'Berapa sisa saldo di semua dompetku?']
+    };
+  }
+
+  const isAksiRiwayat = /\b(buka\s*riwayat|lihat\s*riwayat|daftar\s*transaksi|riwayat\s*lengkap)\b/i.test(q);
+  if (isAksiRiwayat) {
+    return {
+      reply: '📋 Kamu bisa melihat, mencari, memfilter, mengedit, atau menghapus seluruh catatan transaksi di menu Riwayat.',
+      followUpSuggestions: ['Buka menu riwayat', 'Tampilkan transaksi terbaru']
+    };
+  }
+
+  // 5. Tips & Saran Keuangan
+  const isTipsHemat = /\b(tips|saran|hemat|menabung|nabung|cara\s*hemat|nasihat)\b/i.test(q);
+  if (isTipsHemat) {
+    const top = topCategories[0];
+    const net = summary30d.net;
+    let saranKhusus = '';
+    if (top) {
+      saranKhusus = '\n\n💡 **Fokus Penghematanmu:** Kategori pengeluaran tertinggimu saat ini adalah **' + top.category + '** (' + rp(top.amount) + '). Cobalah menetapkan batas anggaran (budget) maksimal 70-80% dari angka tersebut untuk bulan berikutnya.';
+    }
+    const statusArus = net >= 0 ? 'Arus kasmu saat ini surplus ' + rp(net) + ' 👍 Pertahankan dan alokasikan sebagian ke tabungan atau dana darurat.' : 'Arus kasmu saat ini defisit ' + rp(Math.abs(net)) + ' ⚠️ Prioritaskan memangkas pengeluaran non-esensial.';
+    return {
+      reply: '💡 **Tips & Saran Keuangan Pribadi:**\n\n' +
+        '1. **Prinsip 50/30/20**: Alokasikan 50% untuk kebutuhan pokok, 30% untuk keinginan, dan 20% untuk tabungan/investasi.\n' +
+        '2. **Evaluasi Rutin**: Periksa pengeluaran harian agar tidak ada kebocoran halus (langganan yang jarang terpakai, jajan impulsif).\n' +
+        '3. **Catat Real-Time**: Semakin disiplin kamu mencatat, semakin akurat evaluasi keuanganmu.\n\n' +
+        '📌 **Kondisi Finansialmu:** ' + statusArus + saranKhusus,
+      followUpSuggestions: ['Kategori apa yang paling banyak pengeluarannya?', 'Apakah anggaran bulananku masih aman?', 'Berapa sisa saldo di semua dompetku?']
+    };
+  }
+
+  // 6. Ucapan Terima Kasih
+  const isTerimaKasih = /\b(terima\s*kasih|makasih|thanks|thank\s*you|tengkyu|sip|mantap|keren)\b/i.test(q);
+  if (isTerimaKasih) {
+    return {
+      reply: 'Sama-sama! Senang bisa membantumu mengelola keuangan dengan rapi. Kalau ada hal lain yang ingin kamu tanyakan atau cek, panggil saya kapan saja ya! 🚀',
+      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Apakah anggaranku masih aman?']
+    };
+  }
+
+  // 7. Tanya Saldo / Dompet
   const isTanyaSaldo = /\b(saldo(?:ku|mu|nya)?|sisa\s*saldo(?:ku|mu|nya)?|uang(?:ku|mu|nya)?|duit(?:ku|mu|nya)?|dompet(?:ku|mu|nya)?|rekening(?:ku|mu|nya)?|dana|gopay|bca|mandiri|bri|tunai|cash)\b/i.test(q) &&
     !/\b(tambah|catat|tambahkan)\b/i.test(q);
 
@@ -9131,7 +9223,7 @@ function jawabFinansialLokal(pertanyaan, context) {
     };
   }
 
-  // 2. Tanya Kategori Terbanyak / Paling Boros
+  // 8. Tanya Kategori Terbanyak / Paling Boros
   const isTanyaKategori = /\b(kategori|terbanyak|terbesar|paling\s*banyak|paling\s*besar|paling\s*boros|boros)\b/i.test(q);
   if (isTanyaKategori) {
     if (!topCategories.length) {
@@ -9154,7 +9246,7 @@ function jawabFinansialLokal(pertanyaan, context) {
     };
   }
 
-  // 3. Tanya Pengeluaran / Belanja
+  // 9. Tanya Pengeluaran / Belanja
   const isTanyaPengeluaran = /\b(pengeluaran(?:ku|mu|nya)?|belanja(?:ku|mu|nya)?|biaya(?:ku|mu|nya)?|keluar|ongkos|habis\s*berapa)\b/i.test(q) &&
     !/\b(masuk|pemasukan)\b/i.test(q);
   if (isTanyaPengeluaran) {
@@ -9169,7 +9261,7 @@ function jawabFinansialLokal(pertanyaan, context) {
     };
   }
 
-  // 4. Tanya Pemasukan / Gaji
+  // 10. Tanya Pemasukan / Gaji
   const isTanyaPemasukan = /\b(pemasukan(?:ku|mu|nya)?|gaji(?:ku|mu|nya)?|uang\s*masuk|penghasilan(?:ku|mu|nya)?|income|dapat\s*uang)\b/i.test(q);
   if (isTanyaPemasukan) {
     const net = summary30d.net;
@@ -9184,7 +9276,7 @@ function jawabFinansialLokal(pertanyaan, context) {
     };
   }
 
-  // 5. Tanya Anggaran / Budget
+  // 11. Tanya Anggaran / Budget
   const isTanyaBudget = /\b(anggaran(?:ku|mu|nya)?|budget(?:ku|mu|nya)?|batas|limit)\b/i.test(q);
   if (isTanyaBudget) {
     if (!budgets.length) {
@@ -9204,7 +9296,7 @@ function jawabFinansialLokal(pertanyaan, context) {
     };
   }
 
-  // 6. Tanya Transaksi Terbaru / Riwayat
+  // 12. Tanya Transaksi Terbaru / Riwayat
   const isTanyaRiwayat = /\b(terakhir|terbaru|kemarin|riwayat|beli\s*apa)\b/i.test(q);
   if (isTanyaRiwayat) {
     if (!recentTransactions.length) {
@@ -9230,6 +9322,22 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
   const input = $('aiChatInput');
   const teks = String(pertanyaanKustom || input.value || '').trim();
   if (!teks) return;
+
+  if (teks === 'Buka formulir catat' || teks === 'Catat transaksi baru') {
+    $('dlgAiChat').close();
+    goto('catat');
+    return;
+  }
+  if (teks === 'Buka menu riwayat' || teks === 'Lihat semua riwayat') {
+    $('dlgAiChat').close();
+    goto('riwayat');
+    return;
+  }
+  if (teks === 'Buka grafik keuangan') {
+    $('dlgAiChat').close();
+    goto('grafik');
+    return;
+  }
 
   const riwayat = muatRiwayatAiChat();
   const userMsg = { id: uid(), role: 'user', text: teks, ts: Date.now() };
@@ -9292,16 +9400,20 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
     renderPesanAiChat();
   } catch (error) {
     typingEl.remove();
-    const fallbackText = 'Asisten Keuangan telah menyiapkan ringkasan catatanmu:\n\n' +
-      '• Total Saldo: ' + rp(context.balance) + '\n' +
-      '• Pengeluaran (30 hari): ' + rp(context.summary30d.expense) + '\n' +
-      '• Pemasukan (30 hari): ' + rp(context.summary30d.income) + '\n\n' +
-      'Silakan tanyakan hal spesifik seperti "sisa saldo dompet", "kategori terbanyak", atau "cek anggaran".';
+    const fallbackText = 'Saya belum dapat terhubung ke server AI saat ini.\n\n' +
+      'Namun seluruh data catatan keuanganmu tetap bisa saya analisis secara instan di perangkat ini:\n' +
+      '• 💰 Sisa saldo semua dompet & kas tunai\n' +
+      '• 📉 Total pengeluaran & pos terboros\n' +
+      '• 📈 Pemasukan & status arus kas\n' +
+      '• 🎯 Status batas anggaran (budget)\n' +
+      '• 📝 5 riwayat transaksi terakhir\n' +
+      '• 💡 Tips dan saran berhemat\n\n' +
+      'Silakan pilih pertanyaan di bawah atau tanyakan detail keuanganmu!';
     riwayat.push({
       id: uid(),
       role: 'assistant',
       text: fallbackText,
-      suggestions: ['Berapa sisa saldo di semua dompetku?', 'Berapa total pengeluaranku bulan ini?', 'Kategori apa yang paling banyak pengeluarannya?'],
+      suggestions: ['Berapa sisa saldo di semua dompetku?', 'Kategori apa yang paling banyak pengeluarannya?', 'Apakah anggaran bulananku masih aman?', 'Beri tips berhemat'],
       ts: Date.now()
     });
     simpanRiwayatAiChat(riwayat);
