@@ -9486,6 +9486,35 @@ function bukaDialogGeminiKey() {
   $('dlgGeminiKey').showModal();
 }
 
+function skorModelGemini(m) {
+  const name = (m.name || '').toLowerCase();
+
+  // Model yang dilarang atau sudah dipensiunkan Google
+  if (name.includes('2.5-flash-lite') || name.includes('legacy') || (name.includes('gemini-pro') && !name.includes('1.5') && !name.includes('2.') && !name.includes('3.') && !name.includes('4.'))) {
+    return -500;
+  }
+
+  // Prioritaskan model generasi tertinggi (3.5 > 3.0 > 2.5 > 2.0 > 1.5)
+  const match = name.match(/gemini-(\d+)(?:\.(\d+))?/);
+  let major = 1;
+  let minor = 0;
+  if (match) {
+    major = parseInt(match[1], 10) || 1;
+    minor = parseInt(match[2], 10) || 0;
+  }
+
+  let typeBonus = 0;
+  if (name.includes('flash') && !name.includes('lite')) typeBonus = 35;
+  else if (name.includes('flash-lite')) typeBonus = 30;
+  else if (name.includes('flash')) typeBonus = 25;
+  else if (name.includes('pro')) typeBonus = 15;
+
+  let expPenalty = 0;
+  if (name.includes('exp') || name.includes('preview')) expPenalty = -5;
+
+  return (major * 100) + (minor * 10) + typeBonus + expPenalty;
+}
+
 async function dapatkanModelTersedia(apiKey) {
   const cleanKey = String(apiKey || '').trim().replace(/^["']|["']$/g, '');
   if (!cleanKey) throw new Error('API Key belum diisi. Silakan tempelkan kunci dari Google AI Studio.');
@@ -9528,28 +9557,7 @@ async function dapatkanModelTersedia(apiKey) {
           m.supportedGenerationMethods.includes('generateContent')
         );
 
-        generatorModels.sort((a, b) => {
-          const score = m => {
-            const n = (m.name || '').toLowerCase();
-            if (n.includes('2.5-flash')) return 100;
-            if (n.includes('2.0-flash') && !n.includes('lite') && !n.includes('exp')) return 95;
-            if (n.includes('2.0-flash-exp')) return 92;
-            if (n.includes('2.0-flash-lite')) return 90;
-            if (n.includes('1.5-flash-latest')) return 88;
-            if (n.includes('1.5-flash-002')) return 86;
-            if (n.includes('1.5-flash-001')) return 85;
-            if (n.includes('1.5-flash')) return 84;
-            if (n.includes('1.5-flash-8b')) return 80;
-            if (n.includes('flash')) return 75;
-            if (n.includes('2.5-pro')) return 65;
-            if (n.includes('2.0-pro')) return 60;
-            if (n.includes('1.5-pro')) return 55;
-            if (n.includes('pro')) return 50;
-            if (n.includes('gemini')) return 40;
-            return 10;
-          };
-          return score(b) - score(a);
-        });
+        generatorModels.sort((a, b) => skorModelGemini(b) - skorModelGemini(a));
 
         return {
           ver,
@@ -9579,10 +9587,11 @@ async function ujiKoneksiGemini(apiKey) {
     throw new Error('Kunci terhubung, namun akunmu tidak memiliki model pembuat teks yang aktif (hanya ada ' + allModelCount + ' model lain). Pastikan Generative Language API aktif.');
   }
 
+  let candidates = [...generatorModels];
   let lastError = '';
 
-  for (let i = 0; i < Math.min(generatorModels.length, 3); i++) {
-    const rawModel = generatorModels[i].name;
+  for (let i = 0; i < candidates.length; i++) {
+    const rawModel = candidates[i].name;
     const modelPath = rawModel.startsWith('models/') ? rawModel : ('models/' + rawModel);
     const cleanDisplay = rawModel.replace(/^models\//, '');
     const url = 'https://generativelanguage.googleapis.com/' + ver + '/' + modelPath + ':generateContent?key=' + encodeURIComponent(cleanKey);
@@ -9610,6 +9619,15 @@ async function ujiKoneksiGemini(apiKey) {
         if (rawMsg.includes('quota') || rawMsg.includes('RESOURCE_EXHAUSTED')) {
           throw new Error('Batas kuota gratis Google Gemini tercapai sementara. Coba lagi dalam 1 menit.');
         }
+
+        // Jika Google memberikan rekomendasi model spesifik (seperti gemini-3.5-flash-lite)
+        const recMatch = rawMsg.match(/models\/([a-zA-Z0-9_.-]+)/i);
+        if (recMatch && recMatch[1] && !recMatch[1].includes(cleanDisplay)) {
+          const recName = 'models/' + recMatch[1];
+          if (!candidates.some(c => c.name === recName)) {
+            candidates.splice(i + 1, 0, { name: recName });
+          }
+        }
         continue;
       }
 
@@ -9619,7 +9637,7 @@ async function ujiKoneksiGemini(apiKey) {
       simpanGeminiKey(cleanKey, modelPath, ver);
       return { model: cleanDisplay, apiVer: ver };
     } catch (err) {
-      if (err.message.includes('API Key') || err.message.includes('kuota') || i === generatorModels.length - 1) {
+      if (err.message.includes('API Key') || err.message.includes('kuota') || i === candidates.length - 1) {
         throw err;
       }
     } finally {
@@ -9735,6 +9753,14 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
           modelList = fresh.generatorModels.map(m => m.name);
           i = -1;
           continue;
+        }
+
+        const recMatch = rawMsg.match(/models\/([a-zA-Z0-9_.-]+)/i);
+        if (recMatch && recMatch[1]) {
+          const recModel = 'models/' + recMatch[1].replace(/^models\//, '');
+          if (!modelList.includes(recModel)) {
+            modelList.splice(i + 1, 0, recModel);
+          }
         }
 
         continue;
