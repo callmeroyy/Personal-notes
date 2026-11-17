@@ -2881,7 +2881,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <p class="muted" style="margin-bottom:12px">Secara default, Asisten AI menganalisis data keuangan, saldo, pengeluaran, anggaran, dan tips secara lokal on-device. Hubungkan API Key Google Gemini gratis untuk bertanya bebas/random tentang apa saja tanpa batas.</p>
     <div class="field-wrap">
       <label class="field-label" for="sGeminiKey">Google Gemini API Key (Opsional)</label>
-      <input type="password" id="sGeminiKey" placeholder="Tempel AIzaSy..." autocomplete="off" style="font-family:monospace;font-size:13px">
+      <input type="password" id="sGeminiKey" placeholder="Tempel AIzaSy... atau AQ..." autocomplete="off" style="font-family:monospace;font-size:13px">
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px">
       <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="font-size:12px;color:var(--pri);font-weight:600">Dapatkan API Key Gratis di Google AI Studio ↗</a>
@@ -3196,7 +3196,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
   <div class="field-wrap" style="margin-bottom:12px">
     <label class="field-label" for="geminiApiKeyInput">API Key Gemini</label>
-    <input type="password" id="geminiApiKeyInput" placeholder="Tempel AIzaSy..." autocomplete="off" style="font-family:monospace;font-size:13px">
+    <input type="password" id="geminiApiKeyInput" placeholder="Tempel AIzaSy... atau AQ..." autocomplete="off" style="font-family:monospace;font-size:13px">
   </div>
   <div class="ai-dialog-actions" style="display:flex;gap:8px;flex-wrap:wrap">
     <button type="button" class="ghost" id="btnTestGeminiKey" style="flex:1">Uji Kunci</button>
@@ -9544,7 +9544,7 @@ async function dapatkanModelTersedia(apiKey) {
           throw new Error('API Key ini memiliki pembatasan HTTP Referrer di Google Cloud Console. Ubah pembatasan ke "None" agar dapat diakses dari browser.');
         }
         if (rawMsg.includes('Method doesn\'t allow unregistered callers')) {
-          throw new Error('Kunci tidak dikenali sebagai Google API Key yang sah. Pastikan kunci disalin utuh (diawali AIzaSy...).');
+          throw new Error('Kunci tidak dikenali sebagai Google API Key yang sah. Pastikan kunci disalin utuh.');
         }
         lastErr = new Error('Google API (' + ver + '): ' + rawMsg);
         continue;
