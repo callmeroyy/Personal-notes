@@ -55,6 +55,22 @@ const CHAT_SCHEMA = {
     followUpSuggestions: {
       type: 'array', maxItems: 3,
       items: { type: 'string' }
+    },
+    draftTransactions: {
+      type: 'array', maxItems: 5,
+      items: {
+        type: 'object',
+        properties: {
+          type: { type: 'string', enum: ['keluar', 'masuk'] },
+          title: { type: 'string' },
+          amount: { type: 'number' },
+          category: { type: 'string' },
+          paymentMethod: { type: 'string', enum: ['tunai', 'nontunai'] },
+          walletName: { type: 'string' },
+          date: { type: 'string' }
+        },
+        required: ['type', 'title', 'amount']
+      }
     }
   },
   required: ['reply', 'followUpSuggestions']
@@ -306,7 +322,24 @@ async function runInsight(env, payload) {
 function validateChat(raw) {
   const reply = cleanText(raw?.reply, 1500) || 'Maaf, saya belum dapat menganalisis data tersebut saat ini.';
   const followUpSuggestions = cleanList(raw?.followUpSuggestions, 3, 80);
-  return { reply, followUpSuggestions };
+  const draftTransactions = Array.isArray(raw?.draftTransactions)
+    ? raw.draftTransactions.slice(0, 5).map(t => {
+        const type = t?.type === 'masuk' ? 'masuk' : 'keluar';
+        const title = cleanText(t?.title, 80);
+        const amount = safeNumber(t?.amount, { min: 1 });
+        if (!title || !amount) return null;
+        return {
+          type,
+          title,
+          amount,
+          category: cleanText(t?.category, 60) || 'Lainnya',
+          paymentMethod: ['tunai', 'nontunai'].includes(t?.paymentMethod) ? t.paymentMethod : 'tunai',
+          walletName: cleanText(t?.walletName, 60) || null,
+          date: validDate(t?.date) ? t.date : null
+        };
+      }).filter(Boolean)
+    : [];
+  return { reply, followUpSuggestions, draftTransactions };
 }
 
 async function runChat(env, payload) {
@@ -351,9 +384,10 @@ ${JSON.stringify(safeContext)}
 Instruksi:
 1. Jawab pertanyaan pengguna secara ramah, ringkas, dan solutif.
 2. Jika pengguna menanyakan data keuangannya, berikan rincian sesuai data di atas dalam format Rupiah (Rp).
-3. Jika pengguna menyapa, menanyakan identitasmu ("siapa kamu"), atau menanyakan hal umum, jawab dengan ramah dan sopan.
-4. Keluarkan satu objek JSON valid dengan format tepat:
-{"reply": "teks jawaban", "followUpSuggestions": ["pertanyaan lanjutan 1", "pertanyaan lanjutan 2"]}`;
+3. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran..."), berikan konfirmasi ramah dan sertakan array transaksi dalam "draftTransactions".
+4. Jika pengguna menyapa, menanyakan identitasmu ("siapa kamu"), atau menanyakan hal umum, jawab dengan ramah dan sopan.
+5. Keluarkan satu objek JSON valid dengan format tepat:
+{"reply": "teks jawaban", "followUpSuggestions": ["pertanyaan lanjutan 1", "pertanyaan lanjutan 2"], "draftTransactions": [{"type":"keluar","title":"Bensin","amount":30000,"category":"Transportasi","paymentMethod":"nontunai","walletName":"DANA"}]}`;
 
   if (env?.GEMINI_API_KEY) {
     try {

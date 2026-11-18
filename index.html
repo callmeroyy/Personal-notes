@@ -2525,6 +2525,23 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   .ai-chat-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
   .ai-chip{font-size:11.5px;padding:6px 12px;border-radius:99px;background:var(--ui-soft,color-mix(in srgb,var(--pri) 12%,var(--card)));border:1px solid var(--ui-line,color-mix(in srgb,var(--pri) 25%,var(--line)));color:var(--ui-ink,var(--pri));cursor:pointer;transition:all .15s;font-weight:500}
   .ai-chip:hover,.ai-chip:active{background:var(--ui-soft,color-mix(in srgb,var(--pri) 22%,var(--card)));transform:translateY(-1px)}
+  .ai-chat-trx-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;width:100%}
+  .ai-chat-trx-card{padding:12px 14px;border-radius:14px;background:var(--ui-card,var(--card,#fff));border:1.5px solid var(--ui-line,var(--line,#e2e8f0));box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;text-align:left}
+  .ai-chat-trx-header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .ai-chat-trx-badge{font-size:11px;font-weight:700;color:var(--ghostink,var(--pri,#4f46e5))}
+  .ai-chat-trx-type{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:6px;text-transform:uppercase}
+  .ai-chat-trx-type.keluar{background:var(--delbg,#fee2e2);color:var(--delink,#be123c)}
+  .ai-chat-trx-type.masuk{background:color-mix(in srgb,var(--ok,#16a34a) 15%,transparent);color:var(--ok,#16a34a)}
+  .ai-chat-trx-title{font-size:14px;font-weight:700;color:var(--ui-ink,var(--ink,#0f172a))}
+  .ai-chat-trx-amount{font-size:16px;font-weight:800;color:var(--ui-ink,var(--ink,#0f172a));letter-spacing:-.3px}
+  .ai-chat-trx-meta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11.5px;color:var(--ui-muted,var(--muted,#64748b))}
+  .ai-chat-trx-actions{display:flex;gap:7px;margin-top:4px}
+  .ai-chat-trx-btn{flex:1;margin:0;padding:8px 10px;font-size:12px;font-weight:600;border-radius:10px;cursor:pointer;border:none;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:transform .08s,opacity .15s}
+  .ai-chat-trx-btn:active{transform:scale(.98)}
+  .ai-chat-trx-btn.save{background:linear-gradient(135deg,var(--pri,#4f46e5),var(--pri2,#6366f1));color:#fff;box-shadow:0 2px 8px color-mix(in srgb,var(--pri,#4f46e5) 25%,transparent)}
+  .ai-chat-trx-btn.saved{background:color-mix(in srgb,var(--ok,#16a34a) 15%,transparent);color:var(--ok,#16a34a);border:1px solid var(--ok,#16a34a);box-shadow:none;cursor:default}
+  .ai-chat-trx-btn.edit{background:var(--ui-soft,var(--ghostbg,#eef2ff));color:var(--ui-ink,var(--ghostink,#4338ca));border:1px solid var(--ui-line,var(--line,#e2e8f0));box-shadow:none}
+  .ai-chat-trx-btn.save-all{background:linear-gradient(135deg,var(--ghostink,#4338ca),var(--pri,#4f46e5));color:#fff;padding:9px 12px;font-size:12.5px;font-weight:700;border-radius:10px;margin-top:2px}
   .ai-chat-empty{text-align:center;padding:20px 12px;color:var(--ui-muted,var(--muted));margin:auto 0}
   .ai-chat-empty-icon{font-size:34px;margin-bottom:8px}
   .ai-chat-empty h3{font-size:16px;color:var(--ui-ink,var(--ink));margin:0 0 6px;font-weight:700}
@@ -9493,6 +9510,164 @@ function siapkanKonteksAiChat() {
   };
 }
 
+function idDompetDariNama(nama) {
+  if (!nama) return '';
+  const dicari = String(nama).toLowerCase().trim();
+  const ketemu = db.dompet.find(w => !w.arsip && (String(w.nama).toLowerCase().trim() === dicari || String(w.nama).toLowerCase().includes(dicari)));
+  return ketemu ? ketemu.id : '';
+}
+
+function simpanTransaksiLangsung(data) {
+  const tipe = data.type === 'masuk' ? 'masuk' : 'keluar';
+  const total = Number(data.amount) || 0;
+  if (total <= 0) return { ok: false, error: 'Nominal transaksi tidak valid.' };
+
+  const kat = data.category || (tipe === 'masuk' ? 'Lainnya' : 'Lainnya');
+  const judul = String(data.title || (tipe === 'masuk' ? kat : 'Transaksi')).trim();
+  const cara = data.paymentMethod === 'nontunai' ? 'nontunai' : 'tunai';
+  let dompetId = null;
+  if (cara === 'nontunai') {
+    dompetId = data.walletId || (data.walletName ? idDompetDariNama(data.walletName) : (db.dompet[0]?.id || null));
+  }
+  const tgl = /^\d{4}-\d{2}-\d{2}$/.test(data.date || '') ? data.date : hariIni();
+
+  const trx = {
+    id: uid(),
+    ts: Date.now(),
+    tanggal: tgl,
+    tipe,
+    judul,
+    kategori: kat,
+    items: [{ nama: judul, qty: 1, satuan: '', harga: total, hargaTotal: total }],
+    total,
+    tags: Array.isArray(data.tags) ? data.tags : [],
+    foto: null,
+    wishId: null,
+    berulangId: null,
+    drafId: null,
+    saldoAwal: false,
+    tunai: null,
+    cara,
+    dompetId
+  };
+
+  db.transaksi.push(trx);
+  if (!simpan()) {
+    db.transaksi.pop();
+    return { ok: false, error: 'Gagal menyimpan transaksi ke memori perangkat.' };
+  }
+  renderSemua();
+  if (tipe === 'keluar') cekBudget(kat);
+  return { ok: true, id: trx.id, transaction: trx };
+}
+
+function simpanTrxDariChat(msgId, trxId) {
+  const riwayat = muatRiwayatAiChat();
+  const msg = riwayat.find(m => m.id === msgId);
+  if (!msg || !Array.isArray(msg.draftTransactions)) return;
+  const trx = msg.draftTransactions.find(t => t.id === trxId);
+  if (!trx || trx.tersimpan) return;
+
+  const res = simpanTransaksiLangsung(trx);
+  if (res.ok) {
+    trx.tersimpan = true;
+    simpanRiwayatAiChat(riwayat);
+    renderPesanAiChat();
+    beriPesan('✅ Transaksi "' + trx.title + ' (' + rp(trx.amount) + ')" berhasil dicatat!');
+  } else {
+    beriPesan('Gagal mencatat: ' + res.error, true);
+  }
+}
+
+function simpanSemuaTrxDariChat(msgId) {
+  const riwayat = muatRiwayatAiChat();
+  const msg = riwayat.find(m => m.id === msgId);
+  if (!msg || !Array.isArray(msg.draftTransactions)) return;
+
+  let disimpan = 0;
+  for (const trx of msg.draftTransactions) {
+    if (trx.tersimpan) continue;
+    const res = simpanTransaksiLangsung(trx);
+    if (res.ok) {
+      trx.tersimpan = true;
+      disimpan++;
+    }
+  }
+
+  if (disimpan > 0) {
+    simpanRiwayatAiChat(riwayat);
+    renderPesanAiChat();
+    beriPesan('✅ ' + disimpan + ' transaksi berhasil disimpan ke catatan!');
+  }
+}
+
+function bukaDrafDiFormCatat(draft) {
+  if (!draft) return;
+  $('dlgAiChat').close();
+  const data = {
+    tipe: draft.type === 'masuk' ? 'masuk' : 'keluar',
+    kategori: draft.category || 'Lainnya',
+    tanggal: draft.date || hariIni(),
+    judul: draft.title || '',
+    items: [{ nama: draft.title || 'Transaksi', qty: 1, satuan: '', harga: Number(draft.amount) || 0 }],
+    cara: draft.paymentMethod === 'nontunai' ? 'nontunai' : 'tunai',
+    dompetId: draft.walletId || (draft.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : '')
+  };
+  siapkanCatatan(data, 'Draf transaksi dibuka di formulir catat.');
+}
+
+function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.dompet, customCats = katKustom()) {
+  if (!teks || typeof teks !== 'string') return [];
+  const raw = teks.trim();
+
+  let isiTeks = raw.replace(/^(?:tolong\s+|mohon\s+|coba\s+)?(?:catat(?:kan)?|tulis|tambah(?:kan)?)\s*(?:transaksi\s*)?(?:ini\s*)?:?\s*/i, '');
+  const polaSplit = /[\n;]+|\b(?:sama|dan|lalu|terus|kemudian)\s+(?=(?:beli|jajan|bayar|isi|catat|makan|dapat|terima|uang)\b)/i;
+  const potongan = polaSplit.test(isiTeks) ? isiTeks.split(polaSplit) : [isiTeks];
+
+  const hasil = [];
+  for (const p of potongan) {
+    const bersih = p.trim();
+    if (!bersih || bersih.length < 3) continue;
+    const parsed = parseTransaksiLokal(bersih, today, wallets, customCats);
+    if (parsed && parsed.amount > 0 && parsed.title) {
+      let judulBersih = parsed.title.replace(/^(?:sama|dan|lalu|terus|kemudian|tadi|barusan|kemarin)\s+/i, '').trim();
+      if (!judulBersih) judulBersih = parsed.title;
+      hasil.push({
+        id: uid(),
+        type: parsed.type || 'keluar',
+        title: judulBersih,
+        amount: parsed.amount,
+        category: parsed.category || 'Lainnya',
+        paymentMethod: parsed.paymentMethod || 'tunai',
+        walletId: parsed.walletId || (parsed.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : ''),
+        date: parsed.date || today,
+        tags: parsed.tags || [],
+        tersimpan: false
+      });
+    }
+  }
+
+  if (!hasil.length) {
+    const parsed = parseTransaksiLokal(raw, today, wallets, customCats);
+    if (parsed && parsed.amount > 0 && parsed.title) {
+      hasil.push({
+        id: uid(),
+        type: parsed.type || 'keluar',
+        title: parsed.title,
+        amount: parsed.amount,
+        category: parsed.category || 'Lainnya',
+        paymentMethod: parsed.paymentMethod || 'tunai',
+        walletId: parsed.walletId || (parsed.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : ''),
+        date: parsed.date || today,
+        tags: parsed.tags || [],
+        tersimpan: false
+      });
+    }
+  }
+
+  return hasil;
+}
+
 function renderPesanAiChat() {
   const box = $('aiChatMessages');
   if (!box) return;
@@ -9504,13 +9679,13 @@ function renderPesanAiChat() {
     empty.append(
       el('div', 'ai-chat-empty-icon', '🤖'),
       el('h3', null, 'Halo! Saya Asisten Keuangan AI'),
-      el('p', 'muted', 'Saya memiliki akses langsung ke ringkasan saldo, pemasukan, pengeluaran, dompet, dan anggaranmu saat ini. Silakan tanyakan apa saja!')
+      el('p', 'muted', 'Saya bisa membantu mengecek saldo, menjawab kondisi finansial, dan mencatat transaksi langsung dari pesan obrolanmu!')
     );
     const chipsWrap = el('div', 'ai-chat-chips');
     chipsWrap.style.justifyContent = 'center';
     const starters = [
+      'Tolong catat kopi 18rb tunai',
       'Berapa total pengeluaran dan pemasukanku bulan ini?',
-      'Kategori apa yang paling banyak pengeluarannya?',
       'Berapa sisa saldo di semua dompetku?',
       'Apakah anggaran bulananku masih aman?'
     ];
@@ -9530,12 +9705,74 @@ function renderPesanAiChat() {
     if (!msg || typeof msg !== 'object') return;
     const role = msg.role === 'user' ? 'user' : 'assistant';
     const text = String(msg.text || '').trim();
-    if (!text) return;
+    if (!text && (!Array.isArray(msg.draftTransactions) || !msg.draftTransactions.length)) return;
 
     const wrap = el('div', 'ai-msg ' + role);
-    const bubble = el('div', 'ai-msg-bubble', text);
-    bubble.style.whiteSpace = 'pre-line';
-    wrap.appendChild(bubble);
+    if (text) {
+      const bubble = el('div', 'ai-msg-bubble', text);
+      bubble.style.whiteSpace = 'pre-line';
+      wrap.appendChild(bubble);
+    }
+
+    if (role === 'assistant' && Array.isArray(msg.draftTransactions) && msg.draftTransactions.length) {
+      const trxList = el('div', 'ai-chat-trx-list');
+      let adaBelumSimpan = 0;
+
+      msg.draftTransactions.forEach(trx => {
+        if (!trx.tersimpan) adaBelumSimpan++;
+        const card = el('div', 'ai-chat-trx-card');
+
+        const hdr = el('div', 'ai-chat-trx-header');
+        hdr.append(
+          el('span', 'ai-chat-trx-badge', '📝 Draf Transaksi AI'),
+          el('span', 'ai-chat-trx-type ' + (trx.type === 'masuk' ? 'masuk' : 'keluar'), trx.type === 'masuk' ? 'Pemasukan' : 'Pengeluaran')
+        );
+
+        const titleEl = el('div', 'ai-chat-trx-title', trx.title);
+        const amountEl = el('div', 'ai-chat-trx-amount', rp(trx.amount));
+
+        const meta = el('div', 'ai-chat-trx-meta');
+        const dompetNama = trx.paymentMethod === 'nontunai' && trx.walletId ? namaDompet(trx.walletId) : (trx.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai');
+        meta.append(
+          el('span', null, '📂 ' + trx.category),
+          el('span', null, '💳 ' + dompetNama),
+          el('span', null, '📅 ' + tglIndo(trx.date))
+        );
+
+        const actions = el('div', 'ai-chat-trx-actions');
+        if (trx.tersimpan) {
+          const btnSaved = el('button', 'ai-chat-trx-btn saved', '✅ Tersimpan');
+          btnSaved.type = 'button';
+          btnSaved.onclick = () => {
+            $('dlgAiChat').close();
+            goto('riwayat');
+          };
+          actions.appendChild(btnSaved);
+        } else {
+          const btnSave = el('button', 'ai-chat-trx-btn save', '➕ Simpan');
+          btnSave.type = 'button';
+          btnSave.onclick = () => simpanTrxDariChat(msg.id, trx.id);
+
+          const btnEdit = el('button', 'ai-chat-trx-btn edit', '✏️ Form');
+          btnEdit.type = 'button';
+          btnEdit.onclick = () => bukaDrafDiFormCatat(trx);
+
+          actions.append(btnSave, btnEdit);
+        }
+
+        card.append(hdr, titleEl, amountEl, meta, actions);
+        trxList.appendChild(card);
+      });
+
+      if (adaBelumSimpan >= 2) {
+        const btnSaveAll = el('button', 'ai-chat-trx-btn save-all', '✨ Simpan Semua (' + adaBelumSimpan + ' Transaksi)');
+        btnSaveAll.type = 'button';
+        btnSaveAll.onclick = () => simpanSemuaTrxDariChat(msg.id);
+        trxList.appendChild(btnSaveAll);
+      }
+
+      wrap.appendChild(trxList);
+    }
 
     if (msg.ts) {
       const d = new Date(msg.ts);
@@ -9564,6 +9801,19 @@ function jawabFinansialLokal(pertanyaan, context) {
   if (!pertanyaan || typeof pertanyaan !== 'string') return null;
   const q = pertanyaan.trim().toLowerCase();
   const { balance=0, cashBalance=0, wallets=[], summary30d={ income:0, expense:0, net:0 }, topCategories=[], budgets=[], recentTransactions=[] } = context || {};
+
+  // 0. Perintah Catat Transaksi Langsung dari Chat
+  const isPerintahCatat = /\b(catat|catatkan|tulis|tambah\s*(?:transaksi|pengeluaran|pemasukan)?|tadi\s*(?:beli|jajan|bayar|makan|habis)|barusan\s*(?:beli|bayar)|dapat\s*(?:uang|gaji)|dikasih\s*uang)\b/i.test(q);
+  if (isPerintahCatat) {
+    const listTrx = ekstrakDrafTransaksiDariTeks(pertanyaan);
+    if (listTrx.length) {
+      return {
+        reply: 'Siap! Saya sudah menyiapkan ' + listTrx.length + ' draf catatan dari pesanmu di bawah. Silakan periksa detailnya lalu tekan tombol **Simpan**:',
+        draftTransactions: listTrx,
+        followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat']
+      };
+    }
+  }
 
   // 1. Identitas & Profil AI
   const isTanyaIdentitas = /\b(siapa\s*(?:sih\s*)?(?:kamu|anda|dirimu|lu|bot)|kamu\s*siapa|nama\s*kamu|kenalan|perkenalkan)\b/i.test(q);
@@ -10163,7 +10413,22 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
     '1. Jawab pertanyaan pengguna dalam bahasa Indonesia yang ramah, terstruktur, dan nyaman dibaca di layar HP.\n' +
     '2. Jika pengguna menanyakan kondisi keuangan atau membuat simulasi (contoh: "Aku dikasih uang 500k bisa bertahan berapa hari?"), hitung rata-rata pengeluaran harian pengguna (Pengeluaran 30 hari ÷ 30) lalu proyeksikan berapa hari uang tersebut dapat mencukupi dan berikan saran hemat yang bersahabat.\n' +
     '3. Jika pengguna menanyakan pertanyaan bebas, umum, atau edukatif (seperti sains, cerita, sejarah, resep, coding, saran hidup, teka-teki, dll.), jawab dengan wawasan luas, antusias, dan akurat!\n' +
-    '4. Jangan gunakan markdown yang berlebihan, gunakan poin-poin yang mudah dipahami.';
+    '4. Jangan gunakan markdown yang berlebihan, gunakan poin-poin yang mudah dipahami.\n' +
+    '5. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran...", "dapat uang..."), berikan kalimat konfirmasi ramah dan selalu sertakan blok JSON di akhir jawabanmu dengan format persis:\n' +
+    '```json:transactions\n' +
+    '[\n' +
+    '  {\n' +
+    '    "type": "keluar",\n' +
+    '    "title": "Bensin",\n' +
+    '    "amount": 30000,\n' +
+    '    "category": "Transportasi",\n' +
+    '    "paymentMethod": "nontunai",\n' +
+    '    "walletName": "DANA",\n' +
+    '    "date": "' + hariIni() + '"\n' +
+    '  }\n' +
+    ']\n' +
+    '```\n' +
+    'Jika pembayaran tunai, isi paymentMethod "tunai" dan walletName null.';
 
   let historyText = '';
   if (Array.isArray(history) && history.length) {
@@ -10301,13 +10566,18 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
 
   // Hanya gunakan jawaban lokal instan JIKA perangkat sedang offline dan tidak ada kunci Gemini
   if (!navigator.onLine && !geminiKey) {
+    const draftTransactions = ekstrakDrafTransaksiDariTeks(teks);
     const jawabanLokal = jawabFinansialLokal(teks, context);
-    if (jawabanLokal) {
+    if (jawabanLokal || draftTransactions.length) {
+      const reply = draftTransactions.length
+        ? 'Siap! Saya sudah menyiapkan draf catatan dari pesanmu di bawah. Silakan periksa dan tekan tombol Simpan:'
+        : (jawabanLokal?.reply || 'Pertanyaan diterima.');
       riwayat.push({
         id: uid(),
         role: 'assistant',
-        text: '📡 *(Mode Offline)*\n\n' + jawabanLokal.reply,
-        suggestions: jawabanLokal.followUpSuggestions,
+        text: '📡 *(Mode Offline)*\n\n' + reply,
+        draftTransactions,
+        suggestions: jawabanLokal?.followUpSuggestions || ['Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat'],
         ts: Date.now()
       });
       simpanRiwayatAiChat(riwayat);
@@ -10338,10 +10608,31 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
   try {
     let replyText = '';
     let suggestions = [];
+    let draftTransactions = [];
 
     if (geminiKey) {
       replyText = await tanyaGeminiLangsung(geminiKey, teks, riwayat, context);
       suggestions = ['Tanya hal lain', 'Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat'];
+      const matchTrx = replyText.match(/```(?:json:)?transactions?\s*([\s\S]*?)\s*```/i);
+      if (matchTrx) {
+        try {
+          const list = JSON.parse(matchTrx[1]);
+          if (Array.isArray(list)) {
+            draftTransactions = list.map(t => ({
+              id: uid(),
+              type: t.type === 'masuk' ? 'masuk' : 'keluar',
+              title: String(t.title || 'Transaksi').slice(0, 80).trim(),
+              amount: Number(t.amount) || 0,
+              category: String(t.category || 'Lainnya'),
+              paymentMethod: t.paymentMethod === 'nontunai' ? 'nontunai' : 'tunai',
+              walletId: t.walletName ? idDompetDariNama(t.walletName) : (t.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : ''),
+              date: /^\d{4}-\d{2}-\d{2}$/.test(t.date || '') ? t.date : hariIni(),
+              tersimpan: false
+            })).filter(t => t.amount > 0 && t.title);
+          }
+        } catch (_) {}
+        replyText = replyText.replace(/```(?:json:)?transactions?\s*([\s\S]*?)\s*```/i, '').trim();
+      }
     } else {
       const historyPayload = riwayat.slice(-4).map(m => ({ role: m.role, content: m.text }));
       const data = await panggilAsistenAi('financial_chat', {
@@ -10352,6 +10643,30 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
 
       replyText = String(data?.reply || 'Saya telah memeriksa catatanmu, silakan tanyakan detail spesifik yang ingin kamu ketahui.').trim();
       suggestions = Array.isArray(data?.followUpSuggestions) ? data.followUpSuggestions : [];
+      if (Array.isArray(data?.draftTransactions) && data.draftTransactions.length) {
+        draftTransactions = data.draftTransactions.map(t => ({
+          id: uid(),
+          type: t.type === 'masuk' ? 'masuk' : 'keluar',
+          title: String(t.title || 'Transaksi').slice(0, 80).trim(),
+          amount: Number(t.amount) || 0,
+          category: String(t.category || 'Lainnya'),
+          paymentMethod: t.paymentMethod === 'nontunai' ? 'nontunai' : 'tunai',
+          walletId: t.walletName ? idDompetDariNama(t.walletName) : (t.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : ''),
+          date: /^\d{4}-\d{2}-\d{2}$/.test(t.date || '') ? t.date : hariIni(),
+          tersimpan: false
+        })).filter(t => t.amount > 0 && t.title);
+      }
+    }
+
+    // Jika belum ada draftTransactions dan teks berisi instruksi catat, ekstrak secara lokal
+    if (!draftTransactions.length) {
+      const intentCatat = /\b(catat|catatkan|tulis|tambah\s*(?:transaksi|pengeluaran|pemasukan)?|tadi\s*(?:beli|jajan|bayar|makan|habis)|barusan\s*(?:beli|bayar)|dapat\s*(?:uang|gaji)|dikasih\s*uang)\b/i.test(teks);
+      if (intentCatat) {
+        draftTransactions = ekstrakDrafTransaksiDariTeks(teks);
+        if (draftTransactions.length && (!replyText || replyText.length < 15)) {
+          replyText = 'Siap! Saya sudah menyiapkan ' + draftTransactions.length + ' draf transaksi dari pesanmu. Silakan simpan langsung ke catatan:';
+        }
+      }
     }
 
     typingEl.remove();
@@ -10359,6 +10674,7 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
       id: uid(),
       role: 'assistant',
       text: replyText,
+      draftTransactions,
       suggestions,
       ts: Date.now()
     });
@@ -10372,6 +10688,7 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
         id: uid(),
         role: 'assistant',
         text: fallbackLokal.reply + '\n\n*(Catatan: Dijawab menggunakan analisis data lokal perangkat karena koneksi AI sedang bermasalah)*',
+        draftTransactions: fallbackLokal.draftTransactions || [],
         suggestions: fallbackLokal.followUpSuggestions,
         ts: Date.now()
       });
