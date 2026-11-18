@@ -359,13 +359,17 @@ function validateChat(raw) {
         const title = cleanText(t?.title, 80);
         const amount = safeNumber(t?.amount, { min: 1 });
         if (!title || !amount) return null;
+        const rawWallet = cleanText(t?.walletName, 60) || null;
+        const isTunai = String(rawWallet || '').toLowerCase() === 'tunai' || t?.paymentMethod === 'tunai';
+        const isNonTunai = !isTunai && (t?.paymentMethod === 'nontunai' || Boolean(rawWallet));
+        const walletName = isNonTunai ? (rawWallet && rawWallet.toLowerCase() !== 'tunai' ? rawWallet : null) : (isTunai ? 'Tunai' : null);
         return {
           type,
           title,
           amount,
           category: cleanText(t?.category, 60) || 'Lainnya',
-          paymentMethod: ['tunai', 'nontunai'].includes(t?.paymentMethod) ? t.paymentMethod : 'tunai',
-          walletName: cleanText(t?.walletName, 60) || null,
+          paymentMethod: isNonTunai ? 'nontunai' : 'tunai',
+          walletName,
           date: validDate(t?.date) ? t.date : null
         };
       }).filter(Boolean)
@@ -457,7 +461,7 @@ ${JSON.stringify(safeContext)}
 Instruksi:
 1. Jawab pertanyaan pengguna secara ramah, ringkas, dan solutif.
 2. Jika pengguna menanyakan data keuangannya, berikan rincian sesuai data di atas dalam format Rupiah (Rp).
-3. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran..."), berikan konfirmasi ramah dan sertakan array transaksi dalam "draftTransactions".
+3. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran..."), berikan konfirmasi ramah dan sertakan array transaksi dalam "draftTransactions". Jika menyebut e-wallet atau bank (seperti DANA, GoPay, OVO, BCA, dll), selalu set paymentMethod: "nontunai" dan walletName sesuai nama dompet/bank tersebut.
 4. Jika pengguna bermaksud menghapus/membatalkan catatan transaksi (misal: "hapus bensin tadi", "batalkan pengeluaran 18rb"), cocokkan transaksi yang dimaksud di "recentTransactions" lalu sertakan di array "deleteActions" dengan targetId dan judul yang sesuai.
 5. Jika pengguna bermaksud mengubah/mengedit nominal, kategori, dompet, atau judul transaksi (misal: "ubah bensin tadi jadi 35rb", "ganti kategori makan jadi Jajan"), cocokkan transaksi di "recentTransactions" lalu sertakan di array "updateActions" beserta data barunya.
 6. Jika pengguna menyapa, menanyakan identitasmu ("siapa kamu"), atau menanyakan hal umum, jawab dengan ramah dan sopan.

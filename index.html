@@ -9542,11 +9542,32 @@ function siapkanKonteksAiChat() {
   };
 }
 
-function idDompetDariNama(nama) {
+function idDompetDariNama(nama, autoCreate = false) {
   if (!nama) return '';
   const dicari = String(nama).toLowerCase().trim();
-  const ketemu = db.dompet.find(w => !w.arsip && (String(w.nama).toLowerCase().trim() === dicari || String(w.nama).toLowerCase().includes(dicari)));
-  return ketemu ? ketemu.id : '';
+  let ketemu = db.dompet.find(w => !w.arsip && (String(w.nama).toLowerCase().trim() === dicari || String(w.nama).toLowerCase().includes(dicari)));
+  if (ketemu) return ketemu.id;
+  if (!ketemu && autoCreate) {
+    const provider = (typeof PENYEDIA_DOMPET !== 'undefined' && Array.isArray(PENYEDIA_DOMPET))
+      ? PENYEDIA_DOMPET.find(p => p.nama.toLowerCase() === dicari || p.id === dicari || (Array.isArray(p.alias) && p.alias.includes(dicari)))
+      : null;
+    const wNama = provider ? provider.nama : (nama.charAt(0).toUpperCase() + nama.slice(1));
+    const wJenis = provider ? provider.jenis : 'wallet';
+    const wPenyediaId = provider ? provider.id : null;
+    const baru = {
+      id: uid(),
+      nama: wNama,
+      jenis: wJenis,
+      penyediaId: wPenyediaId,
+      arsip: false,
+      saldoAwal: 0
+    };
+    db.dompet.push(baru);
+    simpan();
+    renderSemua();
+    return baru.id;
+  }
+  return '';
 }
 
 function simpanTransaksiLangsung(data) {
@@ -9559,7 +9580,7 @@ function simpanTransaksiLangsung(data) {
   const cara = data.paymentMethod === 'nontunai' ? 'nontunai' : 'tunai';
   let dompetId = null;
   if (cara === 'nontunai') {
-    dompetId = data.walletId || (data.walletName ? idDompetDariNama(data.walletName) : (db.dompet[0]?.id || null));
+    dompetId = data.walletId || (data.walletName ? idDompetDariNama(data.walletName, true) : (db.dompet[0]?.id || null));
   }
   const tgl = /^\d{4}-\d{2}-\d{2}$/.test(data.date || '') ? data.date : hariIni();
 
@@ -9790,7 +9811,10 @@ function cariTransaksiCocok(teks, list = db.transaksi) {
   // 3. Cocokkan kategori transaksi (misal: 'transport', 'makan')
   for (const t of reversed) {
     const k = String(t.kategori || '').toLowerCase().trim();
-    if (k && k !== 'lainnya' && raw.includes(k)) return t;
+    if (k && k !== 'lainnya' && raw.includes(k)) {
+      const isTargetBaru = new RegExp(`(?:ke|jadi|menjadi|kategori\\s*(?:ke|jadi)?)\\s+${k.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')}\\b`, 'i').test(raw);
+      if (!isTargetBaru) return t;
+    }
   }
 
   // 4. Jika ada nominal di teks tapi bukan target nominal baru (tidak didahului jadi/menjadi/ke)
@@ -9809,7 +9833,8 @@ function cariTransaksiCocok(teks, list = db.transaksi) {
     }
   }
 
-  return reversed[0] || null;
+  const isTerakhir = /\b(terakhir|paling\s*baru|barusan|tadi)\b/i.test(raw);
+  return isTerakhir ? (reversed[0] || null) : null;
 }
 
 function deteksiAksiHapusTrx(teks, list = db.transaksi) {
@@ -9910,14 +9935,20 @@ function deteksiAksiEditTrx(teks, list = db.transaksi) {
 function bukaDrafDiFormCatat(draft) {
   if (!draft) return;
   $('dlgAiChat').close();
+  const cara = draft.paymentMethod === 'nontunai' ? 'nontunai' : 'tunai';
+  let dompetId = draft.walletId;
+  if (cara === 'nontunai') {
+    if (!dompetId && draft.walletName) dompetId = idDompetDariNama(draft.walletName, true);
+    if (!dompetId) dompetId = db.dompet[0]?.id || '';
+  }
   const data = {
     tipe: draft.type === 'masuk' ? 'masuk' : 'keluar',
     kategori: draft.category || 'Lainnya',
     tanggal: draft.date || hariIni(),
     judul: draft.title || '',
     items: [{ nama: draft.title || 'Transaksi', qty: 1, satuan: '', harga: Number(draft.amount) || 0 }],
-    cara: draft.paymentMethod === 'nontunai' ? 'nontunai' : 'tunai',
-    dompetId: draft.walletId || (draft.walletName ? idDompetDariNama(draft.walletName) : '') || (draft.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : '')
+    cara,
+    dompetId
   };
   siapkanCatatan(data, 'Draf transaksi dibuka di formulir catat.');
 }
@@ -9938,16 +9969,20 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
     if (parsed && parsed.amount > 0 && parsed.title) {
       let judulBersih = parsed.title.replace(/^(?:sama|dan|lalu|terus|kemudian|tadi\s*(?:pagi|siang|sore|malam)?|siang|pagi|sore|malam|aku|saya|beli|jajan|bayar)\s+/gi, '').trim();
       if (!judulBersih) judulBersih = parsed.title;
-      const wId = parsed.walletId || (parsed.walletName ? idDompetDariNama(parsed.walletName) : '') || (parsed.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : '');
+      const matchedW = bersih.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i);
+      const wName = parsed.walletName || (matchedW ? matchedW[0].toUpperCase() : null);
+      const isNonTunai = parsed.paymentMethod === 'nontunai' || Boolean(wName);
+      const wId = parsed.walletId || (wName ? idDompetDariNama(wName, true) : '') || (isNonTunai ? (db.dompet[0]?.id || '') : '');
+      const dompetLabel = wName || (wId ? namaDompet(wId) : (isNonTunai ? 'Non-tunai' : 'Tunai'));
       hasil.push({
         id: uid(),
         type: parsed.type || 'keluar',
         title: judulBersih,
         amount: parsed.amount,
         category: parsed.category || 'Lainnya',
-        paymentMethod: parsed.paymentMethod || 'tunai',
+        paymentMethod: isNonTunai ? 'nontunai' : 'tunai',
         walletId: wId,
-        walletName: parsed.walletName || (wId ? namaDompet(wId) : (parsed.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai')),
+        walletName: dompetLabel,
         date: parsed.date || today,
         tags: parsed.tags || [],
         tersimpan: false
@@ -9960,16 +9995,20 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
     if (parsed && parsed.amount > 0 && parsed.title) {
       let judulBersih = parsed.title.replace(/^(?:sama|dan|lalu|terus|kemudian|tadi\s*(?:pagi|siang|sore|malam)?|siang|pagi|sore|malam|aku|saya|beli|jajan|bayar)\s+/gi, '').trim();
       if (!judulBersih) judulBersih = parsed.title;
-      const wId = parsed.walletId || (parsed.walletName ? idDompetDariNama(parsed.walletName) : '') || (parsed.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : '');
+      const matchedW = raw.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i);
+      const wName = parsed.walletName || (matchedW ? matchedW[0].toUpperCase() : null);
+      const isNonTunai = parsed.paymentMethod === 'nontunai' || Boolean(wName);
+      const wId = parsed.walletId || (wName ? idDompetDariNama(wName, true) : '') || (isNonTunai ? (db.dompet[0]?.id || '') : '');
+      const dompetLabel = wName || (wId ? namaDompet(wId) : (isNonTunai ? 'Non-tunai' : 'Tunai'));
       hasil.push({
         id: uid(),
         type: parsed.type || 'keluar',
         title: judulBersih,
         amount: parsed.amount,
         category: parsed.category || 'Lainnya',
-        paymentMethod: parsed.paymentMethod || 'tunai',
+        paymentMethod: isNonTunai ? 'nontunai' : 'tunai',
         walletId: wId,
-        walletName: parsed.walletName || (wId ? namaDompet(wId) : (parsed.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai')),
+        walletName: dompetLabel,
         date: parsed.date || today,
         tags: parsed.tags || [],
         tersimpan: false
@@ -10044,7 +10083,7 @@ function renderPesanAiChat() {
         const amountEl = el('div', 'ai-chat-trx-amount', rp(trx.amount));
 
         const meta = el('div', 'ai-chat-trx-meta');
-        const dompetNama = trx.paymentMethod === 'nontunai' && trx.walletId ? namaDompet(trx.walletId) : (trx.walletName || (trx.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai'));
+        const dompetNama = (trx.paymentMethod === 'nontunai' && trx.walletId ? namaDompet(trx.walletId) : '') || trx.walletName || (trx.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai');
         meta.append(
           el('span', null, '📂 ' + trx.category),
           el('span', null, '💳 ' + dompetNama),
@@ -10885,7 +10924,7 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
     '  }\n' +
     ']\n' +
     '```\n' +
-    'Jika pembayaran tunai, isi paymentMethod "tunai" dan walletName null.';
+    'Jika pembayaran tunai, isi paymentMethod "tunai" dan walletName null. Jika pembayaran menggunakan e-wallet atau rekening bank (seperti DANA, GoPay, OVO, ShopeePay, BCA, Mandiri, BRI, dll), selalu set paymentMethod "nontunai" dan walletName sesuai nama dompet/bank tersebut.';
 
   let historyText = '';
   if (Array.isArray(history) && history.length) {
@@ -10986,6 +11025,158 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
   throw new Error('Gagal menghubungi Google Gemini: ' + (lastErrorMsg || 'Model tidak merespons'));
 }
 
+function cariDrafTransaksiAktif(riwayat = muatRiwayatAiChat()) {
+  if (!Array.isArray(riwayat) || !riwayat.length) return null;
+  for (let i = riwayat.length - 1; i >= 0; i--) {
+    const msg = riwayat[i];
+    if (msg && msg.role === 'assistant' && Array.isArray(msg.draftTransactions) && msg.draftTransactions.length) {
+      const unsaved = msg.draftTransactions.find(t => t && !t.tersimpan);
+      if (unsaved) {
+        return { msg, draft: unsaved, msgIndex: i };
+      }
+    }
+  }
+  return null;
+}
+
+function deteksiAksiEditDraf(teks, draft) {
+  if (!teks || !draft || typeof teks !== 'string') return null;
+  const raw = teks.trim();
+  const lower = raw.toLowerCase();
+
+  const isEditWord = /\b(ubah|ganti|edit|koreksi|perbaiki|revisi|jadikan|pakai|pake|jangan|ke|jadi|buat)\b/i.test(raw);
+  const mentionsField = /\b(kategori|metode|pembayaran|nominal|jumlah|harga|biaya|judul|nama|dompet|rekening|dana|gopay|ovo|shopeepay|linkaja|tunai|cash)\b/i.test(raw);
+
+  if (!isEditWord && !mentionsField) return null;
+
+  const changes = {};
+  const oldValues = {};
+
+  // 1. Cek Kategori
+  const allKnownCats = [
+    'Makan', 'Jajan', 'Minuman', 'Transport', 'Kos', 'Kuota/Pulsa', 'Belanja',
+    'Tabungan', 'Kesehatan', 'Hiburan', 'Tagihan', 'Pendidikan', 'Biaya admin', 'Lainnya',
+    ...(typeof katKustom === 'function' ? [...(katKustom()?.keluar || []), ...(katKustom()?.masuk || [])] : [])
+  ];
+
+  const mKat = lower.match(/(?:kategori\s*(?:ke|jadi)?|jadi\s*kategori|ke\s*kategori)\s+([^,.;]+)/i);
+  if (mKat) {
+    const cand = mKat[1].replace(/\b(dan|serta|dengan|pakai|pake|via|lewat|metode|pembayaran|nominal|sebesar|harga|tanggal)\b.*$/i, '').trim();
+    const matched = allKnownCats.find(c => c.toLowerCase() === cand.toLowerCase() || cand.toLowerCase().startsWith(c.toLowerCase()) || c.toLowerCase().startsWith(cand.toLowerCase()));
+    if (matched && matched !== draft.category) {
+      changes.category = matched;
+      oldValues.category = draft.category;
+    } else if (!matched && cand.length >= 3) {
+      const formatted = cand.split(/\s+/).slice(0, 2).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      if (formatted !== draft.category) {
+        changes.category = formatted;
+        oldValues.category = draft.category;
+      }
+    }
+  } else {
+    for (const c of allKnownCats) {
+      const cLow = c.toLowerCase();
+      if (cLow === 'lainnya') continue;
+      const re = new RegExp(`\\b(?:ke|jadi|jadikan|kategori)\\s+${cLow.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+      if (re.test(lower) && draft.category.toLowerCase() !== cLow) {
+        changes.category = c;
+        oldValues.category = draft.category;
+        break;
+      }
+    }
+  }
+
+  // 2. Cek Pembayaran & Dompet
+  const isTunai = /\b(?:metode\s*(?:pembayaran\s*)?)?(?:tunai|cash|kontan)\b/i.test(lower) && !/\b(bukan|jangan)\s*(?:tunai|cash)\b/i.test(lower);
+  if (isTunai) {
+    if (draft.paymentMethod !== 'tunai') {
+      changes.paymentMethod = 'tunai';
+      changes.walletName = 'Tunai';
+      changes.walletId = '';
+      oldValues.paymentMethod = draft.paymentMethod;
+      oldValues.walletName = draft.walletName || 'Non-tunai';
+    }
+  } else {
+    const ewalletMatch = lower.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i);
+    let targetWalletName = '';
+    if (ewalletMatch) {
+      const matchedCode = ewalletMatch[1].toLowerCase();
+      const prov = (typeof PENYEDIA_DOMPET !== 'undefined' && Array.isArray(PENYEDIA_DOMPET))
+        ? PENYEDIA_DOMPET.find(p => p.id === matchedCode || p.nama.toLowerCase() === matchedCode || (Array.isArray(p.alias) && p.alias.includes(matchedCode)))
+        : null;
+      targetWalletName = prov ? prov.nama : ewalletMatch[1].toUpperCase();
+    } else if (Array.isArray(db.dompet)) {
+      for (const w of db.dompet) {
+        const wName = String(w.nama || '').trim().toLowerCase();
+        if (wName && new RegExp(`\\b${wName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(lower)) {
+          targetWalletName = w.nama;
+          break;
+        }
+      }
+    }
+
+    if (targetWalletName) {
+      const curWalletName = draft.walletName || (draft.walletId ? namaDompet(draft.walletId) : (draft.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai'));
+      if (curWalletName.toLowerCase() !== targetWalletName.toLowerCase() || draft.paymentMethod !== 'nontunai') {
+        changes.paymentMethod = 'nontunai';
+        changes.walletName = targetWalletName;
+        changes.walletId = idDompetDariNama(targetWalletName, true);
+        oldValues.paymentMethod = draft.paymentMethod;
+        oldValues.walletName = curWalletName;
+      }
+    }
+  }
+
+  // 3. Cek Nominal
+  const mNominal = lower.match(/(?:nominal|jumlah|harga|biaya|jadi|menjadi|ke|sebesar)\s*(?:rp\.?\s*)?(\d+(?:[.,]\d+)?)\s*(k|rb|ribu|jt|juta)?\b/i);
+  if (mNominal) {
+    let n = parseFloat(mNominal[1].replace(',', '.'));
+    const unit = (mNominal[2] || '').toLowerCase();
+    if (unit === 'k' || unit === 'rb' || unit === 'ribu') n *= 1000;
+    else if (unit === 'jt' || unit === 'juta') n *= 1000000;
+    const finalAmount = Math.round(n);
+    if (finalAmount > 0 && finalAmount !== draft.amount) {
+      changes.amount = finalAmount;
+      oldValues.amount = draft.amount;
+    }
+  }
+
+  // 4. Cek Judul
+  const mJudul = lower.match(/(?:judul|nama|catatan)\s*(?:jadi|ke|nya)?\s+([^,.;]+)/i);
+  if (mJudul) {
+    const rawJudul = mJudul[1].replace(/\b(dan|serta|dengan|pakai|pake|via|lewat|kategori|metode|nominal)\b.*$/i, '').trim();
+    if (rawJudul && rawJudul.toLowerCase() !== draft.title.toLowerCase()) {
+      changes.title = rawJudul.charAt(0).toUpperCase() + rawJudul.slice(1);
+      oldValues.title = draft.title;
+    }
+  }
+
+  // 5. Cek Tanggal
+  if (typeof parseTransaksiLokal === 'function') {
+    const parsedTrx = parseTransaksiLokal(raw, draft.date || hariIni());
+    if (parsedTrx && parsedTrx.date && parsedTrx.date !== draft.date && /\b(kemarin|lusa|tanggal|tgl|hari ini)\b/i.test(lower)) {
+      changes.date = parsedTrx.date;
+      oldValues.date = draft.date;
+    }
+  }
+
+  // 6. Cek Tipe
+  if (/\b(?:jadikan|ubah\s*ke|ganti\s*ke)?\s*pemasukan\b/i.test(lower) && draft.type !== 'masuk') {
+    changes.type = 'masuk';
+    oldValues.type = draft.type;
+  } else if (/\b(?:jadikan|ubah\s*ke|ganti\s*ke)?\s*pengeluaran\b/i.test(lower) && draft.type !== 'keluar') {
+    changes.type = 'keluar';
+    oldValues.type = draft.type;
+  }
+
+  if (!Object.keys(changes).length) return null;
+
+  return {
+    changes,
+    oldValues
+  };
+}
+
 async function kirimPesanAiChat(pertanyaanKustom = null) {
   const input = $('aiChatInput');
   const teks = String(pertanyaanKustom || input.value || '').trim();
@@ -11026,6 +11217,57 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
   simpanRiwayatAiChat(riwayat);
   input.value = '';
   renderPesanAiChat();
+
+  // 0a. Cek apakah ada draf transaksi aktif di obrolan yang ingin diubah atau dibatalkan
+  const activeDraftInfo = cariDrafTransaksiAktif(riwayat.slice(0, -1));
+  if (activeDraftInfo) {
+    const isBatalDraf = /\b(batal|batalkan|hapus|buang)\s*(?:draf|draft|catatan\s*tadi)?\b/i.test(teks) &&
+                        !/\b(transaksi|riwayat|chat|obrolan)\b/i.test(teks);
+    if (isBatalDraf) {
+      activeDraftInfo.msg.draftTransactions = activeDraftInfo.msg.draftTransactions.filter(t => t.id !== activeDraftInfo.draft.id);
+      riwayat.push({
+        id: uid(),
+        role: 'assistant',
+        text: 'Draf transaksi **' + activeDraftInfo.draft.title + '** telah dibatalkan.',
+        suggestions: ['Catat transaksi baru', 'Berapa sisa saldo di semua dompetku?'],
+        ts: Date.now()
+      });
+      simpanRiwayatAiChat(riwayat);
+      renderPesanAiChat();
+      return;
+    }
+
+    const editDraf = deteksiAksiEditDraf(teks, activeDraftInfo.draft);
+    if (editDraf) {
+      Object.assign(activeDraftInfo.draft, editDraf.changes);
+
+      const rincianPerubahan = [];
+      if (editDraf.changes.category) rincianPerubahan.push('• Kategori: **' + editDraf.oldValues.category + '** ➔ **' + editDraf.changes.category + '**');
+      if (editDraf.changes.walletName || editDraf.changes.paymentMethod) {
+        const dompetBaru = editDraf.changes.walletName || (editDraf.changes.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai');
+        rincianPerubahan.push('• Metode: **' + (editDraf.oldValues.walletName || 'Tunai') + '** ➔ **' + dompetBaru + '**');
+      }
+      if (editDraf.changes.amount) rincianPerubahan.push('• Nominal: **' + rp(editDraf.oldValues.amount) + '** ➔ **' + rp(editDraf.changes.amount) + '**');
+      if (editDraf.changes.title) rincianPerubahan.push('• Judul: **' + editDraf.oldValues.title + '** ➔ **' + editDraf.changes.title + '**');
+      if (editDraf.changes.date) rincianPerubahan.push('• Tanggal: **' + tglIndo(editDraf.oldValues.date) + '** ➔ **' + tglIndo(editDraf.changes.date) + '**');
+
+      const balasTeks = 'Siap! Draf transaksimu sudah kuperbarui:\n' +
+        rincianPerubahan.join('\n') + '\n\n' +
+        'Silakan periksa kartu draf di bawah lalu tekan tombol **➕ Simpan** jika sudah sesuai! ✨';
+
+      riwayat.push({
+        id: uid(),
+        role: 'assistant',
+        text: balasTeks,
+        draftTransactions: [activeDraftInfo.draft],
+        suggestions: ['Buka formulir catat', 'Berapa sisa saldo di semua dompetku?'],
+        ts: Date.now()
+      });
+      simpanRiwayatAiChat(riwayat);
+      renderPesanAiChat();
+      return;
+    }
+  }
 
   const context = siapkanKonteksAiChat();
   const geminiKey = muatGeminiKey();
@@ -11097,17 +11339,27 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
         try {
           const list = JSON.parse(matchTrx[1]);
           if (Array.isArray(list)) {
-            draftTransactions = list.map(t => ({
-              id: uid(),
-              type: t.type === 'masuk' ? 'masuk' : 'keluar',
-              title: String(t.title || 'Transaksi').slice(0, 80).trim(),
-              amount: Number(t.amount) || 0,
-              category: String(t.category || 'Lainnya'),
-              paymentMethod: t.paymentMethod === 'nontunai' ? 'nontunai' : 'tunai',
-              walletId: t.walletName ? idDompetDariNama(t.walletName) : (t.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : ''),
-              date: /^\d{4}-\d{2}-\d{2}$/.test(t.date || '') ? t.date : hariIni(),
-              tersimpan: false
-            })).filter(t => t.amount > 0 && t.title);
+            draftTransactions = list.map(t => {
+              const matchedW = teks.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i);
+              const rawWName = t.walletName || (matchedW ? matchedW[0].toUpperCase() : null);
+              const isTunai = (String(rawWName || '').toLowerCase() === 'tunai' || t.paymentMethod === 'tunai') && !matchedW;
+              const isNonTunai = !isTunai && (t.paymentMethod === 'nontunai' || Boolean(rawWName));
+              const wName = isNonTunai ? (rawWName && rawWName.toLowerCase() !== 'tunai' ? rawWName : (matchedW ? matchedW[0].toUpperCase() : null)) : null;
+              const wId = wName ? idDompetDariNama(wName, true) : (isNonTunai ? (db.dompet[0]?.id || '') : '');
+              const dompetLabel = isNonTunai ? (wName || (wId ? namaDompet(wId) : 'Non-tunai')) : 'Tunai';
+              return {
+                id: uid(),
+                type: t.type === 'masuk' ? 'masuk' : 'keluar',
+                title: String(t.title || 'Transaksi').slice(0, 80).trim(),
+                amount: Number(t.amount) || 0,
+                category: String(t.category || 'Lainnya'),
+                paymentMethod: isNonTunai ? 'nontunai' : 'tunai',
+                walletId: wId,
+                walletName: dompetLabel,
+                date: /^\d{4}-\d{2}-\d{2}$/.test(t.date || '') ? t.date : hariIni(),
+                tersimpan: false
+              };
+            }).filter(t => t.amount > 0 && t.title);
           }
         } catch (_) {}
         replyText = replyText.replace(/```(?:json:)?transactions?\s*([\s\S]*?)\s*```/i, '').trim();
@@ -11174,17 +11426,27 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
       replyText = String(data?.reply || 'Saya telah memeriksa catatanmu, silakan tanyakan detail spesifik yang ingin kamu ketahui.').trim();
       suggestions = Array.isArray(data?.followUpSuggestions) ? data.followUpSuggestions : [];
       if (Array.isArray(data?.draftTransactions) && data.draftTransactions.length) {
-        draftTransactions = data.draftTransactions.map(t => ({
-          id: uid(),
-          type: t.type === 'masuk' ? 'masuk' : 'keluar',
-          title: String(t.title || 'Transaksi').slice(0, 80).trim(),
-          amount: Number(t.amount) || 0,
-          category: String(t.category || 'Lainnya'),
-          paymentMethod: t.paymentMethod === 'nontunai' ? 'nontunai' : 'tunai',
-          walletId: t.walletName ? idDompetDariNama(t.walletName) : (t.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : ''),
-          date: /^\d{4}-\d{2}-\d{2}$/.test(t.date || '') ? t.date : hariIni(),
-          tersimpan: false
-        })).filter(t => t.amount > 0 && t.title);
+        draftTransactions = data.draftTransactions.map(t => {
+          const matchedW = teks.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i);
+          const rawWName = t.walletName || (matchedW ? matchedW[0].toUpperCase() : null);
+          const isTunai = (String(rawWName || '').toLowerCase() === 'tunai' || t.paymentMethod === 'tunai') && !matchedW;
+          const isNonTunai = !isTunai && (t.paymentMethod === 'nontunai' || Boolean(rawWName));
+          const wName = isNonTunai ? (rawWName && rawWName.toLowerCase() !== 'tunai' ? rawWName : (matchedW ? matchedW[0].toUpperCase() : null)) : null;
+          const wId = wName ? idDompetDariNama(wName, true) : (isNonTunai ? (db.dompet[0]?.id || '') : '');
+          const dompetLabel = isNonTunai ? (wName || (wId ? namaDompet(wId) : 'Non-tunai')) : 'Tunai';
+          return {
+            id: uid(),
+            type: t.type === 'masuk' ? 'masuk' : 'keluar',
+            title: String(t.title || 'Transaksi').slice(0, 80).trim(),
+            amount: Number(t.amount) || 0,
+            category: String(t.category || 'Lainnya'),
+            paymentMethod: isNonTunai ? 'nontunai' : 'tunai',
+            walletId: wId,
+            walletName: dompetLabel,
+            date: /^\d{4}-\d{2}-\d{2}$/.test(t.date || '') ? t.date : hariIni(),
+            tersimpan: false
+          };
+        }).filter(t => t.amount > 0 && t.title);
       }
 
       if (Array.isArray(data?.deleteActions) && data.deleteActions.length) {
