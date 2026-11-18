@@ -9008,7 +9008,7 @@ function parseTransaksiLokal(teks, today = hariIni(), wallets = [], customCats =
 
   const reKemarinLusa = /\b(kemarin\s+lusa|lusa\s+kemarin)\b/i;
   const reKemarin = /\b(kemarin|semalam)\b/i;
-  const reHariIni = /\b(hari\s*ini|tadi\s*pagi|siang\s*ini|sore\s*ini|malam\s*ini|barusan|tadi)\b/i;
+  const reHariIni = /\b(hari\s*ini|tadi\s*(?:pagi|siang|sore|malam)?|siang\s*ini|sore\s*ini|malam\s*ini|barusan|tadi)\b/i;
   const reIsoDate = /\b(\d{4})[-/](\d{1,2})[-/](\d{1,2})\b/;
   const reDmyDate = /\b(\d{1,2})[-/](\d{1,2})[-/](\d{4})\b/;
   const reDmDate = /\b(\d{1,2})[-/](\d{1,2})\b/;
@@ -9174,10 +9174,11 @@ function parseTransaksiLokal(teks, today = hariIni(), wallets = [], customCats =
   // 4. Ekstrak Pembayaran & Dompet
   let paymentMethod = '';
   let walletId = '';
+  let walletName = '';
 
   let matchedWallet = null;
   for (const w of wallets) {
-    const wName = String(w.name || '').trim().toLowerCase();
+    const wName = String(w.name || w.nama || '').trim().toLowerCase();
     if (!wName) continue;
     const wRegex = new RegExp(`\\b${wName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
     if (wRegex.test(raw)) {
@@ -9193,13 +9194,18 @@ function parseTransaksiLokal(teks, today = hariIni(), wallets = [], customCats =
   if (matchedWallet) {
     paymentMethod = 'nontunai';
     walletId = matchedWallet.id;
+    walletName = matchedWallet.nama || matchedWallet.name || '';
   } else if (reTunai.test(raw)) {
     paymentMethod = 'tunai';
+    walletName = 'Tunai';
     cleanTeks = cleanTeks.replace(reTunai, ' ');
   } else if (reNonTunaiKeywords.test(raw)) {
     paymentMethod = 'nontunai';
     const m = raw.match(reNonTunaiKeywords);
-    if (m) cleanTeks = cleanTeks.replace(new RegExp(`\\b${m[0]}\\b`, 'i'), ' ');
+    if (m) {
+      walletName = m[0].toUpperCase();
+      cleanTeks = cleanTeks.replace(new RegExp(`\\b${m[0]}\\b`, 'i'), ' ');
+    }
   }
 
   cleanTeks = cleanTeks.replace(/\b(pakai|pake|lewat|via|menggunakan|dg|dgn)\b/gi, ' ');
@@ -9264,11 +9270,15 @@ function parseTransaksiLokal(teks, today = hariIni(), wallets = [], customCats =
     }
   ];
 
-  for (const c of customCats) {
-    if (new RegExp(`\\b${c}\\b`, 'i').test(raw)) {
-      category = c;
-      break;
-    }
+  const listKustom = Array.isArray(customCats) ? customCats : [...(customCats?.keluar || []), ...(customCats?.masuk || [])];
+  for (const c of listKustom) {
+    if (!c || typeof c !== 'string') continue;
+    try {
+      if (new RegExp(`\\b${c}\\b`, 'i').test(raw)) {
+        category = c;
+        break;
+      }
+    } catch (_) {}
   }
 
   if (category === 'Lainnya') {
@@ -9283,6 +9293,9 @@ function parseTransaksiLokal(teks, today = hariIni(), wallets = [], customCats =
 
   // 6. Ekstrak Judul
   let title = cleanTeks
+    .replace(/^(?:tolong\s+|mohon\s+|coba\s+)?(?:catat(?:kan)?|tulis|tambah(?:kan)?)\s*/i, ' ')
+    .replace(/^(?:tadi\s*(?:pagi|siang|sore|malam)?\s*(?:aku\s*)?|barusan\s*(?:aku\s*)?|aku\s+|saya\s+|kemarin\s+|beli\s+|jajan\s+|bayar\s+)+/i, ' ')
+    .replace(/\s+(?:ya|deh|dong|sih|nih|aja|saja)$/i, ' ')
     .replace(/\b(untuk|buat|seharga|sebesar|senilai|rp\.?|di|ke|dari|pada)\b/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim();
@@ -9308,6 +9321,7 @@ function parseTransaksiLokal(teks, today = hariIni(), wallets = [], customCats =
     amount,
     paymentMethod,
     walletId,
+    walletName,
     missing
   };
 }
@@ -9611,12 +9625,12 @@ function bukaDrafDiFormCatat(draft) {
     judul: draft.title || '',
     items: [{ nama: draft.title || 'Transaksi', qty: 1, satuan: '', harga: Number(draft.amount) || 0 }],
     cara: draft.paymentMethod === 'nontunai' ? 'nontunai' : 'tunai',
-    dompetId: draft.walletId || (draft.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : '')
+    dompetId: draft.walletId || (draft.walletName ? idDompetDariNama(draft.walletName) : '') || (draft.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : '')
   };
   siapkanCatatan(data, 'Draf transaksi dibuka di formulir catat.');
 }
 
-function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.dompet, customCats = katKustom()) {
+function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.dompet, customCats = [...(katKustom()?.keluar || []), ...(katKustom()?.masuk || [])]) {
   if (!teks || typeof teks !== 'string') return [];
   const raw = teks.trim();
 
@@ -9630,8 +9644,9 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
     if (!bersih || bersih.length < 3) continue;
     const parsed = parseTransaksiLokal(bersih, today, wallets, customCats);
     if (parsed && parsed.amount > 0 && parsed.title) {
-      let judulBersih = parsed.title.replace(/^(?:sama|dan|lalu|terus|kemudian|tadi|barusan|kemarin)\s+/i, '').trim();
+      let judulBersih = parsed.title.replace(/^(?:sama|dan|lalu|terus|kemudian|tadi\s*(?:pagi|siang|sore|malam)?|siang|pagi|sore|malam|aku|saya|beli|jajan|bayar)\s+/gi, '').trim();
       if (!judulBersih) judulBersih = parsed.title;
+      const wId = parsed.walletId || (parsed.walletName ? idDompetDariNama(parsed.walletName) : '') || (parsed.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : '');
       hasil.push({
         id: uid(),
         type: parsed.type || 'keluar',
@@ -9639,7 +9654,8 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
         amount: parsed.amount,
         category: parsed.category || 'Lainnya',
         paymentMethod: parsed.paymentMethod || 'tunai',
-        walletId: parsed.walletId || (parsed.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : ''),
+        walletId: wId,
+        walletName: parsed.walletName || (wId ? namaDompet(wId) : (parsed.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai')),
         date: parsed.date || today,
         tags: parsed.tags || [],
         tersimpan: false
@@ -9650,14 +9666,18 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
   if (!hasil.length) {
     const parsed = parseTransaksiLokal(raw, today, wallets, customCats);
     if (parsed && parsed.amount > 0 && parsed.title) {
+      let judulBersih = parsed.title.replace(/^(?:sama|dan|lalu|terus|kemudian|tadi\s*(?:pagi|siang|sore|malam)?|siang|pagi|sore|malam|aku|saya|beli|jajan|bayar)\s+/gi, '').trim();
+      if (!judulBersih) judulBersih = parsed.title;
+      const wId = parsed.walletId || (parsed.walletName ? idDompetDariNama(parsed.walletName) : '') || (parsed.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : '');
       hasil.push({
         id: uid(),
         type: parsed.type || 'keluar',
-        title: parsed.title,
+        title: judulBersih,
         amount: parsed.amount,
         category: parsed.category || 'Lainnya',
         paymentMethod: parsed.paymentMethod || 'tunai',
-        walletId: parsed.walletId || (parsed.paymentMethod === 'nontunai' ? (db.dompet[0]?.id || '') : ''),
+        walletId: wId,
+        walletName: parsed.walletName || (wId ? namaDompet(wId) : (parsed.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai')),
         date: parsed.date || today,
         tags: parsed.tags || [],
         tersimpan: false
@@ -9732,7 +9752,7 @@ function renderPesanAiChat() {
         const amountEl = el('div', 'ai-chat-trx-amount', rp(trx.amount));
 
         const meta = el('div', 'ai-chat-trx-meta');
-        const dompetNama = trx.paymentMethod === 'nontunai' && trx.walletId ? namaDompet(trx.walletId) : (trx.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai');
+        const dompetNama = trx.paymentMethod === 'nontunai' && trx.walletId ? namaDompet(trx.walletId) : (trx.walletName || (trx.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai'));
         meta.append(
           el('span', null, '📂 ' + trx.category),
           el('span', null, '💳 ' + dompetNama),
