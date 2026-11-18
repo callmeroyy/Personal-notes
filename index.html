@@ -9293,12 +9293,17 @@ function parseTransaksiLokal(teks, today = hariIni(), wallets = [], customCats =
 
   // 6. Ekstrak Judul
   let title = cleanTeks
+    .trim()
     .replace(/^(?:tolong\s+|mohon\s+|coba\s+)?(?:catat(?:kan)?|tulis|tambah(?:kan)?)\s*/i, ' ')
+    .trim()
     .replace(/^(?:tadi\s*(?:pagi|siang|sore|malam)?\s*(?:aku\s*)?|barusan\s*(?:aku\s*)?|aku\s+|saya\s+|kemarin\s+|beli\s+|jajan\s+|bayar\s+)+/i, ' ')
+    .trim()
     .replace(/\s+(?:ya|deh|dong|sih|nih|aja|saja)$/i, ' ')
     .replace(/\b(untuk|buat|seharga|sebesar|senilai|rp\.?|di|ke|dari|pada)\b/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+
+  title = title.replace(/^(?:beli|jajan|bayar|pesan|order|isi)\s+/i, '').trim();
 
   if (title) {
     title = title.charAt(0).toUpperCase() + title.slice(1);
