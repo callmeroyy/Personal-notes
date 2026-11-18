@@ -9566,9 +9566,43 @@ function jawabFinansialLokal(pertanyaan, context) {
     };
   }
 
-  // 7. Tanya Saldo / Dompet
-  const isTanyaSaldo = /\b(saldo(?:ku|mu|nya)?|sisa\s*saldo(?:ku|mu|nya)?|uang(?:ku|mu|nya)?|duit(?:ku|mu|nya)?|dompet(?:ku|mu|nya)?|rekening(?:ku|mu|nya)?|dana|gopay|bca|mandiri|bri|tunai|cash)\b/i.test(q) &&
-    !/\b(tambah|catat|tambahkan)\b/i.test(q);
+  // 6b. Estimasi Ketahanan Dana (Simulasi: Uang X bisa bertahan berapa hari)
+  const isTanyaKetahanan = /(?:bertahan|cukup|habis)\s*(?:sampai|kira\b|sekitar|berapa\s*(?:hari|bulan|minggu|lama))|dikasih\s*uang.*bertahan|punya\s*uang.*bertahan/i.test(q);
+  if (isTanyaKetahanan) {
+    let nominalTanya = 0;
+    const matchNominal = q.match(/(?:rp\.?\s*)?(\d+(?:[.,]\d+)?)\s*(k|rb|ribu|jt|juta)?\b/i);
+    if (matchNominal) {
+      let angka = parseFloat(matchNominal[1].replace(',', '.'));
+      const unit = (matchNominal[2] || '').toLowerCase();
+      if (unit === 'k' || unit === 'rb' || unit === 'ribu') angka *= 1000;
+      else if (unit === 'jt' || unit === 'juta') angka *= 1000000;
+      nominalTanya = Math.round(angka);
+    }
+    const nominalEvaluasi = nominalTanya > 0 ? nominalTanya : (balance > 0 ? balance : 500000);
+    const avgHarian = summary30d.expense > 0 ? Math.round(summary30d.expense / 30) : 0;
+
+    let text = '💡 **Simulasi Ketahanan Keuangan:**\n\n';
+    if (avgHarian > 0) {
+      const hari = Math.max(1, Math.round(nominalEvaluasi / avgHarian));
+      const durasiText = hari >= 60 ? (Math.round((hari / 30) * 10) / 10) + ' bulan' : hari + ' hari';
+      text += 'Berdasarkan catatan pengeluaranmu dalam 30 hari terakhir (rata-rata **' + rp(avgHarian) + ' / hari**):\n' +
+        '• Uang sejumlah **' + rp(nominalEvaluasi) + '** diperkirakan bisa bertahan sekitar **' + durasiText + '** jika pola pengeluaranmu stabil.\n\n';
+    } else {
+      text += 'Belum ada data pengeluaran rutin yang cukup untuk menghitung rata-rata harianmu secara akurat.\n' +
+        'Jika diasumsikan pengeluaran harianmu Rp 30.000/hari, uang **' + rp(nominalEvaluasi) + '** bisa bertahan sekitar **' + Math.round(nominalEvaluasi / 30000) + ' hari**.\n\n';
+    }
+    if (topCategories.length) {
+      text += '📌 *Saran Berhemat:* Kategori pengeluaran terbesarmu saat ini adalah **' + topCategories[0].category + '** (' + rp(topCategories[0].amount) + '). Mengurangi pengeluaran di pos ini akan membuat uangmu bertahan lebih lama!';
+    }
+    return {
+      reply: text,
+      followUpSuggestions: ['Berapa total pengeluaranku bulan ini?', 'Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat']
+    };
+  }
+
+  // 7. Tanya Saldo / Dompet (Hanya jika secara eksplisit menanyakan saldo/dompet)
+  const isTanyaSaldo = /^(?:berapa\s*)?(?:sisa\s*)?saldo\b|^(?:cek|lihat|tampilkan)\s*(?:sisa\s*)?saldo\b|\bsaldo\s*(?:saat\s*ini|sekarang|akhir|keseluruhan|dompet)\b|\brincian\s*saldo\b/i.test(q) &&
+    !/\b(tambah|catat|tambahkan|bertahan|berapa\s*hari|berapa\s*lama|cukup|habis|investasi|simpan|transfer)\b/i.test(q);
 
   if (isTanyaSaldo) {
     let rincianDompet = wallets && wallets.length
@@ -9588,7 +9622,7 @@ function jawabFinansialLokal(pertanyaan, context) {
   }
 
   // 8. Tanya Kategori Terbanyak / Paling Boros
-  const isTanyaKategori = /\b(kategori|terbanyak|terbesar|paling\s*banyak|paling\s*besar|paling\s*boros|boros)\b/i.test(q);
+  const isTanyaKategori = /\b(kategori\s*(?:paling\s*)?(?:boros|terbanyak|terbesar)|kategori\s*apa\s*yang\s*paling|paling\s*boros)\b/i.test(q);
   if (isTanyaKategori) {
     if (!topCategories.length) {
       return {
@@ -9611,8 +9645,8 @@ function jawabFinansialLokal(pertanyaan, context) {
   }
 
   // 9. Tanya Pengeluaran / Belanja
-  const isTanyaPengeluaran = /\b(pengeluaran(?:ku|mu|nya)?|belanja(?:ku|mu|nya)?|biaya(?:ku|mu|nya)?|keluar|ongkos|habis\s*berapa)\b/i.test(q) &&
-    !/\b(masuk|pemasukan)\b/i.test(q);
+  const isTanyaPengeluaran = /^(?:berapa\s*)?(?:total\s*)?pengeluaran\b|^(?:cek|lihat)\s*pengeluaran\b|\btotal\s*pengeluaran\b|\bringkasan\s*pengeluaran\b|\bhabis\s*berapa\b/i.test(q) &&
+    !/\b(masuk|pemasukan|bertahan|berapa\s*hari|berapa\s*lama)\b/i.test(q);
   if (isTanyaPengeluaran) {
     const text = '📉 Ringkasan Pengeluaran (30 Hari Terakhir):\n\n' +
       '• Total Pengeluaran: ' + rp(summary30d.expense) + '\n' +
@@ -9626,7 +9660,8 @@ function jawabFinansialLokal(pertanyaan, context) {
   }
 
   // 10. Tanya Pemasukan / Gaji
-  const isTanyaPemasukan = /\b(pemasukan(?:ku|mu|nya)?|gaji(?:ku|mu|nya)?|uang\s*masuk|penghasilan(?:ku|mu|nya)?|income|dapat\s*uang)\b/i.test(q);
+  const isTanyaPemasukan = /^(?:berapa\s*)?(?:total\s*)?pemasukan\b|^(?:cek|lihat)\s*pemasukan\b|\btotal\s*pemasukan\b|\bringkasan\s*pemasukan\b|\bgaji(?:ku)?\b/i.test(q) &&
+    !/\b(bertahan|berapa\s*hari|berapa\s*lama)\b/i.test(q);
   if (isTanyaPemasukan) {
     const net = summary30d.net;
     const text = '📈 Ringkasan Pemasukan & Arus Kas (30 Hari Terakhir):\n\n' +
@@ -10035,9 +10070,9 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
     '• Kategori Terbesar: ' + (context.topCategories.map(c => c.category + ': ' + rp(c.amount)).join(', ') || 'Belum ada data') + '\n\n' +
     'Instruksi:\n' +
     '1. Jawab pertanyaan pengguna dalam bahasa Indonesia yang ramah, terstruktur, dan nyaman dibaca di layar HP.\n' +
-    '2. Jika pengguna menanyakan kondisi keuangannya, berikan analisis akurat sesuai data di atas dalam format Rupiah (Rp).\n' +
-    '3. Jika pengguna menanyakan pertanyaan bebas, umum, atau random (seperti sains, cerita, sejarah, resep, coding, saran hidup, teka-teki, dll.), jawab dengan wawasan luas, antusias, dan akurat!\n' +
-    '4. Jangan gunakan markdown yang berlebihan.';
+    '2. Jika pengguna menanyakan kondisi keuangan atau membuat simulasi (contoh: "Aku dikasih uang 500k bisa bertahan berapa hari?"), hitung rata-rata pengeluaran harian pengguna (Pengeluaran 30 hari ÷ 30) lalu proyeksikan berapa hari uang tersebut dapat mencukupi dan berikan saran hemat yang bersahabat.\n' +
+    '3. Jika pengguna menanyakan pertanyaan bebas, umum, atau edukatif (seperti sains, cerita, sejarah, resep, coding, saran hidup, teka-teki, dll.), jawab dengan wawasan luas, antusias, dan akurat!\n' +
+    '4. Jangan gunakan markdown yang berlebihan, gunakan poin-poin yang mudah dipahami.';
 
   let historyText = '';
   if (Array.isArray(history) && history.length) {
@@ -10171,25 +10206,28 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
   renderPesanAiChat();
 
   const context = siapkanKonteksAiChat();
-  const jawabanLokal = jawabFinansialLokal(teks, context);
-  if (jawabanLokal) {
-    riwayat.push({
-      id: uid(),
-      role: 'assistant',
-      text: jawabanLokal.reply,
-      suggestions: jawabanLokal.followUpSuggestions,
-      ts: Date.now()
-    });
-    simpanRiwayatAiChat(riwayat);
-    renderPesanAiChat();
-    setTimeout(() => {
-      if (document.activeElement === input) return;
-      input.focus({ preventScroll: true });
-    }, 60);
-    return;
-  }
-
   const geminiKey = muatGeminiKey();
+
+  // Hanya gunakan jawaban lokal instan JIKA perangkat sedang offline dan tidak ada kunci Gemini
+  if (!navigator.onLine && !geminiKey) {
+    const jawabanLokal = jawabFinansialLokal(teks, context);
+    if (jawabanLokal) {
+      riwayat.push({
+        id: uid(),
+        role: 'assistant',
+        text: '📡 *(Mode Offline)*\n\n' + jawabanLokal.reply,
+        suggestions: jawabanLokal.followUpSuggestions,
+        ts: Date.now()
+      });
+      simpanRiwayatAiChat(riwayat);
+      renderPesanAiChat();
+      setTimeout(() => {
+        if (document.activeElement === input) return;
+        input.focus({ preventScroll: true });
+      }, 60);
+      return;
+    }
+  }
 
   if (!geminiKey && !await mintaPersetujuanAi()) {
     beriPesan('Persetujuan AI diperlukan untuk mengirim pertanyaan.', true);
@@ -10237,24 +10275,37 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
     renderPesanAiChat();
   } catch (error) {
     typingEl.remove();
-    const isGemini = Boolean(geminiKey);
-    const fallbackText = isGemini
-      ? 'Gagal menghubungi Google Gemini API: ' + (error.message || 'Koneksi terputus') + '.\n\nPeriksa kembali API Key kamu di tombol 🔑 Kunci AI.'
-      : '🤖 Pertanyaan ini di luar lingkup analisis catatan keuangan lokal.\n\n' +
-        'Untuk bertanya **bebas / random tentang apa saja** (sains, cerita, pengetahuan umum, resep, tips hidup), hubungkan **Google Gemini AI (Gratis)**.\n\n' +
-        'Cukup dapatkan API Key gratis di Google AI Studio (tanpa kartu kredit) lalu simpan dengan tombol di bawah!';
+    const fallbackLokal = jawabFinansialLokal(teks, context);
+    if (fallbackLokal) {
+      riwayat.push({
+        id: uid(),
+        role: 'assistant',
+        text: fallbackLokal.reply + '\n\n*(Catatan: Dijawab menggunakan analisis data lokal perangkat karena koneksi AI sedang bermasalah)*',
+        suggestions: fallbackLokal.followUpSuggestions,
+        ts: Date.now()
+      });
+      simpanRiwayatAiChat(riwayat);
+      renderPesanAiChat();
+    } else {
+      const isGemini = Boolean(geminiKey);
+      const fallbackText = isGemini
+        ? 'Gagal menghubungi Google Gemini API: ' + (error.message || 'Koneksi terputus') + '.\n\nPeriksa kembali API Key kamu di tombol 🔑 Kunci AI.'
+        : '🤖 Pertanyaan ini di luar lingkup analisis catatan keuangan lokal.\n\n' +
+          'Untuk bertanya **bebas / random tentang apa saja** (sains, cerita, pengetahuan umum, resep, tips hidup), hubungkan **Google Gemini AI (Gratis)**.\n\n' +
+          'Cukup dapatkan API Key gratis di Google AI Studio (tanpa kartu kredit) lalu simpan dengan tombol di bawah!';
 
-    riwayat.push({
-      id: uid(),
-      role: 'assistant',
-      text: fallbackText,
-      suggestions: geminiKey
-        ? ['Coba tanyakan lagi', 'Berapa sisa saldo di semua dompetku?']
-        : ['🔑 Masukkan Kunci Gemini', 'Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat'],
-      ts: Date.now()
-    });
-    simpanRiwayatAiChat(riwayat);
-    renderPesanAiChat();
+      riwayat.push({
+        id: uid(),
+        role: 'assistant',
+        text: fallbackText,
+        suggestions: geminiKey
+          ? ['Coba tanyakan lagi', 'Berapa sisa saldo di semua dompetku?']
+          : ['🔑 Masukkan Kunci Gemini', 'Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat'],
+        ts: Date.now()
+      });
+      simpanRiwayatAiChat(riwayat);
+      renderPesanAiChat();
+    }
   } finally {
     sendBtn.disabled = false;
     input.disabled = false;
