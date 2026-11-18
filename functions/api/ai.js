@@ -71,6 +71,37 @@ const CHAT_SCHEMA = {
         },
         required: ['type', 'title', 'amount']
       }
+    },
+    deleteActions: {
+      type: 'array', maxItems: 5,
+      items: {
+        type: 'object',
+        properties: {
+          targetId: { type: 'string' },
+          title: { type: 'string' },
+          amount: { type: 'number' },
+          category: { type: 'string' },
+          date: { type: 'string' }
+        },
+        required: ['title']
+      }
+    },
+    updateActions: {
+      type: 'array', maxItems: 5,
+      items: {
+        type: 'object',
+        properties: {
+          targetId: { type: 'string' },
+          title: { type: 'string' },
+          newAmount: { type: 'number' },
+          newTitle: { type: 'string' },
+          newCategory: { type: 'string' },
+          newWalletName: { type: 'string' },
+          newPaymentMethod: { type: 'string', enum: ['tunai', 'nontunai'] },
+          newDate: { type: 'string' }
+        },
+        required: ['title']
+      }
     }
   },
   required: ['reply', 'followUpSuggestions']
@@ -339,7 +370,39 @@ function validateChat(raw) {
         };
       }).filter(Boolean)
     : [];
-  return { reply, followUpSuggestions, draftTransactions };
+
+  const deleteActions = Array.isArray(raw?.deleteActions)
+    ? raw.deleteActions.slice(0, 5).map(d => {
+        const title = cleanText(d?.title, 80);
+        if (!title) return null;
+        return {
+          targetId: cleanText(d?.targetId, 60) || '',
+          title,
+          amount: safeNumber(d?.amount, { min: 0 }) ?? 0,
+          category: cleanText(d?.category, 60) || '',
+          date: validDate(d?.date) ? d.date : null
+        };
+      }).filter(Boolean)
+    : [];
+
+  const updateActions = Array.isArray(raw?.updateActions)
+    ? raw.updateActions.slice(0, 5).map(u => {
+        const title = cleanText(u?.title, 80);
+        if (!title) return null;
+        return {
+          targetId: cleanText(u?.targetId, 60) || '',
+          title,
+          newAmount: safeNumber(u?.newAmount, { min: 1 }),
+          newTitle: cleanText(u?.newTitle, 80) || null,
+          newCategory: cleanText(u?.newCategory, 60) || null,
+          newWalletName: cleanText(u?.newWalletName, 60) || null,
+          newPaymentMethod: ['tunai', 'nontunai'].includes(u?.newPaymentMethod) ? u.newPaymentMethod : null,
+          newDate: validDate(u?.newDate) ? u.newDate : null
+        };
+      }).filter(Boolean)
+    : [];
+
+  return { reply, followUpSuggestions, draftTransactions, deleteActions, updateActions };
 }
 
 async function runChat(env, payload) {
@@ -374,6 +437,16 @@ async function runChat(env, payload) {
       limit: safeNumber(b?.limit) ?? 0,
       spent: safeNumber(b?.spent) ?? 0,
       remaining: safeNumber(b?.remaining, { min: -Number.MAX_SAFE_INTEGER }) ?? 0
+    })) : [],
+    recentTransactions: Array.isArray(contextData.recentTransactions) ? contextData.recentTransactions.slice(0, 15).map(r => ({
+      id: cleanText(r?.id, 50),
+      date: validDate(r?.date) ? r.date : '',
+      title: cleanText(r?.title, 60),
+      category: cleanText(r?.category, 40),
+      type: r?.type === 'masuk' ? 'masuk' : 'keluar',
+      amount: safeNumber(r?.amount) ?? 0,
+      payment: ['tunai', 'nontunai'].includes(r?.payment) ? r.payment : 'tunai',
+      wallet: cleanText(r?.wallet, 40)
     })) : []
   };
 
@@ -385,9 +458,11 @@ Instruksi:
 1. Jawab pertanyaan pengguna secara ramah, ringkas, dan solutif.
 2. Jika pengguna menanyakan data keuangannya, berikan rincian sesuai data di atas dalam format Rupiah (Rp).
 3. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran..."), berikan konfirmasi ramah dan sertakan array transaksi dalam "draftTransactions".
-4. Jika pengguna menyapa, menanyakan identitasmu ("siapa kamu"), atau menanyakan hal umum, jawab dengan ramah dan sopan.
-5. Keluarkan satu objek JSON valid dengan format tepat:
-{"reply": "teks jawaban", "followUpSuggestions": ["pertanyaan lanjutan 1", "pertanyaan lanjutan 2"], "draftTransactions": [{"type":"keluar","title":"Bensin","amount":30000,"category":"Transportasi","paymentMethod":"nontunai","walletName":"DANA"}]}`;
+4. Jika pengguna bermaksud menghapus/membatalkan catatan transaksi (misal: "hapus bensin tadi", "batalkan pengeluaran 18rb"), cocokkan transaksi yang dimaksud di "recentTransactions" lalu sertakan di array "deleteActions" dengan targetId dan judul yang sesuai.
+5. Jika pengguna bermaksud mengubah/mengedit nominal, kategori, dompet, atau judul transaksi (misal: "ubah bensin tadi jadi 35rb", "ganti kategori makan jadi Jajan"), cocokkan transaksi di "recentTransactions" lalu sertakan di array "updateActions" beserta data barunya.
+6. Jika pengguna menyapa, menanyakan identitasmu ("siapa kamu"), atau menanyakan hal umum, jawab dengan ramah dan sopan.
+7. Keluarkan satu objek JSON valid dengan format tepat:
+{"reply": "teks jawaban", "followUpSuggestions": ["pertanyaan lanjutan 1", "pertanyaan lanjutan 2"], "draftTransactions": [], "deleteActions": [], "updateActions": []}`;
 
   if (env?.GEMINI_API_KEY) {
     try {
