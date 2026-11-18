@@ -2249,8 +2249,9 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   .ai-preview{border-top:1px solid var(--line);margin-top:13px;padding-top:14px}.ai-preview h3{margin:0 0 9px;font-size:15px}
   .ai-preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ai-preview-grid .field-wrap{margin:0}.ai-preview-grid .field-wide{grid-column:1/-1}.ai-preview-grid input,.ai-preview-grid select{margin:0}
   .ai-missing{font-size:12px;line-height:1.5;padding:9px 11px;border-radius:10px;background:color-mix(in srgb,var(--bad) 8%,var(--card));color:var(--muted);margin:10px 0}
-  .ai-dialog-actions{display:flex;gap:10px;margin-top:14px;margin-bottom:12px;align-items:stretch}.ai-dialog-actions button{margin:0;min-height:46px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;border-radius:13px}.ai-dialog-actions .ghost{flex:.7;border:1px solid var(--line)!important}.ai-dialog-actions button:not(.ghost){flex:1.3}
+  .ai-dialog-actions{display:flex;gap:10px;margin-top:14px;margin-bottom:6px;align-items:stretch}.ai-dialog-actions button{margin:0;min-height:46px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;border-radius:13px}.ai-dialog-actions :is(.ghost,.sec){flex:1;border:1px solid var(--line)!important}.ai-dialog-actions button:not(.ghost):not(.sec){flex:1.4}
   #btnAiSmartClose{margin-top:12px;border:1px solid var(--line);min-height:44px}
+  #aiSmartPreview:not([hidden]) ~ #btnAiSmartClose{display:none !important}
   .ai-consent-list{padding-left:20px;color:var(--muted);font-size:13px;line-height:1.55}.ai-consent-list li+li{margin-top:5px}
   .ai-loading{display:inline-flex;align-items:center;gap:7px}.ai-loading::before{content:"";width:13px;height:13px;border:2px solid color-mix(in srgb,var(--pri) 25%,transparent);border-top-color:var(--pri);border-radius:50%;animation:ai-spin .7s linear infinite}
   .ui-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
@@ -3147,7 +3148,10 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
 </dialog>
 
 <dialog id="dlgAiSmart" class="ai-dialog" aria-labelledby="aiSmartTitle">
-  <h2 id="aiSmartTitle"><span class="ai-spark" aria-hidden="true">&#x2728;</span>Catat dengan AI & Suara</h2>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+    <h2 id="aiSmartTitle" style="margin:0;display:flex;align-items:center;gap:6px"><span class="ai-spark" aria-hidden="true">&#x2728;</span>Catat dengan AI & Suara</h2>
+    <button type="button" class="ghost kecil" id="btnAiSmartTopClose" aria-label="Tutup" style="width:auto;margin:0;padding:4px 9px">&#x2715;</button>
+  </div>
   <p class="muted">Tulis atau ucapkan transaksi bebas. Draf akan disiapkan secara instan langsung di perangkat tanpa kuota AI.</p>
   <label class="field-label" for="aiSmartText">Transaksi kamu</label>
   <textarea id="aiSmartText" maxlength="500" placeholder="Contoh: Kemarin beli bensin 50 ribu pakai DANA"></textarea>
@@ -3158,7 +3162,10 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   <button type="button" id="btnAiSmartAnalyze">Buat draf transaksi</button>
   <p class="ai-status" id="aiSmartStatus" role="status" aria-live="polite"></p>
   <section class="ai-preview" id="aiSmartPreview" hidden aria-labelledby="aiSmartPreviewTitle">
-    <h3 id="aiSmartPreviewTitle">Periksa draf transaksi</h3>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3 id="aiSmartPreviewTitle" style="margin:0">Periksa draf transaksi</h3>
+      <button type="button" class="ghost kecil" id="btnAiSmartRetry" style="margin:0;padding:5px 12px;font-size:12px;display:inline-flex;align-items:center;gap:5px;border-radius:9px">&#x21BB; Ulangi proses</button>
+    </div>
     <div class="ai-preview-grid">
       <div class="field-wrap"><label class="field-label" for="aiDraftType">Jenis</label><select id="aiDraftType"><option value="keluar">Pengeluaran</option><option value="masuk">Pemasukan</option></select></div>
       <div class="field-wrap"><label class="field-label" for="aiDraftDate">Tanggal</label><input type="date" id="aiDraftDate"></div>
@@ -3170,7 +3177,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     </div>
     <p class="ai-missing" id="aiSmartMissing" hidden></p>
     <p class="ai-card-note">Periksa kembali nominal, tanggal, kategori, dan dompet sebelum digunakan.</p>
-    <div class="ai-dialog-actions"><button type="button" class="ghost" id="btnAiSmartRetry">Ulangi proses</button><button type="button" id="btnAiSmartUse">Gunakan sebagai draf</button></div>
+    <div class="ai-dialog-actions"><button type="button" class="sec" id="btnAiSmartCloseDraft">Tutup</button><button type="button" id="btnAiSmartUse">Gunakan sebagai draf</button></div>
   </section>
   <button type="button" class="sec" id="btnAiSmartClose">Tutup</button>
 </dialog>
@@ -5474,9 +5481,9 @@ function cekBudget(kat) {
   if (!b) return;
   const pakai = pakaiBudget(kat, b.periode);
   if (pakai > b.limit) {
-    alert('Batas anggaran ' + kat + ' terlampaui. Terpakai ' + rp(pakai) + ' dari ' + rp(b.limit) + '.');
+    beriPesan('⚠️ Batas anggaran ' + kat + ' terlampaui (' + rp(pakai) + ' dari batas ' + rp(b.limit) + ').', true);
   } else if (pakai >= b.limit * 0.8) {
-    alert('Hampir melewati batas ' + kat + '. Terpakai ' + rp(pakai) + ' dari ' + rp(b.limit) + '.');
+    beriPesan('ℹ️ Pengeluaran ' + kat + ' mendekati batas (' + rp(pakai) + ' dari ' + rp(b.limit) + ').');
   }
 }
 
@@ -8949,6 +8956,8 @@ $('btnAiVoice').onclick = mulaiSuaraAi;
 $('btnAiSmartAnalyze').onclick = analisisSmartAi;
 $('btnAiSmartRetry').onclick = analisisSmartAi;
 $('btnAiSmartClose').onclick = () => { akhiriSuaraAi(true); $('dlgAiSmart').close(); };
+$('btnAiSmartTopClose').onclick = () => $('btnAiSmartClose').click();
+$('btnAiSmartCloseDraft').onclick = () => $('btnAiSmartClose').click();
 $('dlgAiSmart').addEventListener('close', () => akhiriSuaraAi(true));
 dukunganSuaraAi();
 $('aiDraftType').onchange = () => isiPilihanKategoriAi($('aiDraftType').value);
