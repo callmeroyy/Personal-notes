@@ -2,6 +2,13 @@
 <html lang="id" id="financeApp" data-ui="ruang">
 <head>
 <meta charset="UTF-8">
+<script id="themeInit">
+  try {
+    const _t = JSON.parse(localStorage.getItem('catatan-tampilan-v1') || '{}');
+    if (_t.gaya) document.documentElement.dataset.gaya = _t.gaya;
+    if (_t.tema) document.documentElement.dataset.tema = _t.tema;
+  } catch (_) {}
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#4f46e5">
 <meta name="description" content="Catatan keuangan pribadi yang bekerja langsung di perangkat, termasuk dompet, anggaran, target, grafik, dan backup.">
@@ -2529,138 +2536,65 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   .ai-chat-note{margin:6px 0 0;font-size:11px;text-align:center;color:var(--ui-muted,var(--muted))}
   @keyframes aiMsgFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-  /* ===== SPLASH / SKELETON LOADING STATE ===== */
+  /* ===== SPLASH LOADING OVERLAY (BLURRED + THEME + CENTERED SPINNER) ===== */
   .app-loading-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
     display: flex;
-    flex-direction: column;
-    gap: 14px;
-    width: 100%;
-    margin-top: 6px;
-    padding: 6px 0 32px;
-    z-index: 10;
-    box-sizing: border-box;
-  }
-  .app-loading-splash.selesai {
-    position: absolute;
-    top: 0;
-    left: 14px;
-    right: 14px;
-    width: auto;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-6px) scale(0.99);
-    transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .app-loading-card {
-    display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: 24px 18px 22px;
-    border-radius: var(--r, 20px);
-    background: var(--ui-card, var(--card, #ffffff));
-    border: 1px solid var(--ui-line, var(--line, rgba(15,23,42,.1)));
-    box-shadow: var(--shadow);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+    background: color-mix(in srgb, var(--ui-solid, var(--card, #ffffff)) 62%, transparent);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    opacity: 1;
+    pointer-events: all;
+    transition: opacity 0.26s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.26s ease;
   }
-  .app-loading-coin-wrap {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    background: color-mix(in srgb, var(--pri, #4f46e5) 15%, var(--card, #fff));
-    border: 1.5px solid color-mix(in srgb, var(--pri, #4f46e5) 35%, transparent);
-    display: grid;
-    place-items: center;
-    font-size: 25px;
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--pri, #4f46e5) 22%, transparent);
-    animation: loadingCoinFloat 1.8s ease-in-out infinite alternate;
+  @media (prefers-color-scheme: dark) {
+    .app-loading-splash {
+      background: color-mix(in srgb, var(--ui-solid, var(--bg, #0b1120)) 72%, transparent);
+    }
   }
-  @keyframes loadingCoinFloat {
-    0% { transform: translateY(0) scale(1); }
-    100% { transform: translateY(-4px) scale(1.05); }
+  html[data-tema="dark"] .app-loading-splash,
+  html[data-gaya="midnight"] .app-loading-splash,
+  html[data-gaya="matcha"] .app-loading-splash,
+  html[data-gaya="retro"] .app-loading-splash,
+  html[data-gaya="arcade"] .app-loading-splash,
+  html[data-gaya="orbit"] .app-loading-splash {
+    background: color-mix(in srgb, var(--ui-solid, var(--bg, #0a0c10)) 75%, transparent) !important;
   }
-  .app-loading-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
+  .app-loading-splash.selesai {
+    opacity: 0;
+    pointer-events: none;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
   }
-  .app-loading-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--ui-ink, var(--ink, #0f172a));
-    margin: 0;
-    letter-spacing: -0.2px;
+  .app-loading-spinner {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3.5px solid color-mix(in srgb, var(--ui-ink, var(--ink, #0f172a)) 14%, transparent);
+    border-top-color: var(--ghostink, var(--pri, #4f46e5));
+    border-right-color: var(--ghostink, var(--pri, #4f46e5));
+    animation: appSpinnerRotate 0.75s linear infinite;
+    box-sizing: border-box;
+    filter: drop-shadow(0 2px 10px color-mix(in srgb, var(--ghostink, var(--pri, #4f46e5)) 35%, transparent));
   }
-  .app-loading-sub {
-    font-size: 12px;
-    color: var(--ui-muted, var(--muted, #64748b));
-    margin: 0;
-  }
-  .app-loading-bar-wrap {
-    width: 130px;
-    height: 5px;
-    border-radius: 99px;
-    background: var(--ui-line, var(--line, #e2e8f0));
-    overflow: hidden;
-    position: relative;
-    margin-top: 4px;
-  }
-  .app-loading-bar-fill {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 45%;
-    border-radius: 99px;
-    background: linear-gradient(90deg, var(--pri, #4f46e5), var(--pri2, #6366f1));
-    animation: loadingBarSweep 1.25s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  }
-  @keyframes loadingBarSweep {
-    0% { left: -45%; }
-    100% { left: 100%; }
-  }
-  .app-skeleton-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  .app-skeleton-card {
-    height: 76px;
-    border-radius: var(--r, 16px);
-    background: var(--ui-card, var(--card, #ffffff));
-    border: 1px solid var(--ui-line, var(--line, rgba(15,23,42,.1)));
-    box-shadow: var(--shadow);
-    position: relative;
-    overflow: hidden;
-  }
-  .app-skeleton-card.hero {
-    height: 105px;
-  }
-  .app-skeleton-shimmer::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ui-ink, var(--ink, #000)) 5%, transparent), transparent);
-    animation: appSkeletonShimmer 1.5s infinite;
-  }
-  @keyframes appSkeletonShimmer {
-    100% { transform: translateX(100%); }
+  @keyframes appSpinnerRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
   @media (prefers-reduced-motion: reduce) {
-    .app-loading-coin-wrap,
-    .app-loading-bar-fill,
-    .app-skeleton-shimmer::after {
-      animation: none !important;
+    .app-loading-spinner {
+      animation-duration: 2s;
     }
   }
 </style>
 
 </head>
-<body><div id="ledgerSecurity" class="ledger-notice ledger-security" role="alert" hidden></div>
+<body><div id="appLoadingSplash" class="app-loading-splash" aria-live="polite" aria-label="Memuat aplikasi"><div class="app-loading-spinner" aria-hidden="true"></div></div>
+<div id="ledgerSecurity" class="ledger-notice ledger-security" role="alert" hidden></div>
 <a class="ui-skip" href="#appMain">Langsung ke isi</a>
 <div id="bgLayer"></div>
 <div id="styleDecor" aria-hidden="true"><div id="styleAmbient"></div></div>
@@ -2704,27 +2638,6 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
 </header>
 
 <main id="appMain" tabindex="-1">
-
-<!-- SPLASH / SKELETON LOADING -->
-<div id="appLoadingSplash" class="app-loading-splash" aria-live="polite" aria-busy="true">
-  <div class="app-loading-card">
-    <div class="app-loading-coin-wrap" aria-hidden="true">
-      <span class="app-loading-coin">💰</span>
-    </div>
-    <div class="app-loading-text">
-      <strong class="app-loading-title">Catatan Keuangan</strong>
-      <span class="app-loading-sub">Memuat data dompet &amp; transaksi…</span>
-    </div>
-    <div class="app-loading-bar-wrap" aria-hidden="true">
-      <div class="app-loading-bar-fill"></div>
-    </div>
-  </div>
-  <div class="app-skeleton-card hero app-skeleton-shimmer" aria-hidden="true"></div>
-  <div class="app-skeleton-row" aria-hidden="true">
-    <div class="app-skeleton-card app-skeleton-shimmer"></div>
-    <div class="app-skeleton-card app-skeleton-shimmer"></div>
-  </div>
-</div>
 
 <!-- BERANDA -->
 <section id="beranda" class="page">
@@ -8738,8 +8651,22 @@ document.addEventListener('visibilitychange', () => {
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost', '127.0.0.1'].includes(location.hostname))) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
-window.addEventListener('load', () => setTimeout(selesaikanLoadingSplash, 500), { once: true });
+window.addEventListener('load', () => setTimeout(selesaikanLoadingSplash, 400), { once: true });
 window.addEventListener('error', () => selesaikanLoadingSplash(), { once: true });
+window.addEventListener('beforeunload', () => {
+  let splash = $('appLoadingSplash');
+  if (!splash) {
+    splash = document.createElement('div');
+    splash.id = 'appLoadingSplash';
+    splash.className = 'app-loading-splash';
+    splash.setAttribute('aria-hidden', 'true');
+    splash.innerHTML = '<div class="app-loading-spinner" aria-hidden="true"></div>';
+    document.body.appendChild(splash);
+  } else {
+    splash.classList.remove('selesai');
+    splash.style.display = 'flex';
+  }
+});
 if (navigator.storage?.persist) {
   navigator.storage.persist().then(renderStorageStatus).catch(() => {});
 }
