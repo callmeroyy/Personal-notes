@@ -373,7 +373,6 @@
   html[data-gaya="biasa"] #bgLayer{display:none !important}
   html[data-gaya="biasa"] .card,
   html[data-gaya="biasa"] .stat,
-  html[data-gaya="biasa"] nav.bottom,
   html[data-gaya="biasa"] dialog{
     background:var(--card-solid) !important;
     -webkit-backdrop-filter:none !important;
@@ -467,8 +466,7 @@
   html[data-efek="ultra"] body::before{opacity:1}
   html[data-efek="ultra"] .saldo-hero{box-shadow:0 18px 50px rgba(10,132,255,.5),inset 0 1px 0 rgba(255,255,255,.6)}
   html[data-efek="ultra"] nav.bottom .tab.aktif{box-shadow:0 0 18px rgba(10,132,255,.45)}
-  html[data-efek="ultra"][data-gaya="biasa"] .card,
-  html[data-efek="ultra"][data-gaya="biasa"] nav.bottom{-webkit-backdrop-filter:none;backdrop-filter:none}
+  html[data-efek="ultra"][data-gaya="biasa"] .card{-webkit-backdrop-filter:none;backdrop-filter:none}
 
   /* ===== KARTU SALDO IKUT WARNA FOTO LATAR ===== */
   .saldo-hero{
@@ -513,7 +511,6 @@
   }
   html[data-adaptif][data-gaya="biasa"] .card,
   html[data-adaptif][data-gaya="biasa"] .stat,
-  html[data-adaptif][data-gaya="biasa"] nav.bottom,
   html[data-adaptif][data-gaya="biasa"] dialog{
     -webkit-backdrop-filter:none !important;
     backdrop-filter:none !important;
@@ -589,7 +586,6 @@
   html[data-gaya="berwarna"] #bgLayer{display:none !important}
   html[data-gaya="berwarna"] .card,
   html[data-gaya="berwarna"] .stat,
-  html[data-gaya="berwarna"] nav.bottom,
   html[data-gaya="berwarna"] dialog{
     background:var(--card-solid) !important;
     -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
@@ -680,14 +676,10 @@
   html[data-gaya="neo"] select:focus{box-shadow:3px 3px 0 #000 !important;border-color:#000 !important;outline:none}
   html[data-gaya="neo"] input::placeholder{color:#6b7280}
 
-  html[data-gaya="neo"] nav.bottom{
-    background:#ffffff !important;border:3px solid #000 !important;border-radius:20px !important;
-    box-shadow:5px 5px 0 #000 !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;
-  }
-  html[data-gaya="neo"][data-tema="dark"] nav.bottom{background:#1f1f24 !important;border-color:#f5f5f7 !important;box-shadow:5px 5px 0 #f5f5f7 !important}
-  html[data-gaya="neo"] nav.bottom .tab{color:#000;border:2px solid transparent;border-radius:12px;box-shadow:none !important;background:none !important}
-  html[data-gaya="neo"] nav.bottom .tab.aktif{background:#ffd60a !important;border-color:#000 !important;color:#000 !important}
+  html[data-gaya="neo"] nav.bottom .tab{color:#000}
+  html[data-gaya="neo"] nav.bottom .tab.aktif{background:#ffd60a !important;color:#000 !important;font-weight:800 !important}
   html[data-gaya="neo"][data-tema="dark"] nav.bottom .tab{color:#f5f5f7}
+  html[data-gaya="neo"][data-tema="dark"] nav.bottom .tab.aktif{color:#000 !important}
   html[data-gaya="neo"] .nav-plus{
     background:#f472b6 !important;border:3px solid #000 !important;box-shadow:4px 4px 0 #000 !important;
     width:60px;height:60px;margin:-30px 6px 6px;
@@ -737,7 +729,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
 @media (prefers-color-scheme: dark){
   html[data-gaya="flat"][data-tema="auto"]{--st-bg:#0e0e10;--st-card:#18181b;--st-ink:#fafafa;--st-muted:#a1a1aa;--st-acc:hsl(var(--aksen-h,215) var(--aksen-s,90%) 58%);--st-on-acc:#ffffff;--st-acc-ink:hsl(var(--aksen-h,215) var(--aksen-s,90%) 75%);--st-soft:#27272a;--st-border:none;--st-r:12px;--st-shadow:none;--st-btn-r:8px;--st-btn-border:none;--st-btn-shadow:none;--st-input:#27272a;--st-inr:8px;--st-nav-r:0px;--st-line:#27272a;--st-track:#27272a;--st-ok:#4ade80;--st-bad:#f87171;--st-plus-r:50%}
 }
-html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom{border-top:1px solid var(--st-line) !important}
+
 
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) {background-color:var(--st-bg) !important}
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) body{background-color:var(--st-bg);background-image:var(--st-bgimg,none);color:var(--st-ink);font-family:var(--st-font,var(--font,system-ui,sans-serif))}
@@ -752,7 +744,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) button.beli{background:var(--st-ok) !important;color:var(--st-on-acc) !important}
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) button:disabled{opacity:.45}
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) input, html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) select{background:var(--st-input) !important;color:var(--st-ink) !important;border:var(--st-border) !important;border-radius:var(--st-inr) !important;box-shadow:var(--st-inset,none) !important}
-  html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom{background:var(--st-card) !important;border:var(--st-border) !important;border-radius:var(--st-nav-r) !important;box-shadow:var(--st-shadow) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom .tab{color:var(--st-muted);box-shadow:none;background:none;border-radius:var(--st-tab-r,16px)}
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) nav.bottom .tab.aktif{background:var(--st-soft) !important;color:var(--st-acc-ink) !important}
   html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya="paper"],[data-gaya="flat"]) .nav-plus{background:var(--st-acc) !important;border:var(--st-btn-border) !important;border-radius:var(--st-plus-r,50%) !important;box-shadow:var(--st-btn-shadow) !important}
@@ -850,7 +842,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html[data-gaya="blok"] .field-label,html[data-gaya="blok"] .copy{color:var(--px-muted)}
   html[data-gaya="blok"] h2,html[data-gaya="blok"] .more-heading h2{color:var(--px-ink);text-shadow:none !important;font-weight:900}
   html[data-gaya="blok"] .card,html[data-gaya="blok"] .stat,
-  html[data-gaya="blok"] dialog,html[data-gaya="blok"] nav.bottom{
+  html[data-gaya="blok"] dialog{
     background:var(--px-card) !important;background-image:none !important;color:var(--px-ink) !important;
     border:3px solid var(--px-edge) !important;border-radius:4px !important;
     box-shadow:inset 0 4px 0 rgba(255,255,255,.18),5px 5px 0 var(--px-shadow) !important;
@@ -997,7 +989,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html[data-gaya="pop"] .sub,html[data-gaya="pop"] .field-label,
   html[data-gaya="pop"] .copy{color:var(--pop-muted)}
   html[data-gaya="pop"] .card,html[data-gaya="pop"] .stat,
-  html[data-gaya="pop"] nav.bottom,html[data-gaya="pop"] dialog{
+  html[data-gaya="pop"] dialog{
     background:var(--pop-card) !important;color:var(--pop-ink) !important;
     border:1px solid var(--pop-line) !important;border-radius:24px !important;
     box-shadow:0 9px 25px rgba(76,37,76,.11) !important;
@@ -1274,7 +1266,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   @keyframes spider-float{50%{transform:translateY(4px)}}
   @media(prefers-reduced-motion:reduce){html[data-gaya="spider"] header.top .spider-mask{animation:none}}
   html[data-gaya="spider"] h2{color:var(--sp-ink)}
-  html[data-gaya="spider"] :is(.card,.stat,dialog,nav.bottom){
+  html[data-gaya="spider"] :is(.card,.stat,dialog){
     background:var(--sp-card) !important;color:var(--sp-ink);
     border:1px solid var(--sp-line);box-shadow:var(--shadow) !important;
     -webkit-backdrop-filter:none !important;backdrop-filter:none !important;
@@ -1412,7 +1404,7 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) body::before,html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) #bgLayer{display:none !important}
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) header.top h1,html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) h2{color:var(--n-ink)}
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) .title-money{display:none}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) :is(.card,.stat,dialog,nav.bottom){background:var(--n-card) !important;color:var(--n-ink);border:1px solid var(--n-line) !important;border-radius:var(--n-radius) !important;box-shadow:var(--n-shadow) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) :is(.card,.stat,dialog){background:var(--n-card) !important;color:var(--n-ink);border:1px solid var(--n-line) !important;border-radius:var(--n-radius) !important;box-shadow:var(--n-shadow) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) .saldo-hero{position:relative;overflow:hidden;background:var(--n-hero) !important;color:#fff !important;border:1px solid #ffffff22;border-radius:var(--n-radius);box-shadow:var(--n-shadow);backdrop-filter:none}
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) .saldo-hero :is(.lbl,.mini,b){color:#fff !important}
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) button:not(.tab):not(.nav-plus){background:var(--n-accent);color:var(--n-on);box-shadow:none;border-radius:14px}
@@ -1901,10 +1893,9 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html[data-gaya="ruangide"] .bar.hijau{background:var(--ri-ok)}
   html[data-gaya="ruangide"] .bar.merah{background:var(--ri-bad)}
   html[data-gaya="ruangide"] .bar.oranye{background:#a68b4f}
-  html[data-gaya="ruangide"] nav.bottom{bottom:0;width:100%;max-width:640px;padding:9px 10px calc(11px + env(safe-area-inset-bottom));background:var(--ri-card) !important;color:var(--ri-ink);border:1px solid var(--ri-line);border-bottom:0;border-radius:21px 21px 0 0;box-shadow:0 -4px 20px #24301906 !important;backdrop-filter:none;-webkit-backdrop-filter:none}
-  html[data-gaya="ruangide"] nav.bottom .tab{background:transparent;color:var(--ri-muted);box-shadow:none;font-size:11px;font-weight:500;border-radius:11px}
-  html[data-gaya="ruangide"] nav.bottom .tab.aktif{background:var(--ri-hero);color:var(--ri-hero-ink);font-weight:650}
-  html[data-gaya="ruangide"] nav.bottom .nav-plus{background:var(--ri-lime) !important;color:var(--ri-lime-ink) !important;border:4px solid var(--ri-card) !important;border-radius:18px !important;box-shadow:none !important}
+  html[data-gaya="ruangide"] nav.bottom .tab{font-size:11px;font-weight:500}
+  html[data-gaya="ruangide"] nav.bottom .tab.aktif{background:var(--ri-hero) !important;color:var(--ri-hero-ink) !important;font-weight:650}
+  html[data-gaya="ruangide"] nav.bottom .nav-plus{background:var(--ri-lime) !important;color:var(--ri-lime-ink) !important;box-shadow:none !important}
   html[data-gaya="ruangide"] nav.bottom .nav-plus svg{stroke:var(--ri-lime-ink) !important}
   html[data-gaya="ruangide"] .toast-note{background:var(--ri-card) !important;color:var(--ri-ink) !important;border:1px solid var(--ri-line);border-radius:14px;box-shadow:0 8px 25px #28302012;bottom:calc(100px + env(safe-area-inset-bottom))}
   html[data-gaya="ruangide"] dialog{padding:22px;max-height:calc(100dvh - 32px);overflow:auto}
@@ -2029,14 +2020,230 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   html#financeApp[data-ui="ruang"][data-gaya] #styleGalleryWrap{border-radius:var(--ui-control-r)}
   html#financeApp[data-ui="ruang"][data-gaya] #styleGallery .style-choice{border-radius:var(--ui-control-r) !important;min-height:0 !important;font-size:11px !important}
   html#financeApp[data-ui="ruang"][data-gaya] #wltProviders .provider-choice{font-size:12px !important;min-height:63px;border-radius:var(--ui-control-r) !important}
-  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom{bottom:0;left:50%;transform:translateX(-50%);right:auto;width:100%;max-width:760px;padding:10px 10px calc(11px + env(safe-area-inset-bottom));border-radius:var(--ui-radius) var(--ui-radius) 0 0 !important;box-shadow:0 -4px 24px #13201a0a !important;border-bottom:0 !important;z-index:8}
-  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .tab{border:0 !important;border-radius:var(--ui-control-r) !important;background:transparent !important;color:var(--ui-muted) !important;box-shadow:none !important;min-height:44px;padding:7px 0;font-size:11px}
-  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .tab svg{width:20px;height:20px;stroke-width:1.7}
-  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .tab.aktif{background:var(--ui-soft) !important;color:var(--ui-ink) !important;font-weight:650}
-  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .nav-plus{background:var(--ui-cta) !important;border:4px solid var(--ui-solid) !important;border-radius:calc(var(--ui-control-r) + 6px) !important;box-shadow:none !important;width:58px;height:58px;margin-top:-26px}
-  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .nav-plus svg{stroke:var(--ui-on-cta) !important;stroke-width:2.1}
-  html#financeApp[data-ui="ruang"][data-gaya="ruangide"] nav.bottom .nav-plus{background:var(--ri-lime) !important}
-  html#financeApp[data-ui="ruang"][data-gaya="ruangide"] nav.bottom .nav-plus svg{stroke:var(--ri-lime-ink) !important}
+  /* ===== MASTER LIQUID GLASS NAVBAR (GLASS CAIR DI SEMUA GAYA) ===== */
+  nav.bottom,
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    bottom: max(12px, calc(env(safe-area-inset-bottom) + 6px)) !important;
+    width: calc(100% - 24px) !important;
+    max-width: 620px !important;
+    padding: 7px 10px calc(7px + env(safe-area-inset-bottom, 0px)) !important;
+    border-radius: 28px !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    gap: 4px !important;
+    z-index: 50 !important;
+
+    /* Efek Kaca Cair (Liquid Glass): Transparansi Cair + Ultra Blur + Saturasi Menawan */
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--card, #ffffff) 68%, rgba(255, 255, 255, 0.45)) 0%,
+      color-mix(in srgb, var(--card, #ffffff) 42%, rgba(255, 255, 255, 0.15)) 100%
+    ) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(210%) contrast(102%) !important;
+    backdrop-filter: blur(28px) saturate(210%) contrast(102%) !important;
+
+    /* Meniskus / Kilau Refraksi Kaca Cair */
+    border: 1px solid color-mix(in srgb, #ffffff 45%, transparent) !important;
+    border-top: 1.5px solid color-mix(in srgb, #ffffff 82%, transparent) !important;
+    border-bottom: 1px solid color-mix(in srgb, #000000 8%, transparent) !important;
+
+    /* Refleksi Cahaya Dalam (Specular Inset) & Bayangan Lembut Mengambang */
+    box-shadow:
+      0 16px 40px -8px rgba(15, 23, 42, 0.18),
+      0 4px 14px -2px rgba(15, 23, 42, 0.08),
+      inset 0 1.5px 1.5px 0 rgba(255, 255, 255, 0.8),
+      inset 0 -1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+
+    isolation: isolate;
+    transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+  }
+
+  /* Kaca Cair untuk Mode Gelap & Gaya Gelap (Midnight, Retro, Arcade, Orbit, Dark) */
+  html[data-tema="dark"] nav.bottom,
+  html:is([data-gaya="midnight"],[data-gaya="retro"],[data-gaya="arcade"],[data-gaya="orbit"]) nav.bottom,
+  html#financeApp[data-ui="ruang"][data-tema="dark"] nav.bottom,
+  html#financeApp[data-ui="ruang"]:is([data-gaya="midnight"],[data-gaya="retro"],[data-gaya="arcade"],[data-gaya="orbit"]) nav.bottom {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--card, #0f1422) 74%, rgba(255, 255, 255, 0.1)) 0%,
+      color-mix(in srgb, var(--card, #0f1422) 48%, rgba(255, 255, 255, 0.02)) 100%
+    ) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-top: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5) !important;
+    box-shadow:
+      0 22px 50px -6px rgba(0, 0, 0, 0.65),
+      0 6px 18px -2px rgba(0, 0, 0, 0.4),
+      inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.28),
+      inset 0 -1px 2px 0 rgba(0, 0, 0, 0.35) !important;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:is([data-tema="auto"],:not([data-tema="light"])) nav.bottom,
+    html#financeApp[data-ui="ruang"]:is([data-tema="auto"],:not([data-tema="light"])) nav.bottom {
+      background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--card, #0f1422) 74%, rgba(255, 255, 255, 0.1)) 0%,
+        color-mix(in srgb, var(--card, #0f1422) 48%, rgba(255, 255, 255, 0.02)) 100%
+      ) !important;
+      border: 1px solid rgba(255, 255, 255, 0.14) !important;
+      border-top: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.5) !important;
+      box-shadow:
+        0 22px 50px -6px rgba(0, 0, 0, 0.65),
+        0 6px 18px -2px rgba(0, 0, 0, 0.4),
+        inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.28),
+        inset 0 -1px 2px 0 rgba(0, 0, 0, 0.35) !important;
+    }
+  }
+
+  /* Tab item navbar kaca cair */
+  nav.bottom .tab,
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .tab {
+    background: transparent !important;
+    color: var(--ui-muted, var(--muted, #64748b)) !important;
+    border: 0 !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+    min-height: 44px !important;
+    padding: 6px 0 !important;
+    margin: 0 !important;
+    font-size: 11px !important;
+    font-weight: 550 !important;
+    line-height: 1.2 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  nav.bottom .tab svg,
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .tab svg {
+    width: 20px !important;
+    height: 20px !important;
+    stroke: currentColor !important;
+    stroke-width: 1.8 !important;
+    fill: none !important;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  }
+
+  nav.bottom .tab:active svg {
+    transform: scale(0.88) !important;
+  }
+
+  /* Tab aktif: Kapsul Kaca Lembut dengan Pendar Warna Aksen */
+  nav.bottom .tab.aktif,
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .tab.aktif {
+    background: color-mix(in srgb, var(--ui-cta, var(--pri, #2563eb)) 15%, rgba(255, 255, 255, 0.6)) !important;
+    color: var(--ui-cta, var(--pri, #2563eb)) !important;
+    font-weight: 700 !important;
+    box-shadow:
+      0 2px 8px -1px color-mix(in srgb, var(--ui-cta, var(--pri, #2563eb)) 28%, transparent),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.7) !important;
+  }
+
+  html[data-tema="dark"] nav.bottom .tab.aktif,
+  html:is([data-gaya="midnight"],[data-gaya="retro"],[data-gaya="arcade"],[data-gaya="orbit"]) nav.bottom .tab.aktif,
+  html#financeApp[data-ui="ruang"][data-tema="dark"] nav.bottom .tab.aktif,
+  html#financeApp[data-ui="ruang"]:is([data-gaya="midnight"],[data-gaya="retro"],[data-gaya="arcade"],[data-gaya="orbit"]) nav.bottom .tab.aktif {
+    background: color-mix(in srgb, var(--ui-cta, var(--pri, #3b82f6)) 25%, rgba(255, 255, 255, 0.1)) !important;
+    color: color-mix(in srgb, var(--ui-cta, var(--pri, #60a5fa)) 85%, #ffffff) !important;
+    box-shadow:
+      0 2px 10px -1px color-mix(in srgb, var(--ui-cta, var(--pri, #3b82f6)) 45%, transparent),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.25) !important;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:is([data-tema="auto"],:not([data-tema="light"])) nav.bottom .tab.aktif,
+    html#financeApp[data-ui="ruang"]:is([data-tema="auto"],:not([data-tema="light"])) nav.bottom .tab.aktif {
+      background: color-mix(in srgb, var(--ui-cta, var(--pri, #3b82f6)) 25%, rgba(255, 255, 255, 0.1)) !important;
+      color: color-mix(in srgb, var(--ui-cta, var(--pri, #60a5fa)) 85%, #ffffff) !important;
+      box-shadow:
+        0 2px 10px -1px color-mix(in srgb, var(--ui-cta, var(--pri, #3b82f6)) 45%, transparent),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.25) !important;
+    }
+  }
+
+  /* Tombol Tengah Catat Transaksi (.nav-plus) */
+  nav.bottom .nav-plus,
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .nav-plus {
+    flex: none !important;
+    width: 54px !important;
+    height: 54px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    margin: -24px 6px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: linear-gradient(
+      135deg,
+      var(--ui-cta, var(--pri, #2563eb)) 0%,
+      color-mix(in srgb, var(--ui-cta, var(--pri, #2563eb)) 82%, #000) 100%
+    ) !important;
+    color: var(--ui-on-cta, #ffffff) !important;
+    border: 3.5px solid color-mix(in srgb, var(--card, #ffffff) 65%, rgba(255, 255, 255, 0.85)) !important;
+    box-shadow:
+      0 8px 24px -2px color-mix(in srgb, var(--ui-cta, var(--pri, #2563eb)) 50%, transparent),
+      inset 0 1.5px 1px rgba(255, 255, 255, 0.6) !important;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease !important;
+    z-index: 2 !important;
+  }
+
+  nav.bottom .nav-plus:hover {
+    transform: translateY(-2px) scale(1.06) !important;
+  }
+
+  nav.bottom .nav-plus:active {
+    transform: translateY(1px) scale(0.94) !important;
+  }
+
+  nav.bottom .nav-plus svg,
+  html#financeApp[data-ui="ruang"][data-gaya] nav.bottom .nav-plus svg {
+    width: 24px !important;
+    height: 24px !important;
+    stroke: var(--ui-on-cta, #ffffff) !important;
+    stroke-width: 2.6 !important;
+    stroke-linecap: round !important;
+    fill: none !important;
+  }
+
+  html[data-tema="dark"] nav.bottom .nav-plus,
+  html:is([data-gaya="midnight"],[data-gaya="retro"],[data-gaya="arcade"],[data-gaya="orbit"]) nav.bottom .nav-plus,
+  html#financeApp[data-ui="ruang"][data-tema="dark"] nav.bottom .nav-plus,
+  html#financeApp[data-ui="ruang"]:is([data-gaya="midnight"],[data-gaya="retro"],[data-gaya="arcade"],[data-gaya="orbit"]) nav.bottom .nav-plus {
+    border: 3.5px solid color-mix(in srgb, var(--card, #121827) 60%, rgba(255, 255, 255, 0.2)) !important;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:is([data-tema="auto"],:not([data-tema="light"])) nav.bottom .nav-plus,
+    html#financeApp[data-ui="ruang"]:is([data-tema="auto"],:not([data-tema="light"])) nav.bottom .nav-plus {
+      border: 3.5px solid color-mix(in srgb, var(--card, #121827) 60%, rgba(255, 255, 255, 0.2)) !important;
+    }
+  }
+
+  html#financeApp[data-ui="ruang"][data-gaya="ruangide"] nav.bottom .nav-plus {
+    background: var(--ri-lime) !important;
+  }
+  html#financeApp[data-ui="ruang"][data-gaya="ruangide"] nav.bottom .nav-plus svg {
+    stroke: var(--ri-lime-ink) !important;
+  }
+
+  @media (max-width: 360px) {
+    nav.bottom,
+    html#financeApp[data-ui="ruang"][data-gaya] nav.bottom {
+      width: calc(100% - 14px) !important;
+      padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+      border-radius: 24px !important;
+    }
+  }
   html#financeApp[data-ui="ruang"][data-gaya] dialog{padding:24px;width:calc(100% - 26px);max-width:590px;max-height:calc(100dvh - 32px) !important;overflow:auto;overscroll-behavior:contain;color:var(--ui-ink);background:var(--ui-solid)}
   html#financeApp[data-ui="ruang"][data-gaya] dialog::backdrop{background:#14201970;backdrop-filter:blur(4px)}
   html#financeApp[data-ui="ruang"][data-gaya] dialog h2{font-family:var(--ui-display);font-size:25px;font-weight:400;line-height:1.3;margin-bottom:20px}
