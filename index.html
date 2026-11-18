@@ -2530,6 +2530,20 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     </div>
     <input type="text" id="judul" placeholder="Contoh: Belanja warung">
     <select id="kategori"></select>
+    <div id="katBaruWrap" style="display:none;margin:-4px 0 10px">
+      <label class="field-label" for="katBaruInput">Tulis nama kategori baru</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="katBaruInput" placeholder="Contoh: Kopi, Skincare, Laundry" maxlength="30" autocomplete="off" style="margin:0">
+        <button type="button" class="ghost kecil" id="btnBatalKatBaru" style="width:auto;margin:0;padding:8px 12px;flex-shrink:0">Batal</button>
+      </div>
+    </div>
+    <div id="katKustomAksiWrap" style="display:none;margin:-4px 0 10px;justify-content:space-between;align-items:center">
+      <span class="muted" style="font-size:11.5px">Kategori kustom</span>
+      <button type="button" class="ghost kecil" id="btnHapusKatKustom" style="width:auto;color:var(--bad);padding:2px 8px;font-size:11.5px;margin:0">&#x1F5D1;&#xFE0F; Hapus kategori ini</button>
+    </div>
+    <div id="katTambahPemicuWrap" style="margin:-4px 0 10px;display:flex;justify-content:flex-end">
+      <button type="button" class="ghost kecil" id="btnBukaKatBaru" style="width:auto;padding:3px 10px;font-size:11.5px;margin:0">+ Tulis kategori baru</button>
+    </div>
     <p class="muted" id="saldoAwalHint" style="display:none;margin:-4px 0 10px">Saldo awal cukup dicatat sekali untuk uang yang sudah kamu miliki sebelum mulai mencatat, agar tidak terhitung dua kali.</p>
     <input type="text" id="iNominalMasuk" data-uang placeholder="Contoh: 50.000" inputmode="decimal">
     <select id="iCara">
@@ -2871,19 +2885,6 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
     <p class="muted setting-help" id="infoKaca" aria-live="polite"></p>
   </div>
 
-  <div class="card">
-    <h2>Kategori</h2>
-    <select id="sKatTipe">
-      <option value="keluar">Pengeluaran</option>
-      <option value="masuk">Pemasukan</option>
-    </select>
-    <div class="grid2">
-    <input type="text" id="kbBaru" placeholder="Contoh: Kopi">
-      <button id="btnKatTambah" style="margin-bottom:10px">+ Tambah</button>
-    </div>
-    <div id="listKatKustom"></div>
-  </div>
-
   <div class="card" id="cardLatar">
     <h2>Latar belakang</h2>
     <p class="muted setting-help" id="infoLatar" aria-live="polite"></p>
@@ -2958,6 +2959,20 @@ html:is([data-gaya="material"],[data-gaya="soft"],[data-gaya="retro"],[data-gaya
   </div>
   <input type="text" id="eJudul" placeholder="Contoh: Belanja warung">
   <select id="eKategori"></select>
+  <div id="eKatBaruWrap" style="display:none;margin:-4px 0 10px">
+    <label class="field-label" for="eKatBaruInput">Tulis nama kategori baru</label>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="text" id="eKatBaruInput" placeholder="Contoh: Kopi, Skincare, Laundry" maxlength="30" autocomplete="off" style="margin:0">
+      <button type="button" class="ghost kecil" id="btnEBatalKatBaru" style="width:auto;margin:0;padding:8px 12px;flex-shrink:0">Batal</button>
+    </div>
+  </div>
+  <div id="eKatKustomAksiWrap" style="display:none;margin:-4px 0 10px;justify-content:space-between;align-items:center">
+    <span class="muted" style="font-size:11.5px">Kategori kustom</span>
+    <button type="button" class="ghost kecil" id="btnEHapusKatKustom" style="width:auto;color:var(--bad);padding:2px 8px;font-size:11.5px;margin:0">&#x1F5D1;&#xFE0F; Hapus kategori ini</button>
+  </div>
+  <div id="eKatTambahPemicuWrap" style="margin:-4px 0 10px;display:flex;justify-content:flex-end">
+    <button type="button" class="ghost kecil" id="btnEBukaKatBaru" style="width:auto;padding:3px 10px;font-size:11.5px;margin:0">+ Tulis kategori baru</button>
+  </div>
   <input type="text" id="eTag" placeholder="Contoh: kantor, kuliah">
   <input type="text" id="eNominalMasuk" data-uang placeholder="Contoh: 50.000" inputmode="decimal">
   <label class="field-label" for="eCara">Cara pembayaran</label>
@@ -3481,7 +3496,7 @@ function pasangLabelForm() {
     rDari:'Dari tanggal', rSampai:'Sampai tanggal', rTipe:'Jenis transaksi', rCari:'Cari transaksi',
     gDari:'Dari tanggal', gSampai:'Sampai tanggal', cmpA:'Hari pertama', cmpB:'Hari pembanding',
     sGaya:'Gaya aktif', sEfek:'Kualitas efek', sAdaptif:'Warna mengikuti foto',
-    sFont:'Font', sTema:'Tema', sKatTipe:'Jenis kategori', kbBaru:'Nama kategori baru', fBg:'Pilih foto latar',
+    sFont:'Font', sTema:'Tema', fBg:'Pilih foto latar',
     eTipe:'Jenis transaksi', eTgl:'Tanggal transaksi', eJudul:'Nama transaksi',
     eKategori:'Kategori', eTag:'Tag (opsional)', eNominalMasuk:'Jumlah uang masuk (Rp)',
     ebNama:'Nama transaksi berulang', ebTipe:'Jenis transaksi', ebKat:'Kategori',
@@ -3743,15 +3758,76 @@ function pakaiBudget(kat,per){const today=hariIni(),awal=per==='bulan'?today.sli
 
 function isiKategoriSelect(selectEl, tipe, pilih) {
   selectEl.innerHTML = '';
-  KAT[tipe].forEach(k => { const o = document.createElement('option'); o.textContent = k; selectEl.appendChild(o); });
-  if (pilih && !KAT[tipe].includes(pilih)) selectEl.add(new Option(pilih, pilih));
+  (KAT[tipe] || []).forEach(k => { const o = document.createElement('option'); o.textContent = k; selectEl.appendChild(o); });
+  if (pilih && !(KAT[tipe] || []).includes(pilih) && pilih !== '__tambah__') selectEl.add(new Option(pilih, pilih));
+  if (selectEl.id === 'kategori' || selectEl.id === 'eKategori') {
+    selectEl.add(new Option('✨ + Tulis kategori baru...', '__tambah__'));
+  }
   if (pilih) selectEl.value = pilih;
 }
 function perbaruiPetunjukSaldoAwal() {
   $('saldoAwalHint').style.display = $('tipe').value === 'masuk' && $('kategori').value === 'Saldo awal' ? '' : 'none';
 }
-function isiKategori() { isiKategoriSelect($('kategori'), $('tipe').value); perbaruiPetunjukSaldoAwal(); }
-$('kategori').onchange = perbaruiPetunjukSaldoAwal;
+function perbaruiKategoriUi(prefix = '') {
+  const isEdit = prefix === 'e';
+  const sel = $(isEdit ? 'eKategori' : 'kategori');
+  const tipe = $(isEdit ? 'eTipe' : 'tipe').value;
+  const wrapBaru = $(isEdit ? 'eKatBaruWrap' : 'katBaruWrap');
+  const inputBaru = $(isEdit ? 'eKatBaruInput' : 'katBaruInput');
+  const wrapAksi = $(isEdit ? 'eKatKustomAksiWrap' : 'katKustomAksiWrap');
+  const wrapPemicu = $(isEdit ? 'eKatTambahPemicuWrap' : 'katTambahPemicuWrap');
+
+  if (sel.value === '__tambah__') {
+    wrapBaru.style.display = '';
+    wrapPemicu.style.display = 'none';
+    wrapAksi.style.display = 'none';
+    if (!isEdit) $('saldoAwalHint').style.display = 'none';
+    setTimeout(() => inputBaru.focus(), 60);
+  } else {
+    wrapBaru.style.display = 'none';
+    wrapPemicu.style.display = 'flex';
+    const isKustom = (katKustom()[tipe] || []).includes(sel.value);
+    wrapAksi.style.display = isKustom ? 'flex' : 'none';
+    if (!isEdit) perbaruiPetunjukSaldoAwal();
+  }
+}
+function isiKategori() {
+  isiKategoriSelect($('kategori'), $('tipe').value);
+  perbaruiKategoriUi('');
+}
+$('kategori').onchange = () => perbaruiKategoriUi('');
+$('btnBukaKatBaru').onclick = () => {
+  $('kategori').value = '__tambah__';
+  perbaruiKategoriUi('');
+};
+$('btnBatalKatBaru').onclick = () => {
+  $('katBaruWrap').style.display = 'none';
+  $('katBaruInput').value = '';
+  $('kategori').value = KAT[$('tipe').value][0] || 'Lainnya';
+  perbaruiKategoriUi('');
+};
+$('btnHapusKatKustom').onclick = () => {
+  const tipe = $('tipe').value;
+  const nama = $('kategori').value;
+  if ((katKustom()[tipe] || []).includes(nama)) hapusKatKustom(tipe, nama);
+};
+
+$('eKategori').onchange = () => perbaruiKategoriUi('e');
+$('btnEBukaKatBaru').onclick = () => {
+  $('eKategori').value = '__tambah__';
+  perbaruiKategoriUi('e');
+};
+$('btnEBatalKatBaru').onclick = () => {
+  $('eKatBaruWrap').style.display = 'none';
+  $('eKatBaruInput').value = '';
+  $('eKategori').value = KAT[$('eTipe').value][0] || 'Lainnya';
+  perbaruiKategoriUi('e');
+};
+$('btnEHapusKatKustom').onclick = () => {
+  const tipe = $('eTipe').value;
+  const nama = $('eKategori').value;
+  if ((katKustom()[tipe] || []).includes(nama)) hapusKatKustom(tipe, nama);
+};
 function isiKategoriBudget() { isiKategoriSelect($('bKategori'), 'keluar'); }
 function isiKategoriBerulang() { isiKategoriSelect($('rbKat'), $('rbTipe').value); }
 
@@ -4439,6 +4515,9 @@ function bukaEdit(id) {
   aturLacakTunai('btnETrackCash', tunaiMengubahStok(x));
   $('eInactiveNote').hidden=x.aktif!==false;
   isiKategoriSelect($('eKategori'), x.tipe, x.kategori);
+  $('eKatBaruInput').value = '';
+  $('eKatBaruWrap').style.display = 'none';
+  perbaruiKategoriUi('e');
   $('eTgl').value = x.tanggal;
   $('eJudul').value = x.judul;
   $('eTag').value = (x.tags || []).join(', ');
@@ -4759,7 +4838,7 @@ function updateEditJenis() {
   hitungEdit();
 }
 $('eNominalMasuk').oninput = hitungEdit;
-$('eTipe').onchange = () => { isiKategoriSelect($('eKategori'), $('eTipe').value); updateEditJenis(); };
+$('eTipe').onchange = () => { isiKategoriSelect($('eKategori'), $('eTipe').value); perbaruiKategoriUi('e'); updateEditJenis(); };
 $('eCara').onchange = updateEditJenis;
 $('btnECashDetails').onclick = () => { aturRincianTunai('e', !rincianTunaiAktif('e')); updateEditJenis(); };
 $('btnETrackCash').onclick = () => { aturLacakTunai('btnETrackCash', !tunaiTerlacak('btnETrackCash')); updateEditJenis(); };
@@ -4827,7 +4906,14 @@ $('btnESimpan').onclick = () => {
   if (editMemproses) return gagalIsi('Tunggu foto atau scan selesai.', 'eFotoStatus');
   const tipeBaru = $('eTipe').value;
   if (!$('eTgl').value) return gagalIsi('Tanggal transaksi wajib diisi.', 'eTgl');
-  if (!$('eKategori').value) return gagalIsi('Pilih kategori transaksi.', 'eKategori');
+  let katBaru = $('eKategori').value;
+  if (katBaru === '__tambah__' || $('eKatBaruInput').value.trim()) {
+    const namaBaru = $('eKatBaruInput').value.trim();
+    if (!namaBaru) return gagalIsi('Tulis nama kategori baru.', 'eKatBaruInput');
+    katBaru = tambahKategoriBaru(tipeBaru, namaBaru);
+    if (!katBaru) return gagalIsi('Nama kategori baru tidak valid.', 'eKatBaruInput');
+  }
+  if (!katBaru || katBaru === '__tambah__') return gagalIsi('Pilih kategori transaksi.', 'eKategori');
   const nominalMasuk = angkaUang($('eNominalMasuk').value);
   const items = tipeBaru === 'masuk'
     ? [{ nama: $('eJudul').value.trim() || $('eKategori').value || 'Pemasukan', qty: 1, satuan: '', harga: nominalMasuk, hargaTotal: nominalMasuk }]
@@ -4903,13 +4989,13 @@ $('btnESimpan').onclick = () => {
       ? pesanDompetEdit('Ada pecahan uang di dompet yang kurang. Periksa jumlah lembar dompet, uang dibayar, dan kembalian.')
       : gagalIsi('Uang fisik dari transaksi lama belum bisa dilepas karena stok dompet akan menjadi minus. Periksa stok di Catat transaksi terlebih dahulu.', 'eCara');
   const tgl = $('eTgl').value;
-  const judul = $('eJudul').value.trim() || (tipeBaru === 'masuk' ? $('eKategori').value : items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
+  const judul = $('eJudul').value.trim() || (tipeBaru === 'masuk' ? katBaru : items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
   const sebelumnya = { ...x };
   const stokLama = stokBaru ? { ...db.uangFisik.stok } : null;
   x.tipe = $('eTipe').value;
   x.tanggal = tgl;
   x.judul = judul;
-  x.kategori = $('eKategori').value;
+  x.kategori = katBaru;
   x.saldoAwal = tipeBaru === 'masuk' && x.kategori === 'Saldo awal';
   if (tipeBaru !== 'keluar' || x.kategori !== 'Tabungan') x.wishId = null;
   x.tags = parseTags($('eTag').value);
@@ -5706,7 +5792,14 @@ $('btnSimpan').onclick = () => {
   }
   const tipe = $('tipe').value;
   if (!$('tgl').value) return pesanForm('Tanggal transaksi wajib diisi.', 'tgl');
-  if (!$('kategori').value) return pesanForm('Pilih kategori transaksi.', 'kategori');
+  let kat = $('kategori').value;
+  if (kat === '__tambah__' || $('katBaruInput').value.trim()) {
+    const namaBaru = $('katBaruInput').value.trim();
+    if (!namaBaru) return pesanForm('Tulis nama kategori baru.', 'katBaruInput');
+    kat = tambahKategoriBaru(tipe, namaBaru);
+    if (!kat) return pesanForm('Nama kategori baru tidak valid.', 'katBaruInput');
+  }
+  if (!kat || kat === '__tambah__') return pesanForm('Pilih kategori transaksi.', 'kategori');
   const tgl = $('tgl').value;
   const cur = tipe === 'keluar' ? itemDariForm() : null;
   let items = tipe === 'keluar' ? keranjang.map(i => ({ ...i })) : [];
@@ -5715,7 +5808,7 @@ $('btnSimpan').onclick = () => {
     if (!Number.isFinite(jumlah) || jumlah <= 0) {
       pesanForm('Isi jumlah uang masuk lebih dari 0.', 'iNominalMasuk'); return;
     }
-    items = [{ nama: $('judul').value.trim() || $('kategori').value || 'Pemasukan', qty: 1, satuan: '', harga: jumlah, hargaTotal: jumlah }];
+    items = [{ nama: $('judul').value.trim() || kat || 'Pemasukan', qty: 1, satuan: '', harga: jumlah, hargaTotal: jumlah }];
   } else if (cur) items.push(cur);
   if (!items.length) {
     pesanBarang();
@@ -5726,8 +5819,7 @@ $('btnSimpan').onclick = () => {
     return;
   }
   const total = items.reduce((s,i) => s + subtotalItem(i), 0);
-  const judul = $('judul').value.trim() || (tipe === 'masuk' ? $('kategori').value : items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
-  const kat = $('kategori').value;
+  const judul = $('judul').value.trim() || (tipe === 'masuk' ? kat : items.length === 1 ? items[0].nama : 'Belanja ' + tglIndo(tgl));
   const digital = ambilDompetForm('i', tipe, total);
   if (digital.error) return pesanForm(digital.error, digital.field);
   const tunai = ambilTunaiForm(tipe, total);
@@ -6327,7 +6419,7 @@ function renderSemua() {
   renderProyeksi();
   renderTunai();
   renderMingguan();
-  renderKatKustom();
+  perbaruiKategoriUi('');
   renderBackupBanner();
   renderPengingat();
   renderBeranda();
@@ -7709,69 +7801,50 @@ function terapkanKatKustom() {
   });
 }
 
-function renderKatKustom() {
-  const tipe = $('sKatTipe').value;
-  const box = $('listKatKustom');
-  box.innerHTML = '';
-  const daftar = katKustom()[tipe];
-  if (!daftar.length) box.appendChild(el('p', 'kosong', 'Belum ada kategori sendiri.'));
-  daftar.forEach(k => {
-    const row = el('div', 'row');
-    row.appendChild(el('span', null, k));
-    const hapus = el('button', 'kecil del', 'Hapus');
-    hapus.onclick = () => hapusKatKustom(tipe, k);
-    row.appendChild(hapus);
-    box.appendChild(row);
-  });
-}
-
 function refreshKategoriSelect() {
   isiKategoriSelect($('kategori'), $('tipe').value, $('kategori').value);
-  perbaruiPetunjukSaldoAwal();
+  perbaruiKategoriUi('');
   isiKategoriSelect($('bKategori'), 'keluar', $('bKategori').value);
   isiKategoriSelect($('rbKat'), $('rbTipe').value, $('rbKat').value);
+  if ($('dlgEdit').open) {
+    isiKategoriSelect($('eKategori'), $('eTipe').value, $('eKategori').value);
+    perbaruiKategoriUi('e');
+  }
 }
 
-$('sKatTipe').onchange = renderKatKustom;
-
-$('btnKatTambah').onclick = () => {
-  const nama = $('kbBaru').value.trim();
-  const tipe = $('sKatTipe').value;
-  if (!nama) return gagalIsi('Nama kategori wajib diisi.', 'kbBaru');
-  const sudahAda = KAT[tipe].some(k => k.toLowerCase() === nama.toLowerCase());
-  if (sudahAda) return gagalIsi('Kategori "' + nama + '" sudah ada.', 'kbBaru');
+function tambahKategoriBaru(tipe, nama) {
+  nama = String(nama || '').trim();
+  if (!nama) return null;
+  const match = (KAT[tipe] || []).find(k => k.toLowerCase() === nama.toLowerCase());
+  if (match) return match;
   katKustom()[tipe].push(nama);
   sisipKat(tipe, nama);
-  try { simpanSet(); }
-  catch (_) {
-    katKustom()[tipe].pop();
-    KAT[tipe] = KAT[tipe].filter(k => k !== nama);
-    return gagalIsi('Penyimpanan HP penuh. Kategori belum ditambahkan.', 'kbBaru');
-  }
-  $('kbBaru').value = '';
+  try { simpanSet(); } catch (_) {}
   refreshKategoriSelect();
-  renderKatKustom();
-  beriPesan('Kategori baru tersimpan.');
-};
+  return nama;
+}
 
 function hapusKatKustom(tipe, nama) {
   const jumlah = db.transaksi.filter(x => x.tipe === tipe && x.kategori === nama).length;
   const pesan = jumlah
-    ? 'Hapus kategori "' + nama + '"? ' + jumlah + ' transaksi akan pindah ke Lainnya.'
-    : 'Hapus kategori "' + nama + '"?';
-  if (!confirm(pesan)) return;
-  db.transaksi.forEach(x => { if (x.tipe === tipe && x.kategori === nama) x.kategori = 'Lainnya'; });
-  db.berulang.forEach(r => { if (r.tipe === tipe && r.kategori === nama) r.kategori = 'Lainnya'; });
-  if (tipe === 'keluar' && db.budgets[nama]) delete db.budgets[nama];
-  katKustom()[tipe] = katKustom()[tipe].filter(k => k !== nama);
-  KAT[tipe] = KAT[tipe].filter(k => k !== nama);
-  simpan();
-  localStorage.setItem(KEY_SET, JSON.stringify(set));
-  if ($('tipe').value === tipe && $('kategori').value === nama) $('kategori').value = 'Lainnya';
-  if (tipe === 'keluar' && $('bKategori').value === nama) $('bKategori').value = 'Lainnya';
-  if ($('rbTipe').value === tipe && $('rbKat').value === nama) $('rbKat').value = 'Lainnya';
-  refreshKategoriSelect();
-  renderSemua();
+    ? 'Hapus kategori "' + nama + '"? ' + jumlah + ' transaksi yang menggunakan kategori ini akan dipindahkan ke "Lainnya".'
+    : 'Hapus kategori "' + nama + '"? Kategori ini tidak akan muncul lagi di pilihan transaksi.';
+  konfirmasiDompet('Hapus kategori?', pesan, () => {
+    db.transaksi.forEach(x => { if (x.tipe === tipe && x.kategori === nama) x.kategori = 'Lainnya'; });
+    db.berulang.forEach(r => { if (r.tipe === tipe && r.kategori === nama) r.kategori = 'Lainnya'; });
+    if (tipe === 'keluar' && db.budgets[nama]) delete db.budgets[nama];
+    katKustom()[tipe] = katKustom()[tipe].filter(k => k !== nama);
+    KAT[tipe] = KAT[tipe].filter(k => k !== nama);
+    simpan();
+    localStorage.setItem(KEY_SET, JSON.stringify(set));
+    if ($('tipe').value === tipe && $('kategori').value === nama) $('kategori').value = 'Lainnya';
+    if (tipe === 'keluar' && $('bKategori').value === nama) $('bKategori').value = 'Lainnya';
+    if ($('rbTipe').value === tipe && $('rbKat').value === nama) $('rbKat').value = 'Lainnya';
+    if ($('eTipe').value === tipe && $('eKategori').value === nama) $('eKategori').value = 'Lainnya';
+    refreshKategoriSelect();
+    renderSemua();
+    beriPesan('Kategori "' + nama + '" dihapus.');
+  });
 }
 
 terapkanKatKustom();
@@ -7993,6 +8066,7 @@ function resetCatatan() {
   ['judul','tTag','iNominalMasuk','fFoto'].forEach(id=>$(id).value='');
   $('fotoStatus').textContent='Foto struk (opsional) disimpan di HP, dikecilkan otomatis.';
   $('catatExtra').open=false; resetFormBarang(); resetPecahan(); updateFormJenis(); pesanForm('');
+  $('katBaruInput').value = ''; $('katBaruWrap').style.display = 'none'; $('katKustomAksiWrap').style.display = 'none'; $('katTambahPemicuWrap').style.display = 'flex';
   sidikDraf='';waktuDraf=0;pesanDrafGagal='';drafSiap=siap;
   renderStatusDraf();
 }
