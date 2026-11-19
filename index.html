@@ -9612,6 +9612,49 @@ function siapkanKonteksAiChat() {
     };
   });
 
+  const daftarTarget = (db.wishlist || []).map(w => {
+    const term = typeof terkumpul === 'function' ? terkumpul(w.id) : 0;
+    const kur = Math.max(0, (Number(w.target) || 0) - term);
+    const pct = (Number(w.target) || 0) > 0 ? Math.min(100, Math.round((term / Number(w.target)) * 100)) : 0;
+    let sisaHari = null;
+    let setoranPerMinggu = null;
+    if (w.tenggat && kur > 0 && typeof selisihHari === 'function') {
+      sisaHari = selisihHari(hariIni(), w.tenggat);
+      if (sisaHari > 0) {
+        const mingguSisa = Math.max(1, Math.ceil(sisaHari / 7));
+        setoranPerMinggu = Math.ceil(kur / mingguSisa);
+      }
+    }
+    return {
+      id: w.id,
+      name: String(w.nama || ''),
+      target: Math.round(Number(w.target) || 0),
+      collected: Math.round(term),
+      remaining: Math.round(kur),
+      percent: pct,
+      deadline: w.tenggat || null,
+      daysLeft: sisaHari,
+      weeklyDeposit: setoranPerMinggu,
+      achieved: kur <= 0
+    };
+  });
+
+  const daftarBerulang = (db.berulang || []).map(r => {
+    const qty = Number(r.qty) || 1;
+    const harga = Number(r.harga) || 0;
+    const totalPerItem = Math.round(qty * harga);
+    return {
+      id: r.id,
+      name: String(r.nama || ''),
+      type: r.tipe === 'masuk' ? 'masuk' : 'keluar',
+      category: r.kategori || 'Lainnya',
+      period: r.periode === 'minggu' ? 'minggu' : 'bulan',
+      amount: totalPerItem,
+      startDate: r.mulai || '',
+      lastRun: r.terakhir || null
+    };
+  });
+
   const riwayatTerbaru = semua
     .slice(0, 15)
     .map(x => ({
@@ -9637,6 +9680,8 @@ function siapkanKonteksAiChat() {
     },
     topCategories: topKategori,
     budgets: daftarBudget,
+    targets: daftarTarget,
+    recurring: daftarBerulang,
     recentTransactions: riwayatTerbaru
   };
 }
@@ -10375,7 +10420,7 @@ function renderPesanAiChat() {
 function jawabFinansialLokal(pertanyaan, context) {
   if (!pertanyaan || typeof pertanyaan !== 'string') return null;
   const q = pertanyaan.trim().toLowerCase();
-  const { balance=0, cashBalance=0, wallets=[], summary30d={ income:0, expense:0, net:0 }, topCategories=[], budgets=[], recentTransactions=[] } = context || {};
+  const { balance=0, cashBalance=0, wallets=[], summary30d={ income:0, expense:0, net:0 }, topCategories=[], budgets=[], targets=[], recurring=[], recentTransactions=[] } = context || {};
 
   // -1. Perintah Hapus Transaksi Langsung dari Chat
   const actHapus = deteksiAksiHapusTrx(pertanyaan);
@@ -10420,10 +10465,12 @@ function jawabFinansialLokal(pertanyaan, context) {
         '• 📉 Menganalisis pengeluaran dan kategori paling boros (30 hari)\n' +
         '• 📈 Memantau pemasukan dan status arus kas (surplus/defisit)\n' +
         '• 🎯 Mengecek batas anggaran bulanan (budget)\n' +
+        '• 🏆 Memantau progres target tabungan & impian\n' +
+        '• 🔁 Mengingatkan jadwal transaksi berulang & tagihan rutin\n' +
         '• 📝 Melihat riwayat transaksi terakhir\n' +
         '• 💡 Memberikan tips dan strategi berhemat\n\n' +
         'Data catatanmu tetap aman di browsermu. Ada yang ingin kamu tanyakan atau periksa hari ini?',
-      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Kategori apa yang paling banyak pengeluarannya?', 'Apakah anggaran bulananku masih aman?']
+      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Bagaimana progres target tabunganku?', 'Apakah anggaran bulananku masih aman?']
     };
   }
 
@@ -10431,8 +10478,8 @@ function jawabFinansialLokal(pertanyaan, context) {
   const isSapaan = /^(halo|hai|hey|hei|pagi|siang|sore|malam|assalamualaikum|tes|ping)\b/i.test(q);
   if (isSapaan) {
     return {
-      reply: '👋 Halo! Senang bertemu denganmu. Saya siap membantumu mengecek saldo dompet, ringkasan pengeluaran, anggaran, atau riwayat transaksimu saat ini.\n\nMau mulai cek apa hari ini?',
-      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Berapa total pengeluaran 30 hari terakhir?', 'Kategori apa yang paling boros?']
+      reply: '👋 Halo! Senang bertemu denganmu. Saya siap membantumu mengecek saldo dompet, ringkasan pengeluaran, anggaran, target tabungan, atau riwayat transaksimu saat ini.\n\nMau mulai cek apa hari ini?',
+      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Bagaimana progres target tabunganku?', 'Ada transaksi berulang apa saja?']
     };
   }
 
@@ -10446,11 +10493,13 @@ function jawabFinansialLokal(pertanyaan, context) {
         '3. **Kategori Boros**: *"Kategori apa yang paling boros?"*\n' +
         '4. **Pemasukan**: *"Berapa total pemasukan 30 hari?"*\n' +
         '5. **Anggaran**: *"Apakah anggaranku masih aman?"*\n' +
-        '6. **Riwayat**: *"Tampilkan transaksi terakhirku"*\n' +
-        '7. **Tips Hemat**: *"Beri tips berhemat"*\n' +
-        '8. **Navigasi Catat**: *"Catat pengeluaran baru"*\n\n' +
+        '6. **Target Tabungan**: *"Bagaimana progres target tabunganku?"*\n' +
+        '7. **Transaksi Berulang**: *"Ada tagihan rutin apa saja?"*\n' +
+        '8. **Riwayat**: *"Tampilkan transaksi terakhirku"*\n' +
+        '9. **Tips Hemat**: *"Beri tips berhemat"*\n' +
+        '10. **Navigasi Catat**: *"Catat pengeluaran baru"*\n\n' +
         'Silakan ketik pertanyaanmu atau pilih tombol pintasan di bawah!',
-      followUpSuggestions: ['Berapa total pengeluaranku?', 'Kategori apa yang paling boros?', 'Beri tips berhemat']
+      followUpSuggestions: ['Berapa total pengeluaranku?', 'Bagaimana progres target tabunganku?', 'Beri tips berhemat']
     };
   }
 
@@ -10707,6 +10756,83 @@ function jawabFinansialLokal(pertanyaan, context) {
     return {
       reply: '🎯 Status Batas Anggaran (Budget):\n\n' + rincianB,
       followUpSuggestions: ['Berapa total pengeluaran bulan ini?', 'Berapa sisa saldo di semua dompetku?', 'Tampilkan transaksi terbaru']
+    };
+  }
+
+  // 11.2. Tanya Target Tabungan / Wishlist / Impian
+  const isTanyaTarget = /\b(target\s*tabungan|tabungan(?:ku)?|target(?:ku)?|wishlist|impian|nabung|progres\s*tabungan|sisa\s*target)\b/i.test(q) &&
+    !/\b(catat|tambah\s*target|buat\s*target|hapus\s*target)\b/i.test(q);
+  if (isTanyaTarget) {
+    if (!targets.length) {
+      return {
+        reply: '🏆 Kamu belum memiliki target tabungan yang aktif.\n\nKamu dapat menambahkan target tabungan baru (seperti Beli Laptop, Dana Darurat, Liburan) melalui menu **Rencana → Target Tabungan**.',
+        followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Apakah anggaranku masih aman?']
+      };
+    }
+    const rincianT = targets.map(t => {
+      const statusIcon = t.achieved ? '🎉 Tercapai' : (t.percent >= 75 ? '🔥 Hampir Tercapai' : '⏳ Berjalan');
+      let txt = '  • **' + t.name + '**: ' + rp(t.collected) + ' dari target ' + rp(t.target) + ' (' + t.percent + '% - ' + statusIcon + ')';
+      if (!t.achieved) {
+        txt += '\n    Kekurangan: ' + rp(t.remaining);
+        if (t.deadline) {
+          txt += '\n    Tenggat: ' + (typeof tglIndo === 'function' ? tglIndo(t.deadline) : t.deadline);
+          if (t.daysLeft !== null) {
+            if (t.daysLeft <= 0) {
+              txt += ' (⚠️ Tenggat sudah lewat)';
+            } else {
+              txt += ' (sisa ' + t.daysLeft + ' hari' + (t.weeklyDeposit ? ', setor ~' + rp(t.weeklyDeposit) + '/minggu' : '') + ')';
+            }
+          }
+        }
+      }
+      return txt;
+    }).join('\n\n');
+
+    const totalTerkumpul = targets.reduce((s, x) => s + (x.collected || 0), 0);
+    const totalTarget = targets.reduce((s, x) => s + (x.target || 0), 0);
+    const totalPersen = totalTarget > 0 ? Math.round((totalTerkumpul / totalTarget) * 100) : 0;
+
+    return {
+      reply: '🏆 **Status Progres Target Tabungan:**\n\n' + rincianT + '\n\n' +
+        '📊 **Total Terkumpul**: ' + rp(totalTerkumpul) + ' dari total ' + rp(totalTarget) + ' (' + totalPersen + '%).\n' +
+        '💡 Kamu bisa menyetor tabungan langsung dari halaman Target Tabungan.',
+      followUpSuggestions: ['Ada transaksi berulang apa saja?', 'Apakah anggaranku masih aman?', 'Berapa sisa saldo di semua dompetku?']
+    };
+  }
+
+  // 11.4. Tanya Transaksi Berulang / Rutin
+  const isTanyaBerulang = /\b(transaksi\s*berulang|berulang|rutin|tagihan\s*rutin|langganan|pengeluaran\s*tetap|pemasukan\s*rutin|komitmen\s*rutin)\b/i.test(q);
+  if (isTanyaBerulang) {
+    if (!recurring.length) {
+      return {
+        reply: '🔁 Kamu belum mendaftarkan transaksi berulang.\n\nKamu dapat mencatat transaksi rutin (seperti tagihan WiFi, kos, langganan aplikasi, atau gaji bulanan) melalui menu **Rencana → Transaksi Berulang**.',
+        followUpSuggestions: ['Bagaimana progres target tabunganku?', 'Berapa sisa saldo di semua dompetku?']
+      };
+    }
+    const rincianR = recurring.map(r => {
+      const tanda = r.type === 'masuk' ? '🟢 (+)' : '🔴 (-)';
+      const periodeLabel = r.period === 'minggu' ? 'Setiap minggu' : 'Setiap bulan';
+      return '  • ' + tanda + ' **' + r.name + '** (' + r.category + '): ' + rp(r.amount) + ' (' + periodeLabel + ')\n    Mulai: ' + (typeof tglIndo === 'function' && r.startDate ? tglIndo(r.startDate) : r.startDate);
+    }).join('\n\n');
+
+    const bebanPengeluaranBulanan = recurring
+      .filter(r => r.type === 'keluar')
+      .reduce((s, r) => s + (r.period === 'minggu' ? r.amount * 4 : r.amount), 0);
+
+    const pemasukanBulanan = recurring
+      .filter(r => r.type === 'masuk')
+      .reduce((s, r) => s + (r.period === 'minggu' ? r.amount * 4 : r.amount), 0);
+
+    let summaryText = '🔁 **Daftar Transaksi Berulang / Rutin:**\n\n' + rincianR;
+    if (bebanPengeluaranBulanan > 0 || pemasukanBulanan > 0) {
+      summaryText += '\n\n📌 **Estimasi Komitmen Rutin Bulanan**:';
+      if (bebanPengeluaranBulanan > 0) summaryText += '\n  • Pengeluaran Rutin: ' + rp(bebanPengeluaranBulanan) + ' / bulan';
+      if (pemasukanBulanan > 0) summaryText += '\n  • Pemasukan Rutin: ' + rp(pemasukanBulanan) + ' / bulan';
+    }
+
+    return {
+      reply: summaryText,
+      followUpSuggestions: ['Bagaimana progres target tabunganku?', 'Apakah anggaranku masih aman?', 'Berapa sisa saldo di semua dompetku?']
     };
   }
 
@@ -11076,19 +11202,35 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
     ? context.wallets.map(w => w.name + ': ' + rp(w.balance)).join(', ')
     : 'Belum ada dompet aktif';
 
+  const budgetsStr = context.budgets && context.budgets.length
+    ? context.budgets.map(b => `${b.category} (${b.period}): ${rp(b.spent)} dari ${rp(b.limit)} [sisa ${rp(b.remaining)}]`).join(', ')
+    : 'Belum ada batas anggaran';
+
+  const targetsStr = context.targets && context.targets.length
+    ? context.targets.map(t => `${t.name}: target ${rp(t.target)}, terkumpul ${rp(t.collected)} (${t.percent}%${t.achieved ? ' - Tercapai' : ' - kurang ' + rp(t.remaining)})${t.deadline ? ', tenggat ' + t.deadline : ''}`).join('; ')
+    : 'Belum ada target tabungan';
+
+  const recurringStr = context.recurring && context.recurring.length
+    ? context.recurring.map(r => `${r.name} (${r.type}, ${r.period}): ${rp(r.amount)} [kategori ${r.category}]`).join('; ')
+    : 'Belum ada transaksi berulang';
+
   const systemInstruction = 'Kamu adalah Asisten AI pribadi yang ramah, santun, cerdas, dan bijak di aplikasi Catatan Keuangan.\n\n' +
     'Data ringkasan keuangan pengguna saat ini:\n' +
     '• Total Saldo: ' + rp(context.balance) + ' (Kas Tunai: ' + rp(context.cashBalance) + ')\n' +
     '• Dompet / Rekening: ' + walletsStr + '\n' +
     '• Pengeluaran 30 hari: ' + rp(context.summary30d.expense) + '\n' +
     '• Pemasukan 30 hari: ' + rp(context.summary30d.income) + ' (Net: ' + rp(context.summary30d.net) + ')\n' +
-    '• Kategori Terbesar: ' + (context.topCategories.map(c => c.category + ': ' + rp(c.amount)).join(', ') || 'Belum ada data') + '\n\n' +
+    '• Kategori Terbesar: ' + (context.topCategories.map(c => c.category + ': ' + rp(c.amount)).join(', ') || 'Belum ada data') + '\n' +
+    '• Batas Anggaran: ' + budgetsStr + '\n' +
+    '• Target Tabungan: ' + targetsStr + '\n' +
+    '• Transaksi Berulang: ' + recurringStr + '\n\n' +
     'Instruksi:\n' +
     '1. Jawab pertanyaan pengguna dalam bahasa Indonesia yang ramah, terstruktur, dan nyaman dibaca di layar HP.\n' +
     '2. Jika pengguna menanyakan kondisi keuangan atau membuat simulasi (contoh: "Aku dikasih uang 500k bisa bertahan berapa hari?"), hitung rata-rata pengeluaran harian pengguna (Pengeluaran 30 hari ÷ 30) lalu proyeksikan berapa hari uang tersebut dapat mencukupi dan berikan saran hemat yang bersahabat.\n' +
-    '3. Jika pengguna menanyakan pertanyaan bebas, umum, atau edukatif (seperti sains, cerita, sejarah, resep, coding, saran hidup, teka-teki, dll.), jawab dengan wawasan luas, antusias, dan akurat!\n' +
-    '4. Jangan gunakan markdown yang berlebihan, gunakan poin-poin yang mudah dipahami.\n' +
-    '5. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran...", "dapat uang..."), berikan kalimat konfirmasi ramah dan selalu sertakan blok JSON di akhir jawabanmu dengan format persis:\n' +
+    '3. Jika pengguna menanyakan batas anggaran, target tabungan, atau transaksi berulang / tagihan rutin, berikan analisis progres, sisa limit / kekurangan, dan saran alokasi yang tepat dan bersahabat.\n' +
+    '4. Jika pengguna menanyakan pertanyaan bebas, umum, atau edukatif (seperti sains, cerita, sejarah, resep, coding, saran hidup, teka-teki, dll.), jawab dengan wawasan luas, antusias, dan akurat!\n' +
+    '5. Jangan gunakan markdown yang berlebihan, gunakan poin-poin yang mudah dipahami.\n' +
+    '6. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran...", "dapat uang..."), berikan kalimat konfirmasi ramah dan selalu sertakan blok JSON di akhir jawabanmu dengan format persis:\n' +
     '```json:transactions\n' +
     '[\n' +
     '  {\n' +

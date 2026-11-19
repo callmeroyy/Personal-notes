@@ -303,4 +303,62 @@ assert.ok(topAiEl, 'Elemen btnTopAiChat harus ada di DOM');
 const sideAiEl = run("document.getElementById('btnSideAiChat')");
 assert.ok(sideAiEl, 'Elemen btnSideAiChat harus ada di DOM');
 
-console.log('Semua pengujian unit draf AI dan E-wallet DANA BERHASIL!');
+// Test 13: Verifikasi Akses AI ke Target Tabungan & Transaksi Berulang di Konteks
+console.log('Testing AI Context for Savings Targets and Recurring Transactions...');
+run(`
+db.wishlist = [
+  { id: 'w-1', nama: 'Beli Laptop', target: 10000000, tenggat: '2026-12-31' },
+  { id: 'w-2', nama: 'Liburan Akhir Tahun', target: 3000000, tenggat: '' }
+];
+db.transaksi.push({
+  id: 'trx-tab-1',
+  tanggal: '2026-11-15',
+  tipe: 'keluar',
+  kategori: 'Tabungan',
+  total: 4000000,
+  wishId: 'w-1',
+  status: 'aktif',
+  cara: 'nontunai'
+});
+db.berulang = [
+  { id: 'r-1', nama: 'Tagihan WiFi Indihome', tipe: 'keluar', kategori: 'Tagihan', qty: 1, harga: 350000, periode: 'bulan', mulai: '2026-01-01' },
+  { id: 'r-2', nama: 'Tabungan Rutin Mingguan', tipe: 'keluar', kategori: 'Tabungan', qty: 1, harga: 50000, periode: 'minggu', mulai: '2026-01-01' },
+  { id: 'r-3', nama: 'Gaji Kantor', tipe: 'masuk', kategori: 'Gaji', qty: 1, harga: 8000000, periode: 'bulan', mulai: '2026-01-01' }
+];
+`);
+
+const ctxBaru = run("siapkanKonteksAiChat()");
+assert.ok(Array.isArray(ctxBaru.targets), 'Konteks AI harus berisi array targets');
+assert.equal(ctxBaru.targets.length, 2, 'Jumlah targets harus 2');
+const targetLaptop = ctxBaru.targets.find(t => t.name === 'Beli Laptop');
+assert.ok(targetLaptop, 'Target Beli Laptop harus ada di konteks');
+assert.equal(targetLaptop.target, 10000000, 'Target laptop harus 10.000.000');
+assert.equal(targetLaptop.collected, 4000000, 'Terkumpul harus 4.000.000 dari transaksi');
+assert.equal(targetLaptop.remaining, 6000000, 'Sisa kekurangan harus 6.000.000');
+assert.equal(targetLaptop.percent, 40, 'Persentase harus 40%');
+
+assert.ok(Array.isArray(ctxBaru.recurring), 'Konteks AI harus berisi array recurring');
+assert.equal(ctxBaru.recurring.length, 3, 'Jumlah recurring harus 3');
+const recWifi = ctxBaru.recurring.find(r => r.name.includes('WiFi'));
+assert.ok(recWifi, 'Tagihan WiFi harus ada di recurring');
+assert.equal(recWifi.amount, 350000, 'Nominal tagihan WiFi harus 350.000');
+assert.equal(recWifi.period, 'bulan', 'Periode WiFi harus bulanan');
+
+// Test 14: AI Assistant merespons pertanyaan tentang Target Tabungan & Transaksi Berulang
+console.log('Testing AI Assistant Queries for Targets and Recurring Transactions...');
+const respTarget = run("jawabFinansialLokal('bagaimana progres target tabunganku?', siapkanKonteksAiChat())");
+assert.ok(respTarget, 'AI harus merespons pertanyaan target tabungan');
+assert.match(respTarget.reply, /Target Tabungan/i, 'Balasan harus menyebut Target Tabungan');
+assert.match(respTarget.reply, /Beli Laptop/i, 'Balasan harus mencantumkan Beli Laptop');
+assert.match(respTarget.reply, /40%/, 'Balasan harus mencantumkan persentase 40%');
+assert.match(respTarget.reply, /6\.000\.000/, 'Balasan harus mencantumkan sisa kekurangan 6jt');
+
+const respBerulang = run("jawabFinansialLokal('ada tagihan rutin apa saja?', siapkanKonteksAiChat())");
+assert.ok(respBerulang, 'AI harus merespons pertanyaan transaksi berulang');
+assert.match(respBerulang.reply, /Transaksi Berulang/i, 'Balasan harus menyebut Transaksi Berulang');
+assert.match(respBerulang.reply, /WiFi Indihome/i, 'Balasan harus mencantumkan Tagihan WiFi');
+assert.match(respBerulang.reply, /350\.000/, 'Balasan harus mencantumkan nominal WiFi');
+assert.match(respBerulang.reply, /Gaji Kantor/i, 'Balasan harus mencantumkan pemasukan rutin');
+assert.match(respBerulang.reply, /Estimasi Komitmen Rutin Bulanan/i, 'Balasan harus menghitung estimasi komitmen bulanan');
+
+console.log('Semua pengujian unit draf AI, E-wallet DANA, Target Tabungan, dan Transaksi Berulang BERHASIL!');
