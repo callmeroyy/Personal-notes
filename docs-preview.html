@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Buku Panduan & Dokumentasi Lengkap Aplikasi Catatan Keuangan PWA & AI</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 11mm 13mm 11mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      line-height: 1.42;
+      font-size: 9.2pt;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page-break {
+      page-break-after: always;
+      break-after: page;
+    }
+
+    /* Header Banner */
+    .header-banner {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 42%, #312e81 100%);
+      color: #ffffff;
+      padding: 20px 22px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 7.5pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    .header-banner h1 {
+      margin: 0 0 4px 0;
+      font-size: 20pt;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+    .header-banner p {
+      margin: 0;
+      font-size: 9.5pt;
+      color: #e0e7ff;
+      line-height: 1.38;
+    }
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 7.8pt;
+      color: #c7d2fe;
+    }
+
+    /* Section Styling */
+    .section {
+      margin-bottom: 12px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5pt;
+      font-weight: 800;
+      color: #0f172a;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-bottom: 7px;
+      letter-spacing: -0.02em;
+    }
+    .section-num {
+      background: #4338ca;
+      color: #ffffff;
+      width: 19px;
+      height: 19px;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7.8pt;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 7px 0;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 7px;
+      margin: 7px 0;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5.5px;
+      margin: 5px 0;
+    }
+
+    /* Cards */
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 10px;
+      page-break-inside: avoid;
+    }
+    .card-title {
+      font-weight: 750;
+      font-size: 8.8pt;
+      color: #0f172a;
+      margin-bottom: 2.5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .card-desc {
+      font-size: 7.8pt;
+      color: #475569;
+      line-height: 1.32;
+      margin: 0;
+    }
+
+    /* Flow Diagram Styles */
+    .flow-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 7.5px;
+      padding: 6.5px 8.5px;
+      margin-bottom: 6.5px;
+      page-break-inside: avoid;
+    }
+    .flow-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4.5px;
+      padding-bottom: 3px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .flow-title {
+      font-weight: 800;
+      font-size: 8.5pt;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .flow-badge {
+      font-size: 6.6pt;
+      font-weight: 750;
+      background: #e0e7ff;
+      color: #4338ca;
+      padding: 1.2px 5.5px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .flow-steps {
+      display: flex;
+      align-items: stretch;
+      gap: 4px;
+    }
+    .flow-step-box {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 5.5px;
+      padding: 5px 6px;
+      font-size: 7.1pt;
+      line-height: 1.27;
+    }
+    .flow-step-num {
+      font-weight: 800;
+      font-size: 6.6pt;
+      color: #4338ca;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .flow-step-text {
+      color: #334155;
+    }
+    .flow-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-weight: 800;
+      font-size: 8pt;
+      flex-shrink: 0;
+    }
+
+    /* Theme Item in Catalog */
+    .theme-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6.5px;
+      padding: 5.5px 7px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      page-break-inside: avoid;
+    }
+    .theme-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+    .theme-name {
+      font-weight: 800;
+      font-size: 7.8pt;
+      color: #1e1b4b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .theme-dots {
+      display: flex;
+      gap: 2.5px;
+      flex-shrink: 0;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      border: 0.5px solid rgba(0,0,0,0.12);
+      display: inline-block;
+    }
+    .theme-desc {
+      font-size: 7pt;
+      color: #475569;
+      line-height: 1.24;
+      margin: 0 0 2.5px;
+      min-height: 25px;
+    }
+    .theme-vibe {
+      font-size: 6.6pt;
+      font-weight: 600;
+      color: #4338ca;
+      background: #eef2ff;
+      padding: 1.2px 4.5px;
+      border-radius: 3px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    /* Callouts */
+    .callout {
+      border-left: 3.5px solid #4f46e5;
+      background: #f5f3ff;
+      padding: 7px 10px;
+      border-radius: 0 6px 6px 0;
+      margin: 7px 0;
+      font-size: 8pt;
+      color: #312e81;
+      line-height: 1.38;
+    }
+    .callout-success {
+      border-left-color: #16a34a;
+      background: #f0fdf4;
+      color: #14532d;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 5px 0;
+      font-size: 8pt;
+      page-break-inside: avoid;
+    }
+    th, td {
+      padding: 5px 7.5px;
+      border: 1px solid #cbd5e1;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f1f5f9;
+      font-weight: 750;
+      color: #0f172a;
+    }
+    tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.3pt;
+      background: #e2e8f0;
+      padding: 1px 3px;
+      border-radius: 3px;
+      color: #0f172a;
+    }
+
+    .footer-doc {
+      text-align: center;
+      font-size: 7pt;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 5px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HALAMAN 1: IDENTITAS & PILAR ARSITEKTUR ==================== -->
+  <div class="header-banner">
+    <div class="header-badge">Ensiklopedi Resmi & Buku Panduan Lengkap</div>
+    <h1>Catatan Keuangan PWA & AI</h1>
+    <p>Aplikasi Web Progresif Manajemen Finansial Pribadi: 100% Offline-First, Kedaulatan Data Lokal Penuh, Dual-Engine AI, dan 23 Koleksi Gaya Tema Visual.</p>
+    <div class="header-meta">
+      <span><strong>Pengembang:</strong> Personal Notes Project</span>
+      <span><strong>Arsitektur:</strong> SPA Vanilla JS (Zero-Dependency)</span>
+      <span><strong>Skema Data:</strong> v4 (Enterprise PWA)</span>
+      <span><strong>Verifikasi:</strong> 14/14 Automated Test Suite Lolos (DOM, Storage, PWA)</span>
+      <span><strong>Rilis:</strong> November 2026</span>
+    </div>
+  </div>
+
+  <!-- BAGIAN 1: 4 PILAR ARSITEKTUR OFFLINE-FIRST -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-num">1</span>
+      <span>4 Pilar Arsitektur Offline-First PWA</span>
+    </div>
+    <p style="margin:0 0 7px 0; font-size:8.6pt; color:#334155;">
+      <strong>Catatan Keuangan</strong> dirancang untuk menjamin privasi absolut bagi pengguna tanpa keharusan membuat akun di server eksternal, bebas iklan komersial, dan sepenuhnya beroperasi di perangkat lokal berdasarkan 4 pilar arsitektur:
+    </p>
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-title">🔒 Kedaulatan Data</div>
+        <p class="card-desc">Bebas akun server & tanpa tracking. Data tersimpan 100% di browser pengguna melalui IndexedDB & LocalStorage privat.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">⚡ Offline-First Sejati</div>
+        <p class="card-desc">Didukung Service Worker & Cache Storage API. Dapat diinstal di Android/iOS/PC dan berfungsi penuh tanpa kuota/internet.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">🚀 Performa Ringan</div>
+        <p class="card-desc">Dibangun tanpa framework berat (Zero Heavy Bundles). Aset statis lokal dicache seketika untuk pemuatan instan.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">☁️ Backup Mandiri</div>
+        <p class="card-desc">Sinkronisasi otomatis ke Google Drive pribadi pengguna melalui OAuth 2.0 PKCE tanpa perantara server backend.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BAGIAN 2: SPESIFIKASI TEKNIS & LINGKUNGAN EKSEKUSI -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-num">2</span>
+      <span>Spesifikasi Teknis & Lingkungan Eksekusi Peramban</span>
+    </div>
+    <p style="margin:0 0 6px 0; font-size:8.5pt; color:#334155;">
+      Aplikasi ini mengintegrasikan seluruh instrumen keuangan pribadi sehari-hari dalam satu layar terpadu tanpa ketergantungan runtime luar:
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:24%;">Komponen Sistem</th>
+          <th style="width:40%;">Teknologi & Standar Web</th>
+          <th style="width:36%;">Perilaku Penyimpanan & Runtime</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Database Transaksi</strong></td>
+          <td>IndexedDB (Store: <code>transaksi</code>, <code>dompet</code>, <code>wishlist</code>, <code>berulang</code>)</td>
+          <td>Persistensi lokal terproteksi via <code>navigator.storage.persist()</code> agar tidak dihapus otomatis saat memori minim.</td>
+        </tr>
+        <tr>
+          <td><strong>PWA Service Worker</strong></td>
+          <td>Cache Storage API (Strategi Cache-First dengan fallback aman)</td>
+          <td>Aset HTML, CSS, font, dan JavaScript disimpan lokal untuk akses instan seketika dalam kondisi offline.</td>
+        </tr>
+        <tr>
+          <td><strong>Dual-Engine AI</strong></td>
+          <td>Local Regex/NLP Parser + Dynamic Google Gemini REST API</td>
+          <td>Mode offline 100% lokal; mode online via API Key pribadi pengguna (BYOK) dengan hanya data agregat yang dikirim.</td>
+        </tr>
+        <tr>
+          <td><strong>Cloud Sync & Backup</strong></td>
+          <td>Google Drive REST API via Standar OAuth 2.0 PKCE</td>
+          <td>Koneksi langsung dari peramban ke akun Google Drive pribadi pengguna dengan format JSON terstruktur skema v4.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout" style="margin-top:6px;">
+      <strong>Zero Tracking & Zero Ads:</strong> Bebas skrip analitik pelacak, tanpa cookie pihak ketiga, dan tanpa iklan pihak ketiga. Seluruh pembukuan keuangan adalah milik pribadi pengguna sepenuhnya.
+    </div>
+  </div>
+
+  <div class="footer-doc">Halaman 1 dari 6 • Dokumentasi Resmi Catatan Keuangan PWA & AI</div>
+  <div class="page-break"></div>
+
+  <!-- ==================== HALAMAN 2: 7 MODUL FITUR FINANSIAL UTAMA ==================== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-num">3</span>
+      <span>7 Modul Fitur Finansial Utama</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:22%;">Modul Fitur</th>
+          <th style="width:48%;">Fungsi & Kapabilitas Sistem</th>
+          <th style="width:30%;">Keunggulan Khusus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Smart Input & Voice (Mikrofon)</strong></td>
+          <td>Pencatatan ekspres berbasis teks bebas atau pengenalan suara (Web Speech API). Parser NLP lokal otomatis mendeteksi nominal angka (<code>25k</code>, <code>50rb</code>, <code>1.5jt</code>), kategori pengeluaran, tanggal, dan metode bayar.</td>
+          <td>Pemrosesan instan di peramban tanpa jeda server. Terdapat tombol mikrofon untuk input suara hands-free.</td>
+        </tr>
+        <tr>
+          <td><strong>Multi-Dompet & Rekening</strong></td>
+          <td>Pemisahan saldo antara <strong>Kas Tunai Fisik</strong>, <strong>Rekening Bank</strong> (BCA, Mandiri, BRI, BNI, Jago, SeaBank, dll.), dan <strong>E-Wallet</strong> (DANA, GoPay, OVO, ShopeePay, LinkAja).</td>
+          <td>Kalkulator stok lembaran fisik uang kertas (Rp 1.000 s/d Rp 100.000) dan mutasi transfer antar dompet dengan biaya admin. Mendukung opsi saldo minus untuk PayLater/Kartu Kredit.</td>
+        </tr>
+        <tr>
+          <td><strong>Target Tabungan (Wishlist)</strong></td>
+          <td>Perencanaan impian atau dana darurat (laptop, liburan, investasi). Menghitung nominal target, akumulasi setoran terkumpul, kekurangan dana, persentase progres, dan sisa hari tenggat.</td>
+          <td>Rekomendasi setoran mingguan otomatis agar target dapat tercapai tepat waktu sebelum tanggal tenggat.</td>
+        </tr>
+        <tr>
+          <td><strong>Transaksi Berulang (Recurring)</strong></td>
+          <td>Jadwal otomatis transaksi rutin (sewa kos, tagihan WiFi, cicilan, langganan aplikasi digital, maupun pemasukan gaji rutin) secara mingguan atau bulanan.</td>
+          <td>Kalkulasi total estimasi beban pengeluaran rutin bulanan vs pemasukan rutin serta logika catch-up otomatis untuk jadwal yang terlewat.</td>
+        </tr>
+        <tr>
+          <td><strong>Batas Anggaran (Budget)</strong></td>
+          <td>Penetapan batas pengeluaran per kategori secara fleksibel (mingguan atau bulanan) dengan pengawasan kuota sisa limit secara real-time.</td>
+          <td>Tiga indikator visual: 🟢 <strong>Aman</strong> (&lt;80%), 🟡 <strong>Waspada</strong> (≥80%), dan 🔴 <strong>Overbudget</strong> (≥100%).</td>
+        </tr>
+        <tr>
+          <td><strong>Keranjang & OCR Scan Struk</strong></td>
+          <td>Pencatatan nota belanja terperinci multi-item lengkap dengan kuantitas, harga satuan, dan diskon. Mendukung lampiran foto struk fisik dan scanner OCR.</td>
+          <td>Perhitungan subtotal akurat, memudahkan verifikasi belanjaan pasar atau supermarket tanpa selisih sepeser pun.</td>
+        </tr>
+        <tr>
+          <td><strong>Laporan & Grafik Dwi-Seri</strong></td>
+          <td>Visualisasi arus kas dwi-seri (saldo tunai vs saldo e-wallet/bank), diagram lingkaran distribusi pengeluaran, serta analisis tren 30 hari terakhir.</td>
+          <td>Filter rentang tanggal kustom dan ekspor data ke format CSV laporan untuk Excel/Spreadsheet.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout callout-success" style="margin-top:7px;">
+      <strong>Penyimpanan Persisten Otomatis:</strong> Aplikasi memanggil API modern <code>navigator.storage.persist()</code> saat inisialisasi awal untuk meminta perlindungan penyimpanan dari browser, mencegah data riwayat terhapus saat memori perangkat penuh.
+    </div>
+  </div>
+
+  <div class="footer-doc">Halaman 2 dari 6 • Dokumentasi Resmi Catatan Keuangan PWA & AI</div>
+  <div class="page-break"></div>
+
+  <!-- ==================== HALAMAN 3: DIAGRAM ALUR KERJA (FLOW) FITUR FINANSIAL ==================== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-num">4</span>
+      <span>Diagram Alur Kerja (User Flow & Workflow) Fitur Finansial Inti</span>
+    </div>
+    <p style="margin:0 0 6px 0; font-size:8.4pt; color:#475569;">
+      Setiap modul finansial dioperasikan melalui alur kerja deterministik yang menjamin akurasi mutasi saldo, validasi kuota batas anggaran, serta sinkronisasi visual secara seketika (real-time).
+    </p>
+
+    <!-- FLOW 1: TRANSAKSI CEPAT & SMART INPUT -->
+    <div class="flow-card">
+      <div class="flow-header">
+        <div class="flow-title"><span>📝 Flow 1: Siklus Pencatatan Transaksi Cepat & Smart Voice</span></div>
+        <span class="flow-badge">Pencatatan Transaksi</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>01</span> INPUT PENGGUNA</div>
+          <div class="flow-step-text">Ketik teks santai (<em>"Kopi 25k BCA"</em>), tekan tombol mikrofon suara, atau buka form manual / mode keranjang belanja multi-item.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>02</span> PARSER NLP LOKAL</div>
+          <div class="flow-step-text">Algoritma teks mengekstrak tipe (Pengeluaran/Pemasukan), nominal angka (k/rb/jt), kategori belanja, dompet sumber, dan tanggal transaksi.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>03</span> VALIDASI SALDO</div>
+          <div class="flow-step-text">Sistem memverifikasi saldo dompet (kecuali dompet yang diizinkan bersaldo minus seperti PayLater) dan format input.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>04</span> EKSEKUSI & REFRESH</div>
+          <div class="flow-step-text">Catatan disimpan ke IndexedDB, saldo dompet termutasi seketika, kuota batas anggaran terpotong, grafik arus kas terupdate.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW 2: MULTI-DOMPET & TRANSFER -->
+    <div class="flow-card">
+      <div class="flow-header">
+        <div class="flow-title"><span>💼 Flow 2: Manajemen Multi-Dompet, Kas Fisik & Mutasi Transfer</span></div>
+        <span class="flow-badge">Saldo & Rekening</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>01</span> SETUP DOMPET</div>
+          <div class="flow-step-text">Tambahkan akun rekening Bank (BCA/Mandiri/Jago), E-Wallet (DANA/GoPay), atau Kas Fisik. Tersedia opsi izin saldo minus (PayLater).</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>02</span> OPNAME FISIK KAS</div>
+          <div class="flow-step-text">Pengguna mengisi jumlah fisik lembaran uang kertas (Rp 1k s/d 100k) pada kalkulator fisik untuk mencocokkan uang di dompet riil.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>03</span> FORM TRANSFER</div>
+          <div class="flow-step-text">Pilih akun asal, akun tujuan, nominal transfer, serta biaya administrasi transfer antar-bank jika diberlakukan.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>04</span> MUTASI GANDA</div>
+          <div class="flow-step-text">Saldo asal berkurang <code>(nominal + biaya)</code>, saldo tujuan bertambah <code>(nominal)</code>, riwayat transfer tercatat rapi.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW 3: BATAS ANGGARAN (BUDGETING) -->
+    <div class="flow-card">
+      <div class="flow-header">
+        <div class="flow-title"><span>🎯 Flow 3: Pemantauan Batas Anggaran & Ambang Batas Otomatis</span></div>
+        <span class="flow-badge">Batas Anggaran</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>01</span> PENETAPAN LIMIT</div>
+          <div class="flow-step-text">Pilih kategori pengeluaran (misal: <em>Makanan</em>) dan tentukan kuota batas nominal (misal: Rp 1.500.000 / bulan).</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>02</span> TRACKING OTOMATIS</div>
+          <div class="flow-step-text">Setiap transaksi pengeluaran baru pada kategori tersebut secara otomatis diakumulasikan ke total pemakaian periode.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>03</span> AMBANG BATAS SISTEM</div>
+          <div class="flow-step-text">Sistem mengevaluasi rasio: 🟢 <strong>Aman</strong> (&lt;80%), 🟡 <strong>Waspada</strong> (80-99%), atau 🔴 <strong>Overbudget</strong> (≥100%).</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>04</span> PERINGATAN & TIPS AI</div>
+          <div class="flow-step-text">Progress bar berubah warna real-time dan asisten AI langsung memberikan peringatan serta saran penghematan taktis.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW 4: TARGET TABUNGAN (WISHLIST) -->
+    <div class="flow-card">
+      <div class="flow-header">
+        <div class="flow-title"><span>🏆 Flow 4: Perencanaan Target Tabungan & Rekomendasi Setoran</span></div>
+        <span class="flow-badge">Target Impian</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>01</span> BUAT TARGET</div>
+          <div class="flow-step-text">Masukkan nama impian (misal: <em>Laptop Kerja</em>), nominal target (Rp 15.000.000), dan batas tanggal tenggat (deadline).</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>02</span> SETORAN BERTAHAP</div>
+          <div class="flow-step-text">Pengguna menyisihkan tabungan berkala melalui tombol <strong>Setor</strong> dari saldo rekening aktif yang dimiliki.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>03</span> KALKULASI MINGGUAN</div>
+          <div class="flow-step-text">Sistem menghitung persentase progres, sisa hari, dan otomatis merekomendasikan: <code>sisa_dana / sisa_minggu</code>.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>04</span> TARGET TERCAPAI</div>
+          <div class="flow-step-text">Ketika dana 100% terkumpul, status berubah menjadi <em>Tercapai</em> 🎉 dan dana impian siap dialokasikan untuk belanja.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW 5: TRANSAKSI BERULANG (RECURRING) -->
+    <div class="flow-card">
+      <div class="flow-header">
+        <div class="flow-title"><span>🔄 Flow 5: Otomasi Tagihan Rutin & Transaksi Berulang</span></div>
+        <span class="flow-badge">Jadwal Rutin</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>01</span> DAFTARKAN TAGIHAN</div>
+          <div class="flow-step-text">Daftarkan tagihan rutin (WiFi Rp 350k, Kos Rp 1.2jt, Spotify Rp 55k) atau pemasukan berkala (Gaji Bulanan).</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>02</span> ATUR SIKLUS WAKTU</div>
+          <div class="flow-step-text">Tentukan interval perulangan (Harian, Mingguan, Bulanan, Tahunan) dan tanggal jatuh tempo pembayaran berikutnya.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>03</span> DETEKSI JATUH TEMPO</div>
+          <div class="flow-step-text">Saat aplikasi dibuka, mesin memeriksa tanggal sistem terhadap jadwal jatuh tempo serta mendeteksi jadwal yang terlewat.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>04</span> PROYEKSI & KOMITMEN</div>
+          <div class="flow-step-text">Transaksi tercatat ke riwayat pembukuan dan total komitmen rutin bulanan tersaji transparan di analitik AI.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-success" style="margin-top:6px;">
+      <strong>Keandalan Logika Finansial & Catch-Up Jadwal:</strong> Seluruh mutasi dwi-entri dieksekusi secara atomik di IndexedDB. Transaksi berulang mengimplementasikan logika <em>catch-up</em> otomatis: jika aplikasi tidak dibuka selama beberapa hari melewati tanggal jatuh tempo, sistem mendeteksi selisih hari dan memunculkan transaksi yang terlewat untuk dicatat secara utuh tanpa ada tagihan yang hilang.
+    </div>
+  </div>
+
+  <div class="footer-doc">Halaman 3 dari 6 • Dokumentasi Resmi Catatan Keuangan PWA & AI</div>
+  <div class="page-break"></div>
+
+  <!-- ==================== HALAMAN 4: FLOW AI, CLOUD & PERSONALISASI ==================== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-num">5</span>
+      <span>Diagram Alur Kerja Asisten AI, Cloud Sync & Personalisasi</span>
+    </div>
+    <p style="margin:0 0 6px 0; font-size:8.4pt; color:#475569;">
+      Alur kerja kecerdasan buatan, sinkronisasi cloud mandiri tanpa server, pencadangan database, dan pergantian gaya antarmuka visual dinamis.
+    </p>
+
+    <!-- FLOW 6: ASISTEN AI DUAL-ENGINE -->
+    <div class="flow-card">
+      <div class="flow-header">
+        <div class="flow-title"><span>✨ Flow 6: Asisten AI Finansial (Q&A Data & Draf CRUD Transaksi)</span></div>
+        <span class="flow-badge">Dual-Engine AI</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>01</span> TAP TOMBOL TANYA AI</div>
+          <div class="flow-step-text">Tekan FAB <strong>✨ Tanya AI</strong> di sudut kanan bawah. Bottom sheet interaktif terbuka dengan tombol saran pertanyaan cepat.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>02</span> ROUTING DUAL-ENGINE</div>
+          <div class="flow-step-text">Jika offline: Mesin NLP Lokal menjawab saldo, anggaran & target. Jika online & punya API Key: Google Gemini merespons cerdas.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>03</span> GENERATE KARTU DRAF</div>
+          <div class="flow-step-text">Jika pesan berupa pencatatan (misal: <em>"Beli bensin 50k DANA"</em>), AI membuat kartu <strong>[📝 Draf Transaksi AI]</strong> di obrolan.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>04</span> KONFIRMASI PENGGUNA</div>
+          <div class="flow-step-text">Pengguna cukup klik <strong>[➕ Simpan]</strong> untuk eksekusi langsung, <strong>[✏️ Form]</strong> untuk revisi detail, atau tombol Batal.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW 7: GOOGLE DRIVE SYNC PKCE -->
+    <div class="flow-card">
+      <div class="flow-header">
+        <div class="flow-title"><span>☁️ Flow 7: Sinkronisasi Google Drive Mandiri (OAuth 2.0 PKCE)</span></div>
+        <span class="flow-badge">Cloud Sync</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>01</span> INISIASI LOGIN</div>
+          <div class="flow-step-text">Buka menu Setelan, klik tombol <strong>Hubungkan Google Drive</strong> untuk memulai proses otentikasi akun Google pribadi.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>02</span> PKCE CODE CHALLENGE</div>
+          <div class="flow-step-text">Peramban mengarahkan ke consent screen Google dengan verifikasi kriptografis SHA-256 PKCE tanpa Client Secret backend.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>03</span> ACCESS TOKEN PRIVAT</div>
+          <div class="flow-step-text">Token akses privat diterima langsung di peramban dan disimpan lokal untuk berkomunikasi langsung ke REST API Google Drive.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>04</span> SINKRONISASI DATA</div>
+          <div class="flow-step-text">Snapshot database diunggah/diunduh langsung melalui HTTPS ke folder pribadi Google Drive pengguna tanpa melalui server perantara.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW 8: BACKUP & RESTORE -->
+    <div class="flow-card">
+      <div class="flow-header">
+        <div class="flow-title"><span>💾 Flow 8: Siklus Ekspor, Impor & Pemulihan Cadangan Data (JSON/CSV)</span></div>
+        <span class="flow-badge">Backup & Restore</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>01</span> EKSPOR CADANGAN</div>
+          <div class="flow-step-text">Klik <strong>Backup JSON</strong> untuk mengamankan skema data v4 lengkap, atau <strong>Ekspor CSV</strong> untuk laporan Excel.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>02</span> UNDUHAN LOKAL</div>
+          <div class="flow-step-text">Berkas hasil ekspor otomatis terunduh ke direktori perangkat pengguna dalam format JSON skema v4 murni (non-enkripsi).</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>03</span> PILIH BERKAS IMPOR</div>
+          <div class="flow-step-text">Pada perangkat baru, pengguna memilih berkas JSON cadangan melalui tombol <strong>Impor Data Cadangan</strong>.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>04</span> VALIDASI & RESTORE</div>
+          <div class="flow-step-text">Sistem memvalidasi integritas struktur data, mencegah duplikasi ID, dan memulihkan seluruh saldo serta riwayat transaksi.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW 9: KUSTOMISASI TEMA -->
+    <div class="flow-card">
+      <div class="flow-header">
+        <div class="flow-title"><span>🎨 Flow 9: Personalisasi Antarmuka & Pergantian 23 Gaya Tema Visual</span></div>
+        <span class="flow-badge">Personalisasi Tema</span>
+      </div>
+      <div class="flow-steps">
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>01</span> BUKA GALERI TEMA</div>
+          <div class="flow-step-text">Pengguna menuju tab <strong>Setelan</strong> dan menjelajahi kartu katalog pratinjau 23 gaya tema artistik yang tersedia.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>02</span> PILIH PRESET GAYA</div>
+          <div class="flow-step-text">Ketuk gaya yang diminati (misal: <em>Midnight Gold</em>, <em>Matcha Zen</em>, <em>Neobrutal</em>, <em>Retro</em>, atau <em>Spider</em>).</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>03</span> INJEKSI CSS INSTAN</div>
+          <div class="flow-step-text">Sistem menyuntikkan variabel warna CSS, radius sudut, gaya font, dan efek Liquid Glass navbar secara instan tanpa reload.</div>
+        </div>
+        <div class="flow-arrow">➔</div>
+        <div class="flow-step-box">
+          <div class="flow-step-num"><span>04</span> PERSISTENSI STORAGE</div>
+          <div class="flow-step-text">ID tema disimpan di LocalStorage sehingga aplikasi selalu tampil sesuai tema pilihan pengguna setiap kali dibuka.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-doc">Halaman 4 dari 6 • Dokumentasi Resmi Catatan Keuangan PWA & AI</div>
+  <div class="page-break"></div>
+
+  <!-- ==================== HALAMAN 5: ENSIKLOPEDIA 23 TEMA ==================== -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-num">6</span>
+      <span>Ensiklopedia Lengkap: 23 Gaya Tema Visual & Suasana Artistik</span>
+    </div>
+    <div class="callout callout-success" style="margin-top:0; margin-bottom:6px;">
+      <strong>Teknologi Master Liquid Glass Navbar:</strong> Semua tema visual di bawah ini menggunakan bilah navigasi bawah mengambang dengan efek <em>Liquid Glass</em> adaptif, blur optik dinamis, dan jarak pemisah ergonomis (~22px) di bawah tombol AI.
+    </div>
+
+    <div class="grid-4">
+      <!-- 1. Midnight Gold -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">1. Midnight Gold</span><div class="theme-dots"><span class="dot" style="background:#0c0d12;"></span><span class="dot" style="background:#e8c766;"></span><span class="dot" style="background:#1a1c29;"></span></div></div>
+        <p class="theme-desc">Kemewahan obsidian, kartu hitam elegan, kilau emas sampanye berkelas.</p>
+        <span class="theme-vibe">✨ Emas Obsidian</span>
+      </div>
+
+      <!-- 2. Matcha Zen -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">2. Matcha Zen</span><div class="theme-dots"><span class="dot" style="background:#f3f6ee;"></span><span class="dot" style="background:#3b632e;"></span><span class="dot" style="background:#ffffff;"></span></div></div>
+        <p class="theme-desc">Ketenangan teh Kyoto: hijau matcha segar, krem susu oat, aksen bambu.</p>
+        <span class="theme-vibe">🍵 Zen Damai</span>
+      </div>
+
+      <!-- 3. Ruang Ide -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">3. Ruang Ide</span><div class="theme-dots"><span class="dot" style="background:#f8f7f2;"></span><span class="dot" style="background:#536044;"></span><span class="dot" style="background:#fffefa;"></span></div></div>
+        <p class="theme-desc">Krem hangat, kartu sage terstruktur, detail catatan kecil yang rapi.</p>
+        <span class="theme-vibe">📖 Catatan Sage</span>
+      </div>
+
+      <!-- 4. Aurora -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">4. Aurora</span><div class="theme-dots"><span class="dot" style="background:#e9f3f5;"></span><span class="dot" style="background:#246c74;"></span><span class="dot" style="background:#fcffff;"></span></div></div>
+        <p class="theme-desc">Pita cahaya mint dan ungu di langit kutub dengan kartu permata.</p>
+        <span class="theme-vibe">🌌 Cahaya Kutub</span>
+      </div>
+
+      <!-- 5. Arcade -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">5. Arcade</span><div class="theme-dots"><span class="dot" style="background:#25143f;"></span><span class="dot" style="background:#ed76c9;"></span><span class="dot" style="background:#39214d;"></span></div></div>
+        <p class="theme-desc">Senja neon 80-an, grid game konsol retro, dan tombol beraksen cyan.</p>
+        <span class="theme-vibe">🕹️ Neon 80s</span>
+      </div>
+
+      <!-- 6. Botanica -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">6. Botanica</span><div class="theme-dots"><span class="dot" style="background:#eef1e5;"></span><span class="dot" style="background:#49623b;"></span><span class="dot" style="background:#fffef6;"></span></div></div>
+        <p class="theme-desc">Taman herbal botani, daun sage hijau tua, panel sejuk di mata.</p>
+        <span class="theme-vibe">🌿 Herbal Teduh</span>
+      </div>
+
+      <!-- 7. Atelier -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">7. Atelier</span><div class="theme-dots"><span class="dot" style="background:#eeeae1;"></span><span class="dot" style="background:#284aca;"></span><span class="dot" style="background:#fffcf4;"></span></div></div>
+        <p class="theme-desc">Galeri seni & arsitektur: biru kobalt berani, bentuk geometris tegas.</p>
+        <span class="theme-vibe">🏛️ Arsitektur</span>
+      </div>
+
+      <!-- 8. Latte -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">8. Latte</span><div class="theme-dots"><span class="dot" style="background:#f3e8d9;"></span><span class="dot" style="background:#825739;"></span><span class="dot" style="background:#fffaf2;"></span></div></div>
+        <p class="theme-desc">Krim susu hangat, aroma biji kopi panggang, dan cangkir keramik.</p>
+        <span class="theme-vibe">☕ Kafe Santai</span>
+      </div>
+
+      <!-- 9. Orbit -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">9. Orbit</span><div class="theme-dots"><span class="dot" style="background:#181b30;"></span><span class="dot" style="background:#baa0ed;"></span><span class="dot" style="background:#2a2f49;"></span></div></div>
+        <p class="theme-desc">Antariksa: orbit planet, rasi bintang ungu kosmis, malam astronomi.</p>
+        <span class="theme-vibe">🪐 Rasi Kosmis</span>
+      </div>
+
+      <!-- 10. Sakura -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">10. Sakura</span><div class="theme-dots"><span class="dot" style="background:#faf0e9;"></span><span class="dot" style="background:#a45b70;"></span><span class="dot" style="background:#fffaf4;"></span></div></div>
+        <p class="theme-desc">Kertas washi krem Jepang, taburan kelopak bunga sakura merah muda.</p>
+        <span class="theme-vibe">🌸 Musim Semi</span>
+      </div>
+
+      <!-- 11. Ocean -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">11. Ocean</span><div class="theme-dots"><span class="dot" style="background:#e7f3ef;"></span><span class="dot" style="background:#246e79;"></span><span class="dot" style="background:#fbffff;"></span></div></div>
+        <p class="theme-desc">Desir ombak pesisir, pasir putih, gradasi toska samudra yang rileks.</p>
+        <span class="theme-vibe">🌊 Ombak Toska</span>
+      </div>
+
+      <!-- 12. Glass (Default) -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">12. Glass</span><div class="theme-dots"><span class="dot" style="background:#d8e5f4;"></span><span class="dot" style="background:#6b8ee1;"></span><span class="dot" style="background:#f3f7ff;"></span></div></div>
+        <p class="theme-desc">Kristal bening translusen, kaca cair, foto latar belakang kustom.</p>
+        <span class="theme-vibe">💎 Kristal Kaca</span>
+      </div>
+
+      <!-- 13. Biasa (Clean) -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">13. Biasa</span><div class="theme-dots"><span class="dot" style="background:#edf0f7;"></span><span class="dot" style="background:#6776c9;"></span><span class="dot" style="background:#ffffff;"></span></div></div>
+        <p class="theme-desc">Minimalis profesional, kartu putih bersih dengan aksen indigo.</p>
+        <span class="theme-vibe">📊 Grafik Rapi</span>
+      </div>
+
+      <!-- 14. Berwarna -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">14. Berwarna</span><div class="theme-dots"><span class="dot" style="background:#f4f2fc;"></span><span class="dot" style="background:#8b6cc7;"></span><span class="dot" style="background:#ffffff;"></span></div></div>
+        <p class="theme-desc">Bentuk geometri ceria, warna pastel tematik per kategori belanja.</p>
+        <span class="theme-vibe">🎈 Pastel Ceria</span>
+      </div>
+
+      <!-- 15. Neobrutal -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">15. Neobrutal</span><div class="theme-dots"><span class="dot" style="background:#fbf1ca;"></span><span class="dot" style="background:#f4c943;"></span><span class="dot" style="background:#ffffff;"></span></div></div>
+        <p class="theme-desc">Garis tepi hitam tebal (bold), bayangan keras, dan warna pop-art.</p>
+        <span class="theme-vibe">⚡ Pop-Art Tebal</span>
+      </div>
+
+      <!-- 16. Blok Pixel -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">16. Blok Pixel</span><div class="theme-dots"><span class="dot" style="background:#c9dfba;"></span><span class="dot" style="background:#5f8e3c;"></span><span class="dot" style="background:#e6dfc8;"></span></div></div>
+        <p class="theme-desc">Panel inventori game 8-bit, matahari kotak, padang rumput pixel.</p>
+        <span class="theme-vibe">🟩 8-Bit Retro</span>
+      </div>
+
+      <!-- 17. Material You -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">17. Material You</span><div class="theme-dots"><span class="dot" style="background:#edf0fc;"></span><span class="dot" style="background:#6577b2;"></span><span class="dot" style="background:#ffffff;"></span></div></div>
+        <p class="theme-desc">Standar Android Modern: membulat dinamis dan bunga geometris.</p>
+        <span class="theme-vibe">📱 Android Modern</span>
+      </div>
+
+      <!-- 18. Soft UI -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">18. Soft UI</span><div class="theme-dots"><span class="dot" style="background:#e0e5ec;"></span><span class="dot" style="background:#8a9dcc;"></span><span class="dot" style="background:#e0e5ec;"></span></div></div>
+        <p class="theme-desc">Gaya Neumorphism: panel timbul lembut dengan efek emboss ganda.</p>
+        <span class="theme-vibe">☁️ Neumorphism</span>
+      </div>
+
+      <!-- 19. Retro -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">19. Retro</span><div class="theme-dots"><span class="dot" style="background:#081108;"></span><span class="dot" style="background:#42c96b;"></span><span class="dot" style="background:#142115;"></span></div></div>
+        <p class="theme-desc">Konsol terminal: latar hitam pekat, teks hijau fosfor, kursor kedip.</p>
+        <span class="theme-vibe">💻 Fosfor Hijau</span>
+      </div>
+
+      <!-- 20. Paper -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">20. Paper</span><div class="theme-dots"><span class="dot" style="background:#f3ead7;"></span><span class="dot" style="background:#a26c3c;"></span><span class="dot" style="background:#fffdf5;"></span></div></div>
+        <p class="theme-desc">Tekstur jurnal fisik, garis buku harian, cap stempel, goresan pena.</p>
+        <span class="theme-vibe">📜 Jurnal Kertas</span>
+      </div>
+
+      <!-- 21. Minimal Flat -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">21. Minimal Flat</span><div class="theme-dots"><span class="dot" style="background:#eef2f5;"></span><span class="dot" style="background:#527589;"></span><span class="dot" style="background:#ffffff;"></span></div></div>
+        <p class="theme-desc">Datar tanpa distraksi gradasi atau bayangan; fokus legibilitas angka.</p>
+        <span class="theme-vibe">📐 Kontras Tajam</span>
+      </div>
+
+      <!-- 22. Persimmon Pop -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">22. Persimmon Pop</span><div class="theme-dots"><span class="dot" style="background:#fff0e8;"></span><span class="dot" style="background:#743f77;"></span><span class="dot" style="background:#fffcf8;"></span></div></div>
+        <p class="theme-desc">Kombinasi buah persik ranum, warna plum tua, dan aksen oranye ceria.</p>
+        <span class="theme-vibe">🍑 Persik & Plum</span>
+      </div>
+
+      <!-- 23. Spider -->
+      <div class="theme-card">
+        <div class="theme-header"><span class="theme-name">23. Spider</span><div class="theme-dots"><span class="dot" style="background:#f9e9dc;"></span><span class="dot" style="background:#ad2250;"></span><span class="dot" style="background:#fff9ef;"></span></div></div>
+        <p class="theme-desc">Multiverse superhero: merah marun, ungu gelap, jaring laba-laba halus.</p>
+        <span class="theme-vibe">🕷️ Superhero</span>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:8px;">
+      <strong>Standar Aksesibilitas Desain & Rasio Kontras (WCAG 2.1 AA):</strong> Setiap tema visual dari ke-23 gaya di atas dirancang dengan palet warna token CSS independen yang mempertahankan rasio kontras teks-ke-latar minimal 4.5:1 untuk keterbacaan optimal. Bilah navigasi bawah (navbar) mengadopsi <em>Liquid Glass</em> dinamis yang secara adaptif menyesuaikan saturasi dan tingkat keburaman (blur) terhadap warna dominan tema terpilih.
+    </div>
+  </div>
+
+  <div class="footer-doc">Halaman 5 dari 6 • Dokumentasi Resmi Catatan Keuangan PWA & AI</div>
+  <div class="page-break"></div>
+
+  <!-- ==================== HALAMAN 6: ARSITEKTUR AI & KEAMANAN ==================== -->
+  <!-- BAGIAN 7: ASISTEN AI KEUANGAN DUAL-ENGINE -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-num">7</span>
+      <span>Arsitektur Asisten AI Finansial: Dual-Engine & Interaksi Chat</span>
+    </div>
+    <p style="margin:0 0 7px 0; font-size:8.6pt; color:#334155;">
+      Aplikasi menyematkan tombol melayang <strong>✨ Tanya AI</strong> (FAB) pada sudut kanan bawah dengan jarak pemisah ergonomis (~22px) di atas bilah navigasi. Dialog AI hadir dalam bentuk <strong>Bottom Sheet</strong> responsif yang dapat dioperasikan mudah dengan satu tangan pada ponsel cerdas.
+    </p>
+
+    <div class="grid-2">
+      <!-- Local Engine -->
+      <div class="card" style="background:#f0fdf4; border-color:#bbf7d0;">
+        <div class="card-title" style="color:#166534;">🌱 Mesin Lokal (100% Offline & Privat)</div>
+        <p class="card-desc" style="color:#14532d; margin-bottom:4px;">Beroperasi seketika di CPU peramban tanpa koneksi internet atau API key. Memproses:</p>
+        <ul style="margin:0; padding-left:14px; font-size:7.9pt; color:#14532d; line-height:1.36;">
+          <li><strong>Saldo & Dompet:</strong> Analisis saldo total, kas fisik, dan rincian e-wallet (DANA, GoPay, dll.).</li>
+          <li><strong>Arus Kas 30 Hari:</strong> Pemasukan, pengeluaran, surplus/defisit, dan kategori paling boros.</li>
+          <li><strong>Target Tabungan:</strong> Progres terkumpul, kekurangan, sisa hari, dan setoran mingguan.</li>
+          <li><strong>Transaksi Berulang:</strong> Daftar tagihan rutin dan estimasi komitmen bulanan.</li>
+          <li><strong>Batas Anggaran:</strong> Peringatan dini overbudget pada kategori yang ditetapkan.</li>
+          <li><strong>Aksi CRUD Percakapan:</strong> Pembuatan kartu draf transaksi, form edit draf, dan konfirmasi hapus transaksi langsung dari ruang obrolan.</li>
+        </ul>
+      </div>
+
+      <!-- Cloud Gemini Engine -->
+      <div class="card" style="background:#faf5ff; border-color:#e9d5ff;">
+        <div class="card-title" style="color:#6b21a8;">✨ Google Gemini API (Dynamic Discovery & Free Tier)</div>
+        <p class="card-desc" style="color:#581c87; margin-bottom:4px;">Diaktifkan saat pengguna memasukkan API Key Google Gemini pribadi (BYOK):</p>
+        <ul style="margin:0; padding-left:14px; font-size:7.9pt; color:#581c87; line-height:1.36;">
+          <li><strong>Deteksi Model Dinamis:</strong> Aplikasi mendeteksi model yang aktif secara otomatis via endpoint REST API <code>v1beta/models</code> Google AI Studio.</li>
+          <li><strong>Prioritas Flash-Lite Bebas Kuota:</strong> Mengutamakan varian Flash-Lite efisien (seperti <code>gemini-2.5-flash</code>, <code>gemini-2.0-flash</code>, atau generasi penerus Flash-Lite yang tersedia di akun pengguna).</li>
+          <li><strong>Simulasi Keuangan Cerdas:</strong> Menganalisis ketahanan uang (misal: <em>"Dikasih uang 500rb bertahan berapa hari?"</em> dihitung berdasarkan laju pengeluaran harian).</li>
+          <li><strong>Rekomendasi Berhemat:</strong> Memberikan saran penghematan taktis pada kategori belanja tertinggi.</li>
+          <li><strong>Format JSON Otomatis:</strong> Menghasilkan blok transaksi terstruktur yang langsung dikonversi menjadi kartu draf interaktif di obrolan.</li>
+          <li><strong>Kedaulatan Data:</strong> Hanya ringkasan angka agregat yang dikirim ke API; catatan detail tetap berada di perangkat lokal.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BAGIAN 8: PROTOKOL BACKUP, GOOGLE DRIVE & KEAMANAN -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-num">8</span>
+      <span>Protokol Keamanan, Google Drive Sync & Pemulihan Data</span>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">☁️ Google Drive OAuth 2.0 PKCE</div>
+        <p class="card-desc">
+          Mendukung sinkronisasi awan mandiri langsung ke folder Google Drive pribadi pengguna. Menggunakan standar keamanan <strong>OAuth 2.0 dengan PKCE</strong> (Proof Key for Code Exchange), sehingga tidak ada token atau data yang melewati server perantara.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title">💾 Cadangan JSON & CSV Bersih</div>
+        <p class="card-desc">
+          Data dapat diekspor menjadi berkas <code>.json</code> terverifikasi skema v4 murni (non-enkripsi) untuk dicadangkan kapan saja, atau diekspor ke format <code>.csv</code> untuk dianalisis lebih lanjut menggunakan Microsoft Excel atau Google Sheets.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title">🛡️ Factory Reset (Penghapusan Total)</div>
+        <p class="card-desc">
+          Tombol darurat <em>Reset Pabrik</em> menghapus seluruh catatan transaksi, konfigurasi dompet, target tabungan, anggaran, dan riwayat percakapan AI dari penyimpanan peramban secara permanen dan instan jika perangkat hendak dipindahtangankan.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BAGIAN 9: KESIMPULAN & TAUTAN PROYEK -->
+  <div class="section">
+    <div class="section-title">
+      <span class="section-num">9</span>
+      <span>Kesimpulan & Spesifikasi Rilis</span>
+    </div>
+    <p style="margin:0 0 6px 0; font-size:8.3pt; color:#334155; line-height:1.36;">
+      Aplikasi <strong>Catatan Keuangan</strong> membuktikan bahwa aplikasi finansial modern dapat dibuat sepenuhnya privat, tanpa ketergantungan server runtime, berdaya guna tinggi di pedalaman tanpa sinyal, dan diperkaya dengan kecerdasan buatan terdepan. Dengan 23 opsi tema estetis dan tata letak responsif, aplikasi ini siap menjadi pendamping finansial setia bagi siapa pun yang mendambakan kendali penuh atas uang pribadinya.
+    </p>
+    <div class="callout" style="margin:3px 0; padding:5px 9px; font-size:7.8pt;">
+      <strong>Repositori Proyek:</strong> <a href="https://github.com/callmeroyy/Personal-notes" style="color:#4338ca; text-decoration:none;">https://github.com/callmeroyy/Personal-notes</a> • <strong>Lisensi:</strong> Open Source & Bebas Iklan.
+    </div>
+  </div>
+
+  <div class="footer-doc">
+    Halaman 6 dari 6 • Dokumentasi Resmi Sistem Aplikasi Catatan Keuangan • Hak Cipta © 2026 Personal Notes.
+  </div>
+
+</body>
+</html>

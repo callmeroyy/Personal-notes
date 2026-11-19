@@ -3456,6 +3456,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   <button type="button" class="ghost kecil" id="wltProviderOther" aria-pressed="false">Lainnya / isi sendiri</button>
   <div id="wltProviderSelected"></div>
   <label class="field-label" for="wltNama">Nama dompet</label><input id="wltNama" type="text" maxlength="40" placeholder="Contoh: BCA pribadi">
+  <div style="margin:8px 0 12px;display:flex;align-items:center;gap:8px"><input type="checkbox" id="wltIzinkanMinus" style="width:auto;margin:0;cursor:pointer"><label for="wltIzinkanMinus" style="font-size:12.5px;cursor:pointer;color:var(--ink);user-select:none">Izinkan saldo minus (PayLater / Kartu Kredit / Overdraft)</label></div>
   <p class="wallet-dialog-note" id="wltEditInfo"></p>
   <details class="provider-credit"><summary>Tentang pilihan &amp; gambar</summary><p class="muted">Bank nasional, digital, daerah, syariah, dan e-wallet tersedia di sini. BPR atau nama lain bisa diisi melalui Lainnya. Logo dan merek dimiliki masing-masing penyelenggara; gambar yang belum tersedia memakai ikon nama. Seluruh gambar disertakan di file agar bisa tampil offline.</p></details>
   <p id="wltError" role="alert"></p><button type="button" id="btnWltSave">Simpan dompet</button><button type="button" class="sec" id="btnWltCancel">Batal</button>
@@ -5578,7 +5579,7 @@ function cekSaldoDompet(transaksi=db.transaksi,transfer=db.transferDompet,dompet
   const physical=validasiPecahanTransfer(t);if(physical)return physical;
  }
  if(transaksi.some(t=>t.transferDompetId&&!transfer.some(r=>r.id===t.transferDompetId)))return 'Ada biaya admin tanpa catatan perpindahannya.';
- const saldo=saldoSemuaDompet(transaksi,transfer,dompet),kurang=dompet.find(w=>saldo.get(w.id)<-0.005);if(kurang)return 'Saldo '+kurang.nama+' akan kurang '+rp(-saldo.get(kurang.id))+'. Nonaktifkan juga pengeluaran terkait atau periksa saldo awalnya.';
+ const saldo=saldoSemuaDompet(transaksi,transfer,dompet),kurang=dompet.find(w=>!w.izinkanMinus&&saldo.get(w.id)<-0.005);if(kurang)return 'Saldo '+kurang.nama+' akan kurang '+rp(-saldo.get(kurang.id))+'. Nonaktifkan juga pengeluaran terkait atau periksa saldo awalnya.';
  if(transfer.some(t=>t.aktif!==false&&t.dariId===TUNAI_ID)&&saldoTunaiKandidat(transaksi,transfer,dompet)<-0.005)return 'Saldo tunai akan kurang. Periksa pemasukan tunai atau nominal perpindahannya.';
  return '';
 }
@@ -5637,12 +5638,12 @@ function konfirmasiDompet(judul,teks,aksi) { walletConfirmAction = aksi; $('wall
 $('btnWalletConfirmNo').onclick = () => { walletConfirmAction = null; $('dlgKonfirmasiDompet').close(); };
 $('btnWalletConfirmYes').onclick = () => { const aksi = walletConfirmAction; walletConfirmAction = null; $('dlgKonfirmasiDompet').close(); aksi?.(); };
 $('dlgKonfirmasiDompet').addEventListener('close',()=>{ if (!$('dlgKonfirmasiDompet').open) walletConfirmAction = null; });
-function keadaanWalletForm() { return JSON.stringify({fields:['wltNama','wltJenis'].map(id=>$(id).value),penyedia:walletProviderId}); }
+function keadaanWalletForm() { return JSON.stringify({fields:['wltNama','wltJenis'].map(id=>$(id).value),penyedia:walletProviderId,izinkanMinus:$('wltIzinkanMinus')?.checked}); }
 function keadaanTransferForm(){return JSON.stringify({mode:transferMode,fields:['transferDariJenis','transferKeJenis','transferDari','transferKe','transferJumlah','transferBiaya','transferTanggal','transferCatatan'].map(id=>$(id).value),pengeluaran:$('transferExpense').checked,lacak:$('transferTrack').checked,pecahan:['tpb','tpk'].map(p=>DENOM.map(d=>$(p+'-'+d).value))});}
 function batalWalletDialog(id,berubah) { if (berubah) konfirmasiDompet('Batalkan perubahan?','Isian yang belum disimpan akan dibuang.',()=>$(id).close()); else $(id).close(); }
 function bukaDompet(id = null,context = null) {
   const w = db.dompet.find(w=>w.id===id); walletEditId = w?.id || null; walletContext = context;
-  $('wltTitle').textContent = w ? 'Edit dompet' : 'Tambah dompet'; $('wltNama').value = w?.nama || ''; $('wltJenis').value = w?.jenis || 'wallet';
+  $('wltTitle').textContent = w ? 'Edit dompet' : 'Tambah dompet'; $('wltNama').value = w?.nama || ''; $('wltJenis').value = w?.jenis || 'wallet'; $('wltIzinkanMinus').checked = Boolean(w?.izinkanMinus);
   $('wltEditInfo').textContent = w ? 'Saldo mengikuti riwayat transaksi. Di sini cukup ubah nama dan jenis dompet.' : 'Cukup isi nama dompet. Nominal pemasukan diisi sekali di Catat transaksi.';
   walletProviderId=w?(w.penyediaId||penyediaDompet(w)?.id||''):'';walletNamaOtomatis=PENYEDIA_DOMPET.find(p=>p.id===walletProviderId)?.nama.slice(0,40)||'';walletProviderAll=false;$('wltProviderSearch').value='';renderPenyediaForm();
   $('wltError').textContent = ''; walletFormAwal = keadaanWalletForm(); $('dlgDompet').showModal();
@@ -5652,9 +5653,10 @@ $('dlgDompet').addEventListener('cancel',e=>{e.preventDefault();$('btnWltCancel'
 $('btnWltSave').onclick = () => {
   const nama = $('wltNama').value.trim(); if (!nama) { $('wltError').textContent = 'Nama dompet wajib diisi.'; $('wltNama').focus(); return; }
   if (db.dompet.some(w=>w.id!==walletEditId && w.nama.toLowerCase()===nama.toLowerCase())) { $('wltError').textContent = 'Nama dompet sudah digunakan. Pilih nama lain.'; return; }
+  const izinkanMinus = Boolean($('wltIzinkanMinus')?.checked);
   const sebelum = JSON.parse(JSON.stringify(db)); let w = db.dompet.find(w=>w.id===walletEditId);
-  if (w) { w.nama=nama;w.jenis=$('wltJenis').value;w.penyediaId=walletProviderId; }
-  else { w={id:uid(),nama,jenis:$('wltJenis').value,penyediaId:walletProviderId,arsip:false,saldoAwal:0};db.dompet.push(w); }
+  if (w) { w.nama=nama;w.jenis=$('wltJenis').value;w.penyediaId=walletProviderId;w.izinkanMinus=izinkanMinus; }
+  else { w={id:uid(),nama,jenis:$('wltJenis').value,penyediaId:walletProviderId,arsip:false,saldoAwal:0,izinkanMinus};db.dompet.push(w); }
   if (!simpan()) { db=sebelum; $('wltError').textContent='Dompet belum tersimpan. Coba lagi.'; return; }
   const id=w.id; $('dlgDompet').close(); renderSemua();
   if(walletContext==='transferSetup'){if(transferMode==='tarik')bukaTarikTunai(id);else if(transferMode==='setor')bukaTransferDompet(null,TUNAI_ID,id);else bukaTransferDompet(null,null,id);}
@@ -5747,7 +5749,7 @@ function renderDompet() {
   const saldo=saldoSemuaDompet(), jumlahSaldo=[...saldo.values()].reduce((a,b)=>a+b,0);$('walletTotal').textContent=rp(jumlahSaldo);
   $('walletUnassignedInfo').textContent='Catat pemasukan untuk menambah saldo, atau pilih dompet saat mencatat pengeluaran.';
   const aktif=db.dompet.filter(w=>!w.arsip),arsip=db.dompet.filter(w=>w.arsip);
-  const render=(list,id)=>{const box=$(id);box.replaceChildren();list.forEach(w=>{const row=el('div','wallet-entry'),top=el('div','wallet-entry-top'),icon=el('span','wallet-symbol');icon.classList.add('wallet-brand-symbol');icon.replaceChildren(badgePenyedia(penyediaDompet(w),w.jenis));const nama=el('div','wallet-entry-title');nama.append(el('b',null,w.nama),el('small',null,(w.jenis==='bank'?'Rekening bank':w.jenis==='saving'?'Tabungan':'E-wallet')+(penyediaDompet(w)&&w.nama!==penyediaDompet(w).nama?' · '+penyediaDompet(w).nama:'')));top.append(icon,nama,el('span','wallet-entry-amount',rp(saldo.get(w.id))));const aksi=el('div','aksi'),edit=el('button','ghost kecil','Edit nama'),archive=el('button','ghost kecil',w.arsip?'Pulihkan':'Arsipkan');edit.type=archive.type='button';edit.onclick=()=>bukaDompet(w.id);archive.onclick=()=>arsipDompet(w.id);const tambah=el('button','ghost kecil','+ Tambah saldo');tambah.type='button';tambah.onclick=()=>mulaiPemasukan('nontunai',w.id);if(!w.arsip){const tarik=el('button','ghost kecil','Tarik tunai');tarik.type='button';tarik.dataset.withdrawSource=w.id;tarik.onclick=()=>bukaTarikTunai(w.id);aksi.append(tambah,tarik);}aksi.append(edit,archive);row.append(top,aksi);box.appendChild(row)})};
+  const render=(list,id)=>{const box=$(id);box.replaceChildren();list.forEach(w=>{const row=el('div','wallet-entry'),top=el('div','wallet-entry-top'),icon=el('span','wallet-symbol');icon.classList.add('wallet-brand-symbol');icon.replaceChildren(badgePenyedia(penyediaDompet(w),w.jenis));const nama=el('div','wallet-entry-title');nama.append(el('b',null,w.nama),el('small',null,(w.jenis==='bank'?'Rekening bank':w.jenis==='saving'?'Tabungan':'E-wallet')+(penyediaDompet(w)&&w.nama!==penyediaDompet(w).nama?' · '+penyediaDompet(w).nama:'')+(w.izinkanMinus?' · PayLater/Overdraft':'')));top.append(icon,nama,el('span','wallet-entry-amount',rp(saldo.get(w.id))));const aksi=el('div','aksi'),edit=el('button','ghost kecil','Edit nama'),archive=el('button','ghost kecil',w.arsip?'Pulihkan':'Arsipkan');edit.type=archive.type='button';edit.onclick=()=>bukaDompet(w.id);archive.onclick=()=>arsipDompet(w.id);const tambah=el('button','ghost kecil','+ Tambah saldo');tambah.type='button';tambah.onclick=()=>mulaiPemasukan('nontunai',w.id);if(!w.arsip){const tarik=el('button','ghost kecil','Tarik tunai');tarik.type='button';tarik.dataset.withdrawSource=w.id;tarik.onclick=()=>bukaTarikTunai(w.id);aksi.append(tambah,tarik);}aksi.append(edit,archive);row.append(top,aksi);box.appendChild(row)})};
   render(aktif,'walletList');render(arsip,'walletArchivedList');
   if(!aktif.length){const kosong=el('div','wallet-empty'),icon=el('span','wallet-symbol');icon.innerHTML=ikonDompet('wallet');kosong.append(icon,el('b',null,'Uangmu, tempatnya masing-masing'),el('p',null,'Tambahkan dompet pertama. Setelah itu pilih dompet saat mencatat transaksi.'));$('walletList').appendChild(kosong)}
   $('walletArchived').hidden=!arsip.length;$('walletArchivedTitle').textContent='Diarsipkan ('+arsip.length+')';$('btnWalletTransfer').disabled=false;$('btnCashToWallet').disabled=false;$('btnWalletToCash').disabled=false;$('walletTransferHint').textContent=aktif.length?'Pindahkan uang antara Tunai dan Wallet atau antar dompet. Saldo total tidak berkurang dua kali.':'Tambahkan satu wallet atau rekening untuk memindahkan uang tunai.';

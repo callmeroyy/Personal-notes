@@ -361,4 +361,27 @@ assert.match(respBerulang.reply, /350\.000/, 'Balasan harus mencantumkan nominal
 assert.match(respBerulang.reply, /Gaji Kantor/i, 'Balasan harus mencantumkan pemasukan rutin');
 assert.match(respBerulang.reply, /Estimasi Komitmen Rutin Bulanan/i, 'Balasan harus menghitung estimasi komitmen bulanan');
 
-console.log('Semua pengujian unit draf AI, E-wallet DANA, Target Tabungan, dan Transaksi Berulang BERHASIL!');
+// Test 15: Opsi "Izinkan Saldo Minus" pada Dompet (PayLater / Kartu Kredit / Overdraft)
+console.log('Testing Negative Balance Allowance for Wallets (PayLater/Credit Card)...');
+run(`
+db.dompet = [
+  { id: 'w-reguler', nama: 'BCA Utama', jenis: 'bank', saldoAwal: 100000, arsip: false, izinkanMinus: false },
+  { id: 'w-paylater', nama: 'SPayLater', jenis: 'wallet', saldoAwal: 0, arsip: false, izinkanMinus: true }
+];
+`);
+
+const errReguler = run(`
+cekSaldoDompet([
+  { id: 't-1', tipe: 'keluar', total: 150000, dompetId: 'w-reguler', cara: 'nontunai', aktif: true }
+])
+`);
+assert.match(errReguler, /Saldo BCA Utama akan kurang/i, 'Dompet reguler harus menolak saldo minus');
+
+const errPaylater = run(`
+cekSaldoDompet([
+  { id: 't-2', tipe: 'keluar', total: 500000, dompetId: 'w-paylater', cara: 'nontunai', aktif: true }
+])
+`);
+assert.equal(errPaylater, '', 'Dompet dengan izinkanMinus=true harus mengizinkan saldo minus tanpa error');
+
+console.log('Semua pengujian unit draf AI, E-wallet DANA, Target Tabungan, Transaksi Berulang, dan Dompet PayLater BERHASIL!');
