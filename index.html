@@ -3905,6 +3905,39 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   </div>
 </dialog>
 
+<div id="appLockOverlay" style="display:none;position:fixed;inset:0;z-index:999999;background:var(--bg);color:var(--ink);flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center">
+  <div style="max-width:320px;width:100%;margin:auto;display:flex;flex-direction:column;align-items:center">
+    <div style="width:60px;height:60px;border-radius:18px;background:color-mix(in srgb,var(--pri) 15%,transparent);display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:14px">🔒</div>
+    <h2 style="margin:0 0 6px;font-size:19px;font-weight:800;letter-spacing:-0.02em">Aplikasi Terkunci</h2>
+    <p class="muted" id="appLockPrompt" style="margin:0 0 20px;font-size:13px">Masukkan PIN untuk membuka catatan keuangan</p>
+    
+    <div id="appLockDots" style="display:flex;gap:12px;margin-bottom:24px" role="status" aria-label="Digit PIN">
+      <span class="app-pin-dot" id="pinDot0"></span>
+      <span class="app-pin-dot" id="pinDot1"></span>
+      <span class="app-pin-dot" id="pinDot2"></span>
+      <span class="app-pin-dot" id="pinDot3"></span>
+    </div>
+    
+    <p class="form-error" id="appLockError" style="display:none;margin-bottom:16px"></p>
+
+    <div id="appLockKeypad" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;width:100%;max-width:260px">
+      <button type="button" class="pin-key" data-key="1">1</button>
+      <button type="button" class="pin-key" data-key="2">2</button>
+      <button type="button" class="pin-key" data-key="3">3</button>
+      <button type="button" class="pin-key" data-key="4">4</button>
+      <button type="button" class="pin-key" data-key="5">5</button>
+      <button type="button" class="pin-key" data-key="6">6</button>
+      <button type="button" class="pin-key" data-key="7">7</button>
+      <button type="button" class="pin-key" data-key="8">8</button>
+      <button type="button" class="pin-key" data-key="9">9</button>
+      <button type="button" class="pin-key pin-tool" id="btnAppLockBio" title="Biometrik" style="visibility:hidden">👆</button>
+      <button type="button" class="pin-key" data-key="0">0</button>
+      <button type="button" class="pin-key pin-tool" id="btnAppLockDel" title="Hapus">⌫</button>
+    </div>
+
+    <input type="password" id="appLockHiddenInput" inputmode="numeric" maxlength="4" style="opacity:0;position:absolute;pointer-events:none" tabindex="-1">
+  </div>
+</div>
 
 <script>
 const TUNAI_ID='__tunai__';
@@ -6952,11 +6985,17 @@ function renderSemua() {
 
 function selesaikanLoadingSplash(){
   const splash = $('appLoadingSplash');
-  if(!splash || splash.classList.contains('selesai')) return;
+  if(!splash) return;
   splash.classList.add('selesai');
   splash.setAttribute('aria-busy', 'false');
+  splash.style.pointerEvents = 'none';
   setTimeout(()=>{
-    try{ splash.remove(); }catch(_){}
+    try{
+      if (splash.parentNode) splash.parentNode.removeChild(splash);
+      else splash.remove();
+    }catch(_){
+      splash.style.display = 'none';
+    }
   }, 320);
 }
 
@@ -9099,22 +9138,11 @@ document.addEventListener('visibilitychange', () => {
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || ['localhost', '127.0.0.1'].includes(location.hostname))) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
-window.addEventListener('load', () => setTimeout(selesaikanLoadingSplash, 400), { once: true });
+window.addEventListener('load', () => setTimeout(selesaikanLoadingSplash, 300), { once: true });
+window.addEventListener('pageshow', () => selesaikanLoadingSplash());
 window.addEventListener('error', () => selesaikanLoadingSplash(), { once: true });
-window.addEventListener('beforeunload', () => {
-  let splash = $('appLoadingSplash');
-  if (!splash) {
-    splash = document.createElement('div');
-    splash.id = 'appLoadingSplash';
-    splash.className = 'app-loading-splash';
-    splash.setAttribute('aria-hidden', 'true');
-    splash.innerHTML = '<div class="app-loading-spinner" aria-hidden="true"></div>';
-    document.body.appendChild(splash);
-  } else {
-    splash.classList.remove('selesai');
-    splash.style.display = 'flex';
-  }
-});
+// Pengaman: pastikan splash loading hilang secara mutlak setelah 1 detik
+setTimeout(selesaikanLoadingSplash, 1000);
 if (navigator.storage?.persist) {
   navigator.storage.persist().then(renderStorageStatus).catch(() => {});
 }
@@ -12897,20 +12925,30 @@ async function pemicuBiometrik() {
 
 function perbaruiUiAppLockSetelan() {
   const aktif = Boolean(set.appLockAktif && set.appLockPinHash);
-  $('appLockStatusText').textContent = aktif ? 'Status: 🟢 Aktif' : 'Status: Tidak Aktif';
-  $('appLockStatusDesc').textContent = aktif
-    ? 'Catatan keuangan terkunci otomatis saat web dibuka. Buka menggunakan PIN' + (set.appLockBiometrik ? ' atau Biometrik.' : '.')
-    : 'Lindungi catatan keuangan agar hanya bisa dibuka dengan PIN atau biometrik saat aplikasi dibuka.';
-  $('btnAppLockToggle').textContent = aktif ? 'Kelola Kunci' : 'Atur PIN';
-  $('appLockSettingsWrap').hidden = !aktif;
+  const statusText = $('appLockStatusText');
+  if (statusText) statusText.textContent = aktif ? 'Status: 🟢 Aktif' : 'Status: Tidak Aktif';
+  const descEl = $('appLockStatusDesc');
+  if (descEl) {
+    descEl.textContent = aktif
+      ? 'Catatan keuangan terkunci otomatis saat web dibuka. Buka menggunakan PIN' + (set.appLockBiometrik ? ' atau Biometrik.' : '.')
+      : 'Lindungi catatan keuangan agar hanya bisa dibuka dengan PIN atau biometrik saat aplikasi dibuka.';
+  }
+  const toggleBtn = $('btnAppLockToggle');
+  if (toggleBtn) toggleBtn.textContent = aktif ? 'Kelola Kunci' : 'Atur PIN';
+  const settingsWrap = $('appLockSettingsWrap');
+  if (settingsWrap) settingsWrap.hidden = !aktif;
+
+  const bioWrap = $('appLockBioWrap');
+  const bioCheck = $('appLockBioCheck');
+  const bioBtn = $('btnAppLockBio');
 
   if (window.PublicKeyCredential && window.isSecureContext) {
-    $('appLockBioWrap').hidden = false;
-    $('appLockBioCheck').checked = Boolean(set.appLockBiometrik);
-    $('btnAppLockBio').style.visibility = set.appLockBiometrik ? 'visible' : 'hidden';
+    if (bioWrap) bioWrap.hidden = false;
+    if (bioCheck) bioCheck.checked = Boolean(set.appLockBiometrik);
+    if (bioBtn) bioBtn.style.visibility = set.appLockBiometrik ? 'visible' : 'hidden';
   } else {
-    $('appLockBioWrap').hidden = true;
-    $('btnAppLockBio').style.visibility = 'hidden';
+    if (bioWrap) bioWrap.hidden = true;
+    if (bioBtn) bioBtn.style.visibility = 'hidden';
   }
 }
 
@@ -12990,17 +13028,23 @@ $('appLockBioCheck').onchange = async () => {
   }
 };
 
-$('appLockKeypad').addEventListener('click', e => {
-  const keyBtn = e.target.closest('button[data-key]');
-  if (keyBtn) {
-    handlePinInput(keyBtn.dataset.key);
-  }
-});
-$('btnAppLockDel').onclick = () => handlePinDelete();
-$('btnAppLockBio').onclick = () => pemicuBiometrik();
+const keypad = $('appLockKeypad');
+if (keypad) {
+  keypad.addEventListener('click', e => {
+    const keyBtn = e.target.closest('button[data-key]');
+    if (keyBtn) {
+      handlePinInput(keyBtn.dataset.key);
+    }
+  });
+}
+const btnDel = $('btnAppLockDel');
+if (btnDel) btnDel.onclick = () => handlePinDelete();
+const btnBio = $('btnAppLockBio');
+if (btnBio) btnBio.onclick = () => pemicuBiometrik();
 
 window.addEventListener('keydown', e => {
-  if ($('appLockOverlay').style.display === 'flex') {
+  const overlay = $('appLockOverlay');
+  if (overlay && overlay.style.display === 'flex') {
     if (e.key >= '0' && e.key <= '9') {
       handlePinInput(e.key);
     } else if (e.key === 'Backspace') {
@@ -13016,39 +13060,5 @@ window.addEventListener('keydown', e => {
   }
 })();
 </script>
-
-<div id="appLockOverlay" style="display:none;position:fixed;inset:0;z-index:999999;background:var(--bg);color:var(--ink);flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center">
-  <div style="max-width:320px;width:100%;margin:auto;display:flex;flex-direction:column;align-items:center">
-    <div style="width:60px;height:60px;border-radius:18px;background:color-mix(in srgb,var(--pri) 15%,transparent);display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:14px">🔒</div>
-    <h2 style="margin:0 0 6px;font-size:19px;font-weight:800;letter-spacing:-0.02em">Aplikasi Terkunci</h2>
-    <p class="muted" id="appLockPrompt" style="margin:0 0 20px;font-size:13px">Masukkan PIN untuk membuka catatan keuangan</p>
-    
-    <div id="appLockDots" style="display:flex;gap:12px;margin-bottom:24px" role="status" aria-label="Digit PIN">
-      <span class="app-pin-dot" id="pinDot0"></span>
-      <span class="app-pin-dot" id="pinDot1"></span>
-      <span class="app-pin-dot" id="pinDot2"></span>
-      <span class="app-pin-dot" id="pinDot3"></span>
-    </div>
-    
-    <p class="form-error" id="appLockError" style="display:none;margin-bottom:16px"></p>
-
-    <div id="appLockKeypad" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;width:100%;max-width:260px">
-      <button type="button" class="pin-key" data-key="1">1</button>
-      <button type="button" class="pin-key" data-key="2">2</button>
-      <button type="button" class="pin-key" data-key="3">3</button>
-      <button type="button" class="pin-key" data-key="4">4</button>
-      <button type="button" class="pin-key" data-key="5">5</button>
-      <button type="button" class="pin-key" data-key="6">6</button>
-      <button type="button" class="pin-key" data-key="7">7</button>
-      <button type="button" class="pin-key" data-key="8">8</button>
-      <button type="button" class="pin-key" data-key="9">9</button>
-      <button type="button" class="pin-key pin-tool" id="btnAppLockBio" title="Biometrik" style="visibility:hidden">👆</button>
-      <button type="button" class="pin-key" data-key="0">0</button>
-      <button type="button" class="pin-key pin-tool" id="btnAppLockDel" title="Hapus">⌫</button>
-    </div>
-
-    <input type="password" id="appLockHiddenInput" inputmode="numeric" maxlength="4" style="opacity:0;position:absolute;pointer-events:none" tabindex="-1">
-  </div>
-</div>
 </body>
 </html>
