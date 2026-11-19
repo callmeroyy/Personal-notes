@@ -2564,6 +2564,60 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   .ai-chat-note{margin:6px 0 0;font-size:11px;text-align:center;color:var(--ui-muted,var(--muted))}
   @keyframes aiMsgFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
+  /* ===== FLOATING ACTION BUTTON (FAB) TANYA AI ===== */
+  .fab-ai-chat {
+    position: fixed;
+    right: 18px;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--pri, #4f46e5), var(--pri2, #6366f1));
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22), 0 2px 6px rgba(0, 0, 0, 0.12);
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, opacity 0.2s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    user-select: none;
+    line-height: 1;
+    text-decoration: none;
+  }
+  .fab-ai-chat:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  }
+  .fab-ai-chat:active {
+    transform: translateY(1px) scale(0.97);
+  }
+  .fab-ai-spark {
+    font-size: 15px;
+    line-height: 1;
+    display: inline-block;
+  }
+  @media (min-width: 900px) {
+    .fab-ai-chat {
+      bottom: 28px;
+      right: 32px;
+      padding: 12px 18px;
+      font-size: 14px;
+    }
+  }
+  body:has(dialog[open]) .fab-ai-chat,
+  html:has(dialog[open]) .fab-ai-chat,
+  body.has-dialog-open .fab-ai-chat {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: scale(0.85) !important;
+  }
+
   /* ===== SPLASH LOADING OVERLAY (BLURRED + THEME + CENTERED SPINNER) ===== */
   .app-loading-splash {
     position: fixed;
@@ -2639,12 +2693,13 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     <button type="button" class="ui-side-link" data-ruang-page="grafik"><span class="ui-icon" data-ruang-icon="chart" aria-hidden="true"></span>Grafik</button>
     <button type="button" class="ui-side-link" data-ruang-page="setelan"><span class="ui-icon" data-ruang-icon="sliders" aria-hidden="true"></span>Setelan</button>
     <button type="button" class="ui-side-link" data-ruang-page="data"><span class="ui-icon" data-ruang-icon="backup" aria-hidden="true"></span>Data &amp; backup</button>
+    <button type="button" class="ui-side-link" id="btnSideAiChat" style="border-top:1px solid var(--ui-line,rgba(0,0,0,.08));margin-top:6px;padding-top:10px"><span class="ui-icon" data-ruang-icon="sparkle" aria-hidden="true">&#x2728;</span>Tanya AI</button>
   </nav>
   <div class="ui-side-note"><span class="ui-icon" data-ruang-icon="sprout" aria-hidden="true"></span><p>Catatan kecil,<br>rencana besar.</p><small>Satu transaksi hari ini membantu kamu mengenali kebiasaanmu.</small></div>
   <div class="ui-side-foot"><span class="ui-icon" data-ruang-icon="palette" aria-hidden="true"></span><span id="uiSideStyle">Gayamu, ruangmu.</span></div>
 </aside>
 <header class="top">
-  <div class="ui-topline"><div class="ui-breadcrumb"><i aria-hidden="true"></i><span>Ruang pribadi</span><span class="ui-crumb-divider" aria-hidden="true">/</span><span id="uiPageCrumb">Beranda</span></div><button type="button" class="ui-help" id="uiOpenHelp"><span class="ui-icon" data-ruang-icon="help" aria-hidden="true"></span>Cara pakai</button></div>
+  <div class="ui-topline"><div class="ui-breadcrumb"><i aria-hidden="true"></i><span>Ruang pribadi</span><span class="ui-crumb-divider" aria-hidden="true">/</span><span id="uiPageCrumb">Beranda</span></div><div style="display:flex;align-items:center;gap:6px"><button type="button" class="ui-help" id="btnTopAiChat" style="display:inline-flex;align-items:center;gap:5px;font-weight:600;border-color:var(--pri);color:var(--pri)"><span aria-hidden="true">&#x2728;</span><span>Tanya AI</span></button><button type="button" class="ui-help" id="uiOpenHelp"><span class="ui-icon" data-ruang-icon="help" aria-hidden="true"></span>Cara pakai</button></div></div>
   <h1><span class="ui-title-symbol ui-icon" data-ruang-icon="wallet" aria-hidden="true"></span><span>Catatan Keuangan</span></h1>
   <p id="hdr"></p>
   <div class="style-signature" aria-hidden="true"><svg id="styleSignatureArt" viewBox="0 0 100 100" fill="none" focusable="false"></svg><span id="styleSignatureName"></span></div>
@@ -3218,6 +3273,9 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
 <footer class="copy"><span><strong>Buatan Roy</strong> ✦ catatan kecil, rencana besar.</span><span><span class="ui-icon" data-ruang-icon="lock" aria-hidden="true"></span>Data tersimpan di browser ini</span></footer>
 </main>
 
+<!-- FLOATING ACTION BUTTON (FAB) TANYA AI -->
+<button type="button" class="fab-ai-chat" id="fabAiChat" aria-label="Buka Tanya AI Keuangan" title="Tanya AI Keuangan"><span class="fab-ai-spark" aria-hidden="true">&#x2728;</span><span class="fab-ai-label">Tanya AI</span></button>
+
 <nav class="bottom" aria-label="Navigasi HP">
   <button class="tab" data-page="beranda"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Beranda</span></button>
   <button class="tab" data-page="riwayat"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span>Riwayat</span></button>
@@ -3505,8 +3563,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
       </div>
     </div>
     <div style="display:flex;gap:6px;align-items:center">
-      <button type="button" class="ghost kecil" id="btnAiChatKey" title="Pengaturan Kunci Google Gemini AI" style="width:auto;margin:0;padding:4px 8px;font-size:11px">🔑 Kunci AI</button>
-      <button type="button" class="ghost kecil" id="btnAiChatClear" style="width:auto;margin:0;padding:4px 8px;font-size:11px">Hapus riwayat</button>
+      <button type="button" class="ghost kecil" id="btnAiChatClear" style="width:auto;margin:0;padding:4px 9px;font-size:11.5px">Hapus riwayat</button>
       <button type="button" class="ghost kecil" id="btnAiChatClose" aria-label="Tutup" style="width:auto;margin:0;padding:4px 9px">&#x2715;</button>
     </div>
   </div>
@@ -9480,6 +9537,7 @@ function siapkanKonteksAiChat() {
   const uang = ringkasanUang();
   const dompetMap = saldoSemuaDompet(db.transaksi);
   const daftarDompet = db.dompet.filter(w => !w.arsip).map(w => ({
+    id: w.id,
     name: String(w.nama || ''),
     balance: Math.round(dompetMap.get(w.id) || 0)
   }));
@@ -10434,6 +10492,85 @@ function jawabFinansialLokal(pertanyaan, context) {
     return {
       reply: text,
       followUpSuggestions: ['Berapa total pengeluaranku bulan ini?', 'Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat']
+    };
+  }
+
+  // 6c. Analisis & Cek Dompet Khusus (DANA, GoPay, OVO, Tunai, dsb.)
+  const mDompetTanya = q.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius|tunai|cash)\b/i);
+  const isKueriDompetSpesifik = mDompetTanya && /\b(saldo|analisis|cek|lihat|tampilkan|pengeluaran|pemasukan|riwayat|berapa|mutasi|laporan|kondisi)\b/i.test(q) &&
+    !/\b(ubah|ganti|edit|catat|tulis|tambah|pake|pakai|bayar|beli|jajan)\b/i.test(q);
+
+  if (isKueriDompetSpesifik) {
+    const rawTarget = mDompetTanya[1].toLowerCase();
+    const isTargetTunai = rawTarget === 'tunai' || rawTarget === 'cash';
+    let targetWallet = null;
+
+    if (isTargetTunai) {
+      targetWallet = { id: TUNAI_ID, name: 'Tunai', isTunai: true, balance: cashBalance };
+    } else {
+      const prov = (typeof PENYEDIA_DOMPET !== 'undefined' && Array.isArray(PENYEDIA_DOMPET))
+        ? PENYEDIA_DOMPET.find(p => p.id === rawTarget || p.nama.toLowerCase() === rawTarget || (Array.isArray(p.alias) && p.alias.includes(rawTarget)))
+        : null;
+      const targetName = prov ? prov.nama : rawTarget.toUpperCase();
+      const inDb = Array.isArray(db.dompet) ? db.dompet.find(w => !w.arsip && (w.nama.toLowerCase() === targetName.toLowerCase() || w.nama.toLowerCase().includes(rawTarget))) : null;
+      const existing = wallets.find(w => w.name.toLowerCase() === targetName.toLowerCase() || w.name.toLowerCase().includes(rawTarget));
+      if (existing) {
+        targetWallet = { ...existing, id: existing.id || inDb?.id, isTunai: false };
+      } else if (inDb) {
+        const dompetMap = saldoSemuaDompet(db.transaksi);
+        targetWallet = { id: inDb.id, name: inDb.nama, balance: Math.round(dompetMap.get(inDb.id) || 0), isTunai: false };
+      } else {
+        targetWallet = { id: '', name: targetName, balance: 0, isTunai: false, belumAda: true };
+      }
+    }
+
+    if (targetWallet.belumAda) {
+      return {
+        reply: '💳 Dompet **' + targetWallet.name + '** belum terdaftar di catatan dompetmu.\n\n' +
+          'Kamu bisa menambahkan dompet baru melalui menu **Beranda ➔ Uangku ➔ Wallet** atau langsung sebut dompet ini saat mencatat transaksi!',
+        followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Catat pengeluaran baru']
+      };
+    }
+
+    const sampaiTgl = hariIni();
+    const dariTgl = geser(sampaiTgl, -29);
+    const semuaTrx = (Array.isArray(db.transaksi) ? db.transaksi : []).filter(t => catatanAktif(t));
+    const trxDompet = semuaTrx.filter(t => {
+      if (targetWallet.isTunai) return t.cara === 'tunai' || t.tunai;
+      return t.dompetId === targetWallet.id;
+    });
+
+    const trx30d = trxDompet.filter(t => t.tanggal >= dariTgl && t.tanggal <= sampaiTgl);
+    const totalKeluarDompet = trx30d.filter(t => t.tipe === 'keluar').reduce((acc, t) => acc + (t.total || 0), 0);
+    const totalMasukDompet = trx30d.filter(t => t.tipe === 'masuk').reduce((acc, t) => acc + (t.total || 0), 0);
+    const netDompet = totalMasukDompet - totalKeluarDompet;
+
+    const katDompetMap = new Map();
+    trx30d.filter(t => t.tipe === 'keluar').forEach(t => {
+      katDompetMap.set(t.kategori, (katDompetMap.get(t.kategori) || 0) + (t.total || 0));
+    });
+    const topKatDompet = [...katDompetMap.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
+    const trxTerakhir = trxDompet.length ? trxDompet[trxDompet.length - 1] : null;
+
+    let rincianAnalisis = '💳 **Analisis Keuangan Dompet ' + targetWallet.name + ':**\n\n' +
+      '• **Saldo Saat Ini**: ' + rp(targetWallet.balance) + '\n' +
+      '• **Pengeluaran (30 Hari)**: ' + rp(totalKeluarDompet) + ' (' + trx30d.filter(t => t.tipe === 'keluar').length + ' transaksi)\n' +
+      '• **Pemasukan (30 Hari)**: ' + rp(totalMasukDompet) + '\n' +
+      '• **Arus Kas Dompet**: ' + (netDompet >= 0 ? 'Surplus ' + rp(netDompet) + ' 👍' : 'Defisit ' + rp(Math.abs(netDompet)) + ' ⚠️') + '\n';
+
+    if (topKatDompet.length) {
+      rincianAnalisis += '\n📂 **Kategori Pengeluaran Terbanyak di ' + targetWallet.name + '**:\n' +
+        topKatDompet.map(([k, amt], idx) => '  ' + (idx + 1) + '. ' + k + ': ' + rp(amt)).join('\n') + '\n';
+    }
+
+    if (trxTerakhir) {
+      rincianAnalisis += '\n🕒 **Transaksi Terakhir via ' + targetWallet.name + '**:\n' +
+        '  • ' + trxTerakhir.judul + ' (' + rp(trxTerakhir.total) + ') pada ' + tglIndo(trxTerakhir.tanggal);
+    }
+
+    return {
+      reply: rincianAnalisis,
+      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Berapa total pengeluaranku bulan ini?', 'Kategori apa yang paling banyak pengeluarannya?']
     };
   }
 
@@ -11550,18 +11687,15 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
     } else {
       const isGemini = Boolean(geminiKey);
       const fallbackText = isGemini
-        ? 'Gagal menghubungi Google Gemini API: ' + (error.message || 'Koneksi terputus') + '.\n\nPeriksa kembali API Key kamu di tombol 🔑 Kunci AI.'
-        : '🤖 Pertanyaan ini di luar lingkup analisis catatan keuangan lokal.\n\n' +
-          'Untuk bertanya **bebas / random tentang apa saja** (sains, cerita, pengetahuan umum, resep, tips hidup), hubungkan **Google Gemini AI (Gratis)**.\n\n' +
-          'Cukup dapatkan API Key gratis di Google AI Studio (tanpa kartu kredit) lalu simpan dengan tombol di bawah!';
+        ? 'Gagal menghubungi Google Gemini API: ' + (error.message || 'Koneksi terputus') + '.\n\nPeriksa kembali koneksi internet atau pengaturan kunci di menu Setelan.'
+        : '🤖 Maaf, saya belum dapat menganalisis pertanyaan ini.\n\n' +
+          'Kamu bisa menanyakan seputar **saldo dompet (misal: saldo DANA), total pengeluaran, batas anggaran, analisis kategori boros**, atau langsung mencatat transaksi baru!';
 
       riwayat.push({
         id: uid(),
         role: 'assistant',
         text: fallbackText,
-        suggestions: geminiKey
-          ? ['Coba tanyakan lagi', 'Berapa sisa saldo di semua dompetku?']
-          : ['🔑 Masukkan Kunci Gemini', 'Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat'],
+        suggestions: ['Berapa sisa saldo di semua dompetku?', 'Cek saldo dompet DANA', 'Beri tips berhemat'],
         ts: Date.now()
       });
       simpanRiwayatAiChat(riwayat);
@@ -11577,7 +11711,7 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
   }
 }
 
-$('btnBukaAiChat').onclick = () => {
+function bukaDialogAiChat() {
   renderPesanAiChat();
   sinkronkanTampilanGeminiKey();
   sinkronisasiStatusDialog();
@@ -11585,8 +11719,12 @@ $('btnBukaAiChat').onclick = () => {
   if (window.innerWidth > 640) {
     setTimeout(() => $('aiChatInput')?.focus({ preventScroll: true }), 80);
   }
-};
-$('btnAiChatKey').onclick = () => bukaDialogGeminiKey();
+}
+
+$('btnBukaAiChat').onclick = bukaDialogAiChat;
+if ($('fabAiChat')) $('fabAiChat').onclick = bukaDialogAiChat;
+if ($('btnTopAiChat')) $('btnTopAiChat').onclick = bukaDialogAiChat;
+if ($('btnSideAiChat')) $('btnSideAiChat').onclick = bukaDialogAiChat;
 $('btnCloseGeminiKey').onclick = () => {
   $('dlgGeminiKey').close();
   sinkronisasiStatusDialog();

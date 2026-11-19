@@ -460,7 +460,7 @@ ${JSON.stringify(safeContext)}
 
 Instruksi:
 1. Jawab pertanyaan pengguna secara ramah, ringkas, dan solutif.
-2. Jika pengguna menanyakan data keuangannya, berikan rincian sesuai data di atas dalam format Rupiah (Rp).
+2. Jika pengguna menanyakan data keuangannya atau analisis/saldo dompet tertentu (misal: saldo DANA, pengeluaran DANA, saldo dompet, ringkasan pengeluaran), berikan analisis mendalam dan rincian sesuai data di atas dalam format Rupiah (Rp).
 3. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran..."), berikan konfirmasi ramah dan sertakan array transaksi dalam "draftTransactions". Jika menyebut e-wallet atau bank (seperti DANA, GoPay, OVO, BCA, dll), selalu set paymentMethod: "nontunai" dan walletName sesuai nama dompet/bank tersebut.
 4. Jika pengguna bermaksud menghapus/membatalkan catatan transaksi (misal: "hapus bensin tadi", "batalkan pengeluaran 18rb"), cocokkan transaksi yang dimaksud di "recentTransactions" lalu sertakan di array "deleteActions" dengan targetId dan judul yang sesuai.
 5. Jika pengguna bermaksud mengubah/mengedit nominal, kategori, dompet, atau judul transaksi (misal: "ubah bensin tadi jadi 35rb", "ganti kategori makan jadi Jajan"), cocokkan transaksi di "recentTransactions" lalu sertakan di array "updateActions" beserta data barunya.

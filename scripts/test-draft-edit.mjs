@@ -279,4 +279,28 @@ assert.equal(trxTersimpan.kategori, 'Belanja', 'Kategori transaksi di database h
 assert.equal(trxTersimpan.cara, 'nontunai', 'Cara bayar transaksi di database harus nontunai');
 assert.equal(trxTersimpan.dompetId, idDana, 'Dompet transaksi di database harus ID DANA');
 
+// Test 10: Analisis Dompet DANA (Dana Analisis) via AI lokal
+console.log('Testing Analisis Keuangan Dompet DANA...');
+const analisisDana = run("jawabFinansialLokal('analisis dompet dana', siapkanKonteksAiChat())");
+assert.ok(analisisDana, 'jawabFinansialLokal harus mengembalikan hasil analisis untuk DANA');
+assert.match(analisisDana.reply, /Analisis Keuangan Dompet DANA/i, 'Judul analisis harus menyebut DANA');
+assert.match(analisisDana.reply, /Saldo Saat Ini/i, 'Harus menampilkan saldo');
+assert.match(analisisDana.reply, /Pengeluaran \(30 Hari\)/i, 'Harus menampilkan statistik pengeluaran 30 hari');
+assert.match(analisisDana.reply, /Belanja/i, 'Harus menganalisis kategori pengeluaran DANA');
+
+// Test 11: Cek Saldo Dompet DANA
+const cekSaldoDana = run("jawabFinansialLokal('cek saldo dana', siapkanKonteksAiChat())");
+assert.ok(cekSaldoDana, 'jawabFinansialLokal harus merespons kueri cek saldo DANA');
+assert.match(cekSaldoDana.reply, /DANA/i, 'Balasan harus menyebut DANA');
+
+// Test 12: Verifikasi Tombol Buka AI Chat (FAB & Top Header)
+console.log('Testing FAB and Header AI buttons...');
+assert.ok(run("typeof bukaDialogAiChat === 'function'"), 'bukaDialogAiChat harus terdefinisi sebagai fungsi');
+const fabEl = run("document.getElementById('fabAiChat')");
+assert.ok(fabEl, 'Elemen fabAiChat harus ada di DOM');
+const topAiEl = run("document.getElementById('btnTopAiChat')");
+assert.ok(topAiEl, 'Elemen btnTopAiChat harus ada di DOM');
+const sideAiEl = run("document.getElementById('btnSideAiChat')");
+assert.ok(sideAiEl, 'Elemen btnSideAiChat harus ada di DOM');
+
 console.log('Semua pengujian unit draf AI dan E-wallet DANA BERHASIL!');
