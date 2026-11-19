@@ -726,23 +726,23 @@
       </div>
       <div class="flow-steps">
         <div class="flow-step-box">
-          <div class="flow-step-num"><span>01</span> EKSPOR CADANGAN</div>
-          <div class="flow-step-text">Klik <strong>Backup JSON</strong> untuk mengamankan skema data v4 lengkap, atau <strong>Ekspor CSV</strong> untuk laporan Excel.</div>
+          <div class="flow-step-num"><span>01</span> PILIH MODE EKSPOR</div>
+          <div class="flow-step-text">Klik <strong>Export backup</strong>, lalu pilih: JSON Standar atau <strong>Terenkripsi Kata Sandi (AES-GCM 256-bit)</strong>.</div>
         </div>
         <div class="flow-arrow">➔</div>
         <div class="flow-step-box">
-          <div class="flow-step-num"><span>02</span> UNDUHAN LOKAL</div>
-          <div class="flow-step-text">Berkas hasil ekspor otomatis terunduh ke direktori perangkat pengguna dalam format JSON skema v4 murni (non-enkripsi).</div>
+          <div class="flow-step-num"><span>02</span> ENKRIPSI &amp; UNDUH</div>
+          <div class="flow-step-text">Jika diproteksi, kunci diturunkan via PBKDF2 (100k iterasi). Berkas cadangan terenkripsi aman langsung terunduh.</div>
         </div>
         <div class="flow-arrow">➔</div>
         <div class="flow-step-box">
-          <div class="flow-step-num"><span>03</span> PILIH BERKAS IMPOR</div>
-          <div class="flow-step-text">Pada perangkat baru, pengguna memilih berkas JSON cadangan melalui tombol <strong>Impor Data Cadangan</strong>.</div>
+          <div class="flow-step-num"><span>03</span> UNGGAH CADANGAN</div>
+          <div class="flow-step-text">Pada perangkat lain, pilih berkas JSON cadangan. Sistem otomatis mendeteksi apakah berkas terenkripsi atau polos.</div>
         </div>
         <div class="flow-arrow">➔</div>
         <div class="flow-step-box">
-          <div class="flow-step-num"><span>04</span> VALIDASI & RESTORE</div>
-          <div class="flow-step-text">Sistem memvalidasi integritas struktur data, mencegah duplikasi ID, dan memulihkan seluruh saldo serta riwayat transaksi.</div>
+          <div class="flow-step-num"><span>04</span> DEKRIPSI &amp; RESTORE</div>
+          <div class="flow-step-text">Masukkan kata sandi pengunci untuk mendekripsi data. Setelah valid, seluruh saldo dan riwayat transaksi dipulihkan.</div>
         </div>
       </div>
     </div>
@@ -1017,9 +1017,9 @@
         </p>
       </div>
       <div class="card">
-        <div class="card-title">💾 Cadangan JSON & CSV Bersih</div>
+        <div class="card-title">💾 Cadangan JSON Terenkripsi &amp; CSV</div>
         <p class="card-desc">
-          Data dapat diekspor menjadi berkas <code>.json</code> terverifikasi skema v4 murni (non-enkripsi) untuk dicadangkan kapan saja, atau diekspor ke format <code>.csv</code> untuk dianalisis lebih lanjut menggunakan Microsoft Excel atau Google Sheets.
+          Mendukung ekspor standar JSON v4 polos maupun proteksi kriptografi <strong>AES-GCM 256-bit + PBKDF2</strong> (100.000 iterasi) via Web Crypto API. Berkas terenkripsi tidak dapat dibuka tanpa kata sandi yang sah. Ekspor CSV juga tersedia untuk Excel.
         </p>
       </div>
       <div class="card">

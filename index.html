@@ -3479,6 +3479,41 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
 <dialog id="dlgStatusCatatan" aria-labelledby="ledgerStatusTitle"><h2 id="ledgerStatusTitle">Ubah status catatan</h2><p class="muted" id="ledgerStatusDescription"></p><div id="ledgerReasonWrap"><label class="field-label" for="ledgerReason">Alasan nonaktif (opsional)</label><input id="ledgerReason" type="text" maxlength="240" placeholder="Contoh: catatan uji coba atau transaksi dibatalkan"></div><p class="ledger-notice" id="ledgerStatusPreview" aria-live="polite"></p><p role="alert" id="ledgerStatusError"></p><button type="button" id="ledgerStatusSave">Ya, ubah status</button><button type="button" class="sec" id="ledgerStatusCancel">Kembali</button></dialog>
 <dialog id="dlgImportLedger" aria-labelledby="ledgerImportTitle"><h2 id="ledgerImportTitle">Periksa backup</h2><p id="ledgerImportSummary"></p><label class="field-label" for="ledgerImportMode">Cara memakai backup</label><select id="ledgerImportMode"><option value="gabung">Gabungkan catatan baru (ID lama tetap)</option><option value="pulihkan">Pulihkan penuh (ganti seluruh data)</option></select><p class="muted">Pulihkan penuh mengembalikan status aktif/nonaktif dan stok pecahan persis dari backup. Gabungkan hanya menambah ID baru; pecahan baru ikut diperiksa agar tidak terhitung dua kali.</p><p role="alert" id="ledgerImportError"></p><button type="button" id="ledgerImportSave">Lanjutkan</button><button type="button" class="sec" id="ledgerImportCancel">Batal</button></dialog>
 
+<dialog id="dlgExportBackup" aria-labelledby="exportBackupTitle">
+  <h2 id="exportBackupTitle">Export Cadangan (JSON)</h2>
+  <p class="muted">Simpan seluruh data transaksi, dompet, target tabungan, dan anggaran ke berkas lokal.</p>
+  <div style="margin:10px 0 12px;display:flex;flex-direction:column;gap:8px">
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--ink)">
+      <input type="radio" name="exportSecMode" id="expSecPlain" value="plain" checked style="width:auto;margin:0">
+      <span>Standar (Tanpa kata sandi)</span>
+    </label>
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--ink)">
+      <input type="radio" name="exportSecMode" id="expSecEncrypted" value="encrypted" style="width:auto;margin:0">
+      <span>🔐 Terenkripsi Kata Sandi (AES-GCM 256-bit)</span>
+    </label>
+  </div>
+  <div id="expPasswordWrap" hidden style="margin-bottom:12px">
+    <label class="field-label" for="expPassword">Kata sandi pengunci</label>
+    <input type="password" id="expPassword" placeholder="Minimal 6 karakter" autocomplete="new-password">
+    <label class="field-label" for="expPasswordConfirm">Ulangi kata sandi</label>
+    <input type="password" id="expPasswordConfirm" placeholder="Ketik ulang kata sandi" autocomplete="new-password">
+    <p class="muted" style="margin:4px 0 0;font-size:11.5px">⚠️ Ingat kata sandi ini. Jika lupa, data tidak dapat dipulihkan kembali.</p>
+  </div>
+  <p class="form-error" id="expError" role="alert" style="display:none"></p>
+  <button type="button" id="btnExportDo">Unduh cadangan</button>
+  <button type="button" class="sec" id="btnExportCancel">Batal</button>
+</dialog>
+
+<dialog id="dlgDecryptBackup" aria-labelledby="decryptBackupTitle">
+  <h2 id="decryptBackupTitle">🔐 Buka Cadangan Terenkripsi</h2>
+  <p class="muted">Berkas backup ini diproteksi enkripsi AES-GCM 256-bit. Masukkan kata sandi yang digunakan saat mengekspor:</p>
+  <label class="field-label" for="decryptPassword">Kata sandi</label>
+  <input type="password" id="decryptPassword" placeholder="Masukkan kata sandi" autocomplete="current-password">
+  <p class="form-error" id="decryptError" role="alert" style="display:none"></p>
+  <button type="button" id="btnDecryptDo">Buka &amp; Periksa</button>
+  <button type="button" class="sec" id="btnDecryptCancel">Batal</button>
+</dialog>
+
 <!-- DIALOG EDIT BERULANG -->
 <dialog id="dlgBerulang">
   <h2>Edit transaksi berulang</h2>
@@ -6934,10 +6969,212 @@ async function renderStorageStatus() {
 
 $('btnExcel').onclick=()=>eksporLedgerCsv();
 
-$('btnBackup').onclick=()=>{unduh('backup-keuangan-'+hariIni()+'.json',JSON.stringify(buatBackupObjek(),null,2),'application/json');set.backupTerakhir=hariIni();try{simpanSet();}catch(_){}renderSemua();};
+// Web Crypto API: Enkripsi & Dekripsi AES-GCM 256-bit + PBKDF2
+async function enkripsiDataBackup(teksJson, password) {
+  const cryptoObj = window.crypto || globalThis.crypto;
+  if (!cryptoObj?.subtle) throw new Error('Fitur enkripsi tidak didukung oleh browser ini.');
+  const enc = new TextEncoder();
+  const salt = cryptoObj.getRandomValues(new Uint8Array(16));
+  const iv = cryptoObj.getRandomValues(new Uint8Array(12));
+
+  const keyMaterial = await cryptoObj.subtle.importKey(
+    'raw',
+    enc.encode(password),
+    'PBKDF2',
+    false,
+    ['deriveKey']
+  );
+
+  const key = await cryptoObj.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt,
+      iterations: 100000,
+      hash: 'SHA-256'
+    },
+    keyMaterial,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt']
+  );
+
+  const encrypted = await cryptoObj.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    key,
+    enc.encode(teksJson)
+  );
+
+  const toB64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+  return JSON.stringify({
+    format: 'catatan-keuangan-encrypted-v1',
+    versiDibuat: 4,
+    tanggal: hariIni(),
+    salt: toB64(salt),
+    iv: toB64(iv),
+    ciphertext: toB64(encrypted)
+  }, null, 2);
+}
+
+async function dekripsiDataBackup(encryptedObj, password) {
+  const cryptoObj = window.crypto || globalThis.crypto;
+  if (!cryptoObj?.subtle) throw new Error('Fitur dekripsi tidak didukung oleh browser ini.');
+  if (encryptedObj?.format !== 'catatan-keuangan-encrypted-v1' || !encryptedObj.salt || !encryptedObj.iv || !encryptedObj.ciphertext) {
+    throw new Error('Format berkas terenkripsi tidak valid.');
+  }
+
+  const fromB64 = str => Uint8Array.from(atob(str), c => c.charCodeAt(0));
+  const salt = fromB64(encryptedObj.salt);
+  const iv = fromB64(encryptedObj.iv);
+  const ciphertext = fromB64(encryptedObj.ciphertext);
+
+  const enc = new TextEncoder();
+  const dec = new TextDecoder();
+
+  const keyMaterial = await cryptoObj.subtle.importKey(
+    'raw',
+    enc.encode(password),
+    'PBKDF2',
+    false,
+    ['deriveKey']
+  );
+
+  const key = await cryptoObj.subtle.deriveKey(
+    {
+      name: 'PBKDF2',
+      salt,
+      iterations: 100000,
+      hash: 'SHA-256'
+    },
+    keyMaterial,
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['decrypt']
+  );
+
+  try {
+    const decrypted = await cryptoObj.subtle.decrypt(
+      { name: 'AES-GCM', iv },
+      key,
+      ciphertext
+    );
+    return JSON.parse(dec.decode(decrypted));
+  } catch (_) {
+    throw new Error('Kata sandi salah atau berkas rusak.');
+  }
+}
+
+let berkasEncryptedDraft = null;
+
+function bukaExportBackupDialog() {
+  $('expSecPlain').checked = true;
+  $('expPasswordWrap').hidden = true;
+  $('expPassword').value = '';
+  $('expPasswordConfirm').value = '';
+  $('expError').style.display = 'none';
+  $('expError').textContent = '';
+  $('dlgExportBackup').showModal();
+}
+
+$('expSecPlain').onchange = () => { $('expPasswordWrap').hidden = true; };
+$('expSecEncrypted').onchange = () => { $('expPasswordWrap').hidden = false; $('expPassword').focus(); };
+$('btnExportCancel').onclick = () => $('dlgExportBackup').close();
+
+$('btnExportDo').onclick = async () => {
+  const isEncrypted = $('expSecEncrypted').checked;
+  const rawData = JSON.stringify(buatBackupObjek(), null, 2);
+  let content = rawData;
+  let filename = 'backup-keuangan-' + hariIni() + '.json';
+
+  if (isEncrypted) {
+    const pw = $('expPassword').value;
+    const pwConf = $('expPasswordConfirm').value;
+    if (!pw || pw.length < 6) {
+      $('expError').textContent = 'Kata sandi minimal 6 karakter.';
+      $('expError').style.display = 'block';
+      $('expPassword').focus();
+      return;
+    }
+    if (pw !== pwConf) {
+      $('expError').textContent = 'Konfirmasi kata sandi tidak cocok.';
+      $('expError').style.display = 'block';
+      $('expPasswordConfirm').focus();
+      return;
+    }
+    try {
+      $('btnExportDo').disabled = true;
+      $('btnExportDo').textContent = 'Mengenkripsi…';
+      content = await enkripsiDataBackup(rawData, pw);
+      filename = 'backup-keuangan-terenkripsi-' + hariIni() + '.json';
+    } catch (err) {
+      $('expError').textContent = 'Gagal mengenkripsi: ' + err.message;
+      $('expError').style.display = 'block';
+      return;
+    } finally {
+      $('btnExportDo').disabled = false;
+      $('btnExportDo').textContent = 'Unduh cadangan';
+    }
+  }
+
+  unduh(filename, content, 'application/json');
+  set.backupTerakhir = hariIni();
+  try { simpanSet(); } catch (_) {}
+  $('dlgExportBackup').close();
+  renderSemua();
+  beriPesan(isEncrypted ? 'Cadangan terenkripsi berhasil diunduh.' : 'Cadangan berhasil diunduh.');
+};
+
+$('btnBackup').onclick = () => bukaExportBackupDialog();
 
 $('btnImport').onclick = () => $('fileImport').click();
-$('fileImport').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>30000000)throw Error('Pilih backup di bawah 30 MB.');const raw=JSON.parse(await file.text());bukaImporLedger(raw);}catch(err){beriPesan('Backup belum dibuka: '+err.message,true);}finally{e.target.value='';}};
+$('fileImport').onchange = async e => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    if (file.size > 30000000) throw Error('Pilih backup di bawah 30 MB.');
+    const text = await file.text();
+    const raw = JSON.parse(text);
+
+    if (raw && raw.format === 'catatan-keuangan-encrypted-v1') {
+      berkasEncryptedDraft = raw;
+      $('decryptPassword').value = '';
+      $('decryptError').style.display = 'none';
+      $('decryptError').textContent = '';
+      $('dlgDecryptBackup').showModal();
+      return;
+    }
+
+    bukaImporLedger(raw);
+  } catch (err) {
+    beriPesan('Backup belum dibuka: ' + err.message, true);
+  } finally {
+    e.target.value = '';
+  }
+};
+
+$('btnDecryptCancel').onclick = () => { berkasEncryptedDraft = null; $('dlgDecryptBackup').close(); };
+
+$('btnDecryptDo').onclick = async () => {
+  const pw = $('decryptPassword').value;
+  if (!pw) {
+    $('decryptError').textContent = 'Masukkan kata sandi.';
+    $('decryptError').style.display = 'block';
+    $('decryptPassword').focus();
+    return;
+  }
+  try {
+    $('btnDecryptDo').disabled = true;
+    $('btnDecryptDo').textContent = 'Mendekripsi…';
+    const decryptedData = await dekripsiDataBackup(berkasEncryptedDraft, pw);
+    $('dlgDecryptBackup').close();
+    bukaImporLedger(decryptedData);
+  } catch (err) {
+    $('decryptError').textContent = err.message || 'Gagal membuka cadangan.';
+    $('decryptError').style.display = 'block';
+  } finally {
+    $('btnDecryptDo').disabled = false;
+    $('btnDecryptDo').textContent = 'Buka & Periksa';
+  }
+};
 
 // ===== TAMPILAN (TEMA, KACA, LATAR) =====
 

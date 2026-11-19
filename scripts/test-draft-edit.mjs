@@ -96,7 +96,13 @@ const document = {
 };
 
 const context = {
-  window: {},
+  window: { crypto: globalThis.crypto },
+  crypto: globalThis.crypto,
+  btoa: globalThis.btoa,
+  atob: globalThis.atob,
+  TextEncoder: globalThis.TextEncoder,
+  TextDecoder: globalThis.TextDecoder,
+  Uint8Array: globalThis.Uint8Array,
   document,
   fetch: async () => ({
     ok: true,
@@ -384,4 +390,39 @@ cekSaldoDompet([
 `);
 assert.equal(errPaylater, '', 'Dompet dengan izinkanMinus=true harus mengizinkan saldo minus tanpa error');
 
-console.log('Semua pengujian unit draf AI, E-wallet DANA, Target Tabungan, Transaksi Berulang, dan Dompet PayLater BERHASIL!');
+// Test 16: Web Crypto API Enkripsi & Dekripsi Backup JSON (AES-GCM 256-bit + PBKDF2)
+console.log('Testing Web Crypto API Backup Encryption and Decryption (AES-GCM)...');
+const testEncryptionScript = `
+(async () => {
+  const dummyData = JSON.stringify({
+    versi: 4,
+    transaksi: [{ id: 'tx-1', judul: 'Kopi Kenangan', total: 22000 }],
+    saldoTotal: 500000
+  });
+  const passwordBenar = 'RahasiaSuperKuat123';
+  const passwordSalah = 'SalahPasswordNya';
+
+  const encryptedJson = await enkripsiDataBackup(dummyData, passwordBenar);
+  const parsedEncrypted = JSON.parse(encryptedJson);
+  if (parsedEncrypted.format !== 'catatan-keuangan-encrypted-v1') throw new Error('Format salah');
+  if (!parsedEncrypted.salt || !parsedEncrypted.iv || !parsedEncrypted.ciphertext) throw new Error('Komponen kripto hilang');
+
+  const decryptedObj = await dekripsiDataBackup(parsedEncrypted, passwordBenar);
+  if (decryptedObj.transaksi[0].judul !== 'Kopi Kenangan') throw new Error('Data dekripsi tidak cocok');
+  if (decryptedObj.saldoTotal !== 500000) throw new Error('Saldo dekripsi tidak cocok');
+
+  let gagalBerhasil = false;
+  try {
+    await dekripsiDataBackup(parsedEncrypted, passwordSalah);
+  } catch (err) {
+    gagalBerhasil = true;
+  }
+  if (!gagalBerhasil) throw new Error('Password salah seharusnya ditolak');
+  return true;
+})()
+`;
+
+const cryptoResult = await run(testEncryptionScript);
+assert.equal(cryptoResult, true, 'Enkripsi & dekripsi Web Crypto API harus berhasil dan menolak password salah');
+
+console.log('Semua pengujian unit draf AI, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, dan Enkripsi Backup BERHASIL!');
