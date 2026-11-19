@@ -425,4 +425,38 @@ const testEncryptionScript = `
 const cryptoResult = await run(testEncryptionScript);
 assert.equal(cryptoResult, true, 'Enkripsi & dekripsi Web Crypto API harus berhasil dan menolak password salah');
 
-console.log('Semua pengujian unit draf AI, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, dan Enkripsi Backup BERHASIL!');
+// Test 17: Kunci Aplikasi (App Lock) PIN Hashing & Validation
+console.log('Testing App Lock PIN Hashing, Locking, and Unlocking Logic...');
+const testAppLockScript = `
+(async () => {
+  const pin1 = '5829';
+  const pinSalah = '1234';
+
+  const hash1 = await hashPin(pin1);
+  const hash2 = await hashPin(pin1);
+  const hashSalah = await hashPin(pinSalah);
+
+  if (!hash1 || hash1.length !== 64) throw new Error('SHA-256 hash PIN tidak valid');
+  if (hash1 !== hash2) throw new Error('Hash PIN harus deterministik');
+  if (hash1 === hashSalah) throw new Error('Hash PIN berbeda harus menghasilkan hash berbeda');
+
+  set.appLockAktif = true;
+  set.appLockPinHash = hash1;
+  kunciAplikasi();
+  if (appLockUnlocked !== false) throw new Error('Aplikasi harus dalam keadaan terkunci');
+
+  inputPinBuffer = '5829';
+  const hashedInput = await hashPin(inputPinBuffer);
+  if (hashedInput === set.appLockPinHash) {
+    bukaKunciAplikasi();
+  }
+  if (appLockUnlocked !== true) throw new Error('Aplikasi harus terbuka setelah PIN benar');
+
+  return true;
+})()
+`;
+
+const appLockResult = await run(testAppLockScript);
+assert.equal(appLockResult, true, 'Logika PIN hash dan status kunci aplikasi harus berhasil');
+
+console.log('Semua pengujian unit draf AI, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, dan Kunci Aplikasi BERHASIL!');

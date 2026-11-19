@@ -2490,6 +2490,56 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     display: none !important;
   }
 
+  /* Kunci Aplikasi (App Lock) Styles */
+  .app-pin-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--pri, #6366f1);
+    background: transparent;
+    transition: all 0.15s ease;
+  }
+  .app-pin-dot.is-filled {
+    background: var(--pri, #6366f1);
+    transform: scale(1.15);
+  }
+  .pin-key {
+    height: 56px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card, #ffffff);
+    color: var(--ink, #1e293b);
+    border: 1px solid var(--line, #e2e8f0);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    transition: all 0.1s ease;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .pin-key:active {
+    background: var(--pri, #6366f1);
+    color: #ffffff;
+    transform: scale(0.95);
+  }
+  .pin-key.pin-tool {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    font-size: 20px;
+  }
+  @keyframes pin-shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+  }
+  .pin-shake {
+    animation: pin-shake 0.35s ease-in-out;
+  }
+
   html#financeApp dialog.ai-chat-dialog[open],
   dialog.ai-chat-dialog[open] {
     position: fixed !important;
@@ -3187,6 +3237,26 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     <p class="muted setting-help" id="driveAutoInfo" role="status"></p>
     <p class="muted" id="driveStatus">Belum pernah disimpan ke Drive.</p>
   </div>
+  <div class="card">
+    <h2>🔒 Kunci Aplikasi (App Lock)</h2>
+    <p class="muted" id="appLockStatusDesc">Lindungi catatan keuangan agar hanya bisa dibuka dengan PIN atau biometrik saat aplikasi dibuka.</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:10px 0 12px">
+      <span style="font-size:13.5px;font-weight:600;color:var(--ink)" id="appLockStatusText">Status: Tidak Aktif</span>
+      <button type="button" class="sec kecil" id="btnAppLockToggle" style="width:auto;margin:0">Atur PIN</button>
+    </div>
+    <div id="appLockSettingsWrap" hidden>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <button type="button" class="ghost kecil" id="btnAppLockChangePin">Ubah PIN</button>
+        <button type="button" class="ghost kecil" id="btnAppLockDisable">Matikan Kunci</button>
+      </div>
+      <div id="appLockBioWrap" style="margin-top:8px" hidden>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--ink)">
+          <input type="checkbox" id="appLockBioCheck" style="width:auto;margin:0">
+          <span>Gunakan Sidik Jari / Biometrik (WebAuthn)</span>
+        </label>
+      </div>
+    </div>
+  </div>
 </section>
 
 
@@ -3512,6 +3582,18 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   <p class="form-error" id="decryptError" role="alert" style="display:none"></p>
   <button type="button" id="btnDecryptDo">Buka &amp; Periksa</button>
   <button type="button" class="sec" id="btnDecryptCancel">Batal</button>
+</dialog>
+
+<dialog id="dlgAppLockSetup" aria-labelledby="appLockSetupTitle">
+  <h2 id="appLockSetupTitle">Atur PIN Keamanan</h2>
+  <p class="muted" id="appLockSetupSubtitle">Buat 4 digit PIN angka untuk mengunci aplikasi saat dibuka.</p>
+  <label class="field-label" for="inpAppLockNew">PIN Baru (4 digit angka)</label>
+  <input type="password" id="inpAppLockNew" inputmode="numeric" maxlength="4" placeholder="Contoh: 1234" autocomplete="new-password">
+  <label class="field-label" for="inpAppLockConfirm">Ulangi PIN Baru</label>
+  <input type="password" id="inpAppLockConfirm" inputmode="numeric" maxlength="4" placeholder="Ketik ulang PIN" autocomplete="new-password">
+  <p class="form-error" id="appLockSetupError" role="alert" style="display:none"></p>
+  <button type="button" id="btnAppLockSavePin">Simpan PIN</button>
+  <button type="button" class="sec" id="btnAppLockCancelPin">Batal</button>
 </dialog>
 
 <!-- DIALOG EDIT BERULANG -->
@@ -6865,6 +6947,7 @@ function renderSemua() {
   renderCompare();
   if(document.documentElement.dataset.uiReady) hiasJudulRuang();
   renderStorageStatus();
+  if (typeof perbaruiUiAppLockSetelan === 'function') perbaruiUiAppLockSetelan();
 }
 
 function selesaikanLoadingSplash(){
@@ -12717,6 +12800,255 @@ $('btnAiCamTerapkan').onclick = () => {
     }
   } catch (_) {}
 })();
+
+// ===== KUNCI APLIKASI (APP LOCK): PIN & BIOMETRIK =====
+let inputPinBuffer = '';
+let appLockUnlocked = false;
+
+async function hashPin(pin) {
+  const enc = new TextEncoder();
+  const salt = 'catatan-keuangan-applock-salt-2026';
+  const data = enc.encode(salt + pin);
+  const cryptoObj = window.crypto || globalThis.crypto;
+  const hashBuffer = await cryptoObj.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function updatePinDots() {
+  const len = inputPinBuffer.length;
+  for (let i = 0; i < 4; i++) {
+    const dot = $('pinDot' + i);
+    if (dot) dot.classList.toggle('is-filled', i < len);
+  }
+}
+
+async function handlePinInput(digit) {
+  if (inputPinBuffer.length >= 4) return;
+  inputPinBuffer += digit;
+  updatePinDots();
+  $('appLockError').style.display = 'none';
+
+  if (inputPinBuffer.length === 4) {
+    const entered = inputPinBuffer;
+    const hashed = await hashPin(entered);
+    if (hashed === set.appLockPinHash) {
+      bukaKunciAplikasi();
+    } else {
+      $('appLockError').textContent = 'PIN salah. Coba lagi.';
+      $('appLockError').style.display = 'block';
+      $('appLockDots').classList.add('pin-shake');
+      setTimeout(() => {
+        $('appLockDots').classList.remove('pin-shake');
+        inputPinBuffer = '';
+        updatePinDots();
+      }, 400);
+    }
+  }
+}
+
+function handlePinDelete() {
+  if (inputPinBuffer.length > 0) {
+    inputPinBuffer = inputPinBuffer.slice(0, -1);
+    updatePinDots();
+    $('appLockError').style.display = 'none';
+  }
+}
+
+function bukaKunciAplikasi() {
+  appLockUnlocked = true;
+  $('appLockOverlay').style.display = 'none';
+  inputPinBuffer = '';
+  updatePinDots();
+  renderSemua();
+}
+
+function kunciAplikasi() {
+  if (!set.appLockAktif || !set.appLockPinHash) return;
+  appLockUnlocked = false;
+  inputPinBuffer = '';
+  updatePinDots();
+  $('appLockError').style.display = 'none';
+  $('appLockOverlay').style.display = 'flex';
+
+  if (set.appLockBiometrik) {
+    pemicuBiometrik();
+  }
+}
+
+async function pemicuBiometrik() {
+  if (!window.PublicKeyCredential || !set.appLockBiometrik) return;
+  try {
+    const challenge = new Uint8Array(32);
+    (window.crypto || globalThis.crypto).getRandomValues(challenge);
+    const assertion = await navigator.credentials.get({
+      publicKey: {
+        challenge,
+        userVerification: 'required',
+        timeout: 60000
+      }
+    });
+    if (assertion) {
+      bukaKunciAplikasi();
+    }
+  } catch (_) {
+    // Pengguna membatalkan biometrik, fallback ke PIN
+  }
+}
+
+function perbaruiUiAppLockSetelan() {
+  const aktif = Boolean(set.appLockAktif && set.appLockPinHash);
+  $('appLockStatusText').textContent = aktif ? 'Status: 🟢 Aktif' : 'Status: Tidak Aktif';
+  $('appLockStatusDesc').textContent = aktif
+    ? 'Catatan keuangan terkunci otomatis saat web dibuka. Buka menggunakan PIN' + (set.appLockBiometrik ? ' atau Biometrik.' : '.')
+    : 'Lindungi catatan keuangan agar hanya bisa dibuka dengan PIN atau biometrik saat aplikasi dibuka.';
+  $('btnAppLockToggle').textContent = aktif ? 'Kelola Kunci' : 'Atur PIN';
+  $('appLockSettingsWrap').hidden = !aktif;
+
+  if (window.PublicKeyCredential && window.isSecureContext) {
+    $('appLockBioWrap').hidden = false;
+    $('appLockBioCheck').checked = Boolean(set.appLockBiometrik);
+    $('btnAppLockBio').style.visibility = set.appLockBiometrik ? 'visible' : 'hidden';
+  } else {
+    $('appLockBioWrap').hidden = true;
+    $('btnAppLockBio').style.visibility = 'hidden';
+  }
+}
+
+$('btnAppLockToggle').onclick = () => {
+  if (!set.appLockAktif) {
+    $('appLockSetupTitle').textContent = 'Atur PIN Keamanan';
+    $('appLockSetupSubtitle').textContent = 'Buat 4 digit PIN angka untuk mengunci aplikasi saat dibuka.';
+    $('inpAppLockNew').value = '';
+    $('inpAppLockConfirm').value = '';
+    $('appLockSetupError').style.display = 'none';
+    $('dlgAppLockSetup').showModal();
+  } else {
+    $('appLockSettingsWrap').hidden = !$('appLockSettingsWrap').hidden;
+  }
+};
+
+$('btnAppLockChangePin').onclick = () => {
+  $('appLockSetupTitle').textContent = 'Ubah PIN Keamanan';
+  $('appLockSetupSubtitle').textContent = 'Masukkan 4 digit PIN angka baru.';
+  $('inpAppLockNew').value = '';
+  $('inpAppLockConfirm').value = '';
+  $('appLockSetupError').style.display = 'none';
+  $('dlgAppLockSetup').showModal();
+};
+
+$('btnAppLockCancelPin').onclick = () => $('dlgAppLockSetup').close();
+
+$('btnAppLockSavePin').onclick = async () => {
+  const p1 = $('inpAppLockNew').value.trim();
+  const p2 = $('inpAppLockConfirm').value.trim();
+  if (!/^\d{4}$/.test(p1)) {
+    $('appLockSetupError').textContent = 'PIN harus berupa 4 digit angka.';
+    $('appLockSetupError').style.display = 'block';
+    $('inpAppLockNew').focus();
+    return;
+  }
+  if (p1 !== p2) {
+    $('appLockSetupError').textContent = 'Konfirmasi PIN tidak cocok.';
+    $('appLockSetupError').style.display = 'block';
+    $('inpAppLockConfirm').focus();
+    return;
+  }
+  set.appLockPinHash = await hashPin(p1);
+  set.appLockAktif = true;
+  try { simpanSet(); } catch (_) {}
+  $('dlgAppLockSetup').close();
+  perbaruiUiAppLockSetelan();
+  beriPesan('Kunci aplikasi aktif! PIN berhasil disimpan.');
+};
+
+$('btnAppLockDisable').onclick = () => {
+  if (!confirm('Matikan kunci aplikasi? Aplikasi akan terbuka langsung tanpa PIN.')) return;
+  set.appLockAktif = false;
+  set.appLockPinHash = '';
+  set.appLockBiometrik = false;
+  try { simpanSet(); } catch (_) {}
+  perbaruiUiAppLockSetelan();
+  beriPesan('Kunci aplikasi telah dimatikan.');
+};
+
+$('appLockBioCheck').onchange = async () => {
+  if ($('appLockBioCheck').checked) {
+    if (!window.PublicKeyCredential) {
+      $('appLockBioCheck').checked = false;
+      beriPesan('Biometrik tidak didukung pada browser ini.', true);
+      return;
+    }
+    set.appLockBiometrik = true;
+    try { simpanSet(); } catch (_) {}
+    perbaruiUiAppLockSetelan();
+    beriPesan('Biometrik diaktifkan.');
+  } else {
+    set.appLockBiometrik = false;
+    try { simpanSet(); } catch (_) {}
+    perbaruiUiAppLockSetelan();
+    beriPesan('Biometrik dinonaktifkan.');
+  }
+};
+
+$('appLockKeypad').addEventListener('click', e => {
+  const keyBtn = e.target.closest('button[data-key]');
+  if (keyBtn) {
+    handlePinInput(keyBtn.dataset.key);
+  }
+});
+$('btnAppLockDel').onclick = () => handlePinDelete();
+$('btnAppLockBio').onclick = () => pemicuBiometrik();
+
+window.addEventListener('keydown', e => {
+  if ($('appLockOverlay').style.display === 'flex') {
+    if (e.key >= '0' && e.key <= '9') {
+      handlePinInput(e.key);
+    } else if (e.key === 'Backspace') {
+      handlePinDelete();
+    }
+  }
+});
+
+(function inisialisasiAppLock() {
+  perbaruiUiAppLockSetelan();
+  if (set.appLockAktif && set.appLockPinHash && !appLockUnlocked) {
+    kunciAplikasi();
+  }
+})();
 </script>
+
+<div id="appLockOverlay" style="display:none;position:fixed;inset:0;z-index:999999;background:var(--bg);color:var(--ink);flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center">
+  <div style="max-width:320px;width:100%;margin:auto;display:flex;flex-direction:column;align-items:center">
+    <div style="width:60px;height:60px;border-radius:18px;background:color-mix(in srgb,var(--pri) 15%,transparent);display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:14px">🔒</div>
+    <h2 style="margin:0 0 6px;font-size:19px;font-weight:800;letter-spacing:-0.02em">Aplikasi Terkunci</h2>
+    <p class="muted" id="appLockPrompt" style="margin:0 0 20px;font-size:13px">Masukkan PIN untuk membuka catatan keuangan</p>
+    
+    <div id="appLockDots" style="display:flex;gap:12px;margin-bottom:24px" role="status" aria-label="Digit PIN">
+      <span class="app-pin-dot" id="pinDot0"></span>
+      <span class="app-pin-dot" id="pinDot1"></span>
+      <span class="app-pin-dot" id="pinDot2"></span>
+      <span class="app-pin-dot" id="pinDot3"></span>
+    </div>
+    
+    <p class="form-error" id="appLockError" style="display:none;margin-bottom:16px"></p>
+
+    <div id="appLockKeypad" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;width:100%;max-width:260px">
+      <button type="button" class="pin-key" data-key="1">1</button>
+      <button type="button" class="pin-key" data-key="2">2</button>
+      <button type="button" class="pin-key" data-key="3">3</button>
+      <button type="button" class="pin-key" data-key="4">4</button>
+      <button type="button" class="pin-key" data-key="5">5</button>
+      <button type="button" class="pin-key" data-key="6">6</button>
+      <button type="button" class="pin-key" data-key="7">7</button>
+      <button type="button" class="pin-key" data-key="8">8</button>
+      <button type="button" class="pin-key" data-key="9">9</button>
+      <button type="button" class="pin-key pin-tool" id="btnAppLockBio" title="Biometrik" style="visibility:hidden">👆</button>
+      <button type="button" class="pin-key" data-key="0">0</button>
+      <button type="button" class="pin-key pin-tool" id="btnAppLockDel" title="Hapus">⌫</button>
+    </div>
+
+    <input type="password" id="appLockHiddenInput" inputmode="numeric" maxlength="4" style="opacity:0;position:absolute;pointer-events:none" tabindex="-1">
+  </div>
+</div>
 </body>
 </html>

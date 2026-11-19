@@ -1009,23 +1009,29 @@
       <span class="section-num">8</span>
       <span>Protokol Keamanan, Google Drive Sync & Pemulihan Data</span>
     </div>
-    <div class="grid-3">
+    <div class="grid-4">
       <div class="card">
-        <div class="card-title">☁️ Google Drive OAuth 2.0 PKCE</div>
+        <div class="card-title">🔒 Kunci PIN &amp; Biometrik</div>
         <p class="card-desc">
-          Mendukung sinkronisasi awan mandiri langsung ke folder Google Drive pribadi pengguna. Menggunakan standar keamanan <strong>OAuth 2.0 dengan PKCE</strong> (Proof Key for Code Exchange), sehingga tidak ada token atau data yang melewati server perantara.
+          Proteksi akses aplikasi dengan 4-digit PIN ter-hash <strong>SHA-256</strong> dan sensor biometrik lokal (<strong>WebAuthn</strong>: Face ID / Touch ID / Windows Hello) dengan overlay keypad interaktif.
         </p>
       </div>
       <div class="card">
-        <div class="card-title">💾 Cadangan JSON Terenkripsi &amp; CSV</div>
+        <div class="card-title">☁️ Google Drive PKCE</div>
         <p class="card-desc">
-          Mendukung ekspor standar JSON v4 polos maupun proteksi kriptografi <strong>AES-GCM 256-bit + PBKDF2</strong> (100.000 iterasi) via Web Crypto API. Berkas terenkripsi tidak dapat dibuka tanpa kata sandi yang sah. Ekspor CSV juga tersedia untuk Excel.
+          Sinkronisasi awan mandiri langsung ke folder Google Drive pribadi pengguna via <strong>OAuth 2.0 PKCE</strong> tanpa melewati server perantara apa pun.
         </p>
       </div>
       <div class="card">
-        <div class="card-title">🛡️ Factory Reset (Penghapusan Total)</div>
+        <div class="card-title">💾 Cadangan Enkripsi &amp; CSV</div>
         <p class="card-desc">
-          Tombol darurat <em>Reset Pabrik</em> menghapus seluruh catatan transaksi, konfigurasi dompet, target tabungan, anggaran, dan riwayat percakapan AI dari penyimpanan peramban secara permanen dan instan jika perangkat hendak dipindahtangankan.
+          Ekspor standar JSON v4 polos maupun proteksi kriptografi <strong>AES-GCM 256-bit + PBKDF2</strong> (100.000 iterasi) via Web Crypto API, serta ekspor CSV untuk Excel.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title">🛡️ Factory Reset Total</div>
+        <p class="card-desc">
+          Tombol darurat <em>Reset Pabrik</em> menghapus seluruh transaksi, dompet, target tabungan, dan riwayat AI dari memori peramban secara permanen dan instan.
         </p>
       </div>
     </div>
