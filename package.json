@@ -4,6 +4,6 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "check": "node scripts/check.mjs && node scripts/check-ai.mjs && node scripts/test-draft-edit.mjs"
+    "check": "node scripts/check.mjs && node scripts/check-ai.mjs && node scripts/test-draft-edit.mjs && node scripts/audit-feature.mjs"
   }
 }

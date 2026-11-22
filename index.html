@@ -2290,11 +2290,12 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     html#financeApp[data-ui="ruang"] :is(#grafik,#data)>.card{margin-bottom:0}
     html#financeApp[data-ui="ruang"] #grafik>.chart-filter,html#financeApp[data-ui="ruang"] #gExtraCharts{grid-column:1/-1}
     html#financeApp[data-ui="ruang"] #catat{max-width:760px;margin:0 auto}
-    html#financeApp[data-ui="ruang"] #setelan{max-width:900px;margin:0 auto}
+    html#financeApp[data-ui="ruang"] #setelan,
+    #setelan{max-width:1040px !important;margin:0 auto}
     html#financeApp[data-ui="ruang"] nav.bottom{max-width:760px}
     html#financeApp[data-ui="ruang"] .toast-note{max-width:620px}
   }
-  @media(min-width:1080px){
+  @media(min-width:1024px){
     html#financeApp[data-ui="ruang"] body{padding-left:230px !important;padding-bottom:26px !important}
     .ui-sidebar{position:fixed;inset:0 auto 0 0;width:230px;padding:30px 20px 23px;display:flex;flex-direction:column;z-index:12;border-right:1px solid var(--ui-line);background:var(--ui-solid);color:var(--ui-ink);overflow:auto;scrollbar-width:thin}
     .ui-brand{display:flex;align-items:center;gap:11px;font-size:21px;font-weight:650;letter-spacing:-.9px;line-height:1.2;margin-bottom:45px;text-decoration:none;color:inherit}
@@ -2313,11 +2314,30 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     .ui-side-foot{font-size:10px;color:var(--ui-muted);margin:20px 11px 0;display:flex;align-items:center;gap:7px}
     .ui-side-foot svg{width:14px;height:14px}
     .ui-side-nav{margin-bottom:35px}
-    html#financeApp[data-ui="ruang"][data-gaya] header.top{padding-top:28px}
-    html#financeApp[data-ui="ruang"][data-gaya] nav.bottom{display:none !important}
-    html#financeApp[data-ui="ruang"][data-gaya] .toast-note{left:calc(50% + 115px);bottom:25px}
+    html#financeApp[data-ui="ruang"] header.top{padding-top:28px}
+    nav.bottom,
+    html#financeApp nav.bottom,
+    html#financeApp[data-ui="ruang"] nav.bottom,
+    html#financeApp[data-ui="ruang"][data-gaya] nav.bottom,
+    nav[aria-label="Navigasi HP"]{display:none !important;visibility:hidden !important;pointer-events:none !important}
+    #fabAiChat.fab-ai-chat,
+    .fab-ai-chat,
+    button#fabAiChat{display:none !important;visibility:hidden !important;pointer-events:none !important}
+    html#financeApp[data-ui="ruang"] .toast-note{left:calc(50% + 115px);bottom:25px}
   }
-  @media(min-width:1080px) and (max-height:650px){.ui-side-note{display:none}.ui-brand{margin-bottom:28px}}
+  /* Styling Setelan Responsif & Rapi untuk Desktop */
+  .setelan-top-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin:0 0 16px}
+  .setelan-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px}
+  .setelan-col{display:flex;flex-direction:column;gap:4px}
+  @media(min-width:680px){
+    .setelan-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px;align-items:start}
+  }
+  .setelan-bottom-row{display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:820px){
+    .setelan-bottom-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch}
+    .setelan-bottom-row > .card{margin-bottom:0 !important;display:flex;flex-direction:column}
+  }
+  @media(min-width:1024px) and (max-height:650px){.ui-side-note{display:none}.ui-brand{margin-bottom:28px}}
   @media(max-width:799px){html#financeApp[data-ui="ruang"][data-gaya] :is(input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]){font-size:16px}}
   @media(max-width:400px){
     html#financeApp[data-ui="ruang"] main{padding:0 14px !important}
@@ -2632,7 +2652,12 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   .ai-chat-diff-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
   .ai-chat-diff-old{color:var(--ui-muted,var(--muted));text-decoration:line-through}
   .ai-chat-diff-new{color:var(--ok,#16a34a);font-weight:700}
-  .ai-chat-trx-btn.save-all{background:linear-gradient(135deg,var(--ghostink,#4338ca),var(--pri,#4f46e5));color:#fff;padding:9px 12px;font-size:12.5px;font-weight:700;border-radius:10px;margin-top:2px}
+  .ai-chat-trx-btn.save-all{background:linear-gradient(135deg,var(--ghostink,#4338ca),var(--pri,#4f46e5));color:#fff;padding:9px 12px;font-size:12.5px;font-weight:700;border-radius:10px}
+  .ai-chat-trx-btn.merge-cart{background:var(--ui-card,var(--card,#fff));color:var(--ghostink,#4338ca);border:1.5px solid var(--ghostink,#4338ca);font-weight:700;padding:9px 12px;font-size:12.5px;border-radius:10px}
+  .ai-chat-cart-items{background:var(--ghostbg,rgba(79,70,229,.05));border-radius:10px;padding:8px 10px;margin:2px 0 4px;display:flex;flex-direction:column;gap:5px;border:1px dashed var(--keranjangline,var(--ui-line,var(--line)))}
+  .ai-chat-cart-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ui-ink,var(--ink))}
+  .ai-chat-cart-name{font-weight:600}
+  .ai-chat-cart-price{font-weight:700;font-variant-numeric:tabular-nums;color:var(--ui-muted,var(--muted))}
   .ai-chat-empty{text-align:center;padding:20px 12px;color:var(--ui-muted,var(--muted));margin:auto 0}
   .ai-chat-empty-icon{font-size:34px;margin-bottom:8px}
   .ai-chat-empty h3{font-size:16px;color:var(--ui-ink,var(--ink));margin:0 0 6px;font-weight:700}
@@ -2708,6 +2733,21 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     pointer-events: none !important;
     transform: scale(0.85) !important;
   }
+  @media (min-width: 1024px) {
+    #fabAiChat.fab-ai-chat,
+    .fab-ai-chat,
+    button#fabAiChat,
+    nav.bottom,
+    html#financeApp nav.bottom,
+    html#financeApp[data-ui="ruang"] nav.bottom,
+    html#financeApp[data-ui="ruang"][data-gaya] nav.bottom,
+    nav[aria-label="Navigasi HP"] {
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      opacity: 0 !important;
+    }
+  }
 
   /* ===== SPLASH LOADING OVERLAY (BLURRED + THEME + CENTERED SPINNER) ===== */
   .app-loading-splash {
@@ -2762,6 +2802,128 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     .app-loading-spinner {
       animation-duration: 2s;
     }
+  }
+
+  /* ===== MODERN MINIMALIST NOTES AESTHETIC ENHANCEMENT ===== */
+  /* Apple Notes & Notion-inspired clean typography, subtle borders, and balanced whitespace */
+  :root {
+    --minimal-border: color-mix(in srgb, var(--ink) 8%, transparent);
+    --minimal-border-focus: var(--pri, #4f46e5);
+    --minimal-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 14px rgba(0, 0, 0, 0.04);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Plus Jakarta Sans", Inter, sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* Crisp tabular figures for all monetary balances and numbers */
+  #saldo,
+  #totMasuk,
+  #totKeluar,
+  #masuk,
+  #keluar,
+  #homeCashTotal,
+  #walletTotal,
+  .amt,
+  .stat b,
+  .cart-amount,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* Refined Cards with subtle hairline border and soft shadow */
+  .card {
+    border: 1px solid var(--minimal-border);
+    box-shadow: var(--minimal-card-shadow);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  /* Refined Modern Notes Hero Card */
+  .saldo-hero {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 8px 24px -4px rgba(30, 41, 59, 0.35);
+    position: relative;
+    overflow: hidden;
+  }
+  .saldo-hero b#saldo {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .saldo-hero .lbl {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.85;
+  }
+  .saldo-hero .mini {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .saldo-hero .mini > span {
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 11.5px;
+    font-weight: 600;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .saldo-hero .mini > span:first-child {
+    border-left: 3.5px solid #10b981;
+  }
+  .saldo-hero .mini > span:last-child {
+    border-left: 3.5px solid #f43f5e;
+  }
+  .saldo-hero .mini > span > span {
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-top: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Refined Form Controls (Apple Notes / Craft feel) */
+  input, select, textarea {
+    border: 1px solid var(--minimal-border);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--minimal-border-focus);
+    box-shadow: 0 0 0 3.5px color-mix(in srgb, var(--pri, #4f46e5) 15%, transparent);
+  }
+
+  /* Refined Rows & Transactions */
+  .row, .ui-transaction {
+    transition: background-color 0.15s ease;
+  }
+  .row:hover, .ui-transaction:hover {
+    background: color-mix(in srgb, var(--pri, #4f46e5) 4%, transparent);
+    border-radius: 8px;
+  }
+
+  /* Refined Primary Buttons */
+  button:not(.ghost):not(.sec):not(.del):not(.kecil):not(.dock-btn):not(#btnAiMic):not(.ai-mic-btn) {
+    transition: transform 0.1s ease, filter 0.15s ease, box-shadow 0.15s ease;
+  }
+  button:not(.ghost):not(.sec):not(.del):not(.kecil):not(.dock-btn):not(#btnAiMic):not(.ai-mic-btn):hover {
+    filter: brightness(1.05);
+  }
+
+  /* Smooth Floating Mobile Dock */
+  .nav-dock, #dockNav, nav[aria-label="Navigasi HP"] {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
   }
 </style>
 
@@ -3262,120 +3424,166 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
 
 <!-- SETELAN -->
 <section id="setelan" class="page">
-  <button class="ghost" onclick="goto('data')" style="margin-top:4px">💾 Buka Data &amp; backup</button>
-  <div class="card">
+  <div class="setelan-top-bar">
+    <div>
+      <h2 style="margin:0;font-size:20px;font-weight:700">Setelan &amp; Tampilan</h2>
+      <p class="muted" style="margin:2px 0 0;font-size:12.5px">Personalisasi tema, gaya visual, latar belakang, dan AI</p>
+    </div>
+    <button type="button" class="ghost kecil" onclick="goto('data')" style="width:auto;margin:0;padding:8px 14px;display:inline-flex;align-items:center;gap:6px">💾 Buka Data &amp; backup</button>
+  </div>
+
+  <div class="card" id="cardTampilan">
     <h2>Tampilan</h2>
-    <label class="field-label" for="sLayout">Tata letak beranda</label>
-    <select id="sLayout">
-      <option value="1">Layout 1 · Klasik</option>
-      <option value="2">Layout 2 · Ringkasan dulu</option>
-      <option value="3">Layout 3 · Catat dulu</option>
-    </select>
-    <p class="muted setting-help" id="infoLayout" aria-live="polite"></p>
-    <h3 style="margin:16px 0 10px;font-size:15px">Pilih suasana catatanmu</h3>
-    <div id="styleSelected"><div class="style-selected-icon"><svg id="styleSelectedArt" viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false"></svg></div><div><h3 id="styleSelectedName"></h3><p id="styleSelectedDesc"></p></div></div>
-    <select id="sGaya">
-      <option value="ruangide">Baru · Ruang Ide (krem, sage, dan elegan)</option>
-      <option value="glass">Glass (kaca transparan)</option>
-      <option value="biasa">Biasa (kartu solid, tanpa efek kaca)</option>
-      <option value="berwarna">Berwarna (kartu putih, garis tepi warna per jenis)</option>
-      <option value="neo">Neobrutal (garis tebal, bayangan keras, warna cerah)</option>
-      <option value="blok">Blok Pixel (nuansa Minecraft)</option>
-      <option value="material">Material You (sudut membulat, warna aksen)</option>
-      <option value="soft">Soft UI (timbul lembut)</option>
-      <option value="retro">Retro terminal (hijau di hitam)</option>
-      <option value="paper">Paper (buku catatan krem)</option>
-      <option value="flat">Minimal flat (tanpa bayangan)</option>
-      <option value="pop">Persimmon Pop (plum dan oranye hangat)</option>
-      <option value="spider">Spider (merah, ungu, hitam, dan krem)</option>
-      <option value="orbit">Orbit (planet dan antariksa, dengan animasi)</option>
-      <option value="sakura">Sakura (krem, kelopak, dan merah muda)</option>
-      <option value="ocean">Ocean (biru laut, toska, dan ombak)</option>
-      <option value="aurora">Baru · Aurora</option>
-      <option value="arcade">Baru · Arcade</option>
-      <option value="botanica">Baru · Botanica</option>
-      <option value="atelier">Baru · Atelier</option>
-      <option value="latte">Baru · Latte</option>
-      <option value="midnight">Baru · Midnight Gold (obsidian mewah & emas)</option>
-      <option value="matcha">Baru · Matcha Zen (hijau matcha & kedai teh)</option>
-    </select>
-    <button type="button" class="ghost" id="btnAnimasiOrbit" hidden>✦ Putar animasi Orbit</button>
-    <details id="styleGalleryWrap"><summary>Jelajahi galeri · 23 gaya <span aria-hidden="true">⌄</span></summary><div id="styleGallery" aria-label="Pilihan gaya tampilan"></div></details>
-    <label class="field-label" for="sGerak">Animasi gaya</label>
-    <select id="sGerak"><option value="penuh">Aktif · dekorasi bergerak</option><option value="ringan">Ringan · transisi singkat</option><option value="mati">Mati · tampilan diam</option></select>
-    <p class="muted setting-help" id="infoGerak" aria-live="polite"></p>
-    <button type="button" class="ghost" id="btnCobaGerak">✦ Coba animasi gaya</button>
-    <span class="muted">Kualitas efek</span>
-    <select id="sEfek">
-      <option value="tanpa">Tanpa efek (paling ringan)</option>
-      <option value="sedang">Sedang</option>
-      <option value="hd">HD</option>
-      <option value="ultra">Ultra HD (paling tajam dan mewah)</option>
-    </select>
-    <p class="muted setting-help" id="infoEfek" aria-live="polite"></p>
-    <span class="muted">Sesuaikan otomatis dengan foto latar</span>
-    <select id="sAdaptif">
-      <option value="on">Aktif (teks dan tombol ikut foto)</option>
-      <option value="off">Mati</option>
-    </select>
-    <p class="muted setting-help" id="infoAdaptif" aria-live="polite"></p>
-    <span class="muted">Font</span>
-    <select id="sFont">
-      <option value="sistem">Modern (default)</option>
-      <option value="serif">Klasik (serif)</option>
-      <option value="bulat">Bulat (rounded)</option>
-      <option value="mono">Rapi (angka monospace)</option>
-      <option value="tegas">Tegas (tebal)</option>
-    </select>
-    <p class="muted setting-help" id="infoFont" aria-live="polite"></p>
-    <label class="field-label" for="sTeks">Warna teks</label>
-    <div class="setel-row">
-      <input type="color" id="sTeks" style="width:72px;height:44px;padding:4px;margin:0">
-      <button class="ghost kecil" id="btnTeksReset">Otomatis</button>
+    <div style="margin-bottom:14px">
+      <h3 style="margin:0 0 10px;font-size:14.5px;font-weight:700">Pilih suasana catatanmu</h3>
+      <div id="styleSelected"><div class="style-selected-icon"><svg id="styleSelectedArt" viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false"></svg></div><div><h3 id="styleSelectedName"></h3><p id="styleSelectedDesc"></p></div></div>
+      <label class="field-label" for="sGaya" style="margin-top:10px">Gaya aktif</label>
+      <select id="sGaya">
+        <option value="ruangide">Baru · Ruang Ide (krem, sage, dan elegan)</option>
+        <option value="glass">Glass (kaca transparan)</option>
+        <option value="biasa">Biasa (kartu solid, tanpa efek kaca)</option>
+        <option value="berwarna">Berwarna (kartu putih, garis tepi warna per jenis)</option>
+        <option value="neo">Neobrutal (garis tebal, bayangan keras, warna cerah)</option>
+        <option value="blok">Blok Pixel (nuansa Minecraft)</option>
+        <option value="material">Material You (sudut membulat, warna aksen)</option>
+        <option value="soft">Soft UI (timbul lembut)</option>
+        <option value="retro">Retro terminal (hijau di hitam)</option>
+        <option value="paper">Paper (buku catatan krem)</option>
+        <option value="flat">Minimal flat (tanpa bayangan)</option>
+        <option value="pop">Persimmon Pop (plum dan oranye hangat)</option>
+        <option value="spider">Spider (merah, ungu, hitam, dan krem)</option>
+        <option value="orbit">Orbit (planet dan antariksa, dengan animasi)</option>
+        <option value="sakura">Sakura (krem, kelopak, dan merah muda)</option>
+        <option value="ocean">Ocean (biru laut, toska, dan ombak)</option>
+        <option value="aurora">Baru · Aurora</option>
+        <option value="arcade">Baru · Arcade</option>
+        <option value="botanica">Baru · Botanica</option>
+        <option value="atelier">Baru · Atelier</option>
+        <option value="latte">Baru · Latte</option>
+        <option value="midnight">Baru · Midnight Gold (obsidian mewah & emas)</option>
+        <option value="matcha">Baru · Matcha Zen (hijau matcha & kedai teh)</option>
+      </select>
+      <button type="button" class="ghost" id="btnAnimasiOrbit" hidden>✦ Putar animasi Orbit</button>
+      <details id="styleGalleryWrap" style="margin-top:10px"><summary>Jelajahi galeri · 23 gaya <span aria-hidden="true">⌄</span></summary><div id="styleGallery" aria-label="Pilihan gaya tampilan"></div></details>
     </div>
-    <p class="muted setting-help" id="infoTeks" aria-live="polite"></p>
-    <span class="muted">Tema</span>
-    <select id="sTema">
-      <option value="auto">Otomatis (ikut HP)</option>
-      <option value="light">Terang</option>
-      <option value="dark">Gelap</option>
-    </select>
-    <p class="muted setting-help" id="infoTema" aria-live="polite"></p>
-    <div class="setel-row">
-      <label class="field-label" for="sKaca">Transparansi kaca</label>
-      <b id="kacaLabel"></b>
+
+    <div class="setelan-grid">
+      <div class="setelan-col">
+        <div class="field-wrap">
+          <label class="field-label" for="sLayout">Tata letak beranda</label>
+          <select id="sLayout">
+            <option value="1">Layout 1 · Klasik</option>
+            <option value="2">Layout 2 · Ringkasan dulu</option>
+            <option value="3">Layout 3 · Catat dulu</option>
+          </select>
+          <p class="muted setting-help" id="infoLayout" aria-live="polite"></p>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label" for="sTema">Tema</label>
+          <select id="sTema">
+            <option value="auto">Otomatis (ikut HP/Sistem)</option>
+            <option value="light">Terang</option>
+            <option value="dark">Gelap</option>
+          </select>
+          <p class="muted setting-help" id="infoTema" aria-live="polite"></p>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label" for="sFont">Font teks</label>
+          <select id="sFont">
+            <option value="sistem">Modern (default)</option>
+            <option value="serif">Klasik (serif)</option>
+            <option value="bulat">Bulat (rounded)</option>
+            <option value="mono">Rapi (angka monospace)</option>
+            <option value="tegas">Tegas (tebal)</option>
+          </select>
+          <p class="muted setting-help" id="infoFont" aria-live="polite"></p>
+        </div>
+
+        <div class="field-wrap">
+          <div class="setel-row" style="margin-top:0">
+            <label class="field-label" for="sKaca">Transparansi kaca</label>
+            <b id="kacaLabel"></b>
+          </div>
+          <input type="range" id="sKaca" min="20" max="90" step="5">
+          <p class="muted setting-help" id="infoKaca" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <div class="setelan-col">
+        <div class="field-wrap">
+          <label class="field-label" for="sGerak">Animasi gaya</label>
+          <select id="sGerak">
+            <option value="penuh">Aktif · dekorasi bergerak</option>
+            <option value="ringan">Ringan · transisi singkat</option>
+            <option value="mati">Mati · tampilan diam</option>
+          </select>
+          <p class="muted setting-help" id="infoGerak" aria-live="polite"></p>
+          <button type="button" class="ghost kecil" id="btnCobaGerak" style="width:auto;margin:0 0 10px;padding:6px 12px">✦ Coba animasi gaya</button>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label" for="sEfek">Kualitas efek</label>
+          <select id="sEfek">
+            <option value="tanpa">Tanpa efek (paling ringan)</option>
+            <option value="sedang">Sedang</option>
+            <option value="hd">HD</option>
+            <option value="ultra">Ultra HD (paling tajam dan mewah)</option>
+          </select>
+          <p class="muted setting-help" id="infoEfek" aria-live="polite"></p>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label" for="sAdaptif">Sesuaikan otomatis dengan foto latar</label>
+          <select id="sAdaptif">
+            <option value="on">Aktif (teks dan tombol ikut foto)</option>
+            <option value="off">Mati</option>
+          </select>
+          <p class="muted setting-help" id="infoAdaptif" aria-live="polite"></p>
+        </div>
+
+        <div class="field-wrap">
+          <label class="field-label" for="sTeks">Warna teks</label>
+          <div class="setel-row" style="margin:4px 0 0">
+            <input type="color" id="sTeks" style="width:68px;height:40px;padding:3px;margin:0">
+            <button type="button" class="ghost kecil" id="btnTeksReset" style="width:auto;margin:0;padding:6px 12px">Otomatis</button>
+          </div>
+          <p class="muted setting-help" id="infoTeks" aria-live="polite"></p>
+        </div>
+      </div>
     </div>
-    <input type="range" id="sKaca" min="20" max="90" step="5">
-    <p class="muted setting-help" id="infoKaca" aria-live="polite"></p>
   </div>
 
-  <div class="card" id="cardLatar">
-    <h2>Latar belakang</h2>
-    <p class="muted setting-help" id="infoLatar" aria-live="polite"></p>
-    <div class="setel-prev" id="bgPrev"></div>
-    <input type="file" id="fBg" accept="image/*">
-    <p class="muted" id="bgStatus"></p>
-    <div class="setel-row">
-      <label class="field-label" for="sBuram">Buram latar</label>
-      <b id="buramLabel">0px</b>
+  <div class="setelan-bottom-row">
+    <div class="card" id="cardLatar">
+      <h2>Latar belakang</h2>
+      <p class="muted setting-help" id="infoLatar" aria-live="polite"></p>
+      <div class="setel-prev" id="bgPrev"></div>
+      <input type="file" id="fBg" accept="image/*">
+      <p class="muted" id="bgStatus"></p>
+      <div class="setel-row">
+        <label class="field-label" for="sBuram">Buram latar</label>
+        <b id="buramLabel">0px</b>
+      </div>
+      <input type="range" id="sBuram" min="0" max="20" step="1">
+      <p class="muted setting-help" id="infoBuram" aria-live="polite"></p>
+      <button type="button" class="ghost kecil" id="btnBgHapus" style="width:auto;margin-top:auto">Hapus latar</button>
     </div>
-    <input type="range" id="sBuram" min="0" max="20" step="1">
-    <p class="muted setting-help" id="infoBuram" aria-live="polite"></p>
-    <button class="ghost" id="btnBgHapus">Hapus latar</button>
-  </div>
 
-  <div class="card" id="cardAiSettings">
-    <h2>Asisten AI &amp; Google Gemini</h2>
-    <p class="muted" style="margin-bottom:12px">Secara default, Asisten AI menganalisis data keuangan, saldo, pengeluaran, anggaran, dan tips secara lokal on-device. Hubungkan API Key Google Gemini gratis untuk bertanya bebas/random tentang apa saja tanpa batas.</p>
-    <div class="field-wrap">
-      <label class="field-label" for="sGeminiKey">Google Gemini API Key (Opsional)</label>
-      <input type="password" id="sGeminiKey" placeholder="Tempel AIzaSy... atau AQ..." autocomplete="off" style="font-family:monospace;font-size:13px">
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:8px">
-      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="font-size:12px;color:var(--pri);font-weight:600">Dapatkan API Key Gratis di Google AI Studio ↗</a>
-      <div style="display:flex;gap:6px">
-        <button type="button" class="ghost kecil" id="btnUjiGeminiSetelan" style="width:auto;margin:0">Uji kunci</button>
-        <button type="button" class="ghost kecil" id="btnSimpanGeminiSetelan" style="width:auto;margin:0">Simpan kunci</button>
+    <div class="card" id="cardAiSettings">
+      <h2>Asisten AI &amp; Google Gemini</h2>
+      <p class="muted" style="margin-bottom:12px;line-height:1.5">Secara default, Asisten AI menganalisis data keuangan, saldo, pengeluaran, anggaran, dan tips secara lokal on-device. Hubungkan API Key Google Gemini gratis untuk bertanya bebas/random tentang apa saja tanpa batas.</p>
+      <div class="field-wrap">
+        <label class="field-label" for="sGeminiKey">Google Gemini API Key (Opsional)</label>
+        <input type="password" id="sGeminiKey" placeholder="Tempel AIzaSy... atau AQ..." autocomplete="off" style="font-family:monospace;font-size:13px">
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:10px">
+        <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="font-size:12px;color:var(--pri);font-weight:600">Dapatkan API Key Gratis di Google AI Studio ↗</a>
+        <div style="display:flex;gap:6px">
+          <button type="button" class="ghost kecil" id="btnUjiGeminiSetelan" style="width:auto;margin:0">Uji kunci</button>
+          <button type="button" class="ghost kecil" id="btnSimpanGeminiSetelan" style="width:auto;margin:0">Simpan kunci</button>
+        </div>
       </div>
     </div>
   </div>
@@ -9765,10 +9973,14 @@ function parseTransaksiLokal(teks, today = hariIni(), wallets = [], customCats =
   title = title.replace(/^(?:beli|jajan|bayar|pesan|order|isi)\s+/i, '').trim();
 
   if (title) {
-    title = title.charAt(0).toUpperCase() + title.slice(1);
-    if (title.length > 80) title = title.slice(0, 80).trim();
-  } else {
-    title = category !== 'Lainnya' ? category : (raw.slice(0, 50).trim() || 'Transaksi');
+    title = title.replace(/<[^>]*>/g, '').replace(/["']/g, '').trim();
+    if (title) {
+      title = title.charAt(0).toUpperCase() + title.slice(1);
+      if (title.length > 80) title = title.slice(0, 80).trim();
+    }
+  }
+  if (!title) {
+    title = category !== 'Lainnya' ? category : (raw.replace(/<[^>]*>/g, '').replace(/["']/g, '').slice(0, 50).trim() || 'Transaksi');
   }
 
   // 7. Missing fields check
@@ -9798,9 +10010,43 @@ function analisisSmartAi() {
   statusAi($('aiSmartStatus'), 'Menyiapkan draf…', { loading:true });
   try {
     const customList = [...(katKustom()?.keluar || []), ...(katKustom()?.masuk || [])];
-    const data = parseTransaksiLokal(teks.slice(0, 500), hariIni(), daftarDompetAi(), customList);
-    tampilkanDrafAi(data);
-    statusAi($('aiSmartStatus'), 'Draf berhasil disiapkan secara instan di perangkat. Periksa sebelum digunakan.');
+    const drafts = ekstrakDrafTransaksiDariTeks(teks.slice(0, 500), hariIni(), daftarDompetAi(), customList);
+    let data;
+    if (drafts.length > 1) {
+      const totalSemua = drafts.reduce((acc, d) => acc + d.amount, 0);
+      const items = drafts.map(d => ({
+        nama: d.title,
+        qty: 1,
+        satuan: '',
+        harga: d.amount,
+        hargaTotal: d.amount
+      }));
+      const pertama = drafts[0];
+      data = {
+        type: pertama.type || 'keluar',
+        date: pertama.date || hariIni(),
+        title: drafts.length <= 2 ? drafts.map(d => d.title).join(' & ') : 'Belanja gabungan (' + drafts.length + ' barang)',
+        category: pertama.category || 'Belanja',
+        amount: totalSemua,
+        paymentMethod: pertama.paymentMethod || 'tunai',
+        walletId: pertama.walletId || '',
+        walletName: pertama.walletName || 'Tunai',
+        tags: [...new Set(drafts.flatMap(d => d.tags || []))],
+        items,
+        isCart: true,
+        missing: []
+      };
+      tampilkanDrafAi(data);
+      statusAi($('aiSmartStatus'), '🛒 Draf keranjang (' + items.length + ' barang, total ' + rp(totalSemua) + ') siap!');
+    } else if (drafts.length === 1) {
+      data = drafts[0];
+      tampilkanDrafAi(data);
+      statusAi($('aiSmartStatus'), (data.isCart ? '🛒 Draf keranjang' : 'Draf') + ' berhasil disiapkan secara instan di perangkat. Periksa sebelum digunakan.');
+    } else {
+      data = parseTransaksiLokal(teks.slice(0, 500), hariIni(), daftarDompetAi(), customList);
+      tampilkanDrafAi(data);
+      statusAi($('aiSmartStatus'), 'Draf berhasil disiapkan secara instan di perangkat. Periksa sebelum digunakan.');
+    }
   } catch (error) {
     statusAi($('aiSmartStatus'), 'Gagal memproses transaksi: ' + (error?.message || error), { error:true });
   } finally {
@@ -9843,7 +10089,10 @@ $('btnAiSmartUse').onclick = () => {
   if (!['tunai','nontunai'].includes(cara)) return statusAi($('aiSmartStatus'), 'Pilih Tunai atau Wallet / non-tunai.', { error:true });
   const dompetId = cara === 'nontunai' && daftarDompetAi().some(w => w.id === $('aiDraftWallet').value) ? $('aiDraftWallet').value : null;
   const nama = judul || kategori;
-  const data = { tipe, tanggal, judul:nama, kategori, cara, dompetId, tags:Array.isArray(aiSmartLast?.tags)?aiSmartLast.tags.slice(0,3):[], items:[{ nama, qty:1, satuan:'', harga:jumlah, hargaTotal:jumlah }] };
+  const items = Array.isArray(aiSmartLast?.items) && aiSmartLast.items.length
+    ? aiSmartLast.items
+    : [{ nama, qty:1, satuan:'', harga:jumlah, hargaTotal:jumlah }];
+  const data = { tipe, tanggal, judul:nama, kategori, cara, dompetId, tags:Array.isArray(aiSmartLast?.tags)?aiSmartLast.tags.slice(0,3):[], items };
   $('dlgAiSmart').close();
   siapkanCatatan(data, 'Draf AI siap. Periksa sekali lagi lalu tekan Simpan transaksi.');
 };
@@ -10078,6 +10327,16 @@ function simpanTransaksiLangsung(data) {
   }
   const tgl = /^\d{4}-\d{2}-\d{2}$/.test(data.date || '') ? data.date : hariIni();
 
+  const items = Array.isArray(data.items) && data.items.length
+    ? data.items.map(it => ({
+        nama: String(it.nama || it.name || judul).trim(),
+        qty: Number(it.qty) > 0 ? Number(it.qty) : 1,
+        satuan: String(it.satuan || '').slice(0, 30),
+        harga: Number(it.harga) > 0 ? Number(it.harga) : total,
+        hargaTotal: Number(it.hargaTotal) > 0 ? Number(it.hargaTotal) : (Number(it.harga) || total)
+      }))
+    : [{ nama: judul, qty: 1, satuan: '', harga: total, hargaTotal: total }];
+
   const trx = {
     id: uid(),
     ts: Date.now(),
@@ -10085,7 +10344,7 @@ function simpanTransaksiLangsung(data) {
     tipe,
     judul,
     kategori: kat,
-    items: [{ nama: judul, qty: 1, satuan: '', harga: total, hargaTotal: total }],
+    items,
     total,
     tags: Array.isArray(data.tags) ? data.tags : [],
     foto: null,
@@ -10146,6 +10405,67 @@ function simpanSemuaTrxDariChat(msgId) {
     renderPesanAiChat();
     beriPesan('✅ ' + disimpan + ' transaksi berhasil disimpan ke catatan!');
   }
+}
+
+function gabungkanDrafChat(msgId) {
+  const riwayat = muatRiwayatAiChat();
+  const msg = riwayat.find(m => m.id === msgId) || riwayat.slice().reverse().find(m => m && m.role === 'assistant' && Array.isArray(m.draftTransactions) && m.draftTransactions.some(t => !t.tersimpan));
+  if (!msg || !Array.isArray(msg.draftTransactions)) return false;
+
+  const belumSimpan = msg.draftTransactions.filter(t => !t.tersimpan);
+  if (belumSimpan.length < 2) return false;
+
+  const total = belumSimpan.reduce((acc, t) => acc + (Number(t.amount) || 0), 0);
+  const items = [];
+  belumSimpan.forEach(t => {
+    if (Array.isArray(t.items) && t.items.length) {
+      t.items.forEach(it => items.push({
+        nama: String(it.nama || it.name || t.title).trim(),
+        qty: Number(it.qty) > 0 ? Number(it.qty) : 1,
+        satuan: String(it.satuan || '').slice(0, 30),
+        harga: Number(it.harga) > 0 ? Number(it.harga) : Number(t.amount) || 0,
+        hargaTotal: Number(it.hargaTotal) > 0 ? Number(it.hargaTotal) : (Number(it.harga) || Number(t.amount) || 0)
+      }));
+    } else {
+      items.push({
+        nama: t.title || 'Barang',
+        qty: 1,
+        satuan: '',
+        harga: Number(t.amount) || 0,
+        hargaTotal: Number(t.amount) || 0
+      });
+    }
+  });
+
+  const pertama = belumSimpan[0];
+  const judulGabung = items.length <= 2
+    ? items.map(i => i.nama).join(' & ')
+    : 'Belanja gabungan (' + items.length + ' barang)';
+
+  const mergedDraft = {
+    id: uid(),
+    type: pertama.type || 'keluar',
+    title: judulGabung,
+    amount: total,
+    category: pertama.category || 'Belanja',
+    paymentMethod: pertama.paymentMethod || 'tunai',
+    walletId: pertama.walletId || '',
+    walletName: pertama.walletName || 'Tunai',
+    date: pertama.date || hariIni(),
+    tags: [...new Set(belumSimpan.flatMap(t => t.tags || []))],
+    items,
+    isCart: true,
+    tersimpan: false
+  };
+
+  const yangSudahSimpan = msg.draftTransactions.filter(t => t.tersimpan);
+  msg.draftTransactions = [...yangSudahSimpan, mergedDraft];
+  msg.text = 'Siap! Saya sudah menggabungkan ' + items.length + ' transaksi menjadi 1 transaksi keranjang belanja (' + rp(total) + '). Silakan periksa atau langsung simpan:';
+
+  simpanRiwayatAiChat(riwayat);
+  renderPesanAiChat();
+  beriPesan('🛒 ' + items.length + ' transaksi berhasil digabungkan menjadi 1 keranjang!');
+  return true;
 }
 
 function hapusTransaksiLangsung(id) {
@@ -10435,12 +10755,22 @@ function bukaDrafDiFormCatat(draft) {
     if (!dompetId && draft.walletName) dompetId = idDompetDariNama(draft.walletName, true);
     if (!dompetId) dompetId = db.dompet[0]?.id || '';
   }
+  const items = Array.isArray(draft.items) && draft.items.length
+    ? draft.items.map(it => ({
+        nama: String(it.nama || it.name || draft.title || 'Transaksi').trim(),
+        qty: Number(it.qty) > 0 ? Number(it.qty) : 1,
+        satuan: String(it.satuan || '').slice(0, 30),
+        harga: Number(it.harga) > 0 ? Number(it.harga) : Number(draft.amount) || 0,
+        hargaTotal: Number(it.hargaTotal) > 0 ? Number(it.hargaTotal) : (Number(it.harga) || Number(draft.amount) || 0)
+      }))
+    : [{ nama: draft.title || 'Transaksi', qty: 1, satuan: '', harga: Number(draft.amount) || 0 }];
+
   const data = {
     tipe: draft.type === 'masuk' ? 'masuk' : 'keluar',
     kategori: draft.category || 'Lainnya',
     tanggal: draft.date || hariIni(),
     judul: draft.title || '',
-    items: [{ nama: draft.title || 'Transaksi', qty: 1, satuan: '', harga: Number(draft.amount) || 0 }],
+    items,
     cara,
     dompetId
   };
@@ -10451,9 +10781,39 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
   if (!teks || typeof teks !== 'string') return [];
   const raw = teks.trim();
 
+  // Deteksi apakah pengguna secara spesifik meminta penggabungan transaksi / keranjang
+  const isMintaGabung = /\b(gabung(?:kan|in)?|satukan|jadikan\s*(?:1|satu)|jadi\s*(?:1|satu)|satu\s*transaksi|keranjang)\b/i.test(raw);
+
+  // Bersihkan awalan perintah umum
   let isiTeks = raw.replace(/^(?:tolong\s+|mohon\s+|coba\s+)?(?:catat(?:kan)?|tulis|tambah(?:kan)?)\s*(?:transaksi\s*)?(?:ini\s*)?:?\s*/i, '');
-  const polaSplit = /[\n;]+|\b(?:sama|dan|lalu|terus|kemudian)\s+(?=(?:beli|jajan|bayar|isi|catat|makan|dapat|terima|uang)\b)/i;
-  const potongan = polaSplit.test(isiTeks) ? isiTeks.split(polaSplit) : [isiTeks];
+  // Bersihkan juga kata kunci gabung dari pemecahan awal jika ada
+  let teksUntukSplit = isiTeks.replace(/\b(?:tolong\s+)?(?:gabung(?:kan|in)?|satukan|jadikan\s*(?:1|satu)|jadi\s*(?:1|satu)|jadikan\s*keranjang|masukkan\s*ke\s*keranjang)\s*(?:transaksi\s*)?:?\s*/gi, ' ');
+
+  const hasNominal = s => /(?:\d+(?:[.,]\d+)?\s*(?:k|rb|ribu|jt|juta)?|\b(?:se)?(?:juta|ribu|ratus|puluh)\b)/i.test(s);
+
+  let potongan = [];
+  if (/(?:^|\s)\d+[\.)]\s+/.test(teksUntukSplit)) {
+    potongan = teksUntukSplit.split(/(?:^|\s)\d+[\.)]\s+/).map(s => s.trim()).filter(s => s.length > 2 && hasNominal(s));
+  } else if (/[\n;]+/.test(teksUntukSplit)) {
+    potongan = teksUntukSplit.split(/[\n;]+/).map(s => s.trim()).filter(s => s.length > 2 && hasNominal(s));
+  }
+
+  if (potongan.length < 2) {
+    const tokens = teksUntukSplit.split(/(?:,\s*(?:dan\s+|sama\s+)?|\s+(?:dan|sama|terus|lalu|kemudian|\+)\s+)/i);
+    const withNominal = tokens.filter(hasNominal);
+    if (withNominal.length >= 2) {
+      potongan = withNominal.map(s => s.trim()).filter(s => s.length > 2);
+    }
+  }
+
+  if (potongan.length < 2) {
+    const polaSplitLama = /[\n;]+|\b(?:sama|dan|lalu|terus|kemudian)\s+(?=(?:beli|jajan|bayar|isi|catat|makan|dapat|terima|uang)\b)/i;
+    if (polaSplitLama.test(teksUntukSplit)) {
+      potongan = teksUntukSplit.split(polaSplitLama).map(s => s.trim()).filter(s => s.length > 2);
+    }
+  }
+
+  if (!potongan.length) potongan = [teksUntukSplit];
 
   const hasil = [];
   for (const p of potongan) {
@@ -10461,13 +10821,16 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
     if (!bersih || bersih.length < 3) continue;
     const parsed = parseTransaksiLokal(bersih, today, wallets, customCats);
     if (parsed && parsed.amount > 0 && parsed.title) {
-      let judulBersih = parsed.title.replace(/^(?:sama|dan|lalu|terus|kemudian|tadi\s*(?:pagi|siang|sore|malam)?|siang|pagi|sore|malam|aku|saya|beli|jajan|bayar)\s+/gi, '').trim();
-      if (!judulBersih) judulBersih = parsed.title;
-      const matchedW = bersih.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i);
-      const wName = parsed.walletName || (matchedW ? matchedW[0].toUpperCase() : null);
-      const isNonTunai = parsed.paymentMethod === 'nontunai' || Boolean(wName);
-      const wId = parsed.walletId || (wName ? idDompetDariNama(wName, true) : '') || (isNonTunai ? (db.dompet[0]?.id || '') : '');
-      const dompetLabel = wName || (wId ? namaDompet(wId) : (isNonTunai ? 'Non-tunai' : 'Tunai'));
+      let judulBersih = parsed.title.replace(/<[^>]*>/g, '').replace(/["']/g, '').replace(/^(?:sama|dan|lalu|terus|kemudian|tadi\s*(?:pagi|siang|sore|malam)?|siang|pagi|sore|malam|aku|saya|beli|jajan|bayar)\s+/gi, '').trim();
+      if (!judulBersih) judulBersih = parsed.title.replace(/<[^>]*>/g, '').replace(/["']/g, '').trim() || 'Barang';
+      const isExplicitTunai = /\b(tunai|cash|kontan)\b/i.test(bersih) || parsed.paymentMethod === 'tunai';
+      const matchedWBersih = bersih.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i);
+      const matchedWRaw = raw.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i);
+      const matchedW = isExplicitTunai ? null : (matchedWBersih || (!/\b(tunai|cash|kontan)\b/i.test(bersih) ? matchedWRaw : null));
+      const wName = isExplicitTunai ? null : (parsed.walletName || (matchedW ? matchedW[0].toUpperCase() : null));
+      const isNonTunai = !isExplicitTunai && (parsed.paymentMethod === 'nontunai' || Boolean(wName));
+      const wId = isExplicitTunai ? '' : (parsed.walletId || (wName ? idDompetDariNama(wName, true) : '') || (isNonTunai ? (db.dompet[0]?.id || '') : ''));
+      const dompetLabel = isExplicitTunai ? 'Tunai' : (wName || (wId ? namaDompet(wId) : (isNonTunai ? 'Non-tunai' : 'Tunai')));
       hasil.push({
         id: uid(),
         type: parsed.type || 'keluar',
@@ -10479,6 +10842,13 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
         walletName: dompetLabel,
         date: parsed.date || today,
         tags: parsed.tags || [],
+        items: [{
+          nama: judulBersih,
+          qty: 1,
+          satuan: '',
+          harga: parsed.amount,
+          hargaTotal: parsed.amount
+        }],
         tersimpan: false
       });
     }
@@ -10487,13 +10857,14 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
   if (!hasil.length) {
     const parsed = parseTransaksiLokal(raw, today, wallets, customCats);
     if (parsed && parsed.amount > 0 && parsed.title) {
-      let judulBersih = parsed.title.replace(/^(?:sama|dan|lalu|terus|kemudian|tadi\s*(?:pagi|siang|sore|malam)?|siang|pagi|sore|malam|aku|saya|beli|jajan|bayar)\s+/gi, '').trim();
-      if (!judulBersih) judulBersih = parsed.title;
-      const matchedW = raw.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i);
-      const wName = parsed.walletName || (matchedW ? matchedW[0].toUpperCase() : null);
-      const isNonTunai = parsed.paymentMethod === 'nontunai' || Boolean(wName);
-      const wId = parsed.walletId || (wName ? idDompetDariNama(wName, true) : '') || (isNonTunai ? (db.dompet[0]?.id || '') : '');
-      const dompetLabel = wName || (wId ? namaDompet(wId) : (isNonTunai ? 'Non-tunai' : 'Tunai'));
+      let judulBersih = parsed.title.replace(/<[^>]*>/g, '').replace(/["']/g, '').replace(/^(?:sama|dan|lalu|terus|kemudian|tadi\s*(?:pagi|siang|sore|malam)?|siang|pagi|sore|malam|aku|saya|beli|jajan|bayar)\s+/gi, '').trim();
+      if (!judulBersih) judulBersih = parsed.title.replace(/<[^>]*>/g, '').replace(/["']/g, '').trim() || 'Barang';
+      const isExplicitTunai = /\b(tunai|cash|kontan)\b/i.test(raw) || parsed.paymentMethod === 'tunai';
+      const matchedW = isExplicitTunai ? null : raw.match(/\b(dana|gopay|ovo|shopeepay|linkaja|spay|bca|mandiri|bri|bni|cimb|jago|seabank|jenius)\b/i);
+      const wName = isExplicitTunai ? null : (parsed.walletName || (matchedW ? matchedW[0].toUpperCase() : null));
+      const isNonTunai = !isExplicitTunai && (parsed.paymentMethod === 'nontunai' || Boolean(wName));
+      const wId = isExplicitTunai ? '' : (parsed.walletId || (wName ? idDompetDariNama(wName, true) : '') || (isNonTunai ? (db.dompet[0]?.id || '') : ''));
+      const dompetLabel = isExplicitTunai ? 'Tunai' : (wName || (wId ? namaDompet(wId) : (isNonTunai ? 'Non-tunai' : 'Tunai')));
       hasil.push({
         id: uid(),
         type: parsed.type || 'keluar',
@@ -10505,9 +10876,49 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
         walletName: dompetLabel,
         date: parsed.date || today,
         tags: parsed.tags || [],
+        items: [{
+          nama: judulBersih,
+          qty: 1,
+          satuan: '',
+          harga: parsed.amount,
+          hargaTotal: parsed.amount
+        }],
         tersimpan: false
       });
     }
+  }
+
+  // JIKA pengguna meminta untuk menggabungkan / jadikan 1 keranjang dan terdapat >= 2 item:
+  if (isMintaGabung && hasil.length >= 2) {
+    const totalSemua = hasil.reduce((acc, h) => acc + h.amount, 0);
+    const itemGabungan = hasil.map(h => ({
+      nama: h.title,
+      qty: 1,
+      satuan: '',
+      harga: h.amount,
+      hargaTotal: h.amount
+    }));
+    const drafPertama = hasil[0];
+    const judulGabungan = hasil.length <= 2
+      ? hasil.map(h => h.title).join(' & ')
+      : 'Belanja gabungan (' + hasil.length + ' barang)';
+
+    const gabunganTrx = {
+      id: uid(),
+      type: drafPertama.type || 'keluar',
+      title: judulGabungan,
+      amount: totalSemua,
+      category: drafPertama.category || 'Belanja',
+      paymentMethod: drafPertama.paymentMethod || 'tunai',
+      walletId: drafPertama.walletId || '',
+      walletName: drafPertama.walletName || 'Tunai',
+      date: drafPertama.date || today,
+      tags: [...new Set(hasil.flatMap(h => h.tags || []))],
+      items: itemGabungan,
+      isCart: true,
+      tersimpan: false
+    };
+    return [gabunganTrx];
   }
 
   return hasil;
@@ -10568,13 +10979,30 @@ function renderPesanAiChat() {
         const card = el('div', 'ai-chat-trx-card');
 
         const hdr = el('div', 'ai-chat-trx-header');
+        const isCartTrx = trx.isCart || (Array.isArray(trx.items) && trx.items.length > 1);
+        const badgeLabel = isCartTrx ? '🛒 Draf Keranjang (' + trx.items.length + ' barang)' : '📝 Draf Transaksi AI';
         hdr.append(
-          el('span', 'ai-chat-trx-badge', '📝 Draf Transaksi AI'),
+          el('span', 'ai-chat-trx-badge', badgeLabel),
           el('span', 'ai-chat-trx-type ' + (trx.type === 'masuk' ? 'masuk' : 'keluar'), trx.type === 'masuk' ? 'Pemasukan' : 'Pengeluaran')
         );
 
         const titleEl = el('div', 'ai-chat-trx-title', trx.title);
         const amountEl = el('div', 'ai-chat-trx-amount', rp(trx.amount));
+
+        card.append(hdr, titleEl, amountEl);
+
+        if (isCartTrx && Array.isArray(trx.items) && trx.items.length > 1) {
+          const cartList = el('div', 'ai-chat-cart-items');
+          trx.items.forEach(it => {
+            const row = el('div', 'ai-chat-cart-row');
+            row.append(
+              el('span', 'ai-chat-cart-name', (Number(it.qty) > 1 ? it.qty + 'x ' : '') + it.nama),
+              el('span', 'ai-chat-cart-price', rp(it.hargaTotal || (it.harga * (it.qty || 1))))
+            );
+            cartList.appendChild(row);
+          });
+          card.appendChild(cartList);
+        }
 
         const meta = el('div', 'ai-chat-trx-meta');
         const dompetNama = (trx.paymentMethod === 'nontunai' && trx.walletId ? namaDompet(trx.walletId) : '') || trx.walletName || (trx.paymentMethod === 'nontunai' ? 'Non-tunai' : 'Tunai');
@@ -10605,15 +11033,21 @@ function renderPesanAiChat() {
           actions.append(btnSave, btnEdit);
         }
 
-        card.append(hdr, titleEl, amountEl, meta, actions);
+        card.append(meta, actions);
         trxList.appendChild(card);
       });
 
       if (adaBelumSimpan >= 2) {
-        const btnSaveAll = el('button', 'ai-chat-trx-btn save-all', '✨ Simpan Semua (' + adaBelumSimpan + ' Transaksi)');
+        const btnRow = el('div', 'ai-chat-trx-actions');
+        btnRow.style.marginTop = '6px';
+        const btnSaveAll = el('button', 'ai-chat-trx-btn save-all', '✨ Simpan Semua (' + adaBelumSimpan + ')');
         btnSaveAll.type = 'button';
         btnSaveAll.onclick = () => simpanSemuaTrxDariChat(msg.id);
-        trxList.appendChild(btnSaveAll);
+        const btnMergeCart = el('button', 'ai-chat-trx-btn merge-cart', '🛒 Jadikan 1 Keranjang');
+        btnMergeCart.type = 'button';
+        btnMergeCart.onclick = () => gabungkanDrafChat(msg.id);
+        btnRow.append(btnSaveAll, btnMergeCart);
+        trxList.appendChild(btnRow);
       }
 
       wrap.appendChild(trxList);
@@ -10792,13 +11226,17 @@ function jawabFinansialLokal(pertanyaan, context) {
     };
   }
 
-  // 0. Perintah Catat Transaksi Langsung dari Chat
-  const isPerintahCatat = /\b(catat|catatkan|tulis|tambah\s*(?:transaksi|pengeluaran|pemasukan)?|tadi\s*(?:beli|jajan|bayar|makan|habis)|barusan\s*(?:beli|bayar)|dapat\s*(?:uang|gaji)|dikasih\s*uang)\b/i.test(q);
+  // 0. Perintah Catat / Gabungkan Transaksi Langsung dari Chat
+  const isPerintahCatat = /\b(catat|catatkan|tulis|tambah\s*(?:transaksi|pengeluaran|pemasukan)?|tadi\s*(?:beli|jajan|bayar|makan|habis)|barusan\s*(?:beli|bayar)|dapat\s*(?:uang|gaji)|dikasih\s*uang|gabung(?:kan|in)?|satukan|jadikan\s*(?:1|satu)|keranjang|beli|belanja|bayar|jajan|ongkir|makan)\b/i.test(q);
   if (isPerintahCatat) {
     const listTrx = ekstrakDrafTransaksiDariTeks(pertanyaan);
     if (listTrx.length) {
+      const isCart = listTrx.length === 1 && listTrx[0].isCart;
+      const balasTeks = isCart
+        ? 'Siap! Saya sudah membuatkan 1 transaksi gabungan berbentuk keranjang belanja (' + listTrx[0].title + ' - ' + rp(listTrx[0].amount) + ') dengan ' + listTrx[0].items.length + ' rincian barang. Silakan periksa lalu tekan tombol **➕ Simpan** atau buka di form keranjang:'
+        : 'Siap! Saya sudah menyiapkan ' + listTrx.length + ' draf catatan dari pesanmu di bawah. Silakan periksa detailnya lalu tekan tombol **Simpan**:';
       return {
-        reply: 'Siap! Saya sudah menyiapkan ' + listTrx.length + ' draf catatan dari pesanmu di bawah. Silakan periksa detailnya lalu tekan tombol **Simpan**:',
+        reply: balasTeks,
         draftTransactions: listTrx,
         followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat']
       };
@@ -11888,9 +12326,16 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
   input.value = '';
   renderPesanAiChat();
 
-  // 0a. Cek apakah ada draf transaksi aktif di obrolan yang ingin diubah atau dibatalkan
+  // 0a. Cek apakah ada draf transaksi aktif di obrolan yang ingin diubah, digabungkan jadi keranjang, atau dibatalkan
   const activeDraftInfo = cariDrafTransaksiAktif(riwayat.slice(0, -1));
   if (activeDraftInfo) {
+    const isGabungDraf = /\b(gabung(?:kan|in)?|satukan|jadikan\s*(?:1|satu)|jadi\s*(?:1|satu)|satu\s*transaksi|keranjang)\b/i.test(teks);
+    const unsavedMulti = activeDraftInfo.msg.draftTransactions.filter(t => !t.tersimpan);
+    if (isGabungDraf && unsavedMulti.length >= 2) {
+      gabungkanDrafChat(activeDraftInfo.msg.id);
+      return;
+    }
+
     const isBatalDraf = /\b(batal|batalkan|hapus|buang)\s*(?:draf|draft|catatan\s*tadi)?\b/i.test(teks) &&
                         !/\b(transaksi|riwayat|chat|obrolan)\b/i.test(teks);
     if (isBatalDraf) {
@@ -12114,6 +12559,8 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
             walletId: wId,
             walletName: dompetLabel,
             date: /^\d{4}-\d{2}-\d{2}$/.test(t.date || '') ? t.date : hariIni(),
+            items: Array.isArray(t.items) && t.items.length ? t.items : [{ nama: String(t.title || 'Transaksi').slice(0, 80).trim(), qty: 1, satuan: '', harga: Number(t.amount) || 0, hargaTotal: Number(t.amount) || 0 }],
+            isCart: Boolean(t.isCart || (Array.isArray(t.items) && t.items.length > 1)),
             tersimpan: false
           };
         }).filter(t => t.amount > 0 && t.title);
@@ -12157,13 +12604,16 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
       }
     }
 
-    // Jika belum ada draftTransactions dan teks berisi instruksi catat, ekstrak secara lokal
+    // Jika belum ada draftTransactions dan teks berisi instruksi catat/gabung, ekstrak secara lokal
     if (!draftTransactions.length && !deleteActions.length && !updateActions.length) {
-      const intentCatat = /\b(catat|catatkan|tulis|tambah\s*(?:transaksi|pengeluaran|pemasukan)?|tadi\s*(?:beli|jajan|bayar|makan|habis)|barusan\s*(?:beli|bayar)|dapat\s*(?:uang|gaji)|dikasih\s*uang)\b/i.test(teks);
+      const intentCatat = /\b(catat|catatkan|tulis|tambah\s*(?:transaksi|pengeluaran|pemasukan)?|tadi\s*(?:beli|jajan|bayar|makan|habis)|barusan\s*(?:beli|bayar)|dapat\s*(?:uang|gaji)|dikasih\s*uang|gabung(?:kan|in)?|satukan|jadikan\s*(?:1|satu)|keranjang)\b/i.test(teks);
       if (intentCatat) {
         draftTransactions = ekstrakDrafTransaksiDariTeks(teks);
         if (draftTransactions.length && (!replyText || replyText.length < 15)) {
-          replyText = 'Siap! Saya sudah menyiapkan ' + draftTransactions.length + ' draf transaksi dari pesanmu. Silakan simpan langsung ke catatan:';
+          const isCart = draftTransactions.length === 1 && draftTransactions[0].isCart;
+          replyText = isCart
+            ? 'Siap! Saya sudah membuatkan 1 transaksi gabungan berbentuk keranjang belanja (' + draftTransactions[0].title + ' - ' + rp(draftTransactions[0].amount) + ') dengan ' + draftTransactions[0].items.length + ' rincian barang. Silakan periksa atau langsung simpan:'
+            : 'Siap! Saya sudah menyiapkan ' + draftTransactions.length + ' draf transaksi dari pesanmu. Silakan simpan langsung ke catatan:';
         }
       }
     }
@@ -12204,7 +12654,23 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
   } catch (error) {
     typingEl.remove();
     const fallbackLokal = jawabFinansialLokal(teks, context);
-    if (fallbackLokal) {
+    const draftsDarurat = !fallbackLokal?.draftTransactions?.length ? ekstrakDrafTransaksiDariTeks(teks) : [];
+    if (draftsDarurat.length) {
+      const isCart = draftsDarurat.length === 1 && draftsDarurat[0].isCart;
+      const balasTeks = isCart
+        ? 'Siap! Saya sudah membuatkan 1 transaksi gabungan berbentuk keranjang belanja (' + draftsDarurat[0].title + ' - ' + rp(draftsDarurat[0].amount) + ') dengan ' + draftsDarurat[0].items.length + ' rincian barang. Silakan periksa atau langsung simpan:'
+        : 'Siap! Saya sudah menyiapkan ' + draftsDarurat.length + ' draf transaksi dari pesanmu di bawah. Silakan periksa detailnya lalu tekan tombol **Simpan**:';
+      riwayat.push({
+        id: uid(),
+        role: 'assistant',
+        text: balasTeks + '\n\n*(Catatan: Diproses secara instan di perangkat)*',
+        draftTransactions: draftsDarurat,
+        suggestions: ['Berapa sisa saldo di semua dompetku?', 'Beri tips berhemat'],
+        ts: Date.now()
+      });
+      simpanRiwayatAiChat(riwayat);
+      renderPesanAiChat();
+    } else if (fallbackLokal) {
       riwayat.push({
         id: uid(),
         role: 'assistant',

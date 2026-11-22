@@ -459,4 +459,76 @@ const testAppLockScript = `
 const appLockResult = await run(testAppLockScript);
 assert.equal(appLockResult, true, 'Logika PIN hash dan status kunci aplikasi harus berhasil');
 
-console.log('Semua pengujian unit draf AI, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, dan Kunci Aplikasi BERHASIL!');
+// Test 18: Ekstraksi Transaksi Lebih Dari 1 (Multi-Item Transaksi Terpisah)
+console.log('Testing Multi-Transaction AI Extraction (>1 items)...');
+const draftsMulti = run("ekstrakDrafTransaksiDariTeks('beli beras 50rb, telur 25rb, minyak 30rb')");
+assert.equal(draftsMulti.length, 3, 'Harus menghasilkan 3 draf transaksi terpisah');
+assert.equal(draftsMulti[0].amount, 50000, 'Nominal item 1 harus 50.000');
+assert.equal(draftsMulti[1].amount, 25000, 'Nominal item 2 harus 25.000');
+assert.equal(draftsMulti[2].amount, 30000, 'Nominal item 3 harus 30.000');
+
+// Test 19: Ekstraksi Transaksi Gabungan Keranjang Belanja (Direct Merge / Cart)
+console.log('Testing Direct Combined Cart Transaction Extraction...');
+const draftsCart = run("ekstrakDrafTransaksiDariTeks('gabungkan beli beras 50rb, telur 25rb, minyak 30rb jadi 1 keranjang')");
+assert.equal(draftsCart.length, 1, 'Harus menghasilkan 1 transaksi gabungan');
+assert.equal(draftsCart[0].amount, 105000, 'Total transaksi gabungan harus 105.000');
+assert.equal(draftsCart[0].items.length, 3, 'Harus memiliki 3 rincian barang dalam keranjang');
+assert.equal(draftsCart[0].isCart, true, 'Flag isCart harus true');
+
+// Test 20: Penggabungan Draf di Chat (gabungkanDrafChat) dan Simpan Transaksi Keranjang
+console.log('Testing Chat Merge into Cart and Saving...');
+const msgChatId = 'msg-chat-cart-test';
+run(`
+const msgObj = {
+  id: '${msgChatId}',
+  role: 'assistant',
+  text: 'Siap! Saya sudah menyiapkan draf catatan.',
+  draftTransactions: [
+    {
+      id: 'd-1',
+      type: 'keluar',
+      title: 'Makan siang',
+      amount: 20000,
+      category: 'Makan',
+      paymentMethod: 'nontunai',
+      walletName: 'DANA',
+      walletId: '',
+      date: hariIni(),
+      tersimpan: false,
+      items: [{ nama: 'Makan siang', qty: 1, satuan: '', harga: 20000, hargaTotal: 20000 }]
+    },
+    {
+      id: 'd-2',
+      type: 'keluar',
+      title: 'Es teh manis',
+      amount: 5000,
+      category: 'Minuman',
+      paymentMethod: 'nontunai',
+      walletName: 'DANA',
+      walletId: '',
+      date: hariIni(),
+      tersimpan: false,
+      items: [{ nama: 'Es teh manis', qty: 1, satuan: '', harga: 5000, hargaTotal: 5000 }]
+    }
+  ],
+  ts: Date.now()
+};
+simpanRiwayatAiChat([msgObj]);
+`);
+
+run(`gabungkanDrafChat('${msgChatId}')`);
+const riwayatMerged = run(`muatRiwayatAiChat()`);
+const msgMerged = riwayatMerged.find(m => m.id === msgChatId);
+assert.equal(msgMerged.draftTransactions.length, 1, 'Draf setelah digabung harus menjadi 1 keranjang');
+const cartDraf = msgMerged.draftTransactions[0];
+assert.equal(cartDraf.amount, 25000, 'Total keranjang gabungan harus 25.000');
+assert.equal(cartDraf.items.length, 2, 'Rincian keranjang harus berisi 2 item');
+
+// Simpan transaksi keranjang ke database
+run(`simpanTrxDariChat('${msgChatId}', '${cartDraf.id}')`);
+const dbTrx = run("db.transaksi.find(t => t.total === 25000 && t.items && t.items.length === 2)");
+assert.ok(dbTrx, 'Transaksi keranjang harus tersimpan di database');
+assert.equal(dbTrx.total, 25000, 'Total transaksi tersimpan harus 25.000');
+assert.equal(dbTrx.items.length, 2, 'Item keranjang tersimpan di database harus 2');
+
+console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, dan Kunci Aplikasi BERHASIL!');

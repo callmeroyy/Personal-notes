@@ -354,7 +354,7 @@ function validateChat(raw) {
   const reply = cleanText(raw?.reply, 1500) || 'Maaf, saya belum dapat menganalisis data tersebut saat ini.';
   const followUpSuggestions = cleanList(raw?.followUpSuggestions, 3, 80);
   const draftTransactions = Array.isArray(raw?.draftTransactions)
-    ? raw.draftTransactions.slice(0, 5).map(t => {
+    ? raw.draftTransactions.slice(0, 10).map(t => {
         const type = t?.type === 'masuk' ? 'masuk' : 'keluar';
         const title = cleanText(t?.title, 80);
         const amount = safeNumber(t?.amount, { min: 1 });
@@ -363,6 +363,15 @@ function validateChat(raw) {
         const isTunai = String(rawWallet || '').toLowerCase() === 'tunai' || t?.paymentMethod === 'tunai';
         const isNonTunai = !isTunai && (t?.paymentMethod === 'nontunai' || Boolean(rawWallet));
         const walletName = isNonTunai ? (rawWallet && rawWallet.toLowerCase() !== 'tunai' ? rawWallet : null) : (isTunai ? 'Tunai' : null);
+        const items = Array.isArray(t?.items)
+          ? t.items.slice(0, 25).map(it => ({
+              nama: cleanText(it?.nama || it?.name, 80) || title,
+              qty: safeNumber(it?.qty, { min: 0.01 }) || 1,
+              satuan: cleanText(it?.satuan || it?.unit, 30) || '',
+              harga: safeNumber(it?.harga || it?.price, { min: 1 }) || amount,
+              hargaTotal: safeNumber(it?.hargaTotal || it?.total, { min: 1 }) || amount
+            })).filter(it => it.nama && it.harga)
+          : [];
         return {
           type,
           title,
@@ -370,7 +379,8 @@ function validateChat(raw) {
           category: cleanText(t?.category, 60) || 'Lainnya',
           paymentMethod: isNonTunai ? 'nontunai' : 'tunai',
           walletName,
-          date: validDate(t?.date) ? t.date : null
+          date: validDate(t?.date) ? t.date : null,
+          items: items.length ? items : undefined
         };
       }).filter(Boolean)
     : [];
@@ -461,7 +471,7 @@ ${JSON.stringify(safeContext)}
 Instruksi:
 1. Jawab pertanyaan pengguna secara ramah, ringkas, dan solutif.
 2. Jika pengguna menanyakan data keuangannya atau analisis/saldo dompet tertentu (misal: saldo DANA, pengeluaran DANA, saldo dompet, ringkasan pengeluaran), berikan analisis mendalam dan rincian sesuai data di atas dalam format Rupiah (Rp).
-3. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran..."), berikan konfirmasi ramah dan sertakan array transaksi dalam "draftTransactions". Jika menyebut e-wallet atau bank (seperti DANA, GoPay, OVO, BCA, dll), selalu set paymentMethod: "nontunai" dan walletName sesuai nama dompet/bank tersebut.
+3. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran..."), berikan konfirmasi ramah dan sertakan array transaksi dalam "draftTransactions". Jika ada lebih dari 1 transaksi, masukkan SEMUA transaksi ke dalam array draftTransactions. Jika pengguna meminta menggabungkan transaksi atau menjadikannya satu keranjang (seperti belanja beberapa barang jadi satu transaksi), buat satu transaksi tunggal dengan total keseluruhan dan sertakan rincian masing-masing barang dalam array "items" (berisi {nama, qty, satuan, harga, hargaTotal}). Jika menyebut e-wallet atau bank (seperti DANA, GoPay, OVO, BCA, dll), selalu set paymentMethod: "nontunai" dan walletName sesuai nama dompet/bank tersebut.
 4. Jika pengguna bermaksud menghapus/membatalkan catatan transaksi (misal: "hapus bensin tadi", "batalkan pengeluaran 18rb"), cocokkan transaksi yang dimaksud di "recentTransactions" lalu sertakan di array "deleteActions" dengan targetId dan judul yang sesuai.
 5. Jika pengguna bermaksud mengubah/mengedit nominal, kategori, dompet, atau judul transaksi (misal: "ubah bensin tadi jadi 35rb", "ganti kategori makan jadi Jajan"), cocokkan transaksi di "recentTransactions" lalu sertakan di array "updateActions" beserta data barunya.
 6. Jika pengguna menyapa, menanyakan identitasmu ("siapa kamu"), atau menanyakan hal umum, jawab dengan ramah dan sopan.
