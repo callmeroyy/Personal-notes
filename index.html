@@ -2283,15 +2283,15 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     html#financeApp[data-ui="ruang"] main{max-width:1250px;margin:0 auto;padding:0 30px !important}
     html#financeApp[data-ui="ruang"][data-active-page="beranda"] #beranda{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch}
     html#financeApp[data-ui="ruang"] #beranda>*{grid-column:1/-1}
-    html#financeApp[data-ui="ruang"] #beranda>:is(.saldo-hero,#cardMingguan){grid-column:auto;margin:0;height:100%}
+    html#financeApp[data-ui="ruang"] #beranda>:is(.saldo-hero,#cardMingguan,#cardAiInsight,#homeMoney,#cardBudget,#cardWish){grid-column:auto;margin:0;height:100%}
     html#financeApp[data-ui="ruang"] #cardMingguan{display:flex;flex-direction:column;justify-content:center}
     html#financeApp[data-ui="ruang"] #homeMoney{padding:25px}
-    html#financeApp[data-ui="ruang"][data-active-page="grafik"] #grafik,html#financeApp[data-ui="ruang"][data-active-page="data"] #data{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
-    html#financeApp[data-ui="ruang"] :is(#grafik,#data)>.card{margin-bottom:0}
+    html#financeApp[data-ui="ruang"][data-active-page="grafik"] #grafik{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+    html#financeApp[data-ui="ruang"] #grafik>.card{margin-bottom:0}
     html#financeApp[data-ui="ruang"] #grafik>.chart-filter,html#financeApp[data-ui="ruang"] #gExtraCharts{grid-column:1/-1}
     html#financeApp[data-ui="ruang"] #catat{max-width:760px;margin:0 auto}
-    html#financeApp[data-ui="ruang"] #setelan,
-    #setelan{max-width:1040px !important;margin:0 auto}
+    html#financeApp[data-ui="ruang"] :is(#beranda,#riwayat,#grafik,#setelan,#data),
+    :is(#beranda,#riwayat,#grafik,#setelan,#data){max-width:1040px !important;margin:0 auto}
     html#financeApp[data-ui="ruang"] nav.bottom{max-width:760px}
     html#financeApp[data-ui="ruang"] .toast-note{max-width:620px}
   }
@@ -2336,6 +2336,30 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   @media(min-width:820px){
     .setelan-bottom-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch}
     .setelan-bottom-row > .card{margin-bottom:0 !important;display:flex;flex-direction:column}
+  }
+
+  /* Styling Data & Backup Responsif & Rapi untuk Desktop */
+  .data-top-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin:0 0 16px}
+  .data-grid{display:grid;grid-template-columns:1fr;gap:16px}
+  .data-col{display:flex;flex-direction:column;gap:16px}
+  .data-actions-grid{display:grid;grid-template-columns:1fr;gap:9px}
+  @media(min-width:540px){
+    .data-actions-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media(min-width:760px){
+    .data-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+    .data-col > .card{margin-bottom:0 !important}
+  }
+
+  /* Toolbar Filter Riwayat Desktop */
+  .riwayat-filter-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}
+  @media(min-width:640px){
+    .riwayat-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+  }
+  @media(min-width:960px){
+    .riwayat-filter-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 14px;align-items:end}
+    .riwayat-filter-grid .field-label{margin-bottom:4px}
+    .riwayat-filter-grid input,.riwayat-filter-grid select{margin-bottom:0}
   }
   @media(min-width:1024px) and (max-height:650px){.ui-side-note{display:none}.ui-brand{margin-bottom:28px}}
   @media(max-width:799px){html#financeApp[data-ui="ruang"][data-gaya] :is(input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]){font-size:16px}}
@@ -3308,7 +3332,30 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
 <!-- RIWAYAT -->
 <section id="riwayat" class="page">
   <div class="card">
-    <h2>Riwayat & periode</h2><label class="field-label" for="rRentang">Periode riwayat</label><select id="rRentang"><option value="semua" selected>Semua tanggal</option><option value="hari">Hari ini</option><option value="7">7 hari terakhir</option><option value="30">30 hari terakhir</option><option value="bulan">Bulan ini</option><option value="6bulan">6 bulan terakhir</option><option value="custom">Tanggal sendiri</option></select><p class="muted" id="rPeriodInfo" aria-live="polite"></p>
+    <h2>Riwayat &amp; periode</h2>
+    <div class="riwayat-filter-grid">
+      <div class="field-wrap">
+        <label class="field-label" for="rRentang">Periode riwayat</label>
+        <select id="rRentang"><option value="semua" selected>Semua tanggal</option><option value="hari">Hari ini</option><option value="7">7 hari terakhir</option><option value="30">30 hari terakhir</option><option value="bulan">Bulan ini</option><option value="6bulan">6 bulan terakhir</option><option value="custom">Tanggal sendiri</option></select>
+      </div>
+      <div class="field-wrap">
+        <label class="field-label" for="rTipe">Jenis transaksi</label>
+        <select id="rTipe">
+          <option value="semua">Semua tipe</option>
+          <option value="masuk">Pemasukan saja</option>
+          <option value="keluar">Pengeluaran saja</option><option value="transfer">Perpindahan uang</option>
+        </select>
+      </div>
+      <div class="field-wrap">
+        <label class="field-label" for="rStatus">Status catatan</label>
+        <select id="rStatus"><option value="aktif">Aktif (dihitung)</option><option value="semua">Semua status</option><option value="nonaktif">Nonaktif (tidak dihitung)</option></select>
+      </div>
+      <div class="field-wrap">
+        <label class="field-label" for="rCari">Cari transaksi</label>
+        <input type="text" id="rCari" placeholder="Contoh: telur, belanja, atau kantor">
+      </div>
+    </div>
+    <p class="muted" id="rPeriodInfo" aria-live="polite"></p>
     <div class="grid2">
       <div><span class="muted">Dari</span><input type="date" id="rDari"></div>
       <div><span class="muted">Sampai</span><input type="date" id="rSampai"></div>
@@ -3317,13 +3364,6 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
       <button class="ghost kecil" id="btnHariIni">Hari ini</button>
       <button class="ghost kecil" id="btnSemuaTanggal">Semua tanggal</button>
     </div>
-    <select id="rTipe">
-      <option value="semua">Semua tipe</option>
-      <option value="masuk">Pemasukan saja</option>
-      <option value="keluar">Pengeluaran saja</option><option value="transfer">Perpindahan uang</option>
-    </select>
-    <label class="field-label" for="rStatus">Status catatan</label><select id="rStatus"><option value="aktif">Aktif (dihitung)</option><option value="semua">Semua status</option><option value="nonaktif">Nonaktif (tidak dihitung)</option></select>
-    <input type="text" id="rCari" placeholder="Contoh: telur, belanja, atau kantor">
     <p class="muted" id="rRingkas"></p>
     <div class="stats history-stats" style="margin:0 0 12px">
       <div class="stat s-masuk"><span class="lbl">Pemasukan</span><b class="hijau" id="masuk"></b></div>
@@ -3368,54 +3408,89 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
 
 <!-- DATA -->
 <section id="data" class="page">
-  <div class="card">
-    <h2>Pengingat harian</h2>
-    <label class="field-label" for="sPengingat">Jam pengingat</label>
-    <input type="time" id="sPengingat" aria-describedby="infoJamPengingat">
-    <p class="muted setting-help" id="infoJamPengingat"></p>
-    <button class="ghost kecil" id="btnPengingatMati" type="button">Matikan pengingat</button>
-    <button class="ghost" id="btnNotif">Izinkan notifikasi HP</button>
-    <p class="muted" id="notifStatus"></p>
-  </div>
-  <div class="card">
-    <h2>Data & backup</h2>
-    <p class="muted" id="storageStatus" role="status">Memeriksa ruang penyimpanan…</p>
-    <label class="field-label" for="sBackupIngat">Ingatkan backup tiap berapa hari?</label>
-    <input type="number" id="sBackupIngat" min="1" max="3650" step="1" inputmode="numeric" placeholder="Contoh: 7" aria-describedby="infoBackupIngat">
-    <p class="muted setting-help" id="infoBackupIngat"></p>
-    <button class="ghost kecil" id="btnBackupMati" type="button">Matikan pengingat backup</button>
-    <button id="btnExcel">Export ke Excel (CSV)</button>
-    <button class="sec" id="btnBackup">Export backup (JSON)</button>
-    <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
-    <button class="ghost" id="btnImport">Import backup (JSON)</button>
-    <h2 style="margin-top:14px">Google Drive</h2>
-    <button id="btnDriveSimpan">☁️ Simpan ke Drive</button>
-    <button class="ghost" id="btnDriveAmbil">⬇️ Ambil dari Drive</button>
-    <label class="field-label" for="sDriveAuto">Simpan otomatis ke Drive</label>
-    <select id="sDriveAuto">
-      <option value="off">Mati</option>
-      <option value="on">Aktif saat web terbuka</option>
-    </select>
-    <p class="muted setting-help" id="driveAutoInfo" role="status"></p>
-    <p class="muted" id="driveStatus">Belum pernah disimpan ke Drive.</p>
-  </div>
-  <div class="card">
-    <h2>🔒 Kunci Aplikasi (App Lock)</h2>
-    <p class="muted" id="appLockStatusDesc">Lindungi catatan keuangan agar hanya bisa dibuka dengan PIN atau biometrik saat aplikasi dibuka.</p>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin:10px 0 12px">
-      <span style="font-size:13.5px;font-weight:600;color:var(--ink)" id="appLockStatusText">Status: Tidak Aktif</span>
-      <button type="button" class="sec kecil" id="btnAppLockToggle" style="width:auto;margin:0">Atur PIN</button>
+  <div class="data-top-bar">
+    <div>
+      <h2 style="margin:0;font-size:20px;font-weight:700">Data, Cadangan &amp; Keamanan</h2>
+      <p class="muted" style="margin:2px 0 0;font-size:12.5px">Kelola ekspor, backup file, Google Drive, pengingat, dan kunci aplikasi</p>
     </div>
-    <div id="appLockSettingsWrap" hidden>
-      <div style="display:flex;gap:8px;margin-bottom:8px">
-        <button type="button" class="ghost kecil" id="btnAppLockChangePin">Ubah PIN</button>
-        <button type="button" class="ghost kecil" id="btnAppLockDisable">Matikan Kunci</button>
+    <button type="button" class="ghost kecil" onclick="goto('setelan')" style="width:auto;margin:0;padding:8px 14px;display:inline-flex;align-items:center;gap:6px">⚙️ Buka Setelan</button>
+  </div>
+
+  <div class="data-grid">
+    <!-- Kolom Kiri: Pengingat Harian & Kunci Aplikasi -->
+    <div class="data-col">
+      <div class="card" id="cardPengingat">
+        <h2>Pengingat harian</h2>
+        <div class="field-wrap">
+          <label class="field-label" for="sPengingat">Jam pengingat</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="time" id="sPengingat" aria-describedby="infoJamPengingat" style="margin-bottom:0">
+            <button class="ghost kecil" id="btnPengingatMati" type="button" style="width:auto;margin:0;white-space:nowrap;padding:11px 14px">Matikan</button>
+          </div>
+          <p class="muted setting-help" id="infoJamPengingat"></p>
+        </div>
+        <button class="ghost" id="btnNotif" style="margin-bottom:6px">Izinkan notifikasi HP</button>
+        <p class="muted" id="notifStatus" style="margin:0;font-size:12px"></p>
       </div>
-      <div id="appLockBioWrap" style="margin-top:8px" hidden>
-        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--ink)">
-          <input type="checkbox" id="appLockBioCheck" style="width:auto;margin:0">
-          <span>Gunakan Sidik Jari / Biometrik (WebAuthn)</span>
-        </label>
+
+      <div class="card" id="cardAppLock">
+        <h2>🔒 Kunci Aplikasi (App Lock)</h2>
+        <p class="muted" id="appLockStatusDesc">Lindungi catatan keuangan agar hanya bisa dibuka dengan PIN atau biometrik saat aplikasi dibuka.</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:10px 0 12px;gap:10px">
+          <span style="font-size:13.5px;font-weight:600;color:var(--ink)" id="appLockStatusText">Status: Tidak Aktif</span>
+          <button type="button" class="sec kecil" id="btnAppLockToggle" style="width:auto;margin:0;white-space:nowrap">Atur PIN</button>
+        </div>
+        <div id="appLockSettingsWrap" hidden>
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <button type="button" class="ghost kecil" id="btnAppLockChangePin">Ubah PIN</button>
+            <button type="button" class="ghost kecil" id="btnAppLockDisable">Matikan Kunci</button>
+          </div>
+          <div id="appLockBioWrap" style="margin-top:8px" hidden>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--ink)">
+              <input type="checkbox" id="appLockBioCheck" style="width:auto;margin:0">
+              <span>Gunakan Sidik Jari / Biometrik (WebAuthn)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kolom Kanan: Data & Backup + Google Drive -->
+    <div class="data-col">
+      <div class="card" id="cardBackup">
+        <h2>Data &amp; backup</h2>
+        <p class="muted" id="storageStatus" role="status" style="margin-bottom:12px">Memeriksa ruang penyimpanan…</p>
+        
+        <div class="field-wrap">
+          <label class="field-label" for="sBackupIngat">Ingatkan backup tiap berapa hari?</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="number" id="sBackupIngat" min="1" max="3650" step="1" inputmode="numeric" placeholder="Contoh: 7" aria-describedby="infoBackupIngat" style="margin-bottom:0">
+            <button class="ghost kecil" id="btnBackupMati" type="button" style="width:auto;margin:0;white-space:nowrap;padding:11px 14px">Matikan</button>
+          </div>
+          <p class="muted setting-help" id="infoBackupIngat"></p>
+        </div>
+
+        <div class="data-actions-grid">
+          <button id="btnExcel" style="margin:0">Export ke Excel (CSV)</button>
+          <button class="sec" id="btnBackup" style="margin:0">Export backup (JSON)</button>
+        </div>
+        <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
+        <button class="ghost" id="btnImport" style="margin:9px 0 16px">Import backup (JSON)</button>
+
+        <h3 style="margin:16px 0 10px;font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:6px">Google Drive</h3>
+        <div class="data-actions-grid">
+          <button id="btnDriveSimpan" style="margin:0">☁️ Simpan ke Drive</button>
+          <button class="ghost" id="btnDriveAmbil" style="margin:0">⬇️ Ambil dari Drive</button>
+        </div>
+        <div class="field-wrap" style="margin-top:10px">
+          <label class="field-label" for="sDriveAuto">Simpan otomatis ke Drive</label>
+          <select id="sDriveAuto" style="margin-bottom:4px">
+            <option value="off">Mati</option>
+            <option value="on">Aktif saat web terbuka</option>
+          </select>
+          <p class="muted setting-help" id="driveAutoInfo" role="status"></p>
+        </div>
+        <p class="muted" id="driveStatus" style="margin:0;font-size:12px">Belum pernah disimpan ke Drive.</p>
       </div>
     </div>
   </div>
