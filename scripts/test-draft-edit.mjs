@@ -156,6 +156,7 @@ const context = {
   parseInt,
   isNaN,
   isFinite,
+  confirm: () => true,
   AbortController
 };
 context.window = context;
@@ -569,4 +570,73 @@ const updatedTrx = run(`db.transaksi.find(t => t.id === 'trx-penyesuaian-500k')`
 assert.equal(updatedTrx.total, 600000, 'Total di database harus terupdate menjadi 600.000');
 assert.equal(updatedTrx.items[0].harga, 600000, 'Harga item harus ikut terupdate menjadi 600.000');
 
-console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, dan Edit Relatif Transaksi BERHASIL!');
+// Test 22: Fitur Sticky Notes (Catatan Tempel)
+console.log('Testing Sticky Notes (Catatan Tempel) CRUD, Pin, Color, and Persistence...');
+run(`
+db.notes = [];
+$('inpNoteJudul').value = 'Daftar Belanja';
+$('txtNoteIsi').value = 'Beli susu, telur, dan roti tawar';
+$('chkNotePinned').checked = false;
+noteWarnaAktif = 'biru';
+simpanNoteDariForm();
+`);
+
+let notesList = run('db.notes');
+assert.equal(notesList.length, 1, 'Harus ada 1 catatan tempel tersimpan');
+assert.equal(notesList[0].judul, 'Daftar Belanja');
+assert.equal(notesList[0].isi, 'Beli susu, telur, dan roti tawar');
+assert.equal(notesList[0].warna, 'biru');
+assert.equal(notesList[0].pinned, false);
+
+const firstNoteId = notesList[0].id;
+
+// Test pin toggle
+run(`togglePinNote('${firstNoteId}')`);
+notesList = run('db.notes');
+assert.equal(notesList[0].pinned, true, 'Catatan harus berhasil disematkan (pinned = true)');
+
+// Tambah catatan kedua tanpa pin
+run(`
+noteEditId = null;
+$('inpNoteJudul').value = 'Catatan Biasa';
+$('txtNoteIsi').value = 'Ini catatan kedua yang tidak dipin';
+$('chkNotePinned').checked = false;
+noteWarnaAktif = 'hijau';
+simpanNoteDariForm();
+`);
+
+notesList = run('db.notes');
+assert.equal(notesList.length, 2, 'Harus ada 2 catatan tempel');
+
+// Test update note
+run(`
+bukaFormNote('${firstNoteId}');
+$('txtNoteIsi').value = 'Beli susu, telur, roti, dan keju';
+simpanNoteDariForm();
+`);
+notesList = run('db.notes');
+const updatedNote = notesList.find(n => n.id === firstNoteId);
+assert.equal(updatedNote.isi, 'Beli susu, telur, roti, dan keju', 'Isi catatan harus terupdate');
+
+// Test backup validation and candidate import with notes
+const backupData = run(`
+validasiBackupLedger({
+  fiturData: 4,
+  transaksi: [],
+  dompet: [],
+  transferDompet: [],
+  notes: db.notes,
+  uangFisik: { aktif: false, stok: stokKosong() }
+})
+`);
+assert.equal(backupData.notes.length, 2, 'Backup ledger harus menyertakan 2 catatan');
+
+// Test delete note
+run(`
+hapusNote('${firstNoteId}');
+`);
+notesList = run('db.notes');
+assert.equal(notesList.length, 1, 'Setelah dihapus harus tersisa 1 catatan');
+assert.equal(notesList[0].judul, 'Catatan Biasa');
+
+console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, Edit Relatif Transaksi, dan Sticky Notes BERHASIL!');

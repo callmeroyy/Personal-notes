@@ -2977,6 +2977,220 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
   }
+
+  /* ===== FITUR STICKY NOTES (CATATAN TEMPEL) ===== */
+  .notes-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .notes-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .notes-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .notes-color-filter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .note-filter-chip {
+    height: 32px;
+    min-width: 32px;
+    border-radius: 99px;
+    border: 1px solid var(--line);
+    background: var(--input);
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0 10px;
+    margin: 0 !important;
+    width: auto !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none !important;
+    transition: transform 0.1s, border-color 0.15s, box-shadow 0.15s;
+  }
+  .note-filter-chip:hover {
+    transform: scale(1.05);
+  }
+  .note-filter-chip.aktif {
+    border-color: var(--pri, #4f46e5) !important;
+    box-shadow: 0 0 0 2.5px color-mix(in srgb, var(--pri, #4f46e5) 30%, transparent) !important;
+  }
+  .note-filter-chip.chip-kuning { background: #fef08a; }
+  .note-filter-chip.chip-hijau { background: #bbf7d0; }
+  .note-filter-chip.chip-biru { background: #bfdbfe; }
+  .note-filter-chip.chip-pink { background: #fbcfe8; }
+  .note-filter-chip.chip-ungu { background: #e9d5ff; }
+  .note-filter-chip.chip-oranye { background: #fed7aa; }
+
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .notes-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .sticky-note-card {
+    position: relative;
+    border-radius: 16px;
+    padding: 16px 18px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 130px;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+    transition: transform 0.14s ease, box-shadow 0.14s ease;
+    word-break: break-word;
+  }
+  .sticky-note-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  }
+  .sticky-note-card.is-pinned {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  }
+  .sticky-note-card.is-pinned::before {
+    content: '📌';
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 15px;
+    opacity: 0.85;
+  }
+
+  .note-theme-kuning { background: #fefce8; border-color: #fef08a; color: #713f12; }
+  .note-theme-hijau { background: #f0fdf4; border-color: #bbf7d0; color: #14532d; }
+  .note-theme-biru { background: #eff6ff; border-color: #bfdbfe; color: #1e3a8a; }
+  .note-theme-pink { background: #fdf2f8; border-color: #fbcfe8; color: #831843; }
+  .note-theme-ungu { background: #faf5ff; border-color: #e9d5ff; color: #581c87; }
+  .note-theme-oranye { background: #fff7ed; border-color: #fed7aa; color: #7c2d12; }
+  .note-theme-netral { background: var(--card); border-color: var(--line); color: var(--ink); }
+
+  html[data-tema="dark"] .note-theme-kuning { background: #422006; border-color: #713f12; color: #fef08a; }
+  html[data-tema="dark"] .note-theme-hijau { background: #052e16; border-color: #14532d; color: #bbf7d0; }
+  html[data-tema="dark"] .note-theme-biru { background: #172554; border-color: #1e3a8a; color: #bfdbfe; }
+  html[data-tema="dark"] .note-theme-pink { background: #500724; border-color: #831843; color: #fbcfe8; }
+  html[data-tema="dark"] .note-theme-ungu { background: #3b0764; border-color: #581c87; color: #e9d5ff; }
+  html[data-tema="dark"] .note-theme-oranye { background: #431407; border-color: #7c2d12; color: #fed7aa; }
+  html[data-tema="dark"] .note-theme-netral { background: #1e293b; border-color: #334155; color: #f1f5f9; }
+
+  .note-card-title {
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.4;
+    margin-bottom: 6px;
+    padding-right: 20px;
+  }
+  .note-card-body {
+    font-size: 13.5px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    flex: 1 1 auto;
+  }
+  .note-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.08);
+    font-size: 11.5px;
+    opacity: 0.85;
+  }
+  html[data-tema="dark"] .note-card-footer {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+  .note-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .note-action-btn {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 4px 6px !important;
+    margin: 0 !important;
+    width: auto !important;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: inherit;
+    opacity: 0.8;
+    transition: opacity 0.12s, transform 0.1s;
+  }
+  .note-action-btn:hover {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  .note-palette {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .note-palette-btn {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+    border-radius: 99px !important;
+    border: 2px solid transparent !important;
+    cursor: pointer;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    transition: transform 0.12s, border-color 0.12s;
+  }
+  .note-palette-btn:hover {
+    transform: scale(1.12);
+  }
+  .note-palette-btn.aktif {
+    border-color: var(--ink) !important;
+    transform: scale(1.15);
+  }
+  .bg-kuning { background: #fef08a !important; }
+  .bg-hijau { background: #bbf7d0 !important; }
+  .bg-biru { background: #bfdbfe !important; }
+  .bg-pink { background: #fbcfe8 !important; }
+  .bg-ungu { background: #e9d5ff !important; }
+  .bg-oranye { background: #fed7aa !important; }
+  .bg-netral { background: #e2e8f0 !important; }
+
+  .notes-empty {
+    text-align: center;
+    padding: 36px 20px;
+    color: var(--muted);
+  }
+  .notes-empty-icon {
+    font-size: 38px;
+    margin-bottom: 8px;
+  }
 </style>
 
 </head>
@@ -2995,6 +3209,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     <button type="button" class="ui-side-link" data-ruang-page="beranda"><span class="ui-icon" data-ruang-icon="grid" aria-hidden="true"></span>Beranda</button>
     <button type="button" class="ui-side-link" data-ruang-page="riwayat"><span class="ui-icon" data-ruang-icon="receipt" aria-hidden="true"></span>Riwayat</button>
     <button type="button" class="ui-side-link" data-ruang-page="catat"><span class="ui-icon" data-ruang-icon="plus" aria-hidden="true"></span>Catat transaksi</button>
+    <button type="button" class="ui-side-link" data-ruang-page="notes"><span class="ui-icon" data-ruang-icon="notes" aria-hidden="true"></span>Catatan Tempel</button>
     <button type="button" class="ui-side-link" data-ruang-page="grafik"><span class="ui-icon" data-ruang-icon="chart" aria-hidden="true"></span>Grafik</button>
     <button type="button" class="ui-side-link" data-ruang-page="setelan"><span class="ui-icon" data-ruang-icon="sliders" aria-hidden="true"></span>Setelan</button>
     <button type="button" class="ui-side-link" data-ruang-page="data"><span class="ui-icon" data-ruang-icon="backup" aria-hidden="true"></span>Data &amp; backup</button>
@@ -3155,6 +3370,15 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
 
   <button class="home-catat" id="btnBerandaCatat" type="button"><span class="home-catat-title">+ Catat transaksi</span><span class="home-catat-sub">Pengeluaran · Pemasukan · Scan struk</span></button>
   <button class="ghost" id="btnLanjutDraf" type="button" hidden><span>Lanjutkan draf</span><small>Belum masuk saldo atau riwayat</small></button>
+
+  <div class="card" id="cardStickyNotesPreview">
+    <div class="notes-header-row">
+      <h2>📌 Catatan Tempel</h2>
+      <button class="ghost kecil" id="btnBukaSemuaNotes" type="button" style="margin:0">Buka semua</button>
+    </div>
+    <div id="notesDashboardGrid" class="notes-preview-grid"></div>
+    <button class="sec" id="btnQuickAddNote" type="button" style="margin-top:10px">+ Tulis catatan tempel</button>
+  </div>
 
   <div class="banner" id="bannerBackup" style="display:none">
     <span id="bannerBackupTeks"></span>
@@ -3527,6 +3751,41 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   </div>
 </section>
 
+<!-- CATATAN TEMPEL / STICKY NOTES -->
+<section id="notes" class="page">
+  <div class="card notes-main-card">
+    <div class="notes-page-header">
+      <div>
+        <h2>📌 Catatan Tempel</h2>
+        <p class="sub">Tulis memo cepat, ide, daftar belanja, atau pengingat harian dengan warna dan pin.</p>
+      </div>
+      <button class="beli" id="btnTambahNoteBaru" type="button" style="width:auto;margin:0;padding:10px 18px">+ Catatan Baru</button>
+    </div>
+
+    <div class="notes-filter-bar">
+      <div class="field-wrap" style="flex:1;min-width:200px;margin-bottom:0">
+        <input type="text" id="inpCariNotes" placeholder="🔍 Cari catatan tempel..." autocomplete="off">
+      </div>
+      <div class="notes-color-filter" id="notesColorFilter" role="radiogroup" aria-label="Filter warna catatan">
+        <button type="button" class="note-filter-chip aktif" data-color="semua">Semua</button>
+        <button type="button" class="note-filter-chip chip-kuning" data-color="kuning" title="Kuning"></button>
+        <button type="button" class="note-filter-chip chip-hijau" data-color="hijau" title="Hijau"></button>
+        <button type="button" class="note-filter-chip chip-biru" data-color="biru" title="Biru"></button>
+        <button type="button" class="note-filter-chip chip-pink" data-color="pink" title="Pink"></button>
+        <button type="button" class="note-filter-chip chip-ungu" data-color="ungu" title="Ungu"></button>
+        <button type="button" class="note-filter-chip chip-oranye" data-color="oranye" title="Oranye"></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="notesListContainer" class="notes-grid"></div>
+  <div id="notesEmptyState" class="notes-empty" hidden>
+    <div class="notes-empty-icon">📝</div>
+    <p><strong>Belum ada catatan tempel</strong></p>
+    <small class="muted">Tulis ide, pengingat, atau catatan bebas yang tersimpan aman di browser.</small>
+    <button type="button" class="sec kecil" id="btnTambahNoteEmpty" style="margin-top:12px;width:auto">+ Buat Catatan Pertama</button>
+  </div>
+</section>
 
 <!-- SETELAN -->
 <section id="setelan" class="page">
@@ -4222,6 +4481,38 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   </div>
 </dialog>
 
+<!-- DIALOG EDIT / TAMBAH CATATAN TEMPEL -->
+<dialog id="dlgEditNote" aria-labelledby="noteModalTitle">
+  <h2 id="noteModalTitle">Tulis Catatan Tempel</h2>
+  <div class="field-wrap">
+    <label class="field-label" for="inpNoteJudul">Judul catatan (opsional)</label>
+    <input type="text" id="inpNoteJudul" placeholder="Contoh: Ide konten, Catatan rapat, Pengingat" maxlength="100">
+  </div>
+  <div class="field-wrap">
+    <label class="field-label" for="txtNoteIsi">Isi catatan</label>
+    <textarea id="txtNoteIsi" rows="5" placeholder="Tulis catatan atau memo kamu di sini..." style="width:100%;min-height:110px;padding:12px;border-radius:12px;font-family:inherit;font-size:14.5px;resize:vertical"></textarea>
+  </div>
+  <div class="field-wrap">
+    <span class="field-label">Pilih warna memo</span>
+    <div class="note-palette" id="notePalette" role="radiogroup" aria-label="Warna memo">
+      <button type="button" class="note-palette-btn bg-kuning aktif" data-color="kuning" title="Kuning" aria-label="Kuning"></button>
+      <button type="button" class="note-palette-btn bg-hijau" data-color="hijau" title="Hijau" aria-label="Hijau"></button>
+      <button type="button" class="note-palette-btn bg-biru" data-color="biru" title="Biru" aria-label="Biru"></button>
+      <button type="button" class="note-palette-btn bg-pink" data-color="pink" title="Pink" aria-label="Pink"></button>
+      <button type="button" class="note-palette-btn bg-ungu" data-color="ungu" title="Ungu" aria-label="Ungu"></button>
+      <button type="button" class="note-palette-btn bg-oranye" data-color="oranye" title="Oranye" aria-label="Oranye"></button>
+      <button type="button" class="note-palette-btn bg-netral" data-color="netral" title="Netral" aria-label="Netral"></button>
+    </div>
+  </div>
+  <label class="ledger-check" style="margin:12px 0 16px;cursor:pointer">
+    <input type="checkbox" id="chkNotePinned">
+    <span>📌 Sematkan catatan ini di paling atas (Pin)</span>
+  </label>
+  <p class="form-error" id="noteFormError" role="alert" style="display:none"></p>
+  <button type="button" id="btnSimpanNote">Simpan Catatan</button>
+  <button type="button" class="sec" id="btnBatalNote">Batal</button>
+</dialog>
+
 <div id="appLockOverlay" style="display:none;position:fixed;inset:0;z-index:999999;background:var(--bg);color:var(--ink);flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center">
   <div style="max-width:320px;width:100%;margin:auto;display:flex;flex-direction:column;align-items:center">
     <div style="width:60px;height:60px;border-radius:18px;background:color-mix(in srgb,var(--pri) 15%,transparent);display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:14px">🔒</div>
@@ -4419,13 +4710,26 @@ const normalBerulang = list => (list || []).filter(r => r && r.mulai).map(r => (
   terakhir: r.terakhir || null
 }));
 
+function normalNote(n) {
+  if (!n || typeof n !== 'object') throw Error('Catatan tidak valid.');
+  return {
+    id: String(n.id || uid()),
+    judul: String(n.judul || '').slice(0, 100),
+    isi: String(n.isi || n.teks || '').slice(0, 5000),
+    warna: ['kuning', 'hijau', 'biru', 'pink', 'ungu', 'oranye', 'netral'].includes(n.warna) ? n.warna : 'kuning',
+    pinned: Boolean(n.pinned),
+    ts: Number(n.ts) || Date.now(),
+    diubah: Number(n.diubah) || Date.now()
+  };
+}
+
 function muat() {
-  const kosong=()=>({transaksi:[],wishlist:[],budgets:{},berulang:[],dompet:[],transferDompet:[]});
+  const kosong=()=>({transaksi:[],wishlist:[],budgets:{},berulang:[],dompet:[],transferDompet:[],notes:[]});
   try {
     financeSnapshot=localStorage.getItem(KEY);const v3=JSON.parse(financeSnapshot||'null');
     if(v3){if(typeof v3!=='object'||Array.isArray(v3)||Number(v3.fiturData||0)>4)throw Error('Versi data belum didukung.');
-      for(const k of ['transaksi','wishlist','berulang','dompet','transferDompet'])if(v3[k]!==undefined&&!Array.isArray(v3[k]))throw Error('Daftar '+k+' tidak valid.');
-      return {fiturData:4,transaksi:(v3.transaksi||[]).map(normal),wishlist:normalWish(v3.wishlist||[]),budgets:v3.budgets||{},berulang:normalBerulang(v3.berulang),dompet:normalDompet(v3.dompet),transferDompet:normalTransferDompet(v3.transferDompet),uangFisik:v3.uangFisik&&typeof v3.uangFisik==='object'?v3.uangFisik:null};}
+      for(const k of ['transaksi','wishlist','berulang','dompet','transferDompet','notes'])if(v3[k]!==undefined&&!Array.isArray(v3[k]))throw Error('Daftar '+k+' tidak valid.');
+      return {fiturData:4,transaksi:(v3.transaksi||[]).map(normal),wishlist:normalWish(v3.wishlist||[]),budgets:v3.budgets||{},berulang:normalBerulang(v3.berulang),dompet:normalDompet(v3.dompet),transferDompet:normalTransferDompet(v3.transferDompet),notes:(v3.notes||[]).map(normalNote),uangFisik:v3.uangFisik&&typeof v3.uangFisik==='object'?v3.uangFisik:null};}
     const v2=JSON.parse(localStorage.getItem(KEY_V2)||'null');if(v2)return {...kosong(),transaksi:(v2.transaksi||[]).map(normal),wishlist:normalWish(v2.wishlist||[])};
     const v1=JSON.parse(localStorage.getItem(KEY_V1)||'[]');return {...kosong(),transaksi:v1.map(normal)};
   }catch(e){financeMuatError=e.message||'Data tidak dapat dibaca.';return kosong();}
@@ -4450,6 +4754,7 @@ function muatSet() {
 let db = muat();
 db.dompet = db.dompet || [];
 db.transferDompet = db.transferDompet || [];
+db.notes = db.notes || [];
 let set = muatSet();
 function muatKeranjang() {
   try {
@@ -7280,6 +7585,223 @@ function renderCompare() {
   const max=Math.max(1,...[...map.values()].flatMap(d=>[d.a,d.b]));for(const [nama,d] of map){const item=el('div','chart-rank');item.append(el('strong',null,nama));[[d.a,'Hari A','var(--ok)'],[d.b,'Hari B','var(--bad)']].forEach(([nilai,label,color])=>{const track=el('div','chart-rank-track'),bar=el('span');bar.style.width=nilai/max*100+'%';bar.style.background=color;track.append(bar);item.append(row(label,rp(nilai)),track);});box.append(item);}
 }
 
+// ===== FITUR STICKY NOTES (CATATAN TEMPEL) =====
+let noteEditId = null;
+let noteWarnaAktif = 'kuning';
+let noteFilterWarna = 'semua';
+let noteSearchTeks = '';
+
+function renderStickyNotes() {
+  renderNotesDashboardPreview();
+  const container = $('notesListContainer');
+  const empty = $('notesEmptyState');
+  if (!container) return;
+  container.replaceChildren();
+
+  let list = [...(db.notes || [])];
+  if (noteFilterWarna && noteFilterWarna !== 'semua') {
+    list = list.filter(n => n.warna === noteFilterWarna);
+  }
+  if (noteSearchTeks) {
+    const q = noteSearchTeks.toLowerCase();
+    list = list.filter(n => (n.judul || '').toLowerCase().includes(q) || (n.isi || '').toLowerCase().includes(q));
+  }
+  list.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || (b.diubah || b.ts) - (a.diubah || a.ts));
+
+  if (empty) empty.hidden = list.length > 0;
+
+  list.forEach(note => {
+    const card = el('div', 'sticky-note-card note-theme-' + (note.warna || 'kuning'));
+    if (note.pinned) card.classList.add('is-pinned');
+    if (note.judul) card.appendChild(el('div', 'note-card-title', note.judul));
+    card.appendChild(el('div', 'note-card-body', note.isi));
+
+    const footer = el('div', 'note-card-footer');
+    const waktu = note.diubah || note.ts;
+    const dateStr = waktu ? new Date(waktu).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+    footer.appendChild(el('span', null, dateStr));
+
+    const actions = el('div', 'note-card-actions');
+    const btnPin = el('button', 'note-action-btn', note.pinned ? '📌' : '📍');
+    btnPin.type = 'button';
+    btnPin.title = note.pinned ? 'Lepas sematan' : 'Sematkan di atas';
+    btnPin.onclick = (e) => {
+      e.stopPropagation();
+      togglePinNote(note.id);
+    };
+
+    const btnEdit = el('button', 'note-action-btn', '✏️');
+    btnEdit.type = 'button';
+    btnEdit.title = 'Edit catatan';
+    btnEdit.onclick = (e) => {
+      e.stopPropagation();
+      bukaFormNote(note.id);
+    };
+
+    const btnHapus = el('button', 'note-action-btn', '🗑️');
+    btnHapus.type = 'button';
+    btnHapus.title = 'Hapus catatan';
+    btnHapus.onclick = (e) => {
+      e.stopPropagation();
+      hapusNote(note.id);
+    };
+
+    actions.append(btnPin, btnEdit, btnHapus);
+    footer.appendChild(actions);
+    card.appendChild(footer);
+    card.onclick = () => bukaFormNote(note.id);
+    container.appendChild(card);
+  });
+}
+
+function renderNotesDashboardPreview() {
+  const grid = $('notesDashboardGrid');
+  if (!grid) return;
+  grid.replaceChildren();
+  const list = [...(db.notes || [])].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || (b.diubah || b.ts) - (a.diubah || a.ts)).slice(0, 3);
+  if (!list.length) {
+    grid.appendChild(el('p', 'muted', 'Belum ada catatan tempel. Klik tombol di bawah untuk menulis memo.'));
+    return;
+  }
+  list.forEach(n => {
+    const item = el('div', 'sticky-note-card note-theme-' + (n.warna || 'kuning'));
+    if (n.pinned) item.classList.add('is-pinned');
+    if (n.judul) item.appendChild(el('div', 'note-card-title', n.judul));
+    const bodySnippet = n.isi.length > 80 ? n.isi.slice(0, 80) + '…' : n.isi;
+    item.appendChild(el('div', 'note-card-body', bodySnippet));
+    item.onclick = () => {
+      goto('notes');
+      bukaFormNote(n.id);
+    };
+    grid.appendChild(item);
+  });
+}
+
+function bukaFormNote(noteId) {
+  noteEditId = noteId;
+  const dlg = $('dlgEditNote');
+  const err = $('noteFormError');
+  if (err) {
+    err.textContent = '';
+    err.style.display = 'none';
+  }
+  const note = noteId ? (db.notes || []).find(n => n.id === noteId) : null;
+  $('noteModalTitle').textContent = note ? 'Edit Catatan Tempel' : 'Tulis Catatan Tempel';
+  $('inpNoteJudul').value = note ? (note.judul || '') : '';
+  $('txtNoteIsi').value = note ? (note.isi || '') : '';
+  $('chkNotePinned').checked = !!(note && note.pinned);
+  noteWarnaAktif = note ? (note.warna || 'kuning') : 'kuning';
+  document.querySelectorAll('#notePalette .note-palette-btn').forEach(btn => {
+    btn.classList.toggle('aktif', btn.dataset.color === noteWarnaAktif);
+  });
+  if (dlg && typeof dlg.showModal === 'function') {
+    dlg.showModal();
+  }
+}
+
+function simpanNoteDariForm() {
+  const judul = ($('inpNoteJudul').value || '').trim();
+  const isi = ($('txtNoteIsi').value || '').trim();
+  const pinned = $('chkNotePinned').checked;
+  const err = $('noteFormError');
+
+  if (!isi) {
+    if (err) {
+      err.textContent = 'Isi catatan tidak boleh kosong.';
+      err.style.display = 'block';
+    }
+    $('txtNoteIsi').focus();
+    return;
+  }
+
+  db.notes = db.notes || [];
+  const now = Date.now();
+  if (noteEditId) {
+    const idx = db.notes.findIndex(n => n.id === noteEditId);
+    if (idx !== -1) {
+      db.notes[idx] = normalNote({
+        ...db.notes[idx],
+        judul,
+        isi,
+        warna: noteWarnaAktif,
+        pinned,
+        diubah: now
+      });
+      beriPesan('Catatan tempel diperbarui.');
+    }
+  } else {
+    const newNote = normalNote({
+      id: 'note_' + now + '_' + Math.random().toString(36).slice(2, 7),
+      judul,
+      isi,
+      warna: noteWarnaAktif,
+      pinned,
+      ts: now,
+      diubah: now
+    });
+    db.notes.push(newNote);
+    beriPesan('Catatan tempel tersimpan.');
+  }
+
+  simpan();
+  renderStickyNotes();
+  const dlg = $('dlgEditNote');
+  if (dlg && typeof dlg.close === 'function') dlg.close();
+}
+
+function hapusNote(noteId) {
+  if (!confirm('Hapus catatan tempel ini?')) return;
+  db.notes = (db.notes || []).filter(n => n.id !== noteId);
+  simpan();
+  renderStickyNotes();
+  beriPesan('Catatan tempel dihapus.');
+}
+
+function togglePinNote(noteId) {
+  const note = (db.notes || []).find(n => n.id === noteId);
+  if (!note) return;
+  note.pinned = !note.pinned;
+  note.diubah = Date.now();
+  simpan();
+  renderStickyNotes();
+  beriPesan(note.pinned ? 'Catatan disematkan di atas.' : 'Sematan catatan dilepas.');
+}
+
+function inisialisasiStickyNotes() {
+  if ($('btnBukaSemuaNotes')) $('btnBukaSemuaNotes').onclick = () => goto('notes');
+  if ($('btnQuickAddNote')) $('btnQuickAddNote').onclick = () => bukaFormNote(null);
+  if ($('btnTambahNoteBaru')) $('btnTambahNoteBaru').onclick = () => bukaFormNote(null);
+  if ($('btnTambahNoteEmpty')) $('btnTambahNoteEmpty').onclick = () => bukaFormNote(null);
+  if ($('btnBatalNote')) $('btnBatalNote').onclick = () => $('dlgEditNote').close();
+  if ($('btnSimpanNote')) $('btnSimpanNote').onclick = simpanNoteDariForm;
+
+  document.querySelectorAll('#notePalette .note-palette-btn').forEach(btn => {
+    btn.onclick = () => {
+      noteWarnaAktif = btn.dataset.color || 'kuning';
+      document.querySelectorAll('#notePalette .note-palette-btn').forEach(b => b.classList.toggle('aktif', b === btn));
+    };
+  });
+
+  const filterContainer = $('notesColorFilter');
+  if (filterContainer) {
+    filterContainer.querySelectorAll('.note-filter-chip').forEach(chip => {
+      chip.onclick = () => {
+        noteFilterWarna = chip.dataset.color || 'semua';
+        filterContainer.querySelectorAll('.note-filter-chip').forEach(c => c.classList.toggle('aktif', c === chip));
+        renderStickyNotes();
+      };
+    });
+  }
+
+  const searchInp = $('inpCariNotes');
+  if (searchInp) {
+    searchInp.oninput = () => {
+      noteSearchTeks = searchInp.value.trim();
+      renderStickyNotes();
+    };
+  }
+}
+
 function renderSemua() {
   renderDompet();
   renderKeamananLedger();
@@ -7299,6 +7821,7 @@ function renderSemua() {
   renderRiwayat();
   renderGrafik();
   renderCompare();
+  renderStickyNotes();
   if(document.documentElement.dataset.uiReady) hiasJudulRuang();
   renderStorageStatus();
   if (typeof perbaruiUiAppLockSetelan === 'function') perbaruiUiAppLockSetelan();
@@ -9288,18 +9811,19 @@ const RUANG_UI_ICONS={
   repeat:'<path d="M4 9a7 7 0 0 1 12-4l3 3m0-5v5h-5M20 15a7 7 0 0 1-12 4l-3-3m0 5v-5h5"/>',
   pen:'<path d="m16 3 5 5L8 21H3v-5L16 3ZM13 6l5 5"/>',
   cash:'<rect x="2" y="5" width="20" height="14" rx="3"/><circle cx="12" cy="12" r="3"/><path d="M6 9h.1M18 15h.1"/>',
+  notes:'<path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M15 3v5h5"/><path d="M7 13h10M7 17h6"/>',
 };
 function ikonRuang(nama){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+(RUANG_UI_ICONS[nama]||RUANG_UI_ICONS.wallet)+'</svg>';}
 function hiasJudulRuang(){
   document.querySelectorAll('.card > h2,.chart-heading > h2').forEach(h=>{
     if(h.dataset.ruangHeading||h.id||h.closest('dialog'))return;
     const teks=h.textContent.toLowerCase();
-    const jenis=/grafik|kategori|bulanan|perbandingan|saldo|bandingkan/.test(teks)?'chart':/target|tabungan/.test(teks)?'sprout':/anggaran/.test(teks)?'target':/berulang|pengingat/.test(teks)?'repeat':/backup|drive|data/.test(teks)?'backup':/tampilan/.test(teks)?'palette':/riwayat|struk/.test(teks)?'receipt':'pen';
+    const jenis=/grafik|kategori|bulanan|perbandingan|saldo|bandingkan/.test(teks)?'chart':/target|tabungan/.test(teks)?'sprout':/catatan tempel|memo/.test(teks)?'notes':/anggaran/.test(teks)?'target':/berulang|pengingat/.test(teks)?'repeat':/backup|drive|data/.test(teks)?'backup':/tampilan/.test(teks)?'palette':/riwayat|struk/.test(teks)?'receipt':'pen';
     const simbol=document.createElement('span');simbol.className='ui-icon ui-card-title-icon';simbol.setAttribute('aria-hidden','true');simbol.innerHTML=ikonRuang(jenis);h.prepend(simbol);h.classList.add('ui-card-heading');h.dataset.ruangHeading='1';
   });
 }
 function sinkronDesainRuang(halaman){
-  const judul={beranda:'Beranda',riwayat:'Riwayat',catat:'Catat transaksi',grafik:'Grafik',setelan:'Setelan',data:'Data & backup'};
+  const judul={beranda:'Beranda',riwayat:'Riwayat',catat:'Catat transaksi',grafik:'Grafik',notes:'Catatan Tempel',setelan:'Setelan',data:'Data & backup'};
   document.documentElement.dataset.activePage=Object.prototype.hasOwnProperty.call(judul,halaman)?halaman:'beranda';
   $('uiPageCrumb').textContent=judul[halaman]||judul.beranda;
   document.querySelectorAll('.ui-side-link').forEach(b=>{if(b.dataset.ruangPage===halaman)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
@@ -9391,12 +9915,12 @@ function eksporLedgerCsv(){const rows=[['Tanggal','Tipe','Transaksi','Kategori',
  rows.push([],['Saldo total aktual',saldoTotal()],['Pemasukan laporan',sum(transaksiLaporan(),'masuk')],['Pengeluaran laporan',sum(transaksiLaporan(),'keluar')]);const escCsv=v=>'"'+String(typeof v==='string'&&/^[=+@\-\t\r]/.test(v)?"'"+v:v).replace(/"/g,'""')+'"';unduh('catatan-keuangan.csv','\uFEFF'+rows.map(r=>r.map(escCsv).join(';')).join('\r\n'),'text/csv;charset=utf-8');
 }
 let importLedgerDraft=null;
-function validasiBackupLedger(raw){if(!raw||typeof raw!=='object')throw Error('Pilih file backup keuangan.');if(!Array.isArray(raw)&&Number(raw.versi||0)>4)throw Error('Versi backup lebih baru dan belum didukung.');const records=Array.isArray(raw)?raw:raw.transaksi;if(!Array.isArray(records)||records.length>100000)throw Error('Daftar transaksi tidak valid.');const data={fiturData:4,transaksi:records.map(normal),wishlist:normalWish(Array.isArray(raw)?[]:raw.wishlist||[]),budgets:Array.isArray(raw)?{}:raw.budgets||{},berulang:normalBerulang(Array.isArray(raw)?[]:raw.berulang||[]),dompet:normalDompet(raw.dompet),transferDompet:normalTransferDompet(raw.transferDompet),uangFisik:{aktif:!!raw.uangFisik?.aktif,stok:{...stokKosong(),...raw.uangFisik?.stok}}};
+function validasiBackupLedger(raw){if(!raw||typeof raw!=='object')throw Error('Pilih file backup keuangan.');if(!Array.isArray(raw)&&Number(raw.versi||0)>4)throw Error('Versi backup lebih baru dan belum didukung.');const records=Array.isArray(raw)?raw:raw.transaksi;if(!Array.isArray(records)||records.length>100000)throw Error('Daftar transaksi tidak valid.');const data={fiturData:4,transaksi:records.map(normal),wishlist:normalWish(Array.isArray(raw)?[]:raw.wishlist||[]),budgets:Array.isArray(raw)?{}:raw.budgets||{},berulang:normalBerulang(Array.isArray(raw)?[]:raw.berulang||[]),dompet:normalDompet(raw.dompet),transferDompet:normalTransferDompet(raw.transferDompet),notes:Array.isArray(raw?.notes)?raw.notes.map(normalNote):(Array.isArray(raw?.catatan)?raw.catatan.map(normalNote):[]),uangFisik:{aktif:!!raw.uangFisik?.aktif,stok:{...stokKosong(),...raw.uangFisik?.stok}}};
  for(const key of ['transaksi','dompet','transferDompet']){const ids=new Set();for(const x of data[key]){if(!x.id||ids.has(x.id)||(key==='dompet'&&x.id===TUNAI_ID))throw Error('ID '+key+' kosong atau ganda.');ids.add(x.id);}}
  if(data.transaksi.some(x=>!tanggalGrafikValid(x.tanggal)||!Number.isFinite(x.total)||x.total<0||x.total>Number.MAX_SAFE_INTEGER))throw Error('Ada tanggal atau nominal transaksi tidak valid.');for(const d of DENOM)if(!Number.isSafeInteger(Number(data.uangFisik.stok[d]))||Number(data.uangFisik.stok[d])<0)throw Error('Stok uang fisik tidak valid.');const e=cekSaldoDompet(data.transaksi,data.transferDompet,data.dompet);if(e)throw Error(e);return data;
 }
 function bukaImporLedger(raw){const data=validasiBackupLedger(raw);importLedgerDraft={raw,data};$('ledgerImportSummary').textContent=data.transaksi.length+' transaksi, '+data.transferDompet.length+' perpindahan, '+data.transaksi.filter(x=>x.aktif===false).length+' transaksi nonaktif. Status aktif/nonaktif ikut dipulihkan.';$('ledgerImportMode').value=financeMuatError||(!db.transaksi.length&&!db.transferDompet.length)?'pulihkan':'gabung';$('ledgerImportError').textContent='';$('dlgImportLedger').showModal();}
-function kandidatImportLedger(incoming,mode){if(mode==='pulihkan')return cloneKeuangan(incoming);const next=cloneKeuangan(db);for(const key of ['dompet','transaksi','transferDompet','wishlist','berulang']){const ids=new Set(next[key].map(x=>x.id));for(const x of incoming[key])if(!ids.has(x.id)){next[key].push(cloneKeuangan(x));ids.add(x.id);}}for(const [key,b]of Object.entries(incoming.budgets))if(!next.budgets[key])next.budgets[key]=cloneKeuangan(b);next.uangFisik.stok=stokSetelahStatus(db,next);return next;}
+function kandidatImportLedger(incoming,mode){if(mode==='pulihkan')return cloneKeuangan(incoming);const next=cloneKeuangan(db);next.notes = next.notes || [];incoming.notes = incoming.notes || [];for(const key of ['dompet','transaksi','transferDompet','wishlist','berulang','notes']){const ids=new Set(next[key].map(x=>x.id));for(const x of incoming[key])if(!ids.has(x.id)){next[key].push(cloneKeuangan(x));ids.add(x.id);}}for(const [key,b]of Object.entries(incoming.budgets))if(!next.budgets[key])next.budgets[key]=cloneKeuangan(b);next.uangFisik.stok=stokSetelahStatus(db,next);return next;}
 function terapkanImportLedger(){if(!importLedgerDraft)return;const mode=$('ledgerImportMode').value,doImport=()=>{let next;try{next=kandidatImportLedger(importLedgerDraft.data,mode);}catch(e){$('ledgerImportError').textContent=e.message;return;}if(!simpanKandidatKeuangan(next,{pemulihan:mode==='pulihkan'})){$('ledgerImportError').textContent=$('pesanSingkat')?.textContent||'Belum dipulihkan.';return;}const raw=importLedgerDraft.raw;importLedgerDraft=null;$('dlgImportLedger').close();pilihanLedger.clear();
  if(!Array.isArray(raw)){try{if(raw.katKustom){for(const type of ['keluar','masuk'])for(const k of raw.katKustom[type]||[]){const nama=String(k).trim();if(nama&&!katKustom()[type].some(x=>x.toLowerCase()===nama.toLowerCase()))katKustom()[type].push(nama);}simpanSet();terapkanKatKustom();refreshKategoriSelect();}if(raw.tampilan&&typeof raw.tampilan==='object'){const {bg,aksen,beranda,...safe}=raw.tampilan;tampilan={...tampilan,...safe};simpanTampilan();terapkanTampilan();}}catch(_){beriPesan('Catatan dipulihkan; sebagian setelan tampilan belum tersimpan.',true);}}
  renderSemua();beriPesan(mode==='pulihkan'?'Backup dipulihkan, termasuk status nonaktif dan pecahan uang.':'Backup digabung. ID yang sudah ada dipertahankan; stok disesuaikan hanya untuk catatan baru.');};
@@ -9441,6 +9965,7 @@ isiKategoriBerulang();
 renderNotifStatus();
 pulihkanDrafCatat();
 simpan();
+inisialisasiStickyNotes();
 pasangDesainRuang();
 goto('beranda');
 selesaikanLoadingSplash();
