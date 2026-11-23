@@ -3042,6 +3042,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   html#financeApp .note-filter-chip.chip-pink { background: #fbcfe8 !important; color: #831843 !important; border-color: #f472b6 !important; }
   html#financeApp .note-filter-chip.chip-ungu { background: #e9d5ff !important; color: #581c87 !important; border-color: #c084fc !important; }
   html#financeApp .note-filter-chip.chip-oranye { background: #fed7aa !important; color: #7c2d12 !important; border-color: #fb923c !important; }
+  html#financeApp .note-filter-chip.chip-kustom { background: linear-gradient(135deg, #fef08a, #bae6fd, #fbcfe8) !important; color: #1f2937 !important; border-color: #cbd5e1 !important; }
 
   .notes-grid {
     display: grid;
@@ -3169,6 +3170,37 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   html[data-tema="dark"] .note-theme-oranye { background-color: #6c270d; color: #fed7aa; border: 1px solid #9a3412 !important; }
   html[data-tema="dark"] .note-theme-netral { background-color: #292524; color: #e7e5e4; border: 1px solid #44403c !important; }
 
+  /* Kartu Warna Kustom */
+  .note-theme-custom {
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.01) 24px, transparent 36px);
+  }
+  .note-theme-custom.note-custom-dark .note-card-footer {
+    border-top-color: rgba(255, 255, 255, 0.22);
+  }
+  html#financeApp .note-theme-custom.note-custom-dark .note-action-btn,
+  .note-theme-custom.note-custom-dark .note-action-btn {
+    background: rgba(255, 255, 255, 0.24) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+  }
+  html#financeApp .note-theme-custom.note-custom-dark .note-action-btn:hover,
+  .note-theme-custom.note-custom-dark .note-action-btn:hover {
+    background: rgba(255, 255, 255, 0.5) !important;
+  }
+  .note-theme-custom.note-custom-light .note-card-footer {
+    border-top-color: rgba(0, 0, 0, 0.12);
+  }
+  html#financeApp .note-theme-custom.note-custom-light .note-action-btn,
+  .note-theme-custom.note-custom-light .note-action-btn {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    color: #1f2937 !important;
+  }
+  html#financeApp .note-theme-custom.note-custom-light .note-action-btn:hover,
+  .note-theme-custom.note-custom-light .note-action-btn:hover {
+    background: #ffffff !important;
+  }
+
   .note-card-title {
     font-weight: 800;
     font-size: 15.5px;
@@ -3293,6 +3325,10 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     line-height: 1;
     color: rgba(0, 0, 0, 0.75);
   }
+  html#financeApp .note-palette-btn.aktif.is-dark::after,
+  .note-palette-btn.aktif.is-dark::after {
+    color: #ffffff !important;
+  }
 
   html#financeApp .note-palette-btn.bg-kuning, .bg-kuning { background: #fff875 !important; background-color: #fff875 !important; }
   html#financeApp .note-palette-btn.bg-hijau, .bg-hijau   { background: #a7f3d0 !important; background-color: #a7f3d0 !important; }
@@ -3301,6 +3337,41 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   html#financeApp .note-palette-btn.bg-ungu, .bg-ungu     { background: #e9d5ff !important; background-color: #e9d5ff !important; }
   html#financeApp .note-palette-btn.bg-oranye, .bg-oranye { background: #fed7aa !important; background-color: #fed7aa !important; }
   html#financeApp .note-palette-btn.bg-netral, .bg-netral { background: #f5eedc !important; background-color: #f5eedc !important; }
+
+  /* Tombol Warna Kustom */
+  .note-custom-color-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .note-custom-color-wrap input[type="color"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+  }
+  html#financeApp .note-palette-btn.note-palette-custom,
+  .note-palette-btn.note-palette-custom {
+    background: conic-gradient(from 180deg at 50% 50%, #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0088ff, #8800ff, #ff0088, #ff0000) !important;
+    font-size: 15px !important;
+    line-height: 1 !important;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2) !important;
+  }
+  html#financeApp .note-palette-btn.note-palette-custom.has-custom-color,
+  .note-palette-btn.note-palette-custom.has-custom-color {
+    background: var(--custom-color, #ffc6ff) !important;
+    background-color: var(--custom-color, #ffc6ff) !important;
+    font-size: 0 !important;
+  }
+  html#financeApp .note-palette-btn.note-palette-custom.has-custom-color.aktif::after,
+  .note-palette-btn.note-palette-custom.has-custom-color.aktif::after {
+    font-size: 16px !important;
+  }
 
   .notes-empty {
     text-align: center;
@@ -3895,6 +3966,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
         <button type="button" class="note-filter-chip chip-pink" data-color="pink" title="Pink"></button>
         <button type="button" class="note-filter-chip chip-ungu" data-color="ungu" title="Ungu"></button>
         <button type="button" class="note-filter-chip chip-oranye" data-color="oranye" title="Oranye"></button>
+        <button type="button" class="note-filter-chip chip-kustom" data-color="kustom" title="Warna Kustom">🎨 Kustom</button>
       </div>
     </div>
   </div>
@@ -4623,6 +4695,10 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
       <button type="button" class="note-palette-btn bg-ungu" data-color="ungu" title="Ungu" aria-label="Ungu"></button>
       <button type="button" class="note-palette-btn bg-oranye" data-color="oranye" title="Oranye" aria-label="Oranye"></button>
       <button type="button" class="note-palette-btn bg-netral" data-color="netral" title="Netral" aria-label="Netral"></button>
+      <div class="note-custom-color-wrap" title="Pilih warna kustom sendiri">
+        <button type="button" class="note-palette-btn note-palette-custom" id="btnNoteCustomColor" data-color="kustom" title="Warna Kustom" aria-label="Warna Kustom">🎨</button>
+        <input type="color" id="inpNoteColorPicker" value="#ffc6ff" aria-label="Pilih kode warna kustom" tabindex="-1">
+      </div>
     </div>
   </div>
   <label class="ledger-check" style="margin:12px 0 16px;cursor:pointer">
@@ -4831,13 +4907,32 @@ const normalBerulang = list => (list || []).filter(r => r && r.mulai).map(r => (
   terakhir: r.terakhir || null
 }));
 
+function normalWarnaNote(w) {
+  if (typeof w !== 'string') return 'kuning';
+  const bersih = w.trim().toLowerCase();
+  if (['kuning', 'hijau', 'biru', 'pink', 'ungu', 'oranye', 'netral'].includes(bersih)) return bersih;
+  if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/.test(bersih)) return bersih;
+  return 'kuning';
+}
+
+function hitungKontrasWarna(hex) {
+  let c = String(hex || '').replace('#', '').trim();
+  if (c.length === 3) c = c.split('').map(x => x + x).join('');
+  if (c.length !== 6) return '#1f2937';
+  const r = parseInt(c.slice(0, 2), 16) || 0;
+  const g = parseInt(c.slice(2, 4), 16) || 0;
+  const b = parseInt(c.slice(4, 6), 16) || 0;
+  const luma = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luma > 0.55 ? '#1f2937' : '#f8fafc';
+}
+
 function normalNote(n) {
   if (!n || typeof n !== 'object') throw Error('Catatan tidak valid.');
   return {
     id: String(n.id || uid()),
     judul: String(n.judul || '').slice(0, 100),
     isi: String(n.isi || n.teks || '').slice(0, 5000),
-    warna: ['kuning', 'hijau', 'biru', 'pink', 'ungu', 'oranye', 'netral'].includes(n.warna) ? n.warna : 'kuning',
+    warna: normalWarnaNote(n.warna),
     pinned: Boolean(n.pinned),
     ts: Number(n.ts) || Date.now(),
     diubah: Number(n.diubah) || Date.now()
@@ -7721,7 +7816,11 @@ function renderStickyNotes() {
 
   let list = [...(db.notes || [])];
   if (noteFilterWarna && noteFilterWarna !== 'semua') {
-    list = list.filter(n => n.warna === noteFilterWarna);
+    if (noteFilterWarna === 'kustom') {
+      list = list.filter(n => (n.warna || '').startsWith('#'));
+    } else {
+      list = list.filter(n => n.warna === noteFilterWarna);
+    }
   }
   if (noteSearchTeks) {
     const q = noteSearchTeks.toLowerCase();
@@ -7732,7 +7831,14 @@ function renderStickyNotes() {
   if (empty) empty.hidden = list.length > 0;
 
   list.forEach(note => {
-    const card = el('div', 'sticky-note-card note-theme-' + (note.warna || 'kuning'));
+    const isCustom = note.warna && note.warna.startsWith('#');
+    const card = el('div', 'sticky-note-card ' + (isCustom ? 'note-theme-custom' : 'note-theme-' + (note.warna || 'kuning')));
+    if (isCustom) {
+      card.style.backgroundColor = note.warna;
+      const ink = hitungKontrasWarna(note.warna);
+      card.style.color = ink;
+      card.classList.add(ink === '#f8fafc' ? 'note-custom-dark' : 'note-custom-light');
+    }
     if (note.pinned) {
       card.classList.add('is-pinned');
       card.appendChild(el('span', 'note-pin-badge', '📌'));
@@ -7788,7 +7894,14 @@ function renderNotesDashboardPreview() {
     return;
   }
   list.forEach(n => {
-    const item = el('div', 'sticky-note-card note-theme-' + (n.warna || 'kuning'));
+    const isCustom = n.warna && n.warna.startsWith('#');
+    const item = el('div', 'sticky-note-card ' + (isCustom ? 'note-theme-custom' : 'note-theme-' + (n.warna || 'kuning')));
+    if (isCustom) {
+      item.style.backgroundColor = n.warna;
+      const ink = hitungKontrasWarna(n.warna);
+      item.style.color = ink;
+      item.classList.add(ink === '#f8fafc' ? 'note-custom-dark' : 'note-custom-light');
+    }
     if (n.pinned) {
       item.classList.add('is-pinned');
       item.appendChild(el('span', 'note-pin-badge', '📌'));
@@ -7818,8 +7931,25 @@ function bukaFormNote(noteId) {
   $('txtNoteIsi').value = note ? (note.isi || '') : '';
   $('chkNotePinned').checked = !!(note && note.pinned);
   noteWarnaAktif = note ? (note.warna || 'kuning') : 'kuning';
+  const customBtn = $('btnNoteCustomColor');
+  const customInp = $('inpNoteColorPicker');
+  const isCustom = noteWarnaAktif.startsWith('#');
   document.querySelectorAll('#notePalette .note-palette-btn').forEach(btn => {
-    btn.classList.toggle('aktif', btn.dataset.color === noteWarnaAktif);
+    if (btn === customBtn) {
+      btn.classList.toggle('aktif', isCustom);
+      btn.classList.toggle('has-custom-color', isCustom);
+      if (isCustom) {
+        btn.style.setProperty('--custom-color', noteWarnaAktif);
+        const ink = hitungKontrasWarna(noteWarnaAktif);
+        btn.classList.toggle('is-dark', ink === '#f8fafc');
+        if (customInp) customInp.value = noteWarnaAktif;
+      } else {
+        btn.style.removeProperty('--custom-color');
+        btn.classList.remove('is-dark');
+      }
+    } else {
+      btn.classList.toggle('aktif', !isCustom && btn.dataset.color === noteWarnaAktif);
+    }
   });
   if (dlg && typeof dlg.showModal === 'function') {
     dlg.showModal();
@@ -7902,12 +8032,38 @@ function inisialisasiStickyNotes() {
   if ($('btnBatalNote')) $('btnBatalNote').onclick = () => $('dlgEditNote').close();
   if ($('btnSimpanNote')) $('btnSimpanNote').onclick = simpanNoteDariForm;
 
-  document.querySelectorAll('#notePalette .note-palette-btn').forEach(btn => {
+  document.querySelectorAll('#notePalette .note-palette-btn:not(.note-palette-custom)').forEach(btn => {
     btn.onclick = () => {
       noteWarnaAktif = btn.dataset.color || 'kuning';
+      const customBtn = $('btnNoteCustomColor');
+      if (customBtn) {
+        customBtn.classList.remove('aktif', 'has-custom-color', 'is-dark');
+        customBtn.style.removeProperty('--custom-color');
+      }
       document.querySelectorAll('#notePalette .note-palette-btn').forEach(b => b.classList.toggle('aktif', b === btn));
     };
   });
+
+  const customBtn = $('btnNoteCustomColor');
+  const customInp = $('inpNoteColorPicker');
+  if (customBtn && customInp) {
+    customBtn.onclick = () => {
+      customInp.click();
+    };
+    const aturWarnaKustom = (hex) => {
+      if (!hex || !/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(hex)) return;
+      noteWarnaAktif = hex.toLowerCase();
+      document.querySelectorAll('#notePalette .note-palette-btn').forEach(b => {
+        b.classList.remove('aktif');
+      });
+      customBtn.classList.add('aktif', 'has-custom-color');
+      customBtn.style.setProperty('--custom-color', noteWarnaAktif);
+      const ink = hitungKontrasWarna(noteWarnaAktif);
+      customBtn.classList.toggle('is-dark', ink === '#f8fafc');
+    };
+    customInp.oninput = (e) => aturWarnaKustom(e.target.value);
+    customInp.onchange = (e) => aturWarnaKustom(e.target.value);
+  }
 
   const filterContainer = $('notesColorFilter');
   if (filterContainer) {

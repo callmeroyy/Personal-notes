@@ -686,4 +686,47 @@ assert.equal(noteGabungan.judul, 'Catatan dari Perangkat Lain');
 assert.equal(noteGabungan.warna, 'pink');
 assert.equal(noteGabungan.pinned, true);
 
-console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, Edit Relatif Transaksi, Sticky Notes Realistis, dan Backup/Restore BERHASIL!');
+// Test 24: Sticky Notes Custom Hex Color Picker, Contrast, and Filter
+console.log('Testing Sticky Notes Custom Hex Color Picker, Contrast Calculation, and Custom Filter...');
+assert.equal(run(`normalWarnaNote('#ff5733')`), '#ff5733', 'Hex 6-digit harus valid');
+assert.equal(run(`normalWarnaNote('#ABC')`), '#abc', 'Hex 3-digit harus valid dan dinormalisasi huruf kecil');
+assert.equal(run(`normalWarnaNote('hijau')`), 'hijau', 'Preset warna hijau harus tetap valid');
+assert.equal(run(`normalWarnaNote('warna-acak-asal')`), 'kuning', 'Warna tidak valid harus fallback ke kuning');
+
+// Test hitungKontrasWarna
+assert.equal(run(`hitungKontrasWarna('#000000')`), '#f8fafc', 'Warna hitam pekat harus menghasilkan teks terang');
+assert.equal(run(`hitungKontrasWarna('#ffffff')`), '#1f2937', 'Warna putih bersih harus menghasilkan teks gelap');
+assert.equal(run(`hitungKontrasWarna('#ffc6ff')`), '#1f2937', 'Warna pastel terang harus menghasilkan teks gelap');
+assert.equal(run(`hitungKontrasWarna('#1e1b4b')`), '#f8fafc', 'Warna navy gelap harus menghasilkan teks terang');
+
+// Buat catatan dengan custom hex color
+run(`
+noteEditId = null;
+$('inpNoteJudul').value = 'Catatan Warna Custom Neon';
+$('txtNoteIsi').value = 'Ini catatan dengan custom hex #9b5de5';
+$('chkNotePinned').checked = true;
+noteWarnaAktif = '#9b5de5';
+simpanNoteDariForm();
+`);
+
+notesList = run('db.notes');
+const customNote = notesList.find(n => n.judul === 'Catatan Warna Custom Neon');
+assert.ok(customNote, 'Catatan warna kustom harus tersimpan di database');
+assert.equal(customNote.warna, '#9b5de5', 'Warna harus tersimpan dalam format hex');
+assert.equal(customNote.pinned, true, 'Catatan harus pinned');
+
+// Test Filter Kustom
+run(`
+noteFilterWarna = 'kustom';
+renderStickyNotes();
+`);
+const renderedContainer = run(`$('notesListContainer')`);
+assert.ok(renderedContainer, 'Kontainer catatan tempel harus ada');
+
+// Test backup export and restore with custom color note
+const backupWithCustom = run('buatBackupObjek()');
+const noteCustomInBackup = backupWithCustom.notes.find(n => n.warna === '#9b5de5');
+assert.ok(noteCustomInBackup, 'Catatan dengan warna hex kustom harus ada di objek backup');
+assert.equal(noteCustomInBackup.judul, 'Catatan Warna Custom Neon');
+
+console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, Edit Relatif Transaksi, Sticky Notes Realistis, Custom Color Picker, dan Backup/Restore BERHASIL!');
