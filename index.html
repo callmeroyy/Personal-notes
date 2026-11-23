@@ -1290,15 +1290,15 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     display:block;position:absolute;right:12px;top:13px;width:49px;height:49px;
     z-index:0;opacity:.62;pointer-events:none;
   }
-  html[data-gaya="spider"] button:not(.tab):not(.nav-plus){
+  html[data-gaya="spider"] button:not(.tab):not(.nav-plus):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn){
     background:linear-gradient(135deg,var(--sp-red),#a81f55) !important;
     color:#fff !important;box-shadow:0 4px 11px rgba(150,30,65,.18) !important;
   }
-  html[data-gaya="spider"] button:not(.tab):not(.nav-plus):is(.sec,.ghost,.kecil.sec){
+  html[data-gaya="spider"] button:not(.tab):not(.nav-plus):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn):is(.sec,.ghost,.kecil.sec){
     background:var(--sp-soft) !important;color:var(--ghostink) !important;box-shadow:none !important;
   }
-  html[data-gaya="spider"] button:not(.tab):not(.nav-plus).del{background:var(--delbg) !important;color:var(--delink) !important;box-shadow:none !important}
-  html[data-gaya="spider"] button:not(.tab):not(.nav-plus).beli{background:var(--ok) !important;color:var(--sp-on) !important}
+  html[data-gaya="spider"] button:not(.tab):not(.nav-plus):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn).del{background:var(--delbg) !important;color:var(--delink) !important;box-shadow:none !important}
+  html[data-gaya="spider"] button:not(.tab):not(.nav-plus):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn).beli{background:var(--ok) !important;color:var(--sp-on) !important}
   html[data-gaya="spider"] .save-status button:not(.tab):not(.nav-plus){background:transparent !important;color:var(--ghostink) !important;box-shadow:none !important}
   html[data-gaya="spider"] button:disabled{opacity:.48;box-shadow:none !important}
   html[data-gaya="spider"] :is(input,select){
@@ -1415,9 +1415,9 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) :is(.card,.stat,dialog){background:var(--n-card) !important;color:var(--n-ink);border:1px solid var(--n-line) !important;border-radius:var(--n-radius) !important;box-shadow:var(--n-shadow) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) .saldo-hero{position:relative;overflow:hidden;background:var(--n-hero) !important;color:#fff !important;border:1px solid #ffffff22;border-radius:var(--n-radius);box-shadow:var(--n-shadow);backdrop-filter:none}
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) .saldo-hero :is(.lbl,.mini,b){color:#fff !important}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) button:not(.tab):not(.nav-plus){background:var(--n-accent);color:var(--n-on);box-shadow:none;border-radius:14px}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) button:not(.tab):is(.ghost,.sec){background:var(--n-soft);color:var(--n-accent)}
-  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) button:not(.tab).del{background:var(--n-soft);color:var(--n-bad)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) button:not(.tab):not(.nav-plus):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn){background:var(--n-accent);color:var(--n-on);box-shadow:none;border-radius:14px}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) button:not(.tab):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn):is(.ghost,.sec){background:var(--n-soft);color:var(--n-accent)}
+  html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) button:not(.tab):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn).del{background:var(--n-soft);color:var(--n-bad)}
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) button:disabled{opacity:.45;cursor:not-allowed}
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) .save-status button{background:transparent !important;color:var(--n-accent) !important;padding:0}
   html:is([data-gaya="orbit"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="aurora"],[data-gaya="arcade"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="midnight"],[data-gaya="matcha"]) .cash-track button[aria-pressed="true"]{background:var(--n-accent);color:var(--n-on)}
@@ -1878,10 +1878,10 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   html[data-gaya="ruangide"] #cardMingguan{background:var(--ri-week) !important;border-color:var(--ri-line) !important;box-shadow:none !important}
   html[data-gaya="ruangide"] #cardMingguan h2{font-family:var(--ri-display);font-size:21px;font-weight:400;line-height:1.35}
   html[data-gaya="ruangide"] #teksMingguan{font-size:12px;line-height:1.8}
-  html[data-gaya="ruangide"] button:not(.tab):not(.nav-plus){background:var(--ri-primary);color:var(--ri-on-primary);box-shadow:none;border:1px solid transparent;border-radius:12px;font-size:14px;font-weight:600;text-shadow:none}
-  html[data-gaya="ruangide"] button:not(.tab):is(.ghost,.sec){background:var(--ri-soft);color:var(--ri-ink)}
-  html[data-gaya="ruangide"] button:not(.tab).del{background:var(--ri-del);color:var(--ri-del-ink)}
-  html[data-gaya="ruangide"] button.kecil{font-size:12px;padding:8px 11px;border-radius:9px}
+  html[data-gaya="ruangide"] button:not(.tab):not(.nav-plus):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn){background:var(--ri-primary);color:var(--ri-on-primary);box-shadow:none;border:1px solid transparent;border-radius:12px;font-size:14px;font-weight:600;text-shadow:none}
+  html[data-gaya="ruangide"] button:not(.tab):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn):is(.ghost,.sec){background:var(--ri-soft);color:var(--ri-ink)}
+  html[data-gaya="ruangide"] button:not(.tab):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn).del{background:var(--ri-del);color:var(--ri-del-ink)}
+  html[data-gaya="ruangide"] button.kecil:not(.note-action-btn){font-size:12px;padding:8px 11px;border-radius:9px}
   html[data-gaya="ruangide"] button:disabled{background:var(--ri-soft);color:var(--ri-muted);opacity:.55;box-shadow:none;cursor:not-allowed}
   html[data-gaya="ruangide"] .save-status button{background:transparent !important;color:var(--ri-ink) !important;border:0;padding:0}
   html[data-gaya="ruangide"] :is(input,select,textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]){background-color:var(--ri-input) !important;color:var(--ri-ink);border:1px solid var(--ri-line);border-radius:12px;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
@@ -1973,10 +1973,10 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   html#financeApp[data-ui="ruang"][data-gaya] :is(input,select,textarea):focus{outline:2px solid var(--ui-accent);outline-offset:2px;box-shadow:none !important}
   html#financeApp[data-ui="ruang"][data-gaya] :is(button,summary,a):focus-visible{outline:2px solid var(--ui-accent);outline-offset:3px;box-shadow:none !important}
   html#financeApp[data-ui="ruang"][data-gaya] input:is([type="checkbox"],[type="radio"]){accent-color:var(--ui-accent)}
-  html#financeApp[data-ui="ruang"][data-gaya] button:where(:not(.tab):not(.nav-plus):not(.ui-side-link):not(.ui-help):not(.style-choice):not(.provider-choice):not(.money-tab)){background:var(--ui-cta) !important;color:var(--ui-on-cta) !important;border-radius:var(--ui-control-r) !important;box-shadow:none !important;font-size:14px;font-weight:600;min-height:43px;line-height:1.5;letter-spacing:0}
-  html#financeApp[data-ui="ruang"][data-gaya] button:not(.tab):not(.nav-plus):is(.ghost,.sec){background:var(--ui-soft) !important;color:var(--ui-ink) !important}
-  html#financeApp[data-ui="ruang"][data-gaya] button:not(.tab).del{background:var(--delbg) !important;color:var(--delink) !important}
-  html#financeApp[data-ui="ruang"][data-gaya] button.kecil{font-size:12px !important;min-height:36px;padding:8px 11px !important}
+  html#financeApp[data-ui="ruang"][data-gaya] button:where(:not(.tab):not(.nav-plus):not(.ui-side-link):not(.ui-help):not(.style-choice):not(.provider-choice):not(.money-tab):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn)){background:var(--ui-cta) !important;color:var(--ui-on-cta) !important;border-radius:var(--ui-control-r) !important;box-shadow:none !important;font-size:14px;font-weight:600;min-height:43px;line-height:1.5;letter-spacing:0}
+  html#financeApp[data-ui="ruang"][data-gaya] button:not(.tab):not(.nav-plus):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn):is(.ghost,.sec){background:var(--ui-soft) !important;color:var(--ui-ink) !important}
+  html#financeApp[data-ui="ruang"][data-gaya] button:not(.tab):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn).del{background:var(--delbg) !important;color:var(--delink) !important}
+  html#financeApp[data-ui="ruang"][data-gaya] button.kecil:not(.note-action-btn){font-size:12px !important;min-height:36px;padding:8px 11px !important}
   html#financeApp[data-ui="ruang"][data-gaya] button:disabled{opacity:.5 !important;cursor:not-allowed;box-shadow:none !important}
   html#financeApp[data-ui="ruang"][data-gaya] .save-status button{min-height:28px !important;background:transparent !important;color:var(--ui-accent) !important;padding:0 !important}
   html#financeApp[data-ui="ruang"][data-gaya] .cash-track button[aria-pressed="false"]{background:var(--ui-solid) !important;color:var(--ui-muted) !important;border:1px solid var(--ui-line) !important}
@@ -2978,7 +2978,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
   }
 
-  /* ===== FITUR STICKY NOTES (CATATAN TEMPEL) ===== */
+  /* ===== FITUR STICKY NOTES (CATATAN TEMPEL REALISTIS) ===== */
   .notes-header-row {
     display: flex;
     align-items: center;
@@ -3003,193 +3003,314 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   .notes-color-filter {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     flex-wrap: wrap;
   }
+  html#financeApp .note-filter-chip,
   .note-filter-chip {
-    height: 32px;
-    min-width: 32px;
-    border-radius: 99px;
-    border: 1px solid var(--line);
-    background: var(--input);
-    color: var(--ink);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 0 10px;
+    min-height: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    border-radius: 99px !important;
+    border: 1.5px solid var(--line) !important;
+    background: var(--input) !important;
+    color: var(--ink) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    padding: 0 12px !important;
     margin: 0 !important;
     width: auto !important;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: none !important;
-    transition: transform 0.1s, border-color 0.15s, box-shadow 0.15s;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    transition: transform 0.12s, border-color 0.15s, box-shadow 0.15s !important;
   }
+  html#financeApp .note-filter-chip:hover,
   .note-filter-chip:hover {
-    transform: scale(1.05);
+    transform: translateY(-1px) scale(1.05) !important;
   }
+  html#financeApp .note-filter-chip.aktif,
   .note-filter-chip.aktif {
     border-color: var(--pri, #4f46e5) !important;
-    box-shadow: 0 0 0 2.5px color-mix(in srgb, var(--pri, #4f46e5) 30%, transparent) !important;
+    box-shadow: 0 0 0 2.5px color-mix(in srgb, var(--pri, #4f46e5) 35%, transparent) !important;
   }
-  .note-filter-chip.chip-kuning { background: #fef08a; }
-  .note-filter-chip.chip-hijau { background: #bbf7d0; }
-  .note-filter-chip.chip-biru { background: #bfdbfe; }
-  .note-filter-chip.chip-pink { background: #fbcfe8; }
-  .note-filter-chip.chip-ungu { background: #e9d5ff; }
-  .note-filter-chip.chip-oranye { background: #fed7aa; }
+  html#financeApp .note-filter-chip.chip-kuning { background: #fff875 !important; color: #422006 !important; border-color: #fef08a !important; }
+  html#financeApp .note-filter-chip.chip-hijau { background: #a7f3d0 !important; color: #064e3b !important; border-color: #86efac !important; }
+  html#financeApp .note-filter-chip.chip-biru { background: #bae6fd !important; color: #075985 !important; border-color: #7dd3fc !important; }
+  html#financeApp .note-filter-chip.chip-pink { background: #fbcfe8 !important; color: #831843 !important; border-color: #f472b6 !important; }
+  html#financeApp .note-filter-chip.chip-ungu { background: #e9d5ff !important; color: #581c87 !important; border-color: #c084fc !important; }
+  html#financeApp .note-filter-chip.chip-oranye { background: #fed7aa !important; color: #7c2d12 !important; border-color: #fb923c !important; }
 
   .notes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 14px;
-    margin-top: 14px;
+    gap: 22px;
+    margin-top: 18px;
+    padding: 10px 4px 20px;
   }
   .notes-preview-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 10px;
-    margin-top: 10px;
+    gap: 14px;
+    margin-top: 12px;
+    padding-bottom: 6px;
   }
 
+  /* KARTU STICKY NOTE REALISTIS (3M POST-IT AESTHETIC) */
   .sticky-note-card {
     position: relative;
-    border-radius: 16px;
-    padding: 16px 18px 14px;
+    border-radius: 2px 2px 14px 2px;
+    padding: 24px 20px 14px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 130px;
-    border: 1px solid transparent;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-    transition: transform 0.14s ease, box-shadow 0.14s ease;
+    min-height: 160px;
+    border: none !important;
     word-break: break-word;
+    cursor: pointer;
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.035) 0%, rgba(0, 0, 0, 0.01) 24px, transparent 36px);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.06),
+      0 4px 8px -1px rgba(0, 0, 0, 0.08),
+      0 10px 20px -2px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+    transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.18s ease;
   }
-  .sticky-note-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  }
-  .sticky-note-card.is-pinned {
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  }
-  .sticky-note-card.is-pinned::before {
-    content: '📌';
+
+  /* Efek bayangan lengkungan kertas di sudut bawah (curled peel corner) */
+  .sticky-note-card::after {
+    content: '';
     position: absolute;
-    top: 10px;
-    right: 12px;
-    font-size: 15px;
-    opacity: 0.85;
+    bottom: 5px;
+    right: 8px;
+    width: 65%;
+    height: 18px;
+    background: transparent;
+    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.16);
+    transform: skew(4deg) rotate(3deg);
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.7;
   }
 
-  .note-theme-kuning { background: #fefce8; border-color: #fef08a; color: #713f12; }
-  .note-theme-hijau { background: #f0fdf4; border-color: #bbf7d0; color: #14532d; }
-  .note-theme-biru { background: #eff6ff; border-color: #bfdbfe; color: #1e3a8a; }
-  .note-theme-pink { background: #fdf2f8; border-color: #fbcfe8; color: #831843; }
-  .note-theme-ungu { background: #faf5ff; border-color: #e9d5ff; color: #581c87; }
-  .note-theme-oranye { background: #fff7ed; border-color: #fed7aa; color: #7c2d12; }
-  .note-theme-netral { background: var(--card); border-color: var(--line); color: var(--ink); }
+  /* Strip selotip transparan (washi tape) di bagian atas kartu untuk catatan biasa */
+  .sticky-note-card::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-left: 2px dashed rgba(0, 0, 0, 0.1);
+    border-right: 2px dashed rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-radius: 1px;
+    z-index: 2;
+    pointer-events: none;
+  }
 
-  html[data-tema="dark"] .note-theme-kuning { background: #422006; border-color: #713f12; color: #fef08a; }
-  html[data-tema="dark"] .note-theme-hijau { background: #052e16; border-color: #14532d; color: #bbf7d0; }
-  html[data-tema="dark"] .note-theme-biru { background: #172554; border-color: #1e3a8a; color: #bfdbfe; }
-  html[data-tema="dark"] .note-theme-pink { background: #500724; border-color: #831843; color: #fbcfe8; }
-  html[data-tema="dark"] .note-theme-ungu { background: #3b0764; border-color: #581c87; color: #e9d5ff; }
-  html[data-tema="dark"] .note-theme-oranye { background: #431407; border-color: #7c2d12; color: #fed7aa; }
-  html[data-tema="dark"] .note-theme-netral { background: #1e293b; border-color: #334155; color: #f1f5f9; }
+  /* Catatan yang disematkan (Pinned): Pita selotip digantikan jarum pin 3D */
+  .sticky-note-card.is-pinned::before {
+    display: none;
+  }
+  .sticky-note-card .note-pin-badge {
+    position: absolute;
+    top: -11px;
+    right: 14px;
+    font-size: 24px;
+    line-height: 1;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.32));
+    z-index: 3;
+    pointer-events: none;
+    transition: transform 0.15s ease;
+  }
+  .sticky-note-card:hover .note-pin-badge {
+    transform: scale(1.15) rotate(5deg);
+  }
+
+  /* Rotasi alami sudut kertas agar terasa seperti papan memo nyata */
+  .notes-grid .sticky-note-card:nth-child(5n + 1) { transform: rotate(-1.2deg); }
+  .notes-grid .sticky-note-card:nth-child(5n + 2) { transform: rotate(0.9deg); }
+  .notes-grid .sticky-note-card:nth-child(5n + 3) { transform: rotate(-0.6deg); }
+  .notes-grid .sticky-note-card:nth-child(5n + 4) { transform: rotate(1.2deg); }
+  .notes-grid .sticky-note-card:nth-child(5n + 5) { transform: rotate(-0.8deg); }
+
+  .sticky-note-card:hover {
+    transform: translateY(-4px) scale(1.02) rotate(0deg) !important;
+    z-index: 5;
+    box-shadow:
+      0 4px 10px rgba(0, 0, 0, 0.06),
+      0 14px 26px -2px rgba(0, 0, 0, 0.14),
+      0 22px 35px -6px rgba(0, 0, 0, 0.09),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+  }
+
+  /* Tema Warna Kertas Post-It Otentik (Light Mode) */
+  .note-theme-kuning { background-color: #fff875; color: #422006; }
+  .note-theme-hijau  { background-color: #a7f3d0; color: #064e3b; }
+  .note-theme-biru   { background-color: #bae6fd; color: #075985; }
+  .note-theme-pink   { background-color: #fbcfe8; color: #831843; }
+  .note-theme-ungu   { background-color: #e9d5ff; color: #581c87; }
+  .note-theme-oranye { background-color: #fed7aa; color: #7c2d12; }
+  .note-theme-netral { background-color: #f5eedc; color: #292524; }
+
+  /* Tema Kertas Post-It (Dark Mode: tetap bernuansa kertas kaya warna) */
+  html[data-tema="dark"] .note-theme-kuning { background-color: #5c470a; color: #fff875; border: 1px solid #785e0c !important; }
+  html[data-tema="dark"] .note-theme-hijau  { background-color: #064e3b; color: #a7f3d0; border: 1px solid #047857 !important; }
+  html[data-tema="dark"] .note-theme-biru   { background-color: #0c4a6e; color: #bae6fd; border: 1px solid #0284c7 !important; }
+  html[data-tema="dark"] .note-theme-pink   { background-color: #701a75; color: #fbcfe8; border: 1px solid #a21caf !important; }
+  html[data-tema="dark"] .note-theme-ungu   { background-color: #4a044e; color: #f5d0fe; border: 1px solid #701a75 !important; }
+  html[data-tema="dark"] .note-theme-oranye { background-color: #6c270d; color: #fed7aa; border: 1px solid #9a3412 !important; }
+  html[data-tema="dark"] .note-theme-netral { background-color: #292524; color: #e7e5e4; border: 1px solid #44403c !important; }
 
   .note-card-title {
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 1.4;
+    font-weight: 800;
+    font-size: 15.5px;
+    line-height: 1.35;
     margin-bottom: 6px;
-    padding-right: 20px;
+    padding-right: 22px;
+    letter-spacing: -0.01em;
   }
   .note-card-body {
-    font-size: 13.5px;
+    font-size: 14px;
     line-height: 1.6;
     white-space: pre-wrap;
     flex: 1 1 auto;
+    opacity: 0.95;
   }
   .note-card-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 14px;
-    padding-top: 8px;
-    border-top: 1px dashed rgba(0, 0, 0, 0.08);
+    padding-top: 9px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.12);
     font-size: 11.5px;
     opacity: 0.85;
   }
   html[data-tema="dark"] .note-card-footer {
-    border-top-color: rgba(255, 255, 255, 0.1);
+    border-top-color: rgba(255, 255, 255, 0.14);
   }
   .note-card-actions {
     display: flex;
     align-items: center;
-    gap: 4px;
-  }
-  .note-action-btn {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 4px 6px !important;
-    margin: 0 !important;
-    width: auto !important;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    color: inherit;
-    opacity: 0.8;
-    transition: opacity 0.12s, transform 0.1s;
-  }
-  .note-action-btn:hover {
-    opacity: 1;
-    transform: scale(1.15);
+    gap: 6px;
   }
 
+  /* Tombol Aksi di dalam Sticky Note (Transparan Menyatu, Bebas dari Tombol Hitam Kaku) */
+  html#financeApp .sticky-note-card .note-action-btn,
+  .sticky-note-card .note-action-btn {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+    color: inherit !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 13px !important;
+    cursor: pointer !important;
+    opacity: 0.85 !important;
+    transition: transform 0.12s ease, background 0.12s ease, opacity 0.12s ease, box-shadow 0.12s ease !important;
+  }
+  html#financeApp .sticky-note-card .note-action-btn:hover,
+  .sticky-note-card .note-action-btn:hover {
+    opacity: 1 !important;
+    background: #ffffff !important;
+    transform: scale(1.15) !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.14) !important;
+  }
+  html[data-tema="dark"] .sticky-note-card .note-action-btn {
+    background: rgba(0, 0, 0, 0.35) !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    color: #ffffff !important;
+  }
+  html[data-tema="dark"] .sticky-note-card .note-action-btn:hover {
+    background: rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* PALET WARNA DI MODAL FORMULIR (SWATCH BULAT WARNA JELAS) */
   .note-palette {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-top: 6px;
+    margin-top: 8px;
+    padding: 4px 2px;
   }
+  html#financeApp .note-palette-btn,
   .note-palette-btn {
-    width: 32px !important;
-    height: 32px !important;
-    min-width: 32px !important;
-    max-width: 32px !important;
-    border-radius: 99px !important;
-    border: 2px solid transparent !important;
-    cursor: pointer;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    max-width: 36px !important;
+    max-height: 36px !important;
+    border-radius: 50% !important;
+    border: 3px solid transparent !important;
+    cursor: pointer !important;
     padding: 0 !important;
     margin: 0 !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-    transition: transform 0.12s, border-color 0.12s;
+    outline: none !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+    transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.14s ease !important;
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
   }
+  html#financeApp .note-palette-btn:hover,
   .note-palette-btn:hover {
-    transform: scale(1.12);
+    transform: scale(1.16) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22) !important;
   }
+  html#financeApp .note-palette-btn.aktif,
   .note-palette-btn.aktif {
-    border-color: var(--ink) !important;
-    transform: scale(1.15);
+    transform: scale(1.18) !important;
+    border-color: #ffffff !important;
+    box-shadow: 0 0 0 2.5px var(--pri, #4f46e5), 0 4px 12px rgba(0, 0, 0, 0.28) !important;
   }
-  .bg-kuning { background: #fef08a !important; }
-  .bg-hijau { background: #bbf7d0 !important; }
-  .bg-biru { background: #bfdbfe !important; }
-  .bg-pink { background: #fbcfe8 !important; }
-  .bg-ungu { background: #e9d5ff !important; }
-  .bg-oranye { background: #fed7aa !important; }
-  .bg-netral { background: #e2e8f0 !important; }
+  html#financeApp .note-palette-btn.aktif::after,
+  .note-palette-btn.aktif::after {
+    content: '✓';
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.75);
+  }
+
+  html#financeApp .note-palette-btn.bg-kuning, .bg-kuning { background: #fff875 !important; background-color: #fff875 !important; }
+  html#financeApp .note-palette-btn.bg-hijau, .bg-hijau   { background: #a7f3d0 !important; background-color: #a7f3d0 !important; }
+  html#financeApp .note-palette-btn.bg-biru, .bg-biru     { background: #bae6fd !important; background-color: #bae6fd !important; }
+  html#financeApp .note-palette-btn.bg-pink, .bg-pink     { background: #fbcfe8 !important; background-color: #fbcfe8 !important; }
+  html#financeApp .note-palette-btn.bg-ungu, .bg-ungu     { background: #e9d5ff !important; background-color: #e9d5ff !important; }
+  html#financeApp .note-palette-btn.bg-oranye, .bg-oranye { background: #fed7aa !important; background-color: #fed7aa !important; }
+  html#financeApp .note-palette-btn.bg-netral, .bg-netral { background: #f5eedc !important; background-color: #f5eedc !important; }
 
   .notes-empty {
     text-align: center;
-    padding: 36px 20px;
+    padding: 42px 20px;
     color: var(--muted);
   }
   .notes-empty-icon {
-    font-size: 38px;
+    font-size: 42px;
     margin-bottom: 8px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   }
 </style>
 
@@ -6327,7 +6448,7 @@ $('wltJenis').onchange=()=>{walletProviderAll=false;$('wltProviderSearch').value
 function normalDompet(list) {
   return (Array.isArray(list) ? list : []).filter(w => w && w.id && String(w.nama || '').trim()).map(w => ({
     id:String(w.id), nama:String(w.nama).trim().slice(0,40), jenis:['wallet','bank','saving'].includes(w.jenis) ? w.jenis : 'wallet',
-    penyediaId:String(w.penyediaId||'').slice(0,80), saldoAwal:Number.isFinite(Number(w.saldoAwal)) && Number(w.saldoAwal) >= 0 ? Number(w.saldoAwal) : 0, arsip:!!w.arsip
+    penyediaId:String(w.penyediaId||'').slice(0,80), saldoAwal:Number.isFinite(Number(w.saldoAwal)) && Number(w.saldoAwal) >= 0 ? Number(w.saldoAwal) : 0, arsip:!!w.arsip, izinkanMinus:!!w.izinkanMinus
   }));
 }
 function normalTransferDompet(list){return (Array.isArray(list)?list:[]).map(t=>{
@@ -7612,7 +7733,10 @@ function renderStickyNotes() {
 
   list.forEach(note => {
     const card = el('div', 'sticky-note-card note-theme-' + (note.warna || 'kuning'));
-    if (note.pinned) card.classList.add('is-pinned');
+    if (note.pinned) {
+      card.classList.add('is-pinned');
+      card.appendChild(el('span', 'note-pin-badge', '📌'));
+    }
     if (note.judul) card.appendChild(el('div', 'note-card-title', note.judul));
     card.appendChild(el('div', 'note-card-body', note.isi));
 
@@ -7665,7 +7789,10 @@ function renderNotesDashboardPreview() {
   }
   list.forEach(n => {
     const item = el('div', 'sticky-note-card note-theme-' + (n.warna || 'kuning'));
-    if (n.pinned) item.classList.add('is-pinned');
+    if (n.pinned) {
+      item.classList.add('is-pinned');
+      item.appendChild(el('span', 'note-pin-badge', '📌'));
+    }
     if (n.judul) item.appendChild(el('div', 'note-card-title', n.judul));
     const bodySnippet = n.isi.length > 80 ? n.isi.slice(0, 80) + '…' : n.isi;
     item.appendChild(el('div', 'note-card-body', bodySnippet));
@@ -9210,6 +9337,7 @@ function buatBackupObjek() {
     uangFisik: db.uangFisik,
     dompet: db.dompet,
     transferDompet: db.transferDompet,
+    notes: (db.notes || []).map(normalNote),
     tampilan: tampilanBackup(),
     katKustom: katKustom()
   };
@@ -9919,7 +10047,7 @@ function validasiBackupLedger(raw){if(!raw||typeof raw!=='object')throw Error('P
  for(const key of ['transaksi','dompet','transferDompet']){const ids=new Set();for(const x of data[key]){if(!x.id||ids.has(x.id)||(key==='dompet'&&x.id===TUNAI_ID))throw Error('ID '+key+' kosong atau ganda.');ids.add(x.id);}}
  if(data.transaksi.some(x=>!tanggalGrafikValid(x.tanggal)||!Number.isFinite(x.total)||x.total<0||x.total>Number.MAX_SAFE_INTEGER))throw Error('Ada tanggal atau nominal transaksi tidak valid.');for(const d of DENOM)if(!Number.isSafeInteger(Number(data.uangFisik.stok[d]))||Number(data.uangFisik.stok[d])<0)throw Error('Stok uang fisik tidak valid.');const e=cekSaldoDompet(data.transaksi,data.transferDompet,data.dompet);if(e)throw Error(e);return data;
 }
-function bukaImporLedger(raw){const data=validasiBackupLedger(raw);importLedgerDraft={raw,data};$('ledgerImportSummary').textContent=data.transaksi.length+' transaksi, '+data.transferDompet.length+' perpindahan, '+data.transaksi.filter(x=>x.aktif===false).length+' transaksi nonaktif. Status aktif/nonaktif ikut dipulihkan.';$('ledgerImportMode').value=financeMuatError||(!db.transaksi.length&&!db.transferDompet.length)?'pulihkan':'gabung';$('ledgerImportError').textContent='';$('dlgImportLedger').showModal();}
+function bukaImporLedger(raw){const data=validasiBackupLedger(raw);importLedgerDraft={raw,data};const noteCount=(data.notes||[]).length;$('ledgerImportSummary').textContent=data.transaksi.length+' transaksi, '+data.transferDompet.length+' perpindahan'+(noteCount?', '+noteCount+' catatan tempel':'')+', '+data.transaksi.filter(x=>x.aktif===false).length+' transaksi nonaktif. Status dan catatan tempel ikut dipulihkan.';$('ledgerImportMode').value=financeMuatError||(!db.transaksi.length&&!db.transferDompet.length)?'pulihkan':'gabung';$('ledgerImportError').textContent='';$('dlgImportLedger').showModal();}
 function kandidatImportLedger(incoming,mode){if(mode==='pulihkan')return cloneKeuangan(incoming);const next=cloneKeuangan(db);next.notes = next.notes || [];incoming.notes = incoming.notes || [];for(const key of ['dompet','transaksi','transferDompet','wishlist','berulang','notes']){const ids=new Set(next[key].map(x=>x.id));for(const x of incoming[key])if(!ids.has(x.id)){next[key].push(cloneKeuangan(x));ids.add(x.id);}}for(const [key,b]of Object.entries(incoming.budgets))if(!next.budgets[key])next.budgets[key]=cloneKeuangan(b);next.uangFisik.stok=stokSetelahStatus(db,next);return next;}
 function terapkanImportLedger(){if(!importLedgerDraft)return;const mode=$('ledgerImportMode').value,doImport=()=>{let next;try{next=kandidatImportLedger(importLedgerDraft.data,mode);}catch(e){$('ledgerImportError').textContent=e.message;return;}if(!simpanKandidatKeuangan(next,{pemulihan:mode==='pulihkan'})){$('ledgerImportError').textContent=$('pesanSingkat')?.textContent||'Belum dipulihkan.';return;}const raw=importLedgerDraft.raw;importLedgerDraft=null;$('dlgImportLedger').close();pilihanLedger.clear();
  if(!Array.isArray(raw)){try{if(raw.katKustom){for(const type of ['keluar','masuk'])for(const k of raw.katKustom[type]||[]){const nama=String(k).trim();if(nama&&!katKustom()[type].some(x=>x.toLowerCase()===nama.toLowerCase()))katKustom()[type].push(nama);}simpanSet();terapkanKatKustom();refreshKategoriSelect();}if(raw.tampilan&&typeof raw.tampilan==='object'){const {bg,aksen,beranda,...safe}=raw.tampilan;tampilan={...tampilan,...safe};simpanTampilan();terapkanTampilan();}}catch(_){beriPesan('Catatan dipulihkan; sebagian setelan tampilan belum tersimpan.',true);}}

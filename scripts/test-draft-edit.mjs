@@ -639,4 +639,51 @@ notesList = run('db.notes');
 assert.equal(notesList.length, 1, 'Setelah dihapus harus tersisa 1 catatan');
 assert.equal(notesList[0].judul, 'Catatan Biasa');
 
-console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, Edit Relatif Transaksi, dan Sticky Notes BERHASIL!');
+// Test 23: Backup Export & Restore Integration for Sticky Notes
+console.log('Testing Sticky Notes Export in buatBackupObjek and Restore in terapkanImportLedger...');
+const exportedBackup = run('buatBackupObjek()');
+assert.ok(Array.isArray(exportedBackup.notes), 'buatBackupObjek harus menyertakan array notes');
+assert.equal(exportedBackup.notes.length, 1, 'Array notes dalam backup harus berisi 1 catatan');
+assert.equal(exportedBackup.notes[0].judul, 'Catatan Biasa', 'Judul catatan dalam backup harus sesuai');
+
+// Simulasikan database dikosongkan (seperti browser baru)
+run('db.notes = []');
+assert.equal(run('db.notes.length'), 0, 'Database notes harus kosong sebelum pemulihan');
+
+// Lakukan import dalam mode 'pulihkan'
+run(`
+importLedgerDraft = { raw: ${JSON.stringify(exportedBackup)}, data: validasiBackupLedger(${JSON.stringify(exportedBackup)}) };
+$('ledgerImportMode').value = 'pulihkan';
+terapkanImportLedger();
+$('btnWalletConfirmYes').onclick?.();
+`);
+notesList = run('db.notes');
+assert.equal(notesList.length, 1, 'Catatan harus berhasil dipulihkan dari backup');
+assert.equal(notesList[0].judul, 'Catatan Biasa', 'Judul catatan yang dipulihkan harus sesuai');
+
+// Lakukan import dalam mode 'gabung' dengan catatan tambahan
+const newIncomingBackup = JSON.parse(JSON.stringify(exportedBackup));
+newIncomingBackup.notes.push({
+  id: 'note-incoming-gabung-01',
+  judul: 'Catatan dari Perangkat Lain',
+  isi: 'Isi catatan yang digabung',
+  warna: 'pink',
+  pinned: true,
+  ts: Date.now(),
+  diubah: Date.now()
+});
+
+run(`
+importLedgerDraft = { raw: ${JSON.stringify(newIncomingBackup)}, data: validasiBackupLedger(${JSON.stringify(newIncomingBackup)}) };
+$('ledgerImportMode').value = 'gabung';
+terapkanImportLedger();
+`);
+notesList = run('db.notes');
+assert.equal(notesList.length, 2, 'Setelah digabung harus ada 2 catatan');
+const noteGabungan = notesList.find(n => n.id === 'note-incoming-gabung-01');
+assert.ok(noteGabungan, 'Catatan gabungan harus ada di database');
+assert.equal(noteGabungan.judul, 'Catatan dari Perangkat Lain');
+assert.equal(noteGabungan.warna, 'pink');
+assert.equal(noteGabungan.pinned, true);
+
+console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, Edit Relatif Transaksi, Sticky Notes Realistis, dan Backup/Restore BERHASIL!');
