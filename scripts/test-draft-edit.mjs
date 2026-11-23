@@ -531,4 +531,42 @@ assert.ok(dbTrx, 'Transaksi keranjang harus tersimpan di database');
 assert.equal(dbTrx.total, 25000, 'Total transaksi tersimpan harus 25.000');
 assert.equal(dbTrx.items.length, 2, 'Item keranjang tersimpan di database harus 2');
 
-console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, dan Kunci Aplikasi BERHASIL!');
+// Test 21: Deteksi Edit Relatif (Penambahan Nominal pada Transaksi yang Ada)
+console.log('Testing Relative Amount Addition on Existing Transaction (Penyesuaian saldo 500k + 100k)...');
+run(`
+db.dompet.forEach(w => w.izinkanMinus = true);
+const existingWIds = new Set(db.dompet.map(w => w.id));
+db.transaksi.forEach(t => {
+  if (t.dompetId && !existingWIds.has(t.dompetId)) {
+    db.dompet.push({ id: t.dompetId, nama: 'Dompet ' + t.dompetId, jenis: 'wallet', saldoAwal: 1000000, izinkanMinus: true });
+    existingWIds.add(t.dompetId);
+  }
+});
+db.transaksi.push({
+  id: 'trx-penyesuaian-500k',
+  ts: Date.now(),
+  tanggal: '2026-11-21',
+  tipe: 'masuk',
+  judul: 'Penyesuaian saldo',
+  kategori: 'Saldo awal',
+  items: [{ nama: 'Penyesuaian saldo', qty: 1, satuan: '', harga: 500000, hargaTotal: 500000 }],
+  total: 500000,
+  cara: 'tunai',
+  dompetId: null
+});
+`);
+
+const actEditTest = run(`deteksiAksiEditTrx('ada transaksi pemasukan penyesuaian saldo 500k nah itu tambahkan 100k')`);
+assert.ok(actEditTest, 'Harus mendeteksi aksi edit transaksi');
+assert.equal(actEditTest.targetId, 'trx-penyesuaian-500k', 'Target ID harus trx-penyesuaian-500k');
+assert.equal(actEditTest.changes.amount, 600000, 'Nominal baru harus 600.000 (500k + 100k)');
+assert.equal(actEditTest.oldValues.amount, 500000, 'Nominal lama harus 500.000');
+
+// Eksekusi perubahan transaksi langsung
+const resUpdate = run(`updateTransaksiLangsung('${actEditTest.targetId}', ${JSON.stringify(actEditTest.changes)})`);
+assert.ok(resUpdate.ok, 'Update transaksi langsung harus berhasil: ' + (resUpdate.error || ''));
+const updatedTrx = run(`db.transaksi.find(t => t.id === 'trx-penyesuaian-500k')`);
+assert.equal(updatedTrx.total, 600000, 'Total di database harus terupdate menjadi 600.000');
+assert.equal(updatedTrx.items[0].harga, 600000, 'Harga item harus ikut terupdate menjadi 600.000');
+
+console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, dan Edit Relatif Transaksi BERHASIL!');

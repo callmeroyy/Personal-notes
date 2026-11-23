@@ -10691,11 +10691,18 @@ function cariTransaksiCocok(teks, list = db.transaksi) {
 
   const reversed = list.slice().reverse();
 
-  // 2. Cocokkan judul transaksi terlebih dahulu (misal: 'bensin', 'makan', 'kopi')
+  // 2. Cocokkan judul transaksi terlebih dahulu (prioritaskan yang juga cocok dengan nominal di teks)
+  let kandidatJudul = null;
   for (const t of reversed) {
     const j = String(t.judul || '').toLowerCase().trim();
-    if (j.length >= 2 && raw.includes(j)) return t;
+    if (j.length >= 2 && raw.includes(j)) {
+      if (raw.includes(String(t.total)) || raw.includes(String(t.total / 1000) + 'k') || raw.includes(String(t.total / 1000) + 'rb') || raw.includes(String(t.total / 1000) + ' ribu')) {
+        return t;
+      }
+      if (!kandidatJudul) kandidatJudul = t;
+    }
   }
+  if (kandidatJudul) return kandidatJudul;
 
   // 3. Cocokkan kategori transaksi (misal: 'transport', 'makan')
   for (const t of reversed) {
@@ -10747,26 +10754,51 @@ function deteksiAksiHapusTrx(teks, list = db.transaksi) {
 }
 
 function deteksiAksiEditTrx(teks, list = db.transaksi) {
-  const isEdit = /\b(ubah|ganti|edit|koreksi|perbaiki|revisi)\b/i.test(teks);
-  if (!isEdit) return null;
-
   const target = cariTransaksiCocok(teks, list);
   if (!target) return null;
 
   const raw = teks.toLowerCase();
+  const isEdit = /\b(ubah|ganti|edit|koreksi|perbaiki|revisi|tambah(?:kan)?|kurang(?:i|kan)?|naik(?:kan)?|turun(?:kan)?)\b/i.test(raw);
+  if (!isEdit) return null;
+
   const changes = {};
   const oldValues = {};
 
-  const mNominal = raw.match(/(?:jadi|menjadi|ke|sebesar)\s+(\d+(?:[.,]\d+)?)\s*(k|rb|ribu|jt|juta)?\b/i) ||
-                   raw.match(/\b(\d+(?:[.,]\d+)?)\s*(k|rb|ribu|jt|juta)\b/i);
-  if (mNominal) {
-    let n = parseFloat(mNominal[1].replace(',', '.'));
-    const unit = (mNominal[2] || '').toLowerCase();
+  // Cek apakah ada instruksi relatif penambahan atau pengurangan nominal
+  const mTambah = raw.match(/\b(?:tambah(?:kan)?|naik(?:kan)?)\s+(?:sebesar\s+)?(?:rp\.?\s*)?(\d+(?:[.,]\d+)?)\s*(k|rb|ribu|jt|juta)?\b/i) ||
+                  raw.match(/\b(?:rp\.?\s*)?(\d+(?:[.,]\d+)?)\s*(k|rb|ribu|jt|juta)?\s*(?:di-?tambah(?:kan)?)\b/i);
+  const mKurang = raw.match(/\b(?:kurang(?:i|kan)?|turun(?:kan)?)\s+(?:sebesar\s+)?(?:rp\.?\s*)?(\d+(?:[.,]\d+)?)\s*(k|rb|ribu|jt|juta)?\b/i);
+
+  if (mTambah) {
+    let n = parseFloat(mTambah[1].replace(',', '.'));
+    const unit = (mTambah[2] || '').toLowerCase();
     if (unit === 'k' || unit === 'rb' || unit === 'ribu') n *= 1000;
     else if (unit === 'jt' || unit === 'juta') n *= 1000000;
     if (n > 0) {
-      changes.amount = Math.round(n);
+      changes.amount = target.total + Math.round(n);
       oldValues.amount = target.total;
+    }
+  } else if (mKurang) {
+    let n = parseFloat(mKurang[1].replace(',', '.'));
+    const unit = (mKurang[2] || '').toLowerCase();
+    if (unit === 'k' || unit === 'rb' || unit === 'ribu') n *= 1000;
+    else if (unit === 'jt' || unit === 'juta') n *= 1000000;
+    if (n > 0) {
+      changes.amount = Math.max(1, target.total - Math.round(n));
+      oldValues.amount = target.total;
+    }
+  } else {
+    const mNominal = raw.match(/(?:jadi|menjadi|ke|sebesar)\s+(\d+(?:[.,]\d+)?)\s*(k|rb|ribu|jt|juta)?\b/i) ||
+                     raw.match(/\b(\d+(?:[.,]\d+)?)\s*(k|rb|ribu|jt|juta)\b/i);
+    if (mNominal) {
+      let n = parseFloat(mNominal[1].replace(',', '.'));
+      const unit = (mNominal[2] || '').toLowerCase();
+      if (unit === 'k' || unit === 'rb' || unit === 'ribu') n *= 1000;
+      else if (unit === 'jt' || unit === 'juta') n *= 1000000;
+      if (n > 0 && Math.round(n) !== target.total) {
+        changes.amount = Math.round(n);
+        oldValues.amount = target.total;
+      }
     }
   }
 
