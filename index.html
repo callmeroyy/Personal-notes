@@ -12711,7 +12711,27 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
       }
     }
 
-    // Jika belum ada draftTransactions dan teks berisi instruksi catat/gabung, ekstrak secara lokal
+    // Prioritaskan aksi Edit transaksi jika instruksi merujuk pada transaksi yang sudah ada di catatan
+    const actEditPrioritas = deteksiAksiEditTrx(teks);
+    if (actEditPrioritas && !updateActions.length) {
+      updateActions.push(actEditPrioritas);
+      draftTransactions = []; // Bersihkan draf agar tidak tercatat ganda / salah draf
+      if (!replyText || replyText.length < 15 || /\b(mencatat|draf|baru)\b/i.test(replyText)) {
+        replyText = 'Saya telah menyiapkan perubahan untuk transaksi **' + actEditPrioritas.title + '** (' + rp(actEditPrioritas.oldValues?.amount || 0) + ' ➔ ' + rp(actEditPrioritas.changes?.amount || 0) + '). Silakan periksa dan terapkan perubahan:';
+      }
+    }
+
+    // Prioritaskan aksi Hapus transaksi jika instruksi merujuk penghapusan transaksi yang ada
+    const actHapusPrioritas = deteksiAksiHapusTrx(teks);
+    if (actHapusPrioritas && !deleteActions.length && !updateActions.length) {
+      deleteActions.push(actHapusPrioritas);
+      draftTransactions = [];
+      if (!replyText || replyText.length < 15) {
+        replyText = 'Saya menemukan transaksi **' + actHapusPrioritas.title + '** (' + rp(actHapusPrioritas.amount) + '). Silakan konfirmasi penghapusan:';
+      }
+    }
+
+    // Jika belum ada draftTransactions, deleteActions, atau updateActions dan teks berisi instruksi catat/gabung, ekstrak secara lokal
     if (!draftTransactions.length && !deleteActions.length && !updateActions.length) {
       const intentCatat = /\b(catat|catatkan|tulis|tambah\s*(?:transaksi|pengeluaran|pemasukan)?|tadi\s*(?:beli|jajan|bayar|makan|habis)|barusan\s*(?:beli|bayar)|dapat\s*(?:uang|gaji)|dikasih\s*uang|gabung(?:kan|in)?|satukan|jadikan\s*(?:1|satu)|keranjang)\b/i.test(teks);
       if (intentCatat) {
@@ -12721,26 +12741,6 @@ async function kirimPesanAiChat(pertanyaanKustom = null) {
           replyText = isCart
             ? 'Siap! Saya sudah membuatkan 1 transaksi gabungan berbentuk keranjang belanja (' + draftTransactions[0].title + ' - ' + rp(draftTransactions[0].amount) + ') dengan ' + draftTransactions[0].items.length + ' rincian barang. Silakan periksa atau langsung simpan:'
             : 'Siap! Saya sudah menyiapkan ' + draftTransactions.length + ' draf transaksi dari pesanmu. Silakan simpan langsung ke catatan:';
-        }
-      }
-    }
-
-    if (!deleteActions.length && !draftTransactions.length && !updateActions.length) {
-      const actHapus = deteksiAksiHapusTrx(teks);
-      if (actHapus) {
-        deleteActions.push(actHapus);
-        if (!replyText || replyText.length < 15) {
-          replyText = 'Saya menemukan transaksi **' + actHapus.title + '** (' + rp(actHapus.amount) + '). Silakan konfirmasi penghapusan:';
-        }
-      }
-    }
-
-    if (!updateActions.length && !draftTransactions.length && !deleteActions.length) {
-      const actEdit = deteksiAksiEditTrx(teks);
-      if (actEdit) {
-        updateActions.push(actEdit);
-        if (!replyText || replyText.length < 15) {
-          replyText = 'Saya telah menyiapkan perubahan untuk transaksi **' + actEdit.title + '**. Silakan periksa dan terapkan perubahan:';
         }
       }
     }
