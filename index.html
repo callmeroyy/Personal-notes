@@ -1557,7 +1557,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   #homeMoney .money-title{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 10px;align-items:center;margin-bottom:13px}
   #homeMoney .money-title h2{margin:0}
   #homeMoney .money-title > span{font-size:11px}
-  #moneyTabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:5px;border:1px solid var(--wl-line);border-radius:15px;background:var(--wl-card)}
+  #moneyTabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:5px;border:1px solid var(--wl-line);border-radius:15px;background:var(--wl-card);margin-bottom:18px}
   html[data-gaya] #moneyTabs .money-tab{width:100%;margin:0;padding:11px 8px;min-height:42px;border:1px solid transparent !important;border-radius:10px !important;background:transparent !important;color:var(--wl-muted) !important;font-size:14px;box-shadow:none !important;transform:none}
   html[data-gaya] #moneyTabs .money-tab[aria-selected="true"]{background:var(--wl-soft) !important;color:var(--wl-accent) !important;border-color:var(--wl-line) !important;font-weight:800}
   #moneyTabs .money-tab:focus-visible{outline:2px solid var(--wl-accent);outline-offset:2px}
@@ -1565,7 +1565,9 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   #moneyPanels{touch-action:pan-y pinch-zoom}
   #moneyPanels > [role="tabpanel"][hidden]{display:none !important}
   #moneyPanels > [role="tabpanel"]{min-width:0}
+  #moneyPanels .wallet-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px;margin-bottom:12px}
   #moneyPanels .wallet-heading h3{margin:0;font-size:14px;line-height:1.4;color:var(--wl-ink)}
+  #moneyPanels .wallet-heading button{flex:none;margin:0}
   #moneyPanels .wallet-summary{margin-top:12px}
   #homeMoney .wallet-actions button{font-size:13px;padding:11px 9px}
   .money-cash-units{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 16px}
@@ -1896,7 +1898,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   html[data-gaya="ruangide"] .wallet-summary{background:var(--ri-hero);border-color:var(--ri-line);border-radius:16px}
   html[data-gaya="ruangide"] .wallet-summary :is(span,b,small){color:var(--ri-hero-ink)}
   html[data-gaya="ruangide"] #homeMoney{box-shadow:none !important}
-  html[data-gaya="ruangide"] #moneyTabs{border:0;background:var(--ri-soft);padding:4px;border-radius:12px}
+  html[data-gaya="ruangide"] #moneyTabs{border:0;background:var(--ri-soft);padding:4px;border-radius:12px;margin-bottom:18px}
   html[data-gaya="ruangide"] #moneyTabs .money-tab[aria-selected="true"]{background:var(--ri-card) !important;border-color:var(--ri-line) !important;color:var(--ri-ink) !important;box-shadow:0 1px 4px #00000008 !important;font-weight:650}
   html[data-gaya="ruangide"] .bar.hijau{background:var(--ri-ok)}
   html[data-gaya="ruangide"] .bar.merah{background:var(--ri-bad)}
@@ -2007,7 +2009,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   html#financeApp[data-ui="ruang"][data-gaya] #teksMingguan{font-size:13px !important;line-height:1.85 !important}
   html#financeApp[data-ui="ruang"][data-gaya] :is(.keranjang,.itemrow,.wallet-summary,.wallet-form-panel,.draft-toolbar,.cash-track,.chart-more>summary){border-radius:var(--ui-control-r) !important}
   html#financeApp[data-ui="ruang"][data-gaya] .keranjang{border-style:solid !important;padding:17px}
-  html#financeApp[data-ui="ruang"][data-gaya] #moneyTabs{padding:4px;border-radius:var(--ui-control-r);background:var(--ui-soft);border:1px solid var(--ui-line)}
+  html#financeApp[data-ui="ruang"][data-gaya] #moneyTabs{padding:4px;border-radius:var(--ui-control-r);background:var(--ui-soft);border:1px solid var(--ui-line);margin-bottom:18px}
   html#financeApp[data-ui="ruang"][data-gaya] #moneyTabs .money-tab{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13px;border-radius:calc(var(--ui-control-r) - 3px) !important}
   html#financeApp[data-ui="ruang"][data-gaya] #moneyTabs .money-tab[aria-selected="true"]{background:var(--ui-solid) !important;color:var(--ui-ink) !important;border-color:var(--ui-line) !important;box-shadow:0 1px 4px #00000008 !important;font-weight:650}
   #moneyTabs .money-tab .ui-icon svg{width:17px;height:17px}
