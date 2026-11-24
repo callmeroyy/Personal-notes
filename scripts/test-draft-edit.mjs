@@ -69,6 +69,7 @@ const document = {
     setAttribute: () => {},
     getAttribute: () => '',
     classList: makeClassList(),
+    prepend: () => {},
     append: () => {},
     insertBefore: () => {},
     appendChild: () => {},
@@ -85,6 +86,7 @@ const document = {
     setAttribute: () => {},
     getAttribute: () => '',
     classList: makeClassList(),
+    prepend: () => {},
     append: () => {},
     insertBefore: () => {},
     appendChild: () => {},
@@ -874,4 +876,98 @@ assert.match(respCaraTarget.reply, /Cara Menggunakan Target Tabungan \(Wishlist 
 const respCaraBerulang = run("jawabFinansialLokal('bagaimana cara mengatur transaksi berulang?', siapkanKonteksAiChat())");
 assert.match(respCaraBerulang.reply, /Cara Menggunakan Transaksi Berulang & Tagihan Rutin/i, 'Harus memberi panduan cara transaksi berulang');
 
-console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, Edit Relatif Transaksi, Sticky Notes Realistis, Custom Color Picker, Custom Finance Name, Pengetahuan Fitur AI, dan Backup/Restore BERHASIL!');
+// Test 27: Security, Math Parser, Markdown Renderer, PBKDF2 Cooldown, Pagination & IndexedDB Media
+console.log('Testing Security Hardening, Safe Math Parser, Markdown Renderer, Pagination & Media Cache...');
+
+// 27.1: Safe Math Parser (tanpa new Function / eval)
+assert.equal(run("hitungEkspresiAman('25000+15000*2')"), 55000, 'Prioritas perkalian harus benar');
+assert.equal(run("hitungEkspresiAman('(100+50)/3')"), 50, 'Tanda kurung dan pembagian harus benar');
+assert.equal(run("hitungEkspresiAman('-50+20')"), -30, 'Unary minus harus didukung');
+assert.ok(Number.isNaN(run("hitungEkspresiAman('10/0')")), 'Pembagian nol harus mengembalikan NaN');
+assert.ok(Number.isNaN(run("hitungEkspresiAman('alert(1)')")), 'Ekspresi non-matematika harus ditolak');
+
+// 27.2: Safe Markdown Renderer (XSS-safe DOM nodes)
+const mdNodes = run(`
+  (() => {
+    const c = { children: [], appendChild(n) { this.children.push(n); } };
+    isiBubbleMarkdownAman(c, 'Halo **Dunia** dan *Miring* serta \`kode\` <script>alert(1)</script>');
+    return c.children.map(n => ({ tag: n.tagName || '#text', text: n.textContent }));
+  })()
+`);
+assert.ok(mdNodes.some(n => n.tag === 'STRONG' && n.text === 'Dunia'), 'Teks **bold** harus jadi elemen STRONG');
+assert.ok(mdNodes.some(n => n.tag === 'EM' && n.text === 'Miring'), 'Teks *italic* harus jadi elemen EM');
+assert.ok(mdNodes.some(n => n.tag === 'CODE' && n.text === 'kode'), 'Teks \`code\` harus jadi elemen CODE');
+assert.ok(!mdNodes.some(n => n.tag === 'SCRIPT'), 'Tag HTML berbahaya tidak boleh dibuat sebagai elemen');
+
+// 27.3: App Lock PBKDF2 Migration & Brute-force Cooldown
+const appLockHardeningOk = await run(`
+  (async () => {
+    set.appLockSalt = '';
+    set.appLockFails = 0;
+    set.appLockLockedUntil = 0;
+    const legacyHash = await hashPinLegacy('2468');
+    set.appLockPinHash = legacyHash;
+    set.appLockAktif = true;
+
+    // Verifikasi legacy harus sukses dan otomatis migrasi ke PBKDF2 + salt unik
+    const okLegacy = await verifikasiPinAppLock('2468');
+    if (!okLegacy) throw new Error('PIN legacy harus valid');
+    if (!set.appLockSalt || set.appLockSalt.length < 16) throw new Error('Salt unik harus dibuat saat migrasi');
+    if (set.appLockPinHash === legacyHash) throw new Error('Hash harus bermigrasi ke PBKDF2');
+
+    // Simulasi 5x salah PIN memicu cooldown 30 detik
+    for (let i = 0; i < 5; i++) {
+      inputPinBuffer = '999';
+      await handlePinInput('9');
+      inputPinBuffer = '';
+    }
+    if (sisaCooldownAppLock() <= 0) throw new Error('Cooldown harus aktif setelah 5x salah PIN');
+    set.appLockFails = 0;
+    set.appLockLockedUntil = 0;
+    return true;
+  })()
+`);
+assert.equal(appLockHardeningOk, true, 'Migrasi PBKDF2 dan cooldown App Lock harus berfungsi');
+
+// 27.4: Media Cache & Backup Resolution
+run(`
+  mediaCache.set('trx:media-test-1', 'data:image/png;base64,AAA');
+  db.transaksi.push(normal({ id: 'media-test-1', tanggal: hariIni(), tipe: 'keluar', judul: 'Tes Foto', kategori: 'Belanja', items: [{ nama: 'Tes', qty: 1, harga: 1000 }], total: 1000, foto: 'idb:trx:media-test-1' }));
+`);
+assert.equal(run("ambilFoto('idb:trx:media-test-1')"), 'data:image/png;base64,AAA', 'ambilFoto harus menyelesaikan pointer idb:');
+const backupMedia = run('buatBackupObjek()');
+const trxMediaInBackup = backupMedia.transaksi.find(t => t.id === 'media-test-1');
+assert.equal(trxMediaInBackup?.foto, 'data:image/png;base64,AAA', 'Backup harus menyertakan data foto asli dari mediaCache');
+
+// 27.5: Paginasi Riwayat (>50 transaksi)
+const paginationRes = run(`
+  (() => {
+    $('rTipe').value = 'semua';
+    $('rStatus').value = 'aktif';
+    $('rDari').value = '';
+    $('rSampai').value = '';
+    $('rCari').value = '';
+    for (let i = 0; i < 55; i++) {
+      db.transaksi.push(normal({ id: 'page-' + i, tanggal: hariIni(), tipe: 'keluar', judul: 'Item ' + i, kategori: 'Lainnya', items: [{ nama: 'Item ' + i, qty: 1, harga: 1000 }], total: 1000 }));
+    }
+    const appended = [];
+    const rListEl = $('rList');
+    const origReplace = rListEl.replaceChildren;
+    const origAppend = rListEl.append;
+    rListEl.replaceChildren = (...args) => { appended.length = 0; appended.push(...args); };
+    rListEl.append = (...args) => { appended.push(...args); };
+    renderRiwayat(true);
+    rListEl.replaceChildren = origReplace;
+    rListEl.append = origAppend;
+    return {
+      totalTerlihat: ledgerTerlihat.length,
+      renderedCount: appended.length,
+      lastText: appended[appended.length - 1]?.textContent || ''
+    };
+  })()
+`);
+assert.ok(paginationRes.totalTerlihat > 50, 'Total transaksi terfilter harus > 50');
+assert.equal(paginationRes.renderedCount, 51, 'DOM harus merender maksimal 50 baris + 1 tombol Muat lebih banyak');
+assert.match(paginationRes.lastText, /Muat lebih banyak/i, 'Tombol Muat lebih banyak harus muncul');
+
+console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi PBKDF2, Edit Relatif Transaksi, Sticky Notes Realistis, Custom Color Picker, Custom Finance Name, Pengetahuan Fitur AI, Safe Math/Markdown, Paginasi, Media Cache, dan Backup/Restore BERHASIL!');

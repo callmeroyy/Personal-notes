@@ -14,6 +14,7 @@
 <meta name="description" content="Catatan keuangan pribadi yang bekerja langsung di perangkat, termasuk dompet, anggaran, target, grafik, dan backup.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <title>Catatan Keuangan</title>
 <style>
   :root{
@@ -4776,6 +4777,103 @@ const KEY_KRJ = 'catatan-keranjang-v3';
 const KEY_DRAF = 'catatan-draf-v1';
 const KEY_SET = 'catatan-pengaturan-v1';
 const $ = id => document.getElementById(id);
+const mediaCache = new Map();
+const idbMedia = (() => {
+  const api = typeof indexedDB !== 'undefined' ? indexedDB : null;
+  let dbPromise = null;
+  function openDb() {
+    if (!api) return Promise.resolve(null);
+    if (dbPromise) return dbPromise;
+    dbPromise = new Promise(resolve => {
+      try {
+        const req = api.open('catatan-keuangan-media-v1', 1);
+        req.onupgradeneeded = () => {
+          const d = req.result;
+          if (!d.objectStoreNames.contains('media')) d.createObjectStore('media');
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => resolve(null);
+      } catch (_) { resolve(null); }
+    });
+    return dbPromise;
+  }
+  return {
+    available: () => Boolean(api),
+    async get(key) {
+      if (mediaCache.has(key)) return mediaCache.get(key);
+      const d = await openDb();
+      if (!d) return null;
+      return new Promise(resolve => {
+        try {
+          const tx = d.transaction('media', 'readonly');
+          const req = tx.objectStore('media').get(key);
+          req.onsuccess = () => {
+            if (req.result) mediaCache.set(key, req.result);
+            resolve(req.result || null);
+          };
+          req.onerror = () => resolve(null);
+        } catch (_) { resolve(null); }
+      });
+    },
+    async set(key, val) {
+      mediaCache.set(key, val);
+      const d = await openDb();
+      if (!d) return false;
+      return new Promise(resolve => {
+        try {
+          const tx = d.transaction('media', 'readwrite');
+          tx.objectStore('media').put(val, key);
+          tx.oncomplete = () => resolve(true);
+          tx.onerror = () => resolve(false);
+        } catch (_) { resolve(false); }
+      });
+    },
+    async del(key) {
+      mediaCache.delete(key);
+      const d = await openDb();
+      if (!d) return false;
+      return new Promise(resolve => {
+        try {
+          const tx = d.transaction('media', 'readwrite');
+          tx.objectStore('media').delete(key);
+          tx.oncomplete = () => resolve(true);
+          tx.onerror = () => resolve(false);
+        } catch (_) { resolve(false); }
+      });
+    },
+    async preloadAll() {
+      const d = await openDb();
+      if (!d) return;
+      return new Promise(resolve => {
+        try {
+          const tx = d.transaction('media', 'readonly');
+          const store = tx.objectStore('media');
+          const req = store.openCursor();
+          req.onsuccess = () => {
+            const cur = req.result;
+            if (cur) {
+              mediaCache.set(cur.key, cur.value);
+              cur.continue();
+            } else {
+              resolve();
+            }
+          };
+          req.onerror = () => resolve();
+        } catch (_) { resolve(); }
+      });
+    }
+  };
+})();
+function ambilFoto(ref) {
+  if (!ref || typeof ref !== 'string') return '';
+  if (ref.startsWith('idb:')) return mediaCache.get(ref.slice(4)) || '';
+  return ref;
+}
+async function ambilFotoAsync(ref) {
+  if (!ref || typeof ref !== 'string') return '';
+  if (ref.startsWith('idb:')) return (await idbMedia.get(ref.slice(4))) || '';
+  return ref;
+}
 const rp = n => 'Rp ' + Math.round(Number(n) || 0).toLocaleString('id-ID');
 const tglStr = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 const hariIni = () => tglStr(new Date());
@@ -5148,6 +5246,7 @@ function simpan({pemulihan=false}={}) {
   try {
     if(financeMuatError&&!pemulihan)throw Error('Data lama belum bisa dibaca. Pulihkan backup atau unduh data asli; data lama tetap aman.');
     if(localStorage.getItem(KEY)!==financeSnapshot)throw Error('Catatan berubah di tab lain. Muat ulang sebelum menyimpan agar data terbaru tidak tertimpa.');
+    if(idbMedia.available()&&Array.isArray(db.transaksi)){for(const tr of db.transaksi){if(tr&&typeof tr.foto==='string'&&tr.foto.startsWith('data:')){idbMedia.set('trx:'+tr.id,tr.foto);tr.foto='idb:trx:'+tr.id;}}}
     db.fiturData=4;const serialized=JSON.stringify(db);localStorage.setItem(KEY,serialized);financeSnapshot=serialized;financeMuatError='';penyimpananBerhasil=true;
   }catch(e){penyimpananBerhasil=false;beriPesan(e.name==='QuotaExceededError'?'Penyimpanan penuh. Isian belum disimpan; cadangkan data atau kurangi foto struk.':e.message||'Penyimpanan belum tersedia.',true);return false;}
   try{tandaiPerubahanDrive();}catch(_){beriPesan('Catatan tersimpan. Pengaturan backup otomatis belum berhasil diperbarui.',true);}return true;
@@ -5746,17 +5845,20 @@ $('fFoto').onchange = async e => {
   simpanDrafCatat();
 };
 
-function bukaFoto(id) {
+async function bukaFoto(id) {
   const x = db.transaksi.find(d => d.id === id);
   if (!x || !x.foto) return;
+  const src = await ambilFotoAsync(x.foto);
+  if (!src) return;
   fotoAktifId = id;
-  $('imgFoto').src = x.foto;
+  $('imgFoto').src = src;
   $('dlgFoto').showModal();
 }
 $('btnFotoHapus').onclick = () => {
   const x = db.transaksi.find(d => d.id === fotoAktifId);
   if (!x) return;
   if (!confirm('Hapus foto struk ini?')) return;
+  idbMedia.del('trx:' + x.id);
   x.foto = null;
   simpan();
   $('dlgFoto').close();
@@ -5911,7 +6013,10 @@ function bukaEdit(id) {
   editGenerasi++;
   editId = id;
   editItems = x.items.map(i => ({ ...i }));
-  editFoto = x.foto || null;
+  editFoto = ambilFoto(x.foto) || x.foto || null;
+  if (x.foto && x.foto.startsWith('idb:') && !editFoto) {
+    ambilFotoAsync(x.foto).then(src => { if (src && editId === x.id) { editFoto = src; renderEditFoto(); } });
+  }
   editFotoFile = null;
   editScanItems = [];
   sibukEdit(false);
@@ -7720,10 +7825,16 @@ function renderBeranda() {
   const laporan=transaksiLaporan();animasikanAngka($('totMasuk'),sum(laporan,'masuk'));animasikanAngka($('totKeluar'),sum(laporan,'keluar'));const pokok=laporan.filter(x=>x.transferPokok&&catatanAktif(x)).reduce((a,x)=>a+x.total,0);$('transferReportNote').hidden=!pokok;$('transferReportNote').textContent='Pengeluaran laporan termasuk pindah saldo '+rp(pokok)+'. Pokok ini masih milikmu di tempat lain; saldo total hanya berkurang belanja dan biaya admin.';
 }
 
-function renderRiwayat(){let a=$('rDari').value,b=$('rSampai').value;if(a&&b&&a>b)[a,b]=[b,a];$('rPeriodInfo').textContent=a||b?(a?'Dari '+tglIndo(a):'Semua catatan')+(b?' sampai '+tglIndo(b):' dan seterusnya'):'Menampilkan semua tanggal.';const p=filterTr({dari:$('rDari').value,sampai:$('rSampai').value,tipe:$('rTipe').value,cari:$('rCari').value,status:$('rStatus').value}),transfers=transferSesuaiFilter();
+let riwayatLimit = 50;
+function renderRiwayat(resetLimit = true){if(resetLimit)riwayatLimit=50;let a=$('rDari').value,b=$('rSampai').value;if(a&&b&&a>b)[a,b]=[b,a];$('rPeriodInfo').textContent=a||b?(a?'Dari '+tglIndo(a):'Semua catatan')+(b?' sampai '+tglIndo(b):' dan seterusnya'):'Menampilkan semua tanggal.';const p=filterTr({dari:$('rDari').value,sampai:$('rSampai').value,tipe:$('rTipe').value,cari:$('rCari').value,status:$('rStatus').value}),transfers=transferSesuaiFilter();
  $('masuk').textContent=rp(sum(p,'masuk'));$('keluar').textContent=rp(sum(p,'keluar'));$('rRingkas').textContent=p.filter(x=>!x.transferDompetId).length+' transaksi dan '+transfers.length+' perpindahan sesuai filter. Nonaktif tetap tersimpan dan tidak masuk perhitungan.';
  const rows=[...p.filter(x=>!x.transferDompetId).map(x=>({x,key:'tr:'+x.id,tanggal:x.tanggal,ts:x.ts})),...transfers.map(x=>({x,key:'transfer:'+x.id,tanggal:x.tanggal,ts:x.ts}))];const terlihat=new Set(rows.map(r=>r.key));for(const key of pilihanLedger)if(!terlihat.has(key))pilihanLedger.delete(key);ledgerTerlihat=[...terlihat];
- const box=$('rList');box.replaceChildren();if(!rows.length)box.append(el('p','kosong','Tidak ada catatan yang cocok. Coba ubah tanggal, tipe, atau status.'));urutTerbaru(rows).forEach((r,i)=>{const node=r.key.startsWith('transfer:')?barisTransferDompet(r.x,true):baris(r.x);node.classList.add('motion-list-item');node.style.setProperty('--motion-index',Math.min(i,7));box.append(node);});$('walletHistory').hidden=true;perbaruiPilihanLedger();
+ const box=$('rList');box.replaceChildren();if(!rows.length)box.append(el('p','kosong','Tidak ada catatan yang cocok. Coba ubah tanggal, tipe, atau status.'));
+ const sorted=urutTerbaru(rows);
+ const visible=sorted.slice(0,riwayatLimit);
+ visible.forEach((r,i)=>{const node=r.key.startsWith('transfer:')?barisTransferDompet(r.x,true):baris(r.x);node.classList.add('motion-list-item');node.style.setProperty('--motion-index',Math.min(i,7));box.append(node);});
+ if(sorted.length>riwayatLimit){const sisa=sorted.length-riwayatLimit;const btnMore=el('button','ghost','Muat lebih banyak ('+sisa+' lagi)');btnMore.type='button';btnMore.style.marginTop='10px';btnMore.onclick=()=>{riwayatLimit+=50;renderRiwayat(false);};box.append(btnMore);}
+ $('walletHistory').hidden=true;perbaruiPilihanLedger();
 }
 
 // ===== GRAFIK: SVG native, data numerik terpisah dari data tersimpan =====
@@ -8713,7 +8824,14 @@ let tampilan = (() => {
 
 function simpanTampilan() {
   try {
-    localStorage.setItem(KEY_TAMPILAN, JSON.stringify(tampilan));
+    const salinan = { ...tampilan };
+    if (idbMedia.available() && typeof salinan.bg === 'string' && salinan.bg.startsWith('data:')) {
+      idbMedia.set('bg:custom', salinan.bg);
+      salinan.bg = 'idb:bg:custom';
+    } else if (idbMedia.available() && !salinan.bg) {
+      idbMedia.del('bg:custom');
+    }
+    localStorage.setItem(KEY_TAMPILAN, JSON.stringify(salinan));
     return true;
   } catch (e) {
     alert('Latar terlalu besar untuk disimpan. Coba pilih foto lain.');
@@ -8844,8 +8962,9 @@ function terapkanTampilan() {
   $('bgLayer').style.filter = tampilan.buram ? 'blur(' + tampilan.buram + 'px)' : 'none';
   $('buramLabel').textContent = (tampilan.buram || 0) + 'px';
   h.style.setProperty('--kaca', (tampilan.kaca / 100).toFixed(2));
-  h.classList.toggle('ada-bg', !!tampilan.bg);
-  const url = tampilan.bg ? 'url("' + tampilan.bg + '")' : '';
+  const bgSrc = ambilFoto(tampilan.bg);
+  h.classList.toggle('ada-bg', !!bgSrc);
+  const url = bgSrc ? 'url("' + bgSrc + '")' : '';
   $('bgLayer').style.backgroundImage = url;
   $('bgPrev').style.backgroundImage = url;
   $('kacaLabel').textContent = tampilan.kaca + '%';
@@ -9591,9 +9710,16 @@ function jadwalkanDriveOtomatis() {
 }
 
 function buatBackupObjek() {
+  const transaksiBackup = (db.transaksi || []).map(tr => {
+    if (tr && typeof tr.foto === 'string' && tr.foto.startsWith('idb:')) {
+      const resolved = ambilFoto(tr.foto);
+      return resolved ? { ...tr, foto: resolved } : { ...tr, foto: null };
+    }
+    return tr;
+  });
   return {
     versi: 4, fiturData:4,
-    transaksi: db.transaksi,
+    transaksi: transaksiBackup,
     wishlist: db.wishlist,
     budgets: db.budgets,
     berulang: db.berulang,
@@ -10382,6 +10508,11 @@ window.addEventListener('error', () => selesaikanLoadingSplash(), { once: true }
 setTimeout(selesaikanLoadingSplash, 1000);
 if (navigator.storage?.persist) {
   navigator.storage.persist().then(renderStorageStatus).catch(() => {});
+}
+if (idbMedia.available()) {
+  idbMedia.preloadAll().then(() => {
+    if (tampilan.bg && tampilan.bg.startsWith('idb:')) terapkanTampilan();
+  }).catch(() => {});
 }
 
 // ===== ASISTEN KEUANGAN AI: Smart Input + Insight (Cloudflare Pages Function) =====
@@ -11985,6 +12116,77 @@ function ekstrakDrafTransaksiDariTeks(teks, today = hariIni(), wallets = db.domp
   return hasil;
 }
 
+function isiBubbleMarkdownAman(container, teks) {
+  const s = String(teks || '');
+  const tokenRe = /(`[^`\n]+`|\*\*[^*\n]+?\*\*|\*(?!\s)[^*\n]+?(?<!\s)\*)/g;
+  let last = 0;
+  let m;
+  while ((m = tokenRe.exec(s)) !== null) {
+    if (m.index > last) {
+      container.appendChild(document.createTextNode(s.slice(last, m.index)));
+    }
+    const tok = m[0];
+    if (tok.startsWith('`') && tok.endsWith('`')) {
+      container.appendChild(el('code', null, tok.slice(1, -1)));
+    } else if (tok.startsWith('**') && tok.endsWith('**')) {
+      container.appendChild(el('strong', null, tok.slice(2, -2)));
+    } else if (tok.startsWith('*') && tok.endsWith('*')) {
+      container.appendChild(el('em', null, tok.slice(1, -1)));
+    }
+    last = tokenRe.lastIndex;
+  }
+  if (last < s.length) {
+    container.appendChild(document.createTextNode(s.slice(last)));
+  }
+}
+
+function hitungEkspresiAman(expr) {
+  const s = String(expr || '').replace(/\s+/g, '');
+  if (!s || s.length > 120 || !/^[\d\+\-\*\/\(\)\.]+$/.test(s)) return NaN;
+  let pos = 0;
+  function parseExpr() {
+    let left = parseTerm();
+    while (pos < s.length && (s[pos] === '+' || s[pos] === '-')) {
+      const op = s[pos++];
+      const right = parseTerm();
+      left = op === '+' ? left + right : left - right;
+    }
+    return left;
+  }
+  function parseTerm() {
+    let left = parseFactor();
+    while (pos < s.length && (s[pos] === '*' || s[pos] === '/')) {
+      const op = s[pos++];
+      const right = parseFactor();
+      if (op === '/' && right === 0) return NaN;
+      left = op === '*' ? left * right : left / right;
+    }
+    return left;
+  }
+  function parseFactor() {
+    if (s[pos] === '+') { pos++; return parseFactor(); }
+    if (s[pos] === '-') { pos++; return -parseFactor(); }
+    if (s[pos] === '(') {
+      pos++;
+      const val = parseExpr();
+      if (s[pos] !== ')') return NaN;
+      pos++;
+      return val;
+    }
+    const start = pos;
+    let dots = 0;
+    while (pos < s.length && ((s[pos] >= '0' && s[pos] <= '9') || s[pos] === '.')) {
+      if (s[pos] === '.') dots++;
+      pos++;
+    }
+    if (pos === start || dots > 1) return NaN;
+    const num = Number(s.slice(start, pos));
+    return Number.isFinite(num) ? num : NaN;
+  }
+  const result = parseExpr();
+  return pos === s.length && Number.isFinite(result) ? result : NaN;
+}
+
 function renderPesanAiChat() {
   const box = $('aiChatMessages');
   if (!box) return;
@@ -12026,8 +12228,10 @@ function renderPesanAiChat() {
 
     const wrap = el('div', 'ai-msg ' + role);
     if (text) {
-      const bubble = el('div', 'ai-msg-bubble', text);
+      const bubble = el('div', 'ai-msg-bubble');
       bubble.style.whiteSpace = 'pre-line';
+      if (role === 'assistant') isiBubbleMarkdownAman(bubble, text);
+      else bubble.textContent = text;
       wrap.appendChild(bubble);
     }
 
@@ -12907,16 +13111,14 @@ function jawabFinansialLokal(pertanyaan, context) {
   // 13. Hitung Matematika Instan
   const mathClean = q.replace(/[x×]/g, '*').replace(/[:÷]/g, '/').replace(/,/g, '.').replace(/\s+/g, '');
   if (/^[\d\+\-\*\/\(\)\.]+$/.test(mathClean) && /[\+\-\*\/]/.test(mathClean)) {
-    try {
-      const val = (new Function('return (' + mathClean + ')'))();
-      if (typeof val === 'number' && Number.isFinite(val)) {
-        const fmt = Number.isInteger(val) ? val.toLocaleString('id-ID') : val.toFixed(2).replace('.', ',');
-        return {
-          reply: '🔢 **Hasil Perhitungan:**\n\n`' + q + '` = **' + fmt + '**',
-          followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Berapa total pengeluaranku bulan ini?']
-        };
-      }
-    } catch (_) {}
+    const val = hitungEkspresiAman(mathClean);
+    if (typeof val === 'number' && Number.isFinite(val)) {
+      const fmt = Number.isInteger(val) ? val.toLocaleString('id-ID') : val.toFixed(2).replace('.', ',');
+      return {
+        reply: '🔢 **Hasil Perhitungan:**\n\n`' + q + '` = **' + fmt + '**',
+        followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Berapa total pengeluaranku bulan ini?']
+      };
+    }
   }
 
   // 14. Waktu & Tanggal
@@ -14571,14 +14773,80 @@ $('btnAiCamTerapkan').onclick = () => {
 // ===== KUNCI APLIKASI (APP LOCK): PIN & BIOMETRIK =====
 let inputPinBuffer = '';
 let appLockUnlocked = false;
+let appLockTimer = null;
 
-async function hashPin(pin) {
+function pastikanAppLockSalt() {
+  if (set.appLockSalt && typeof set.appLockSalt === 'string' && set.appLockSalt.length >= 16) {
+    return set.appLockSalt;
+  }
+  const cryptoObj = window.crypto || globalThis.crypto;
+  const bytes = new Uint8Array(16);
+  cryptoObj.getRandomValues(bytes);
+  set.appLockSalt = Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+  try { simpanSet(); } catch (_) {}
+  return set.appLockSalt;
+}
+
+async function hashPinLegacy(pin) {
   const enc = new TextEncoder();
   const salt = 'catatan-keuangan-applock-salt-2026';
   const data = enc.encode(salt + pin);
   const cryptoObj = window.crypto || globalThis.crypto;
   const hashBuffer = await cryptoObj.subtle.digest('SHA-256', data);
   return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function hashPin(pin, customSalt) {
+  const enc = new TextEncoder();
+  const saltHex = customSalt || pastikanAppLockSalt();
+  const cryptoObj = window.crypto || globalThis.crypto;
+  const keyMat = await cryptoObj.subtle.importKey('raw', enc.encode(String(pin)), 'PBKDF2', false, ['deriveBits']);
+  const bits = await cryptoObj.subtle.deriveBits(
+    { name: 'PBKDF2', salt: enc.encode(saltHex), iterations: 100000, hash: 'SHA-256' },
+    keyMat,
+    256
+  );
+  return Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function verifikasiPinAppLock(pin) {
+  if (!set.appLockPinHash) return false;
+  if (set.appLockSalt) {
+    const h = await hashPin(pin, set.appLockSalt);
+    return h === set.appLockPinHash;
+  }
+  // Kompatibilitas mundur: migrasi otomatis dari SHA-256 lama ke PBKDF2 + salt unik
+  const legacy = await hashPinLegacy(pin);
+  if (legacy === set.appLockPinHash) {
+    set.appLockPinHash = await hashPin(pin, pastikanAppLockSalt());
+    try { simpanSet(); } catch (_) {}
+    return true;
+  }
+  return false;
+}
+
+function sisaCooldownAppLock() {
+  const until = Number(set.appLockLockedUntil || 0);
+  return until > Date.now() ? Math.ceil((until - Date.now()) / 1000) : 0;
+}
+
+function tampilkanCooldownAppLock() {
+  const errEl = $('appLockError');
+  if (!errEl) return false;
+  const sisa = sisaCooldownAppLock();
+  if (sisa > 0) {
+    errEl.textContent = 'Terlalu banyak percobaan salah. Coba lagi dalam ' + sisa + ' detik.';
+    errEl.style.display = 'block';
+    clearTimeout(appLockTimer);
+    appLockTimer = setTimeout(tampilkanCooldownAppLock, 1000);
+    return true;
+  }
+  clearTimeout(appLockTimer);
+  appLockTimer = null;
+  if (errEl.textContent.includes('Terlalu banyak percobaan')) {
+    errEl.style.display = 'none';
+  }
+  return false;
 }
 
 function updatePinDots() {
@@ -14590,6 +14858,7 @@ function updatePinDots() {
 }
 
 async function handlePinInput(digit) {
+  if (tampilkanCooldownAppLock()) return;
   if (inputPinBuffer.length >= 4) return;
   inputPinBuffer += digit;
   updatePinDots();
@@ -14597,12 +14866,24 @@ async function handlePinInput(digit) {
 
   if (inputPinBuffer.length === 4) {
     const entered = inputPinBuffer;
-    const hashed = await hashPin(entered);
-    if (hashed === set.appLockPinHash) {
+    const cocok = await verifikasiPinAppLock(entered);
+    if (cocok) {
+      set.appLockFails = 0;
+      set.appLockLockedUntil = 0;
+      try { simpanSet(); } catch (_) {}
       bukaKunciAplikasi();
     } else {
-      $('appLockError').textContent = 'PIN salah. Coba lagi.';
-      $('appLockError').style.display = 'block';
+      const fails = Number(set.appLockFails || 0) + 1;
+      set.appLockFails = fails;
+      if (fails >= 5) {
+        set.appLockLockedUntil = Date.now() + 30000;
+        set.appLockFails = 0;
+      }
+      try { simpanSet(); } catch (_) {}
+      if (!tampilkanCooldownAppLock()) {
+        $('appLockError').textContent = 'PIN salah (' + fails + '/5). Coba lagi.';
+        $('appLockError').style.display = 'block';
+      }
       $('appLockDots').classList.add('pin-shake');
       setTimeout(() => {
         $('appLockDots').classList.remove('pin-shake');
@@ -14636,6 +14917,7 @@ function kunciAplikasi() {
   updatePinDots();
   $('appLockError').style.display = 'none';
   $('appLockOverlay').style.display = 'flex';
+  tampilkanCooldownAppLock();
 
   if (set.appLockBiometrik) {
     pemicuBiometrik();
@@ -14730,7 +15012,10 @@ $('btnAppLockSavePin').onclick = async () => {
     $('inpAppLockConfirm').focus();
     return;
   }
-  set.appLockPinHash = await hashPin(p1);
+  set.appLockSalt = '';
+  set.appLockPinHash = await hashPin(p1, pastikanAppLockSalt());
+  set.appLockFails = 0;
+  set.appLockLockedUntil = 0;
   set.appLockAktif = true;
   try { simpanSet(); } catch (_) {}
   $('dlgAppLockSetup').close();
@@ -14742,6 +15027,9 @@ $('btnAppLockDisable').onclick = () => {
   if (!confirm('Matikan kunci aplikasi? Aplikasi akan terbuka langsung tanpa PIN.')) return;
   set.appLockAktif = false;
   set.appLockPinHash = '';
+  set.appLockSalt = '';
+  set.appLockFails = 0;
+  set.appLockLockedUntil = 0;
   set.appLockBiometrik = false;
   try { simpanSet(); } catch (_) {}
   perbaruiUiAppLockSetelan();
