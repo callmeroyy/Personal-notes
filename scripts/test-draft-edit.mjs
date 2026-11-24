@@ -779,4 +779,99 @@ $('btnWalletConfirmYes')?.onclick?.();
 `);
 assert.equal(run('namaKeuanganTampil()'), 'Keuangan Keluarga', 'Nama keuangan kustom harus berhasil dipulihkan dari backup');
 
-console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, Edit Relatif Transaksi, Sticky Notes Realistis, Custom Color Picker, Custom Finance Name, dan Backup/Restore BERHASIL!');
+// Test 26: AI Assistant Comprehensive App Feature Knowledge & Explanations
+console.log('Testing AI Assistant Comprehensive Feature Knowledge & Explanations...');
+
+// 26.1: Ikhtisar Seluruh Fitur (All features overview)
+const respAllFeatures = run("jawabFinansialLokal('apa saja fitur yang ada di web ini?', siapkanKonteksAiChat())");
+assert.ok(respAllFeatures, 'AI harus merespons kueri ikhtisar seluruh fitur');
+assert.match(respAllFeatures.reply, /Panduan Lengkap Fitur/i, 'Harus mencantumkan judul Panduan Lengkap Fitur');
+assert.match(respAllFeatures.reply, /Dompet Multi-Akun & Uang Fisik/i, 'Harus menjelaskan fitur dompet');
+assert.match(respAllFeatures.reply, /Catat Transaksi Cepat & Keranjang Belanja/i, 'Harus menjelaskan fitur catat transaksi');
+assert.match(respAllFeatures.reply, /Catatan Tempel \(Sticky Notes 3D\)/i, 'Harus menjelaskan fitur catatan tempel');
+assert.match(respAllFeatures.reply, /Batas Anggaran \(Budget\)/i, 'Harus menjelaskan batas anggaran');
+assert.match(respAllFeatures.reply, /Target Tabungan & Impian/i, 'Harus menjelaskan target tabungan');
+assert.match(respAllFeatures.reply, /Transaksi Berulang & Tagihan Rutin/i, 'Harus menjelaskan transaksi berulang');
+assert.match(respAllFeatures.reply, /Status Catatan \(Aktif\/Nonaktif\)/i, 'Harus menjelaskan status catatan');
+assert.match(respAllFeatures.reply, /Grafik & Analisis Visual/i, 'Harus menjelaskan grafik');
+assert.match(respAllFeatures.reply, /Tampilan & Personalisasi/i, 'Harus menjelaskan tampilan');
+assert.match(respAllFeatures.reply, /Keamanan & Backup Terenkripsi/i, 'Harus menjelaskan keamanan dan backup');
+assert.match(respAllFeatures.reply, /PWA & 100% Offline/i, 'Harus menjelaskan PWA offline');
+assert.ok(respAllFeatures.followUpSuggestions?.includes('Fitur Sticky Notes'), 'Harus menyarankan follow-up Sticky Notes');
+
+// 26.2: Fitur Sticky Notes / Catatan Tempel
+const respStickyNotes = run("jawabFinansialLokal('bagaimana cara pakai sticky notes?', siapkanKonteksAiChat())");
+assert.ok(respStickyNotes, 'AI harus merespons kueri fitur sticky notes');
+assert.match(respStickyNotes.reply, /Fitur Catatan Tempel \(Sticky Notes 3D\)/i, 'Harus ada judul sticky notes');
+assert.match(respStickyNotes.reply, /Desain 3D Realistis/i, 'Harus menyebut desain 3D');
+assert.match(respStickyNotes.reply, /Pemilih Warna Kustom 16 Juta Warna/i, 'Harus menyebut custom color picker');
+assert.match(respStickyNotes.reply, /Kontras Teks Cerdas \(WCAG\)/i, 'Harus menyebut kontras teks dinamis');
+assert.match(respStickyNotes.reply, /Sematkan Catatan \(Pin\)/i, 'Harus menyebut fitur pin');
+
+// 26.3: Fitur Dompet, Transfer, Tarik Tunai & PayLater
+const respTransfer = run("jawabFinansialLokal('bagaimana cara transfer saldo antar dompet?', siapkanKonteksAiChat())");
+assert.ok(respTransfer, 'AI harus merespons kueri transfer saldo');
+assert.match(respTransfer.reply, /Fitur Dompet, Tunai & Transfer Saldo/i, 'Harus ada judul dompet dan transfer');
+assert.match(respTransfer.reply, /Pindahkan Uang/i, 'Harus menjelaskan pindahkan uang');
+assert.match(respTransfer.reply, /Tarik Tunai/i, 'Harus menjelaskan tarik tunai');
+
+const respPayLater = run("jawabFinansialLokal('apakah aplikasi ini mendukung paylater atau saldo minus?', siapkanKonteksAiChat())");
+assert.ok(respPayLater, 'AI harus merespons kueri paylater/saldo minus');
+assert.match(respPayLater.reply, /Saldo Minus \(PayLater \/ Kartu Kredit\)/i, 'Harus menjelaskan saldo negatif untuk paylater');
+
+// 26.4: Fitur Backup, Enkripsi AES-GCM & Google Drive
+const respBackupDrive = run("jawabFinansialLokal('bagaimana cara backup data ke google drive?', siapkanKonteksAiChat())");
+assert.ok(respBackupDrive, 'AI harus merespons kueri backup google drive');
+assert.match(respBackupDrive.reply, /Fitur Backup, Enkripsi AES-GCM & Google Drive Sync/i, 'Harus ada judul backup drive');
+assert.match(respBackupDrive.reply, /Enkripsi Kriptografi Militer \(AES-GCM\)/i, 'Harus menyebut enkripsi AES-GCM');
+assert.match(respBackupDrive.reply, /Google Drive Terintegrasi/i, 'Harus menyebut Google Drive');
+assert.match(respBackupDrive.reply, /Gabung Data/i, 'Harus menjelaskan mode gabung');
+assert.match(respBackupDrive.reply, /Pulihkan Total/i, 'Harus menjelaskan mode pulihkan total');
+
+// 26.5: Fitur Keamanan PIN & Sensor Privasi Saldo
+const respSecurity = run("jawabFinansialLokal('bagaimana cara mengunci aplikasi dengan PIN?', siapkanKonteksAiChat())");
+assert.ok(respSecurity, 'AI harus merespons kueri keamanan aplikasi');
+assert.match(respSecurity.reply, /Fitur Keamanan & Privasi Tingkat Tinggi/i, 'Harus ada judul keamanan');
+assert.match(respSecurity.reply, /Kunci Aplikasi \(App Lock PIN\)/i, 'Harus menyebut app lock PIN');
+assert.match(respSecurity.reply, /SHA-256/i, 'Harus menyebut SHA-256');
+assert.match(respSecurity.reply, /Sensor Saldo \(Mode Privasi\)/i, 'Harus menyebut sensor saldo');
+
+// 26.6: Fitur Gaya Tampilan, Tema & Kustomisasi Nama
+const respStyles = run("jawabFinansialLokal('ada gaya tampilan apa saja di web ini?', siapkanKonteksAiChat())");
+assert.ok(respStyles, 'AI harus merespons kueri gaya dan tampilan');
+assert.match(respStyles.reply, /Fitur Gaya, Tema & Personalisasi Tampilan/i, 'Harus ada judul gaya dan tema');
+assert.match(respStyles.reply, /Kustomisasi Nama Keuangan/i, 'Harus menyebut kustomisasi nama');
+assert.match(respStyles.reply, /23 Gaya Visual Eksklusif/i, 'Harus menyebut 23 gaya visual');
+assert.match(respStyles.reply, /Ruang Ide/i, 'Harus menyebut gaya Ruang Ide');
+
+// 26.7: Fitur Status Catatan (Aktif/Nonaktif) & Ekspor
+const respStatusCatatan = run("jawabFinansialLokal('apa fungsi status catatan nonaktif?', siapkanKonteksAiChat())");
+assert.ok(respStatusCatatan, 'AI harus merespons kueri status catatan nonaktif');
+assert.match(respStatusCatatan.reply, /Status Catatan Inovatif \(Aktif\/Nonaktif\)/i, 'Harus menjelaskan status catatan');
+assert.match(respStatusCatatan.reply, /Ekspor Tabel CSV \/ Excel/i, 'Harus menjelaskan ekspor CSV/Excel');
+assert.match(respStatusCatatan.reply, /Laporan PDF/i, 'Harus menjelaskan laporan PDF');
+
+// 26.8: Fitur Smart Input, Suara & Keranjang Belanja
+const respSmartInput = run("jawabFinansialLokal('bagaimana cara menggunakan smart input suara mikrofon?', siapkanKonteksAiChat())");
+assert.ok(respSmartInput, 'AI harus merespons kueri smart input');
+assert.match(respSmartInput.reply, /Fitur Smart Input, Suara & Keranjang Belanja/i, 'Harus menjelaskan smart input');
+assert.match(respSmartInput.reply, /Input Suara \(Mikrofon\)/i, 'Harus menjelaskan input suara');
+assert.match(respSmartInput.reply, /Keranjang Belanja Multi-Item/i, 'Harus menjelaskan keranjang belanja');
+
+// 26.9: Fitur PWA & Offline
+const respPwa = run("jawabFinansialLokal('apakah aplikasi ini bisa dipakai offline tanpa internet?', siapkanKonteksAiChat())");
+assert.ok(respPwa, 'AI harus merespons kueri offline dan PWA');
+assert.match(respPwa.reply, /Fitur PWA \(Progressive Web App\) & Akses 100% Offline/i, 'Harus ada judul PWA offline');
+assert.match(respPwa.reply, /Berjalan Penuh 100% Tanpa Internet/i, 'Harus menjelaskan offline tanpa internet');
+
+// 26.10: Panduan Cara Pakai Budget, Target & Transaksi Berulang
+const respCaraBudget = run("jawabFinansialLokal('bagaimana cara membuat batas anggaran?', siapkanKonteksAiChat())");
+assert.match(respCaraBudget.reply, /Cara Menggunakan Batas Anggaran \(Budget\)/i, 'Harus memberi panduan cara budget');
+
+const respCaraTarget = run("jawabFinansialLokal('bagaimana cara menggunakan target tabungan?', siapkanKonteksAiChat())");
+assert.match(respCaraTarget.reply, /Cara Menggunakan Target Tabungan \(Wishlist & Impian\)/i, 'Harus memberi panduan cara target tabungan');
+
+const respCaraBerulang = run("jawabFinansialLokal('bagaimana cara mengatur transaksi berulang?', siapkanKonteksAiChat())");
+assert.match(respCaraBerulang.reply, /Cara Menggunakan Transaksi Berulang & Tagihan Rutin/i, 'Harus memberi panduan cara transaksi berulang');
+
+console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, Edit Relatif Transaksi, Sticky Notes Realistis, Custom Color Picker, Custom Finance Name, Pengetahuan Fitur AI, dan Backup/Restore BERHASIL!');

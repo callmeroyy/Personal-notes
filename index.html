@@ -12001,10 +12001,10 @@ function renderPesanAiChat() {
     const chipsWrap = el('div', 'ai-chat-chips');
     chipsWrap.style.justifyContent = 'center';
     const starters = [
+      'Apa saja fitur yang ada di web ini?',
       'Tolong catat kopi 18rb tunai',
-      'Berapa total pengeluaran dan pemasukanku bulan ini?',
       'Berapa sisa saldo di semua dompetku?',
-      'Apakah anggaran bulananku masih aman?'
+      'Berapa total pengeluaran dan pemasukanku bulan ini?'
     ];
     starters.forEach(q => {
       const chip = el('button', 'ai-chip', q);
@@ -12309,17 +12309,20 @@ function jawabFinansialLokal(pertanyaan, context) {
   if (isTanyaIdentitas) {
     return {
       reply: '👋 Halo! Saya **Asisten Keuangan AI** pribadimu di ' + namaKeuanganTampil() + '.\n\n' +
-        'Saya memiliki akses langsung ke catatan keuanganmu untuk membantumu memantau kondisi finansial secara privat dan instan di perangkat ini:\n' +
-        '• 💰 Memeriksa total saldo, uang tunai, dan rekening / e-wallet\n' +
-        '• 📉 Menganalisis pengeluaran dan kategori paling boros (30 hari)\n' +
-        '• 📈 Memantau pemasukan dan status arus kas (surplus/defisit)\n' +
+        'Saya menguasai seluruh fitur aplikasi ini dan memiliki akses langsung ke catatan keuanganmu secara privat di perangkat ini:\n' +
+        '• 💰 Memeriksa saldo keseluruhan, kas tunai, dan rekening / e-wallet\n' +
+        '• 📉 Menganalisis pengeluaran, pemasukan, dan kategori paling boros (30 hari)\n' +
         '• 🎯 Mengecek batas anggaran bulanan (budget)\n' +
-        '• 🏆 Memantau progres target tabungan & impian\n' +
+        '• 🏆 Memantau progres target tabungan & impian (wishlist)\n' +
         '• 🔁 Mengingatkan jadwal transaksi berulang & tagihan rutin\n' +
-        '• 📝 Melihat riwayat transaksi terakhir\n' +
+        '• 📝 Melihat, mengedit, atau menghapus riwayat transaksi langsung dari chat\n' +
+        '• 📌 Menjelaskan fitur Catatan Tempel (Sticky Notes 3D & custom color picker)\n' +
+        '• 💳 Memandu transfer antar dompet, tarik tunai, dan PayLater / saldo minus\n' +
+        '• 🔐 Memandu keamanan PIN, sensor privasi saldo, dan backup terenkripsi AES-GCM / Google Drive\n' +
+        '• 🎨 Menjelaskan 23 gaya visual tampilan, mode tema, dan kustomisasi nama keuangan\n' +
         '• 💡 Memberikan tips dan strategi berhemat\n\n' +
-        'Data catatanmu tetap aman di browsermu. Ada yang ingin kamu tanyakan atau periksa hari ini?',
-      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Bagaimana progres target tabunganku?', 'Apakah anggaran bulananku masih aman?']
+        'Seluruh data catatanmu tetap aman tersimpan di browsermu. Ada yang ingin kamu tanyakan atau periksa hari ini?',
+      followUpSuggestions: ['Apa saja fitur web ini?', 'Berapa sisa saldo di semua dompetku?', 'Bagaimana progres target tabunganku?']
     };
   }
 
@@ -12327,28 +12330,187 @@ function jawabFinansialLokal(pertanyaan, context) {
   const isSapaan = /^(halo|hai|hey|hei|pagi|siang|sore|malam|assalamualaikum|tes|ping)\b/i.test(q);
   if (isSapaan) {
     return {
-      reply: '👋 Halo! Senang bertemu denganmu. Saya siap membantumu mengecek saldo dompet, ringkasan pengeluaran, anggaran, target tabungan, atau riwayat transaksimu saat ini.\n\nMau mulai cek apa hari ini?',
-      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Bagaimana progres target tabunganku?', 'Ada transaksi berulang apa saja?']
+      reply: '👋 Halo! Senang bertemu denganmu di ' + namaKeuanganTampil() + '. Saya siap membantumu mengecek saldo, mencatat pengeluaran, memantau anggaran, atau menjelaskan fitur apa pun di aplikasi ini.\n\nMau mulai dari mana hari ini?',
+      followUpSuggestions: ['Apa saja fitur yang ada di web ini?', 'Berapa sisa saldo di semua dompetku?', 'Bagaimana progres target tabunganku?']
     };
   }
 
-  // 3. Kemampuan & Bantuan
-  const isTanyaBisaApa = /\b(bisa\s*apa|kamu\s*bisa\s*apa|fitur\s*apa|kegunaan|fungsi|bantu\s*apa|cara\s*pakai|panduan)\b/i.test(q);
-  if (isTanyaBisaApa) {
+  // 3. Fitur Spesifik: Catatan Tempel (Sticky Notes 3D)
+  const isTanyaStickyNotes = /\b(sticky\s*notes?|catatan\s*tempel|memo(?:\s*3d)?|post\s*it|kertas\s*tempel)\b/i.test(q);
+  if (isTanyaStickyNotes) {
     return {
-      reply: '✨ Berikut beberapa hal yang bisa kamu tanyakan langsung ke saya:\n\n' +
-        '1. **Saldo & Dompet**: *"Berapa saldo dompetku?"*\n' +
-        '2. **Pengeluaran**: *"Berapa pengeluaranku bulan ini?"*\n' +
-        '3. **Kategori Boros**: *"Kategori apa yang paling boros?"*\n' +
-        '4. **Pemasukan**: *"Berapa total pemasukan 30 hari?"*\n' +
-        '5. **Anggaran**: *"Apakah anggaranku masih aman?"*\n' +
-        '6. **Target Tabungan**: *"Bagaimana progres target tabunganku?"*\n' +
-        '7. **Transaksi Berulang**: *"Ada tagihan rutin apa saja?"*\n' +
-        '8. **Riwayat**: *"Tampilkan transaksi terakhirku"*\n' +
-        '9. **Tips Hemat**: *"Beri tips berhemat"*\n' +
-        '10. **Navigasi Catat**: *"Catat pengeluaran baru"*\n\n' +
-        'Silakan ketik pertanyaanmu atau pilih tombol pintasan di bawah!',
-      followUpSuggestions: ['Berapa total pengeluaranku?', 'Bagaimana progres target tabunganku?', 'Beri tips berhemat']
+      reply: '📌 **Fitur Catatan Tempel (Sticky Notes 3D)**\n\n' +
+        'Fitur ini membantumu mencatat memo kilat, daftar belanja kecil, atau pengingat penting langsung di Beranda:\n\n' +
+        '• 🎨 **Desain 3D Realistis**: Efek tekstur kertas post-it dengan kemiringan halus (tilt), lekukan sudut bawah (curled peel corner), bayangan bertingkat, serta dekorasi pin dorong atau selotip washi tape.\n' +
+        '• 🌈 **Pilihan Warna Lengkap**: 6 warna pastel klasik preset PLUS **Pemilih Warna Kustom 16 Juta Warna** (hex picker `#rrggbb`).\n' +
+        '• 🔤 **Kontras Teks Cerdas (WCAG)**: Warna teks memo (hitam pekat atau putih bersih) otomatis disesuaikan secara dinamis mengikuti tingkat kecerahan warna memo agar selalu nyaman dibaca.\n' +
+        '• 📌 **Sematkan Catatan (Pin)**: Tandai catatan penting agar selalu muncul paling awal di baris atas.\n' +
+        '• 🔍 **Filter Memo**: Filter tampilan berdasarkan Semua Catatan, Hanya Tersemat, atau berdasarkan chip warna tertentu.\n' +
+        '• 💾 **Cadangan & Pulihkan**: Seluruh sticky notes otomatis ikut tersimpan dalam file backup JSON dan sinkronisasi Google Drive.\n\n' +
+        '💡 *Cara membuat:* Pada halaman Beranda, cari bagian **Catatan Tempel** lalu tekan tombol **+ Tambah Catatan**.',
+      followUpSuggestions: ['Apa saja fitur web ini?', 'Fitur Backup & Drive', 'Berapa sisa saldo di semua dompetku?']
+    };
+  }
+
+  // 3.1. Fitur Spesifik: Dompet, Tunai, Transfer & PayLater
+  const isTanyaDompetTransfer = /\b(transfer(?:\s*saldo)?|pindah\s*saldo|tarik\s*tunai|isi\s*saldo|fitur\s*dompet|tentang\s*dompet|cara\s*(?:pakai|tambah)?\s*dompet|pecahan(?:\s*uang)?|uang\s*fisik|lembar\s*uang|paylater|saldo\s*minus|kartu\s*kredit)\b/i.test(q) &&
+    !/\b(berapa|sisa\s*saldo|total\s*saldo|rincian\s*saldo|analisis|cek\s*saldo|saldo\s*dana|saldo\s*gopay|saldo\s*ovo|saldo\s*bca)\b/i.test(q);
+  if (isTanyaDompetTransfer) {
+    return {
+      reply: '💳 **Fitur Dompet, Tunai & Transfer Saldo**\n\n' +
+        'Aplikasi ini menyediakan manajemen saldo multi-sumber yang sangat lengkap:\n\n' +
+        '• 📱 **Rekening & E-Wallet**: Tambahkan dompet digital dan bank tak terbatas seperti DANA, GoPay, OVO, ShopeePay, BCA, Mandiri, BRI, dll.\n' +
+        '• 💵 **Uang Tunai & Pecahan Fisik**: Catat jumlah lembar pecahan uang kertas (Rp100k, Rp50k, dll) dan koin fisik, lengkap dengan kalkulasi pembayaran pas dan kembalian.\n' +
+        '• 🔄 **Pindahkan Uang (Transfer & Tarik Tunai)**:\n' +
+        '  - Transfer saldo antar rekening/e-wallet.\n' +
+        '  - Setor tunai ke rekening atau tarik tunai dari rekening ke dompet tunai.\n' +
+        '  - Opsi biaya admin (selalu masuk pengeluaran) dan opsi centang *Masukkan pokok ke laporan pengeluaran*.\n' +
+        '• ⚠️ **Dukungan Saldo Minus (PayLater / Kartu Kredit)**: Dompet non-tunai mengizinkan saldo negatif jika kamu menggunakan PayLater/Kartu Kredit, lengkap dengan badge warna merah peringatan.\n\n' +
+        '💡 *Cara akses:* Buka menu **Beranda ➔ Uangku** lalu pilih tab **Tunai** atau **Wallet**.',
+      followUpSuggestions: ['Berapa sisa saldo di semua dompetku?', 'Cara catat transaksi', 'Apa saja fitur web ini?']
+    };
+  }
+
+  // 3.2. Fitur Spesifik: Backup, Enkripsi AES-GCM & Google Drive
+  const isTanyaBackupDrive = /\b(backup|cadang(?:an|kan)|pulihkan|restore|google\s*drive|drive|enkripsi|aes|impor(?:\s*data)?|ekspor(?:\s*json|\s*data)?)\b/i.test(q);
+  if (isTanyaBackupDrive) {
+    return {
+      reply: '💾 **Fitur Backup, Enkripsi AES-GCM & Google Drive Sync**\n\n' +
+        'Catatan keuanganmu dijamin aman dan mudah dipindahkan:\n\n' +
+        '• 📄 **Ekspor Data JSON**: Seluruh data (transaksi, dompet, uang fisik, anggaran, target, transaksi berulang, memo sticky notes, dan tema) dicadangkan ke satu file JSON utuh.\n' +
+        '• 🔐 **Enkripsi Kriptografi Militer (AES-GCM)**: Lindungi file backup dengan password pribadi menggunakan Web Crypto API AES-GCM 256-bit sebelum diunduh.\n' +
+        '• ☁️ **Google Drive Terintegrasi**: Sambungkan Google Drive untuk pencadangan manual satu klik atau auto-sync berkala tanpa repot upload manual.\n' +
+        '• 📥 **Pilihan Impor Fleksibel**:\n' +
+        '  - *Gabung Data*: Menambahkan catatan baru dari file cadangan tanpa menimpa data yang ada.\n' +
+        '  - *Pulihkan Total*: Mengembalikan kondisi seluruh database persis seperti isi file cadangan.\n\n' +
+        '💡 *Cara akses:* Buka menu **Setelan ➔ Data & Backup**.',
+      followUpSuggestions: ['Fitur Kunci Aplikasi & Privasi', 'Apa saja fitur web ini?', 'Berapa sisa saldo di semua dompetku?']
+    };
+  }
+
+  // 3.3. Fitur Spesifik: Keamanan PIN & Sensor Privasi Saldo
+  const isTanyaKeamananLock = /\b(kunci\s*aplikasi|app\s*lock|pin(?:\s*keamanan)?|password|kata\s*sandi|sensor\s*saldo|sembunyikan\s*saldo|mata\s*saldo|privasi|keamanan)\b/i.test(q);
+  if (isTanyaKeamananLock) {
+    return {
+      reply: '🔐 **Fitur Keamanan & Privasi Tingkat Tinggi**\n\n' +
+        'Jaga kerahasiaan data keuanganmu saat menggunakan perangkat:\n\n' +
+        '• 🔒 **Kunci Aplikasi (App Lock PIN)**: Proteksi aplikasi dengan PIN 4-6 digit. PIN diamankan menggunakan hashing **Web Crypto SHA-256 + cryptographic salt unik** di perangkat (PIN tidak bisa dibaca secara plain text).\n' +
+        '• 👁️ **Sensor Saldo (Mode Privasi)**: Sembunyikan seluruh nominal saldo menjadi tanda bintang `••••••` dengan satu sentuhan pada tombol ikon mata di header atas.\n' +
+        '• 🛡️ **100% On-Device & Privat**: Data keuangan tersimpan secara lokal di browser perangkatmu dan tidak pernah dikirim ke server pihak ketiga mana pun.\n\n' +
+        '💡 *Cara akses:* Buka menu **Setelan ➔ Keamanan & Privasi**.',
+      followUpSuggestions: ['Fitur Backup & Drive', 'Gaya dan tema tampilan', 'Apa saja fitur web ini?']
+    };
+  }
+
+  // 3.4. Fitur Spesifik: Gaya Tampilan, Tema & Kustomisasi Nama
+  const isTanyaTampilanTema = /\b(gaya(?:\s*visual|\s*tampilan)?|tema(?:\s*warna)?|theme|ruang\s*ide|midnight|matcha|glass|neobrutal|kustom\s*nama|nama\s*keuangan|ganti\s*nama|tata\s*letak|layout)\b/i.test(q);
+  if (isTanyaTampilanTema) {
+    return {
+      reply: '🎨 **Fitur Gaya, Tema & Personalisasi Tampilan**\n\n' +
+        'Aplikasi dapat dipersonalisasi sepenuhnya sesuai gayamu:\n\n' +
+        '• 🏷️ **Kustomisasi Nama Keuangan**: Ubah nama aplikasi sesukamu (misal *Keuangan Roy*, *Catatan Finansial*, *Kas Usaha*) yang akan tampil di header, banner, sidebar, dan tab browser.\n' +
+        '• 🎭 **23 Gaya Visual Eksklusif**: Ruang Ide, Midnight Gold, Matcha Zen, Glass transparan, Neobrutal, Blok Pixel, Retro Terminal, Soft UI, Paper, Minimal Flat, Orbit, Sakura, Ocean, Pop, Spider, dll.\n' +
+        '• 🌓 **3 Mode Tema**: Terang (Light), Gelap (Dark), dan Otomatis (Auto).\n' +
+        '• 📐 **3 Tata Letak (Layout)**: Layout 1 (klasik), Layout 2 (tab modern), dan Layout 3 (ringkas).\n' +
+        '• 🖼️ **Foto Latar Kustom**: Khusus gaya Glass, kamu bisa memasang gambar latar favorit dan mengatur tingkat buram (blur) kaca.\n\n' +
+        '💡 *Cara ganti:* Buka menu **Setelan ➔ Tampilan & Gaya**.',
+      followUpSuggestions: ['Apa saja fitur web ini?', 'Fitur Sticky Notes', 'Berapa sisa saldo di semua dompetku?']
+    };
+  }
+
+  // 3.5. Fitur Spesifik: Status Catatan (Aktif/Nonaktif) & Cetak/Ekspor
+  const isTanyaStatusCatatan = /\b(status\s*catatan|nonaktif(?:kan)?|aktifkan\s*kembali|arsip\s*transaksi|cetak\s*(?:pdf|struk|nota)|ekspor\s*(?:csv|excel)|laporan\s*pdf|rekap\s*pdf|gambar\s*struk)\b/i.test(q);
+  if (isTanyaStatusCatatan) {
+    return {
+      reply: '📋 **Fitur Status Catatan (Aktif/Nonaktif) & Ekspor Laporan**\n\n' +
+        '• ⚖️ **Status Catatan Inovatif (Aktif/Nonaktif)**: Kamu bisa mengubah status transaksi menjadi **Nonaktif** jika transaksi dibatalkan atau direfund tanpa menghapus data aslinya. Transaksi nonaktif tidak dihitung di saldo atau laporan, namun tetap ada untuk riwayat audit dan bisa diaktifkan kembali kapan saja!\n' +
+        '• 📊 **Ekspor Tabel CSV / Excel**: Ekspor seluruh baris transaksi lengkap dengan rincian barang, dompet, kategori, dan status ke format file spreadsheet.\n' +
+        '• 📄 **Laporan PDF**: Unduh ringkasan laporan keuangan resmi siap cetak.\n' +
+        '• 🧾 **Cetak Gambar Struk**: Buat dan unduh struk digital dalam format gambar PNG untuk dibagikan.\n\n' +
+        '💡 *Cara akses:* Buka menu **Riwayat**.',
+      followUpSuggestions: ['Buka menu riwayat', 'Cara catat transaksi', 'Apa saja fitur web ini?']
+    };
+  }
+
+  // 3.6. Fitur Spesifik: Smart Input, Suara & Keranjang Belanja
+  const isTanyaSmartInput = /\b(smart\s*input|suara|voice|mic|mikrofon|foto\s*struk|scan\s*struk|scan\s*nota|ocr|keranjang\s*belanja|tambah\s*barang)\b/i.test(q);
+  if (isTanyaSmartInput) {
+    return {
+      reply: '⚡ **Fitur Smart Input, Suara & Keranjang Belanja**\n\n' +
+        'Pencatatan transaksi dirancang sangat cepat dan fleksibel:\n\n' +
+        '• 🎙️ **Input Suara (Mikrofon)**: Tekan tombol mic di Beranda lalu ucapkan transaksi (misal: *"Tadi jajan martabak 25 ribu pakai GoPay"*).\n' +
+        '• ⌨️ **Smart Input Teks**: Ketik satu kalimat bebas, sistem akan mengekstrak barang, nominal, kategori, dan dompet otomatis.\n' +
+        '• 🛒 **Keranjang Belanja Multi-Item**: Catat belanja banyak barang dalam 1 transaksi (qty desimal seperti 0.5 kg, satuan bebas, harga per barang).\n' +
+        '• 📸 **Foto & Scan Struk**: Lampirkan foto nota/struk belanja dari kamera atau galeri dengan pemindaian OCR cepat.\n' +
+        '• 💾 **Draf Otomatis**: Formulir catat menyimpan draf secara otomatis sehingga isian tidak hilang jika aplikasi tertutup sebelum disimpan.\n' +
+        '• 💬 **Catat Langsung di Chat**: Kamu juga bisa meminta saya langsung di obrolan ini, misal *"Catat makan siang 20rb tunai"*!',
+      followUpSuggestions: ['Buka formulir catat', 'Berapa total pengeluaranku?', 'Apa saja fitur web ini?']
+    };
+  }
+
+  // 3.7. Fitur Spesifik: PWA & Akses Offline
+  const isTanyaPwaOffline = /\b(offline|tanpa\s*internet|install(?:\s*aplikasi)?|pasang(?:\s*aplikasi)?|pwa|download\s*aplikasi|aplikasi\s*hp|apk)\b/i.test(q);
+  if (isTanyaPwaOffline) {
+    return {
+      reply: '📱 **Fitur PWA (Progressive Web App) & Akses 100% Offline**\n\n' +
+        '• 📲 **Bisa Diinstall di Layar Utama HP / PC**: Aplikasi ini adalah Progressive Web App resmi. Kamu bisa menginstalnya langsung melalui browser (pilih *Tambah ke Layar Utama* di Android/iOS atau ikon *Install App* di Chrome/Edge PC).\n' +
+        '• ⚡ **Berjalan Penuh 100% Tanpa Internet**: Berkat Service Worker dan LocalStorage modern, kamu tetap bisa mencatat pengeluaran, mengecek saldo, melihat grafik, dan membuka memo meski sedang offline atau mode pesawat.\n' +
+        '• 🔔 **Pengingat Notifikasi Harian**: Pasang pengingat pencatatan rutin setiap sore atau malam agar tidak ada pengeluaran yang terlupa.\n' +
+        '• 🚀 **Ringan & Hemat Kuota**: Ukuran sangat kecil dibanding aplikasi native, hemat baterai, dan bebas iklan.',
+      followUpSuggestions: ['Apa saja fitur web ini?', 'Fitur Backup & Drive', 'Berapa sisa saldo di semua dompetku?']
+    };
+  }
+
+  // 3.8. Panduan Seluruh Fitur (Ikhtisar Lengkap)
+  const isTanyaSemuaFitur = /\b(bisa\s*apa|kamu\s*bisa\s*apa|fitur\s*apa|apa\s*(?:saja\s*)?fitur(?:nya)?|semua\s*fitur|daftar\s*fitur|kemampuan|kegunaan|fungsi|bantu\s*apa|cara\s*pakai|panduan(?:\s*aplikasi|\s*fitur)?|menu\s*apa)\b/i.test(q);
+  if (isTanyaSemuaFitur) {
+    return {
+      reply: '🌟 **Panduan Lengkap Fitur ' + namaKeuanganTampil() + '** 🌟\n\n' +
+        'Berikut adalah seluruh fitur unggulan yang tersedia di aplikasi ini:\n\n' +
+        '1. 💰 **Dompet Multi-Akun & Uang Fisik**\n' +
+        '   • Kelola Uang Tunai serta rekening bank & e-wallet tanpa batas (DANA, GoPay, OVO, BCA, dll).\n' +
+        '   • Lacak stok lembar pecahan fisik (Rp100k s/d Rp1.000) dan koin.\n' +
+        '   • Pindahkan uang (transfer saldo / tarik tunai) dengan biaya admin.\n' +
+        '   • Dukungan saldo minus untuk PayLater atau kartu kredit.\n\n' +
+        '2. ✍️ **Catat Transaksi Cepat & Keranjang Belanja**\n' +
+        '   • Catat pengeluaran & pemasukan harian dengan kategori default & kustom.\n' +
+        '   • Keranjang belanja multi-item (qty desimal, satuan, harga per item).\n' +
+        '   • Lampiran foto struk/nota dari kamera atau galeri dengan pemindai cepat.\n' +
+        '   • Draf otomatis tersimpan aman di perangkat jika belum selesai.\n\n' +
+        '3. 📌 **Catatan Tempel (Sticky Notes 3D)**\n' +
+        '   • Papan memo 3D realistis bertekstur lipatan, bayangan sudut (curled peel shadow), dan pin dorong.\n' +
+        '   • 6 preset pastel + pemilih warna kustom 16 juta warna (hex picker `#rrggbb`).\n' +
+        '   • Kontras teks otomatis (hitam/putih) sesuai kecerahan kertas memo (standar WCAG).\n' +
+        '   • Fitur sematkan ke atas (pin) dan filter memo per warna.\n\n' +
+        '4. 🎯 **Batas Anggaran (Budget)**\n' +
+        '   • Limit mingguan/bulanan per kategori dengan indikator visual aman (hijau), waspada (kuning), dan overbudget (merah).\n\n' +
+        '5. 🏆 **Target Tabungan & Impian (Wishlist)**\n' +
+        '   • Pasang target tabungan dengan deadline, kalkulasi saran setoran per minggu, dan tombol setor instan.\n\n' +
+        '6. 🔁 **Transaksi Berulang & Tagihan Rutin**\n' +
+        '   • Jadwalkan tagihan rutin (WiFi, kos, langganan) dengan opsi catat otomatis atau lewati saat jatuh tempo.\n\n' +
+        '7. 📋 **Riwayat & Status Catatan (Aktif/Nonaktif)**\n' +
+        '   • Filter pencarian multi-kriteria dan fitur inovatif ubah status transaksi menjadi Nonaktif (membatalkan saldo tanpa hapus data).\n' +
+        '   • Ekspor data ke CSV/Excel, cetak laporan PDF, dan cetak struk gambar PNG.\n\n' +
+        '8. 📊 **Grafik & Analisis Visual**\n' +
+        '   • Tren pengeluaran/pemasukan bulanan, diagram donut kategori, dan perbandingan Hari A vs Hari B.\n\n' +
+        '9. 🎨 **Tampilan & Personalisasi**\n' +
+        '   • Kustomisasi Nama Keuangan (misal *"Keuangan Roy"*).\n' +
+        '   • 23 Gaya Visual (Ruang Ide, Midnight Gold, Matcha Zen, Glass, Neobrutal, Blok Pixel, Retro Terminal, dll).\n' +
+        '   • Mode tema Terang/Gelap/Auto dan 3 pilihan tata letak (Layout).\n\n' +
+        '10. 🔐 **Keamanan & Backup Terenkripsi**\n' +
+        '    • Kunci aplikasi dengan PIN (hashing Web Crypto SHA-256 + salt) dan mode sensor privasi saldo.\n' +
+        '    • Backup file JSON terenkripsi AES-GCM dan sinkronisasi Google Drive (manual & otomatis).\n\n' +
+        '11. ⚡ **Smart Input & Asisten AI**\n' +
+        '    • Catat transaksi via suara mikrofon, draf AI otomatis, dan tanya kondisi keuangan langsung di chat ini.\n\n' +
+        '12. 📱 **PWA & 100% Offline**\n' +
+        '    • Bisa diinstal di HP/Desktop dan bekerja penuh 100% tanpa internet.\n\n' +
+        '💡 Ingin tahu cara pakai fitur tertentu? Tanyakan langsung ke saya!',
+      followUpSuggestions: [
+        'Fitur Sticky Notes',
+        'Fitur Dompet & Transfer',
+        'Fitur Backup & Drive',
+        'Fitur Kunci Aplikasi & Privasi'
+      ]
     };
   }
 
@@ -12591,6 +12753,20 @@ function jawabFinansialLokal(pertanyaan, context) {
   // 11. Tanya Anggaran / Budget
   const isTanyaBudget = /\b(anggaran(?:ku|mu|nya)?|budget(?:ku|mu|nya)?|batas|limit)\b/i.test(q);
   if (isTanyaBudget) {
+    if (/\b(?:cara|panduan|tutorial|apa\s*itu)\b/i.test(q) || /\bbagaimana\s*(?:cara|sih\s*cara|menggunakan|pakai|menambah|membuat|mengatur)\b/i.test(q)) {
+      return {
+        reply: '🎯 **Cara Menggunakan Batas Anggaran (Budget)**\n\n' +
+          'Fitur Batas Anggaran membantumu mencegah pengeluaran berlebih di setiap kategori:\n\n' +
+          '1. Buka menu **Fitur lain ➔ Rencana keuangan** (atau menu Rencana).\n' +
+          '2. Pilih kategori pengeluaran (misal *Makan*, *Jajan*, *Belanja*) dan tentukan periode (mingguan atau bulanan).\n' +
+          '3. Masukkan batas nominal maksimal yang kamu inginkan lalu simpan.\n' +
+          '4. Indikator bar visual akan memantau pengeluaranmu:\n' +
+          '   • 🟢 **Aman**: Pengeluaran masih di bawah 80% dari batas.\n' +
+          '   • 🟡 **Waspada**: Pengeluaran mencapai 80% - 99%.\n' +
+          '   • 🔴 **Overbudget**: Pengeluaran melampaui batas (≥100%), dan aplikasi akan memberi peringatan saat kamu mencatat transaksi baru pada kategori tersebut!',
+        followUpSuggestions: ['Apakah anggaran bulananku masih aman?', 'Kategori apa yang paling banyak pengeluarannya?', 'Apa saja fitur web ini?']
+      };
+    }
     if (!budgets.length) {
       return {
         reply: '🎯 Kamu belum menetapkan batas anggaran (budget) untuk kategori apa pun.\n\nKamu dapat membuat batas anggaran melalui menu Fitur lain → Rencana keuangan.',
@@ -12612,6 +12788,18 @@ function jawabFinansialLokal(pertanyaan, context) {
   const isTanyaTarget = /\b(target\s*tabungan|tabungan(?:ku)?|target(?:ku)?|wishlist|impian|nabung|progres\s*tabungan|sisa\s*target)\b/i.test(q) &&
     !/\b(catat|tambah\s*target|buat\s*target|hapus\s*target)\b/i.test(q);
   if (isTanyaTarget) {
+    if (/\b(?:cara|panduan|tutorial|apa\s*itu)\b/i.test(q) || /\bbagaimana\s*(?:cara|sih\s*cara|menggunakan|pakai|menambah|membuat|mengatur)\b/i.test(q)) {
+      return {
+        reply: '🏆 **Cara Menggunakan Target Tabungan (Wishlist & Impian)**\n\n' +
+          'Wujudkan barang impian atau dana daruratmu secara terencana:\n\n' +
+          '1. Buka menu **Rencana ➔ Target Tabungan**.\n' +
+          '2. Tekan **+ Target Baru**, isi nama impian (misal *Beli Laptop Baru*, *Liburan Akhir Tahun*), target nominal, dan tenggat waktu (deadline opsional).\n' +
+          '3. Jika ada tenggat waktu, sistem otomatis menghitung saran setoran per minggu yang perlu kamu sisihkan.\n' +
+          '4. Saat ingin menabung, tekan tombol **Setor** pada target tersebut. Setoran akan dicatat sebagai pengeluaran pos *Tabungan* dan memotong saldo dompet yang kamu pilih.\n' +
+          '5. Saat target mencapai 100%, kamu akan mendapatkan perayaan visual 🎉!',
+        followUpSuggestions: ['Bagaimana progres target tabunganku?', 'Berapa sisa saldo di semua dompetku?', 'Apa saja fitur web ini?']
+      };
+    }
     if (!targets.length) {
       return {
         reply: '🏆 Kamu belum memiliki target tabungan yang aktif.\n\nKamu dapat menambahkan target tabungan baru (seperti Beli Laptop, Dana Darurat, Liburan) melalui menu **Rencana → Target Tabungan**.',
@@ -12652,6 +12840,18 @@ function jawabFinansialLokal(pertanyaan, context) {
   // 11.4. Tanya Transaksi Berulang / Rutin
   const isTanyaBerulang = /\b(transaksi\s*berulang|berulang|rutin|tagihan\s*rutin|langganan|pengeluaran\s*tetap|pemasukan\s*rutin|komitmen\s*rutin)\b/i.test(q);
   if (isTanyaBerulang) {
+    if (/\b(?:cara|panduan|tutorial|apa\s*itu)\b/i.test(q) || /\bbagaimana\s*(?:cara|sih\s*cara|menggunakan|pakai|menambah|membuat|mengatur)\b/i.test(q)) {
+      return {
+        reply: '🔁 **Cara Menggunakan Transaksi Berulang & Tagihan Rutin**\n\n' +
+          'Jangan sampai lupa membayar tagihan atau mencatat pemasukan rutin:\n\n' +
+          '1. Buka menu **Rencana ➔ Transaksi Berulang**.\n' +
+          '2. Daftarkan pengeluaran/pemasukan rutin (misal *WiFi Indihome*, *Biaya Kos*, *Langganan Netflix*, atau *Gaji Bulanan*).\n' +
+          '3. Tentukan periode (setiap minggu atau setiap bulan) dan tanggal mulai.\n' +
+          '4. Saat jadwal jatuh tempo tiba, aplikasi akan memunculkan kartu **Perlu Dicatat** di Beranda.\n' +
+          '5. Kamu cukup menekan tombol **Catat** untuk langsung menyimpan ke transaksi, atau tombol **Lewati** jika periode tersebut tidak ingin dicatat.',
+        followUpSuggestions: ['Ada transaksi berulang apa saja?', 'Apakah anggaranku masih aman?', 'Apa saja fitur web ini?']
+      };
+    }
     if (!recurring.length) {
       return {
         reply: '🔁 Kamu belum mendaftarkan transaksi berulang.\n\nKamu dapat mencatat transaksi rutin (seperti tagihan WiFi, kos, langganan aplikasi, atau gaji bulanan) melalui menu **Rencana → Transaksi Berulang**.',
@@ -13073,13 +13273,25 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
     '• Batas Anggaran: ' + budgetsStr + '\n' +
     '• Target Tabungan: ' + targetsStr + '\n' +
     '• Transaksi Berulang: ' + recurringStr + '\n\n' +
+    'Pengetahuan Lengkap Seluruh Fitur Aplikasi ' + namaKeuanganTampil() + ':\n' +
+    '1. Beranda & Dompet Multi-Akun: Mendukung uang tunai fisik (dengan pelacakan jumlah lembar/keping pecahan Rp100k-Rp100 pas & kembalian) dan dompet digital/bank tanpa batas (DANA, GoPay, OVO, ShopeePay, BCA, Mandiri, BRI, dll). Fitur "Pindahkan Uang" mendukung transfer antar dompet & tarik tunai dengan biaya admin dan opsi masuk laporan pengeluaran. Dompet juga mengizinkan saldo minus (PayLater / Kartu Kredit) dengan peringatan visual.\n' +
+    '2. Catatan Tempel (Sticky Notes) 3D: Papan memo bergaya post-it 3D realistis bertekstur lipatan, bayangan sudut (curled peel shadow), pushpin, dan selotip washi tape. Dilengkapi pin/sematkan ke atas, 6 preset warna pastel + pemilih warna kustom 16 juta warna (hex picker #rrggbb) dengan kalkulasi kontras warna teks otomatis (WCAG), filter warna chip, serta otomatis masuk backup & restore.\n' +
+    '3. Catat Transaksi & Keranjang Belanja: Pencatatan pengeluaran & pemasukan, keranjang belanja multi-item (qty bisa desimal seperti 0.5 kg, satuan bebas, harga satuan/total), lampiran foto struk kamera/galeri, serta draf otomatis lokal yang tidak hilang saat berpindah menu.\n' +
+    '4. Rencana Keuangan: Batas Anggaran (budget bulanan/mingguan per kategori dengan bar indikator hijau/kuning/merah overbudget), Target Tabungan & Wishlist (impian dengan kalkulasi saran setoran mingguan dan tombol setor instan), dan Transaksi Berulang (jadwal pengeluaran/pemasukan rutin mingguan/bulanan dengan tombol catat atau lewati).\n' +
+    '5. Riwayat & Status Catatan: Filter multi-kriteria, fitur inovatif Status Catatan Aktif/Nonaktif (membatalkan dampak saldo transaksi tanpa menghapus data audit), ekspor tabel CSV/Excel, cetak dokumen PDF, dan cetak struk digital gambar PNG.\n' +
+    '6. Analisis Grafik: Tren bar bulanan/mingguan, diagram donut proporsi kategori pengeluaran, komparasi pengeluaran Hari A vs Hari B, dan peringkat metode pembayaran.\n' +
+    '7. Tampilan & Personalisasi: Kustomisasi Nama Keuangan (misal "Keuangan Roy", "Kas Toko", dll) yang tampil dinamis di header dan tab, 23 gaya visual eksklusif (Ruang Ide, Midnight Gold, Matcha Zen, Glass transparan, Neobrutal, Blok Pixel, Retro Terminal, Soft UI, Paper, Minimal Flat, Orbit, Sakura, Ocean, Pop, Spider, dll), mode tema Terang/Gelap/Auto, 3 pilihan layout, dan gambar latar belakang kustom.\n' +
+    '8. Keamanan & Backup Data: Kunci aplikasi dengan PIN 4-6 digit (Web Crypto SHA-256 + cryptographic salt), mode privasi sensor saldo (sembunyikan angka), backup data JSON lengkap, enkripsi file backup AES-GCM dengan password, dan sinkronisasi Google Drive (manual & otomatis).\n' +
+    '9. Smart Input & Interaksi AI: Input cepat via teks bebas atau rekaman suara mikrofon, draf AI instan, serta kemampuan mencatat, mengedit, atau menghapus transaksi langsung dari ruang obrolan chat AI ini.\n' +
+    '10. PWA & Privasi: 100% Progressive Web App yang dapat diinstal di HP/Desktop, bekerja penuh 100% secara offline tanpa internet, dan seluruh data tersimpan privat di perangkat pengguna tanpa server pusat pelacak.\n\n' +
     'Instruksi:\n' +
     '1. Jawab pertanyaan pengguna dalam bahasa Indonesia yang ramah, terstruktur, dan nyaman dibaca di layar HP.\n' +
-    '2. Jika pengguna menanyakan kondisi keuangan atau membuat simulasi (contoh: "Aku dikasih uang 500k bisa bertahan berapa hari?"), hitung rata-rata pengeluaran harian pengguna (Pengeluaran 30 hari ÷ 30) lalu proyeksikan berapa hari uang tersebut dapat mencukupi dan berikan saran hemat yang bersahabat.\n' +
-    '3. Jika pengguna menanyakan batas anggaran, target tabungan, atau transaksi berulang / tagihan rutin, berikan analisis progres, sisa limit / kekurangan, dan saran alokasi yang tepat dan bersahabat.\n' +
-    '4. Jika pengguna menanyakan pertanyaan bebas, umum, atau edukatif (seperti sains, cerita, sejarah, resep, coding, saran hidup, teka-teki, dll.), jawab dengan wawasan luas, antusias, dan akurat!\n' +
-    '5. Jangan gunakan markdown yang berlebihan, gunakan poin-poin yang mudah dipahami.\n' +
-    '6. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran...", "dapat uang..."), berikan kalimat konfirmasi ramah dan selalu sertakan blok JSON di akhir jawabanmu dengan format persis:\n' +
+    '2. Jika pengguna menanyakan tentang fitur aplikasi, cara kerja, atau panduan penggunaan fitur apa pun (seperti sticky notes, transfer saldo, paylater, backup drive, kunci PIN, tema 23 gaya, status catatan aktif/nonaktif, ekspor PDF/Excel, dll.), jelaskan secara ramah, lengkap, terstruktur, dan tepat sasaran sesuai pengetahuan fitur di atas.\n' +
+    '3. Jika pengguna menanyakan kondisi keuangan atau membuat simulasi (contoh: "Aku dikasih uang 500k bisa bertahan berapa hari?"), hitung rata-rata pengeluaran harian pengguna (Pengeluaran 30 hari ÷ 30) lalu proyeksikan berapa hari uang tersebut dapat mencukupi dan berikan saran hemat yang bersahabat.\n' +
+    '4. Jika pengguna menanyakan batas anggaran, target tabungan, atau transaksi berulang / tagihan rutin, berikan analisis progres, sisa limit / kekurangan, dan saran alokasi yang tepat dan bersahabat.\n' +
+    '5. Jika pengguna menanyakan pertanyaan bebas, umum, atau edukatif (seperti sains, cerita, sejarah, resep, coding, saran hidup, teka-teki, dll.), jawab dengan wawasan luas, antusias, dan akurat!\n' +
+    '6. Jangan gunakan markdown yang berlebihan, gunakan poin-poin yang mudah dipahami.\n' +
+    '7. Jika pengguna bermaksud mencatat transaksi (misal: "catat...", "tadi beli...", "tambah pengeluaran...", "dapat uang..."), berikan kalimat konfirmasi ramah dan selalu sertakan blok JSON di akhir jawabanmu dengan format persis:\n' +
     '```json:transactions\n' +
     '[\n' +
     '  {\n' +
