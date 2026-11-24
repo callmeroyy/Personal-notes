@@ -3395,9 +3395,9 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
 <div id="orbitIntro" aria-hidden="true" hidden><div class="orbit-intro-inner"><div class="orbit-intro-planet"><i></i></div><strong>ORBIT</strong><small>Catatan kecil, tujuan besar.</small></div></div>
 
 <aside class="ui-sidebar" aria-label="Menu utama">
-  <a class="ui-brand" href="#beranda" data-ruang-page="beranda"><span class="ui-icon" data-ruang-icon="wallet" aria-hidden="true"></span><span>catatan<br>keuangan.<small>BUATAN ROY</small></span></a>
-  <div class="ui-sidebar-caption">Ruang keuanganmu</div>
-  <nav class="ui-side-nav" aria-label="Halaman Catatan Keuangan">
+  <a class="ui-brand" href="#beranda" data-ruang-page="beranda"><span class="ui-icon" data-ruang-icon="wallet" aria-hidden="true"></span><span id="uiBrandTitle">catatan<br>keuangan.<small>BUATAN ROY</small></span></a>
+  <div class="ui-sidebar-caption" id="uiSidebarCaption">Ruang keuanganmu</div>
+  <nav class="ui-side-nav" id="uiSideNav" aria-label="Halaman Catatan Keuangan">
     <button type="button" class="ui-side-link" data-ruang-page="beranda"><span class="ui-icon" data-ruang-icon="grid" aria-hidden="true"></span>Beranda</button>
     <button type="button" class="ui-side-link" data-ruang-page="riwayat"><span class="ui-icon" data-ruang-icon="receipt" aria-hidden="true"></span>Riwayat</button>
     <button type="button" class="ui-side-link" data-ruang-page="catat"><span class="ui-icon" data-ruang-icon="plus" aria-hidden="true"></span>Catat transaksi</button>
@@ -3412,7 +3412,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
 </aside>
 <header class="top">
   <div class="ui-topline"><div class="ui-breadcrumb"><i aria-hidden="true"></i><span>Ruang pribadi</span><span class="ui-crumb-divider" aria-hidden="true">/</span><span id="uiPageCrumb">Beranda</span></div><div style="display:flex;align-items:center;gap:6px"><button type="button" class="ui-help" id="btnTopAiChat" style="display:inline-flex;align-items:center;gap:5px;font-weight:600;border-color:var(--pri);color:var(--pri)"><span aria-hidden="true">&#x2728;</span><span>Tanya AI</span></button><button type="button" class="ui-help" id="uiOpenHelp"><span class="ui-icon" data-ruang-icon="help" aria-hidden="true"></span>Cara pakai</button></div></div>
-  <h1><span class="ui-title-symbol ui-icon" data-ruang-icon="wallet" aria-hidden="true"></span><span>Catatan Keuangan</span></h1>
+  <h1><span class="ui-title-symbol ui-icon" data-ruang-icon="wallet" aria-hidden="true"></span><span id="appHeaderTitle">Catatan Keuangan</span></h1>
   <p id="hdr"></p>
   <div class="style-signature" aria-hidden="true"><svg id="styleSignatureArt" viewBox="0 0 100 100" fill="none" focusable="false"></svg><span id="styleSignatureName"></span></div>
   <svg class="spider-mask" viewBox="0 0 110 120" aria-hidden="true" focusable="false">
@@ -3988,6 +3988,26 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
       <p class="muted" style="margin:2px 0 0;font-size:12.5px">Personalisasi tema, gaya visual, latar belakang, dan AI</p>
     </div>
     <button type="button" class="ghost kecil" onclick="goto('data')" style="width:auto;margin:0;padding:8px 14px;display:inline-flex;align-items:center;gap:6px">💾 Buka Data &amp; backup</button>
+  </div>
+
+  <div class="card" id="cardIdentitas">
+    <h2>Nama &amp; Ruang Keuangan</h2>
+    <p class="muted" style="margin-bottom:12px;font-size:13px;line-height:1.5">Kustomisasi nama catatan keuangan pribadimu (misal: <em>Keuangan Roy</em>, <em>Keuangan Pribadi</em>, <em>Keuangan Keluarga</em>, atau <em>Catatan Keuangan</em>).</p>
+    <div class="field-wrap">
+      <label class="field-label" for="sNamaKeuangan">Nama / Judul Keuangan</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="sNamaKeuangan" placeholder="Contoh: Keuangan Roy atau Catatan Keuangan" maxlength="40" autocomplete="off" style="margin:0;font-size:14px;font-weight:600">
+        <button type="button" class="ghost kecil" id="btnResetNamaKeuangan" style="width:auto;margin:0;padding:8px 12px;flex-shrink:0" title="Kembalikan ke nama default">Default</button>
+      </div>
+      <p class="muted setting-help" id="infoNamaKeuangan" aria-live="polite" style="margin-top:6px"></p>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center">
+      <span class="muted" style="font-size:12px">Saran cepat:</span>
+      <button type="button" class="ghost kecil btn-saran-nama" data-nama="Keuangan Roy" style="width:auto;margin:0;padding:4px 10px;font-size:12px">Keuangan Roy</button>
+      <button type="button" class="ghost kecil btn-saran-nama" data-nama="Keuangan Pribadi" style="width:auto;margin:0;padding:4px 10px;font-size:12px">Keuangan Pribadi</button>
+      <button type="button" class="ghost kecil btn-saran-nama" data-nama="Keuangan Keluarga" style="width:auto;margin:0;padding:4px 10px;font-size:12px">Keuangan Keluarga</button>
+      <button type="button" class="ghost kecil btn-saran-nama" data-nama="Catatan Keuangan" style="width:auto;margin:0;padding:4px 10px;font-size:12px">Catatan Keuangan</button>
+    </div>
   </div>
 
   <div class="card" id="cardTampilan">
@@ -7657,7 +7677,7 @@ function renderPengingat() {
   $('bannerPengingat').style.display = tampil ? 'flex' : 'none';
   if (tampil && set.notifHari !== hariIni() && 'Notification' in window && Notification.permission === 'granted' && navigator.serviceWorker) {
     navigator.serviceWorker.ready.then(reg => {
-      reg.showNotification('Catatan Keuangan', { body: 'Belum ada catatan hari ini. Yuk catat pengeluaranmu.', tag: 'pengingat-harian' });
+      reg.showNotification(namaKeuanganTampil(), { body: 'Belum ada catatan hari ini. Yuk catat pengeluaranmu.', tag: 'pengingat-harian' });
     }).catch(() => {});
     set.notifHari = hariIni();
     simpanSet();
@@ -8683,9 +8703,9 @@ const KEY_TAMPILAN = 'catatan-tampilan-v1';
 let tampilan = (() => {
   try {
     const { beranda, ...tersimpan } = JSON.parse(localStorage.getItem(KEY_TAMPILAN) || '{}');
-    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', layout: '1', gerak: 'penuh', ...tersimpan };
+    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', layout: '1', gerak: 'penuh', namaKeuangan: '', ...tersimpan };
   } catch (e) {
-    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', layout: '1' };
+    return { tema: 'auto', kaca: 55, bg: '', gaya: 'biasa', efek: 'tanpa', layout: '1', namaKeuangan: '' };
   }
 })();
 
@@ -8696,6 +8716,60 @@ function simpanTampilan() {
   } catch (e) {
     alert('Latar terlalu besar untuk disimpan. Coba pilih foto lain.');
     return false;
+  }
+}
+
+function ambilNamaKeuangan() {
+  return String(tampilan?.namaKeuangan || (typeof set !== 'undefined' && set?.namaKeuangan) || '').trim().slice(0, 40);
+}
+
+function namaKeuanganTampil() {
+  return ambilNamaKeuangan() || 'Catatan Keuangan';
+}
+
+function perbaruiNamaKeuangan() {
+  const kustom = ambilNamaKeuangan();
+  const judul = namaKeuanganTampil();
+
+  // 1. Judul header utama h1
+  const h1Span = $('appHeaderTitle');
+  if (h1Span) h1Span.textContent = judul;
+
+  // 2. Judul tab dokumen browser
+  document.title = kustom ? `${kustom} — Catatan Keuangan` : 'Catatan Keuangan';
+
+  // 3. Brand sidebar desktop
+  const brandSpan = $('uiBrandTitle');
+  if (brandSpan) {
+    if (!kustom) {
+      brandSpan.innerHTML = 'catatan<br>keuangan.<small>BUATAN ROY</small>';
+    } else {
+      const kata = kustom.split(/\s+/).filter(Boolean);
+      if (kata.length <= 1) {
+        brandSpan.innerHTML = esc(kata[0] || 'keuangan').toLowerCase() + '<br>keuangan.<small>RUANG PRIBADI</small>';
+      } else {
+        const tengah = Math.ceil(kata.length / 2);
+        const baris1 = kata.slice(0, tengah).join(' ').toLowerCase();
+        const baris2 = kata.slice(tengah).join(' ').toLowerCase();
+        brandSpan.innerHTML = esc(baris1) + '<br>' + esc(baris2) + '.<small>RUANG PRIBADI</small>';
+      }
+    }
+  }
+
+  // 4. Caption sidebar & aria-label
+  const caption = $('uiSidebarCaption');
+  if (caption) caption.textContent = kustom ? `Ruang ${kustom}` : 'Ruang keuanganmu';
+  const sideNav = $('uiSideNav');
+  if (sideNav) sideNav.setAttribute('aria-label', `Halaman ${judul}`);
+
+  // 5. Input text & status info di halaman Setelan
+  const inp = $('sNamaKeuangan');
+  if (inp && document.activeElement !== inp) {
+    inp.value = kustom;
+  }
+  const info = $('infoNamaKeuangan');
+  if (info) {
+    info.textContent = kustom ? `Nama aktif: "${judul}" (tersimpan otomatis).` : 'Menggunakan nama bawaan "Catatan Keuangan".';
   }
 }
 
@@ -8797,6 +8871,7 @@ function terapkanTampilan() {
   perbaruiKoleksiGaya();
   perbaruiGerakGaya();
   perbaruiWarnaBrowser();
+  perbaruiNamaKeuangan();
 }
 
 function kompresBg(file) {
@@ -8897,6 +8972,36 @@ $('btnBgHapus').onclick = () => {
   terapkanTampilan();
   $('bgStatus').textContent = 'Latar dihapus.';
 };
+
+if ($('sNamaKeuangan')) {
+  $('sNamaKeuangan').oninput = e => {
+    const val = e.target.value.slice(0, 40);
+    tampilan.namaKeuangan = val;
+    simpanTampilan();
+    perbaruiNamaKeuangan();
+  };
+}
+
+if ($('btnResetNamaKeuangan')) {
+  $('btnResetNamaKeuangan').onclick = () => {
+    tampilan.namaKeuangan = '';
+    simpanTampilan();
+    perbaruiNamaKeuangan();
+    if ($('sNamaKeuangan')) $('sNamaKeuangan').value = '';
+    beriPesan('Nama keuangan dikembalikan ke default.');
+  };
+}
+
+document.querySelectorAll('.btn-saran-nama').forEach(btn => {
+  btn.onclick = () => {
+    const saran = btn.dataset.nama || '';
+    tampilan.namaKeuangan = saran === 'Catatan Keuangan' ? '' : saran;
+    simpanTampilan();
+    perbaruiNamaKeuangan();
+    if ($('sNamaKeuangan')) $('sNamaKeuangan').value = tampilan.namaKeuangan;
+    beriPesan('Nama keuangan diubah menjadi "' + namaKeuanganTampil() + '".');
+  };
+});
 
 terapkanTampilan();
 if (tampilan.gaya === 'orbit') setTimeout(putarIntroOrbit, 100);
@@ -10102,7 +10207,7 @@ function hiasJudulRuang(){
   document.querySelectorAll('.card > h2,.chart-heading > h2').forEach(h=>{
     if(h.dataset.ruangHeading||h.id||h.closest('dialog'))return;
     const teks=h.textContent.toLowerCase();
-    const jenis=/grafik|kategori|bulanan|perbandingan|saldo|bandingkan/.test(teks)?'chart':/target|tabungan/.test(teks)?'sprout':/catatan tempel|memo/.test(teks)?'notes':/anggaran/.test(teks)?'target':/berulang|pengingat/.test(teks)?'repeat':/backup|drive|data/.test(teks)?'backup':/tampilan/.test(teks)?'palette':/riwayat|struk/.test(teks)?'receipt':'pen';
+    const jenis=/grafik|kategori|bulanan|perbandingan|saldo|bandingkan/.test(teks)?'chart':/target|tabungan/.test(teks)?'sprout':/catatan tempel|memo/.test(teks)?'notes':/anggaran/.test(teks)?'target':/berulang|pengingat/.test(teks)?'repeat':/backup|drive|data/.test(teks)?'backup':/nama|ruang|identitas/.test(teks)?'wallet':/tampilan/.test(teks)?'palette':/riwayat|struk/.test(teks)?'receipt':'pen';
     const simbol=document.createElement('span');simbol.className='ui-icon ui-card-title-icon';simbol.setAttribute('aria-hidden','true');simbol.innerHTML=ikonRuang(jenis);h.prepend(simbol);h.classList.add('ui-card-heading');h.dataset.ruangHeading='1';
   });
 }
@@ -12201,7 +12306,7 @@ function jawabFinansialLokal(pertanyaan, context) {
   const isTanyaIdentitas = /\b(siapa\s*(?:sih\s*)?(?:kamu|anda|dirimu|lu|bot)|kamu\s*siapa|nama\s*kamu|kenalan|perkenalkan)\b/i.test(q);
   if (isTanyaIdentitas) {
     return {
-      reply: '👋 Halo! Saya **Asisten Keuangan AI** pribadimu di aplikasi Catatan Keuangan.\n\n' +
+      reply: '👋 Halo! Saya **Asisten Keuangan AI** pribadimu di ' + namaKeuanganTampil() + '.\n\n' +
         'Saya memiliki akses langsung ke catatan keuanganmu untuk membantumu memantau kondisi finansial secara privat dan instan di perangkat ini:\n' +
         '• 💰 Memeriksa total saldo, uang tunai, dan rekening / e-wallet\n' +
         '• 📉 Menganalisis pengeluaran dan kategori paling boros (30 hari)\n' +
@@ -12956,7 +13061,7 @@ async function tanyaGeminiLangsung(apiKey, message, history, context) {
     ? context.recurring.map(r => `${r.name} (${r.type}, ${r.period}): ${rp(r.amount)} [kategori ${r.category}]`).join('; ')
     : 'Belum ada transaksi berulang';
 
-  const systemInstruction = 'Kamu adalah Asisten AI pribadi yang ramah, santun, cerdas, dan bijak di aplikasi Catatan Keuangan.\n\n' +
+  const systemInstruction = 'Kamu adalah Asisten AI pribadi yang ramah, santun, cerdas, dan bijak di ' + namaKeuanganTampil() + '.\n\n' +
     'Data ringkasan keuangan pengguna saat ini:\n' +
     '• Total Saldo: ' + rp(context.balance) + ' (Kas Tunai: ' + rp(context.cashBalance) + ')\n' +
     '• Dompet / Rekening: ' + walletsStr + '\n' +

@@ -729,4 +729,54 @@ const noteCustomInBackup = backupWithCustom.notes.find(n => n.warna === '#9b5de5
 assert.ok(noteCustomInBackup, 'Catatan dengan warna hex kustom harus ada di objek backup');
 assert.equal(noteCustomInBackup.judul, 'Catatan Warna Custom Neon');
 
-console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, Edit Relatif Transaksi, Sticky Notes Realistis, Custom Color Picker, dan Backup/Restore BERHASIL!');
+// Test 25: Custom Finance Name & Branding Setting
+console.log('Testing Custom Finance Name (Kustomisasi Nama Keuangan) & Branding...');
+assert.equal(run('namaKeuanganTampil()'), 'Catatan Keuangan', 'Default nama keuangan harus Catatan Keuangan');
+
+// Ubah nama keuangan kustom menjadi "Keuangan Roy"
+run(`
+tampilan.namaKeuangan = 'Keuangan Roy';
+simpanTampilan();
+perbaruiNamaKeuangan();
+`);
+
+assert.equal(run('ambilNamaKeuangan()'), 'Keuangan Roy', 'Nama keuangan kustom harus terbaca');
+assert.equal(run('namaKeuanganTampil()'), 'Keuangan Roy', 'Nama tampilan harus Keuangan Roy');
+assert.equal(run("$('appHeaderTitle')?.textContent"), 'Keuangan Roy', 'Header h1 harus menampilkan Keuangan Roy');
+assert.equal(run("$('uiSidebarCaption')?.textContent"), 'Ruang Keuangan Roy', 'Sidebar caption harus terupdate');
+assert.ok(run("document.title.includes('Keuangan Roy')"), 'Document title harus menyertakan nama kustom');
+
+// Test tombol reset nama kembali ke default
+run(`$('btnResetNamaKeuangan')?.onclick?.()`);
+assert.equal(run('ambilNamaKeuangan()'), '', 'Nama kustom harus kosong setelah reset');
+assert.equal(run('namaKeuanganTampil()'), 'Catatan Keuangan', 'Nama tampilan harus kembali ke default');
+assert.equal(run("$('appHeaderTitle')?.textContent"), 'Catatan Keuangan', 'Header h1 harus kembali ke Catatan Keuangan');
+
+// Test saran cepat nama
+run(`
+tampilan.namaKeuangan = 'Keuangan Keluarga';
+simpanTampilan();
+perbaruiNamaKeuangan();
+`);
+assert.equal(run('namaKeuanganTampil()'), 'Keuangan Keluarga', 'Saran nama kustom Keuangan Keluarga harus aktif');
+
+// Test persistensi backup dan import restore
+const backupCustomName = run('buatBackupObjek()');
+assert.equal(backupCustomName.tampilan?.namaKeuangan, 'Keuangan Keluarga', 'Nama kustom harus masuk ke objek backup');
+
+run(`
+tampilan.namaKeuangan = '';
+simpanTampilan();
+terapkanTampilan();
+`);
+assert.equal(run('namaKeuanganTampil()'), 'Catatan Keuangan', 'Harus reset sebelum restore');
+
+run(`
+importLedgerDraft = { raw: ${JSON.stringify(backupCustomName)}, data: validasiBackupLedger(${JSON.stringify(backupCustomName)}) };
+$('ledgerImportMode').value = 'pulihkan';
+terapkanImportLedger();
+$('btnWalletConfirmYes')?.onclick?.();
+`);
+assert.equal(run('namaKeuanganTampil()'), 'Keuangan Keluarga', 'Nama keuangan kustom harus berhasil dipulihkan dari backup');
+
+console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi, Edit Relatif Transaksi, Sticky Notes Realistis, Custom Color Picker, Custom Finance Name, dan Backup/Restore BERHASIL!');
