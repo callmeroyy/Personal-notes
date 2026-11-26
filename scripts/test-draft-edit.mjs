@@ -970,4 +970,42 @@ assert.ok(paginationRes.totalTerlihat > 50, 'Total transaksi terfilter harus > 5
 assert.equal(paginationRes.renderedCount, 51, 'DOM harus merender maksimal 50 baris + 1 tombol Muat lebih banyak');
 assert.match(paginationRes.lastText, /Muat lebih banyak/i, 'Tombol Muat lebih banyak harus muncul');
 
-console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi PBKDF2, Edit Relatif Transaksi, Sticky Notes Realistis, Custom Color Picker, Custom Finance Name, Pengetahuan Fitur AI, Safe Math/Markdown, Paginasi, Media Cache, dan Backup/Restore BERHASIL!');
+// Test 28: Kalender Cashflow (Integrasi Grafik & Variasi BG per Gaya)
+console.log('Testing Cashflow Calendar integration and bg-v* assignment...');
+assert.equal(run("angkaRingkasKalender(1500000)"), '1,5jt', 'Format ringkas jutaan harus 1,5jt');
+assert.equal(run("angkaRingkasKalender(45000)"), '45rb', 'Format ringkas ribuan harus 45rb');
+
+const calRes = run(`
+  (() => {
+    const tgl = hariIni();
+    calTahun = Number(tgl.slice(0, 4));
+    calBulan = Number(tgl.slice(5, 7)) - 1;
+    calTanggalDipilih = tgl;
+    calMode = 'semua';
+
+    const gridChildren = [];
+    const calGridEl = $('calGrid');
+    const origReplace = calGridEl.replaceChildren;
+    const origAppend = calGridEl.appendChild;
+    calGridEl.replaceChildren = (...a) => { gridChildren.length = 0; gridChildren.push(...a); };
+    calGridEl.appendChild = n => { gridChildren.push(n); };
+
+    renderKalenderCashflow();
+
+    calGridEl.replaceChildren = origReplace;
+    calGridEl.appendChild = origAppend;
+
+    const dayButtons = gridChildren.filter(n => n && n.tagName === 'BUTTON');
+    return {
+      dayCount: dayButtons.length,
+      title: $('calMonthTitle').textContent,
+      detailTitle: $('calDetailTitle').textContent,
+      detailSub: $('calDetailSub').textContent
+    };
+  })()
+`);
+assert.ok(calRes.dayCount >= 28 && calRes.dayCount <= 31, 'Kalender harus merender 28-31 tombol tanggal');
+assert.ok(calRes.title.length > 4, 'Judul bulan kalender harus terisi');
+assert.match(calRes.detailSub, /Masuk Rp .*Keluar Rp /i, 'Ringkasan tanggal terpilih harus menampilkan Masuk dan Keluar');
+
+console.log('Semua pengujian unit draf AI, multi-item, keranjang gabungan, E-wallet DANA, Target Tabungan, Transaksi Berulang, Dompet PayLater, Enkripsi Backup, Kunci Aplikasi PBKDF2, Edit Relatif Transaksi, Sticky Notes Realistis, Custom Color Picker, Custom Finance Name, Pengetahuan Fitur AI, Safe Math/Markdown, Paginasi, Media Cache, Kalender Cashflow, dan Backup/Restore BERHASIL!');

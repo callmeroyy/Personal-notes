@@ -2482,6 +2482,219 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
       transform: none !important;
     }
   }
+  /* ===== KALENDER CASHFLOW & VARIASI BG PER GAYA (23 TEMA) ===== */
+  :root {
+    --cal-pill-bg: rgba(255,255,255,.86);
+    --bv0: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+    --bv1: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    --bv2: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    --bv3: linear-gradient(160deg, #f8fafc 0%, #e2e8f0 100%);
+  }
+  [data-tema="gelap"] {
+    --cal-pill-bg: rgba(15,23,42,.74);
+    --bv0: linear-gradient(135deg, rgba(244,63,94,.26), rgba(225,29,72,.38));
+    --bv1: linear-gradient(135deg, rgba(34,197,94,.20), rgba(22,163,74,.32));
+    --bv2: linear-gradient(135deg, rgba(99,102,241,.24), rgba(79,70,229,.34));
+    --bv3: linear-gradient(160deg, rgba(148,163,184,.14), rgba(100,116,139,.24));
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-tema="terang"]) {
+      --cal-pill-bg: rgba(15,23,42,.74);
+      --bv0: linear-gradient(135deg, rgba(244,63,94,.26), rgba(225,29,72,.38));
+      --bv1: linear-gradient(135deg, rgba(34,197,94,.20), rgba(22,163,74,.32));
+      --bv2: linear-gradient(135deg, rgba(99,102,241,.24), rgba(79,70,229,.34));
+      --bv3: linear-gradient(160deg, rgba(148,163,184,.14), rgba(100,116,139,.24));
+    }
+  }
+  [data-gaya="ruangide"] {
+    --bv0: linear-gradient(135deg, #f3e8d2 0%, #ead7b7 100%);
+    --bv1: linear-gradient(135deg, #e3ecd9 0%, #cfdfc0 100%);
+    --bv2: repeating-linear-gradient(0deg, #faf6eb, #faf6eb 11px, #e6dec8 12px);
+    --bv3: linear-gradient(160deg, #f6efe0 0%, #e9e4d0 100%);
+  }
+  [data-gaya="midnight"] {
+    --cal-pill-bg: rgba(15,17,23,.76);
+    --bv0: linear-gradient(135deg, #2d2414 0%, #4b3919 100%);
+    --bv1: linear-gradient(135deg, #162a23 0%, #1f3d31 100%);
+    --bv2: linear-gradient(155deg, #232836 0%, #31291d 100%);
+    --bv3: radial-gradient(circle at top right, rgba(212,175,55,.28), #1b202b 75%);
+  }
+  [data-gaya="matcha"] {
+    --bv0: linear-gradient(135deg, #dce8cf 0%, #c5d9b0 100%);
+    --bv1: linear-gradient(135deg, #e7f2dc 0%, #d4e8c1 100%);
+    --bv2: repeating-linear-gradient(-45deg, #f3f7ec, #f3f7ec 8px, #e6efda 8px, #e6efda 16px);
+    --bv3: linear-gradient(160deg, #eef4e6 0%, #dde8cf 100%);
+  }
+  [data-gaya="aurora"] {
+    --bv0: linear-gradient(135deg, rgba(244,63,94,.24), rgba(196,161,241,.28));
+    --bv1: linear-gradient(135deg, rgba(128,237,206,.34), rgba(165,219,225,.28));
+    --bv2: linear-gradient(145deg, rgba(196,161,241,.30), rgba(128,237,206,.24));
+    --bv3: radial-gradient(circle at top left, rgba(128,237,206,.24), rgba(196,161,241,.16));
+  }
+  [data-gaya="arcade"] {
+    --cal-pill-bg: rgba(14,16,32,.78);
+    --bv0: linear-gradient(135deg, rgba(244,63,94,.32), rgba(168,85,247,.34));
+    --bv1: linear-gradient(135deg, rgba(6,182,212,.26), rgba(34,197,94,.26));
+    --bv2: repeating-linear-gradient(0deg, rgba(34,211,238,.12), rgba(34,211,238,.12) 4px, rgba(168,85,247,.16) 5px);
+    --bv3: linear-gradient(160deg, rgba(251,146,60,.22), rgba(236,72,153,.22));
+  }
+  [data-gaya="botanica"] {
+    --bv0: linear-gradient(135deg, #e4eed8 0%, #cddfc0 100%);
+    --bv1: linear-gradient(135deg, #d8efe2 0%, #bce0cc 100%);
+    --bv2: radial-gradient(circle at bottom right, #cfe2c3, #f3f7ef 78%);
+    --bv3: linear-gradient(160deg, #eef4ea 0%, #dce7d5 100%);
+  }
+  [data-gaya="atelier"] {
+    --bv0: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+    --bv1: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    --bv2: repeating-linear-gradient(90deg, #f1f5f9, #f1f5f9 10px, #e2e8f0 10px, #e2e8f0 11px);
+    --bv3: linear-gradient(155deg, #eff6ff 0%, #dbeafe 100%);
+  }
+  [data-gaya="latte"] {
+    --bv0: linear-gradient(135deg, #f3dfc9 0%, #e4c4a2 100%);
+    --bv1: linear-gradient(135deg, #e9edd9 0%, #d5dec0 100%);
+    --bv2: radial-gradient(circle at top right, #edd7bc, #fbf5ec 78%);
+    --bv3: linear-gradient(160deg, #f8efe2 0%, #ebd9c3 100%);
+  }
+  [data-gaya="orbit"] {
+    --cal-pill-bg: rgba(19,17,38,.76);
+    --bv0: linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%);
+    --bv1: linear-gradient(135deg, #1e3a5f 0%, #0f766e 100%);
+    --bv2: radial-gradient(circle at top right, rgba(168,85,247,.38), #231d42 75%);
+    --bv3: linear-gradient(160deg, #2b2450 0%, #3b2d70 100%);
+  }
+  [data-gaya="sakura"] {
+    --bv0: linear-gradient(135deg, #ffd6e0 0%, #ffb3c6 100%);
+    --bv1: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
+    --bv2: radial-gradient(circle at bottom right, #ffc8dd, #fff0f5 75%);
+    --bv3: linear-gradient(155deg, #fff0f3 0%, #ffdde6 100%);
+  }
+  [data-gaya="ocean"] {
+    --bv0: linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%);
+    --bv1: linear-gradient(135deg, #ccfbf1 0%, #99f6e4 100%);
+    --bv2: linear-gradient(180deg, #e0f2fe 0%, #bae6fd 100%);
+    --bv3: radial-gradient(circle at top left, #e0f7fa, #b2ebf2 80%);
+  }
+  [data-gaya="glass"] {
+    --bv0: linear-gradient(135deg, rgba(254,205,211,.78), rgba(253,164,175,.65));
+    --bv1: linear-gradient(135deg, rgba(187,247,208,.78), rgba(134,239,172,.65));
+    --bv2: linear-gradient(135deg, rgba(191,219,254,.78), rgba(196,181,253,.70));
+    --bv3: linear-gradient(135deg, rgba(255,255,255,.88), rgba(224,231,255,.72));
+  }
+  [data-gaya="biasa"] {
+    --bv0: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+    --bv1: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    --bv2: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    --bv3: linear-gradient(160deg, #f8fafc 0%, #e2e8f0 100%);
+  }
+  [data-gaya="berwarna"] {
+    --bv0: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    --bv1: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    --bv2: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    --bv3: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+  }
+  [data-gaya="neo"] {
+    --bv0: #ff8fab; --bv1: #80ed99; --bv2: #72efdd; --bv3: #ffd166;
+  }
+  [data-gaya="blok"] {
+    --bv0: linear-gradient(180deg, #6ab04c 0%, #6ab04c 26%, #d4b483 26%, #c49e68 100%);
+    --bv1: linear-gradient(180deg, #55a630 0%, #55a630 26%, #e6dfcc 26%, #d9d0b8 100%);
+    --bv2: linear-gradient(135deg, #cde4f5 0%, #a9d0ec 100%);
+    --bv3: linear-gradient(135deg, #e3dac9 0%, #cfc2aa 100%);
+  }
+  [data-gaya="blok"] .cal-day.bg-v0 .cal-day-top,
+  [data-gaya="blok"] .cal-day.bg-v1 .cal-day-top {
+    color: #ffffff; text-shadow: 0 1px 0 rgba(0,0,0,.45);
+  }
+  [data-gaya="blok"] .cal-day.bg-v0 .cal-day-cnt,
+  [data-gaya="blok"] .cal-day.bg-v1 .cal-day-cnt { color: #f4f1ea; }
+  [data-gaya="material"] {
+    --bv0: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+    --bv1: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    --bv2: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    --bv3: linear-gradient(155deg, #f3e8ff 0%, #e9d5ff 100%);
+  }
+  [data-gaya="soft"] {
+    --bv0: linear-gradient(145deg, #fde8ec, #f7d5dc);
+    --bv1: linear-gradient(145deg, #e2f5ea, #cdebd9);
+    --bv2: linear-gradient(145deg, #e6ecf7, #d5dfef);
+    --bv3: linear-gradient(145deg, #f4f6fb, #e5eaf3);
+  }
+  [data-gaya="retro"] {
+    --cal-pill-bg: rgba(5,10,5,.82);
+    --bv0: repeating-linear-gradient(0deg, #0b1f0b, #0b1f0b 3px, #123312 4px);
+    --bv1: linear-gradient(135deg, #062912 0%, #0b421d 100%);
+    --bv2: radial-gradient(circle at center, rgba(34,197,94,.24), #071207 80%);
+    --bv3: linear-gradient(180deg, #0a1b0a 0%, #102a10 100%);
+  }
+  [data-gaya="paper"] {
+    --bv0: repeating-linear-gradient(0deg, #fdf3de, #fdf3de 11px, #e4cfb0 12px);
+    --bv1: linear-gradient(135deg, #f3e9d2 0%, #e5d8b8 100%);
+    --bv2: linear-gradient(155deg, #fff8e7 0%, #f1dfc0 100%);
+    --bv3: radial-gradient(circle at bottom right, #ead4b0, #fcf5e5 75%);
+  }
+  [data-gaya="flat"] {
+    --bv0: #ffe4e6; --bv1: #dcfce7; --bv2: #e0e7ff; --bv3: #f1f5f9;
+  }
+  [data-gaya="pop"] {
+    --bv0: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+    --bv1: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    --bv2: linear-gradient(135deg, #fae8ff 0%, #f3d0ff 100%);
+    --bv3: linear-gradient(160deg, #fef3c7 0%, #fde68a 100%);
+  }
+  [data-gaya="spider"] {
+    --cal-pill-bg: rgba(28,22,34,.80);
+    --bv0: linear-gradient(135deg, #6b102d 0%, #9f1239 100%);
+    --bv1: linear-gradient(135deg, #1b3831 0%, #244a40 100%);
+    --bv2: linear-gradient(150deg, #3b1c47 0%, #581c45 100%);
+    --bv3: radial-gradient(circle at top right, rgba(225,29,72,.30), #2b1f33 78%);
+  }
+
+  .cal-head { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+  .cal-nav { display:flex; align-items:center; gap:6px; }
+  .cal-nav button { width:34px; height:34px; min-height:34px; padding:0; margin:0; border-radius:10px; }
+  .cal-month-title { font-size:14px; font-weight:700; min-width:118px; text-align:center; }
+  .cal-modes { display:inline-flex; gap:4px; }
+  .cal-modes button { width:auto; margin:0; padding:6px 10px; min-height:auto; font-size:12px; }
+  .cal-modes button[aria-pressed="true"] { background:var(--pri); color:#fff; }
+  .cal-weekdays { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:4px; }
+  .cal-weekdays span { text-align:center; font-size:11px; font-weight:700; color:var(--muted); padding:2px 0; }
+  .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .cal-empty { min-height:58px; }
+  .cal-day {
+    min-height:58px; width:100%; margin:0; padding:5px 4px; border-radius:10px;
+    border:1px solid var(--line); background:var(--input); color:var(--ink);
+    box-shadow:none; display:flex; flex-direction:column; justify-content:space-between;
+    align-items:stretch; text-align:left; font-weight:500; cursor:pointer;
+  }
+  .cal-day.is-selected { outline:2px solid var(--pri); outline-offset:1px; }
+  .cal-day.is-today .cal-day-num { background:var(--pri); color:#fff; border-radius:999px; padding:1px 5px; }
+  .cal-day.bg-v0 { background:var(--bv0); }
+  .cal-day.bg-v1 { background:var(--bv1); }
+  .cal-day.bg-v2 { background:var(--bv2); }
+  .cal-day.bg-v3 { background:var(--bv3); }
+  .cal-day-top { display:flex; justify-content:space-between; align-items:center; gap:2px; }
+  .cal-day-num { font-size:11.5px; font-weight:700; line-height:1.25; }
+  .cal-day-cnt { font-size:9.5px; color:var(--muted); font-weight:700; }
+  .cal-day-vals { display:flex; flex-direction:column; gap:1px; margin-top:3px; }
+  .cal-vin, .cal-vout {
+    font-size:9px; font-weight:700; line-height:1.15; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .cal-vin { color:var(--ok); }
+  .cal-vout { color:var(--bad); }
+  .cal-day.bg-v0 .cal-vin, .cal-day.bg-v1 .cal-vin, .cal-day.bg-v2 .cal-vin, .cal-day.bg-v3 .cal-vin,
+  .cal-day.bg-v0 .cal-vout, .cal-day.bg-v1 .cal-vout, .cal-day.bg-v2 .cal-vout, .cal-day.bg-v3 .cal-vout {
+    background:var(--cal-pill-bg); padding:1px 3px; border-radius:4px; width:fit-content; max-width:100%;
+  }
+  .cal-legend { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-top:10px; padding-top:8px; border-top:1px dashed var(--line); font-size:11.5px; color:var(--muted); }
+  .cal-scale { display:flex; align-items:center; gap:4px; }
+  .cal-scale .sw { width:12px; height:12px; border-radius:3px; border:1px solid var(--line); display:inline-block; }
+  .cal-detail { margin-top:12px; padding-top:12px; border-top:1px solid var(--line); }
+  .cal-detail-head { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+  .cal-detail-head h3 { margin:0; font-size:14px; }
+  .cal-detail-list { display:flex; flex-direction:column; gap:6px; }
+  .cal-trx { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:var(--input); border:1px solid var(--line); font-size:13px; }
+  @media (max-width:420px) { .cal-day, .cal-empty { min-height:52px; padding:4px 3px; } .cal-vin, .cal-vout { font-size:8.5px; } }
 </style>
 
 <style>
@@ -3839,6 +4052,37 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     <h2>Uang masuk &amp; keluar</h2><p class="sub" id="gFlowInfo"></p>
     <div class="legend chart-legend"><span class="sw" style="background:var(--ok)"></span>Pemasukan <span class="sw" style="background:var(--bad)"></span>Pengeluaran</div>
     <div class="svgbox chart-plot" id="chart7"></div><details class="chart-data"><summary>Lihat angka grafik</summary><div id="gFlowData"></div></details>
+  </div>
+  <div class="card" id="cardKalenderCashflow">
+    <h2>Kalender cashflow</h2>
+    <div class="cal-head">
+      <div class="cal-nav">
+        <button type="button" class="ghost kecil" id="calPrevMonth" aria-label="Bulan sebelumnya">&lsaquo;</button>
+        <span class="cal-month-title" id="calMonthTitle"></span>
+        <button type="button" class="ghost kecil" id="calNextMonth" aria-label="Bulan berikutnya">&rsaquo;</button>
+      </div>
+      <div class="cal-modes" role="group" aria-label="Mode tampilan kalender cashflow">
+        <button type="button" class="ghost kecil" id="calModeSemua" aria-pressed="true">Semua</button>
+        <button type="button" class="ghost kecil" id="calModeKeluar" aria-pressed="false">Keluar</button>
+        <button type="button" class="ghost kecil" id="calModeMasuk" aria-pressed="false">Masuk</button>
+      </div>
+    </div>
+    <div class="cal-weekdays" aria-hidden="true"><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span></div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-legend">
+      <div class="cal-scale" id="calLegendScale"></div>
+      <span id="calLegendLabel">Ketuk tanggal untuk rincian</span>
+    </div>
+    <div class="cal-detail" id="calDetailBox">
+      <div class="cal-detail-head">
+        <div>
+          <h3 id="calDetailTitle">Pilih tanggal</h3>
+          <div class="muted" id="calDetailSub" style="font-size:12px"></div>
+        </div>
+        <button type="button" class="kecil" id="calBtnCatatTgl">+ Catat di tanggal ini</button>
+      </div>
+      <div class="cal-detail-list" id="calDetailList"></div>
+    </div>
   </div>
   <div class="card">
     <div class="chart-heading"><h2>Pengeluaran per kategori</h2><div class="chart-view" role="group" aria-label="Tampilan grafik kategori"><button type="button" class="ghost kecil" id="btnGDonut" aria-pressed="true">Lingkaran</button><button type="button" class="ghost kecil" id="btnGBar" aria-pressed="false">Batang</button></div></div>
@@ -7922,7 +8166,150 @@ function renderGrafik() {
   gambarSaldoGrafik(dataSaldoGrafik(r.mulai,r.akhir,dataGrafikAman({laporan:false}).list,transfer));
   const monthStart=tambahBulan(r.akhir.slice(0,7)+'-01',-5),monthList=r.list.filter(t=>t.tanggal>=monthStart),months=kumpulkanGrafik(monthList,monthStart,r.akhir,true).groups;gambarBatangGrafik('gMonthChart',months,'Perbandingan pemasukan dan pengeluaran per bulan');tabelGrafik('gMonthData',['Bulan','Masuk','Keluar'],months.map(d=>[d.label,rp(d.m),rp(d.k)]));
   gambarPeringkatGrafik('gPaymentChart',entriGrafik(r.list,t=>t.cara==='tunai'||t.tunai?'Tunai':t.dompetId?namaDompet(t.dompetId):'Non-tunai tanpa dompet'));
+  renderKalenderCashflow();
 }
+
+// ===== KALENDER CASHFLOW (VARIASI BG PER GAYA TEMA) =====
+let calTahun = Number(hariIni().slice(0, 4));
+let calBulan = Number(hariIni().slice(5, 7)) - 1;
+let calMode = 'semua';
+let calTanggalDipilih = hariIni();
+
+function angkaRingkasKalender(n) {
+  const a = Math.abs(n || 0);
+  if (a >= 1e6) return (a / 1e6).toFixed(a % 1e6 === 0 ? 0 : 1).replace('.', ',') + 'jt';
+  if (a >= 1e3) return Math.round(a / 1e3) + 'rb';
+  return String(Math.round(a));
+}
+
+function renderKalenderCashflow() {
+  const grid = $('calGrid');
+  if (!grid) return;
+  const namaBulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const namaHari = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const prefix = calTahun + '-' + String(calBulan + 1).padStart(2, '0') + '-';
+  const today = hariIni();
+  const list = dataGrafikAman().list.filter(t => t.tanggal.startsWith(prefix));
+
+  $('calMonthTitle').textContent = namaBulan[calBulan] + ' ' + calTahun;
+
+  const byDate = new Map();
+  for (const t of list) {
+    if (!byDate.has(t.tanggal)) byDate.set(t.tanggal, { masuk: 0, keluar: 0, items: [] });
+    const entry = byDate.get(t.tanggal);
+    if (t.tipe === 'masuk') entry.masuk += t.total;
+    else entry.keluar += t.total;
+    entry.items.push(t);
+  }
+
+  let worstTgl = '';
+  let worstVal = 0;
+  let maxMasuk = 1;
+  for (const [k, v] of byDate.entries()) {
+    if (v.keluar > worstVal) { worstVal = v.keluar; worstTgl = k; }
+    if (v.masuk > maxMasuk) maxMasuk = v.masuk;
+  }
+
+  grid.replaceChildren();
+  const firstDay = new Date(calTahun, calBulan, 1).getDay();
+  const offset = (firstDay + 6) % 7;
+  const daysInMonth = new Date(calTahun, calBulan + 1, 0).getDate();
+
+  for (let i = 0; i < offset; i++) {
+    grid.appendChild(el('div', 'cal-empty'));
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const tgl = prefix + String(d).padStart(2, '0');
+    const info = byDate.get(tgl) || { masuk: 0, keluar: 0, items: [] };
+    const btn = el('button', 'cal-day');
+    btn.type = 'button';
+    if (tgl === calTanggalDipilih) btn.classList.add('is-selected');
+    if (tgl === today) btn.classList.add('is-today');
+
+    if (calMode === 'masuk') {
+      if (info.masuk > 0) btn.classList.add(info.masuk / maxMasuk > 0.6 ? 'bg-v1' : 'bg-v3');
+    } else {
+      if (tgl === worstTgl && worstVal > 0) btn.classList.add('bg-v0');
+      else if (info.masuk > 0) btn.classList.add('bg-v1');
+      else if (tgl === today) btn.classList.add('bg-v2');
+      else if (info.items.length >= 2 || (d % 10 === 0 && info.keluar > 0)) btn.classList.add('bg-v3');
+    }
+
+    btn.setAttribute('aria-label', `${d} ${namaBulan[calBulan]} ${calTahun}: Masuk ${rp(info.masuk)}, Keluar ${rp(info.keluar)}`);
+    btn.onclick = () => { calTanggalDipilih = tgl; renderKalenderCashflow(); };
+
+    const top = el('div', 'cal-day-top');
+    top.appendChild(el('span', 'cal-day-num', String(d)));
+    if (info.items.length) top.appendChild(el('span', 'cal-day-cnt', info.items.length + 'x'));
+
+    const vals = el('div', 'cal-day-vals');
+    if ((calMode === 'semua' || calMode === 'masuk') && info.masuk > 0) {
+      vals.appendChild(el('span', 'cal-vin', '+' + angkaRingkasKalender(info.masuk)));
+    }
+    if ((calMode === 'semua' || calMode === 'keluar') && info.keluar > 0) {
+      vals.appendChild(el('span', 'cal-vout', '-' + angkaRingkasKalender(info.keluar)));
+    }
+
+    btn.append(top, vals);
+    grid.appendChild(btn);
+  }
+
+  const scale = $('calLegendScale');
+  if (scale) {
+    scale.replaceChildren();
+    scale.appendChild(el('span', null, calMode === 'masuk' ? 'Sedikit' : 'Hemat'));
+    const vars = calMode === 'masuk' ? ['var(--bv3)', 'var(--bv1)'] : ['var(--bv3)', 'var(--bv2)', 'var(--bv1)', 'var(--bv0)'];
+    for (const v of vars) {
+      const sw = el('span', 'sw');
+      sw.style.background = v;
+      scale.appendChild(sw);
+    }
+    scale.appendChild(el('span', null, calMode === 'masuk' ? 'Besar' : 'Boros'));
+  }
+
+  if (!calTanggalDipilih || !calTanggalDipilih.startsWith(prefix)) {
+    calTanggalDipilih = today.startsWith(prefix) ? today : prefix + '01';
+  }
+  const [yy, mm, dd] = calTanggalDipilih.split('-').map(Number);
+  const dt = new Date(yy, mm - 1, dd);
+  $('calDetailTitle').textContent = namaHari[dt.getDay()] + ', ' + dd + ' ' + namaBulan[mm - 1] + ' ' + yy;
+  const detInfo = byDate.get(calTanggalDipilih) || { masuk: 0, keluar: 0, items: [] };
+  $('calDetailSub').textContent = 'Masuk ' + rp(detInfo.masuk) + ' · Keluar ' + rp(detInfo.keluar);
+
+  const detList = $('calDetailList');
+  detList.replaceChildren();
+  const filtered = detInfo.items.filter(it => calMode === 'semua' || it.tipe === calMode);
+  if (!filtered.length) {
+    detList.appendChild(el('p', 'kosong', 'Tidak ada catatan aktif pada tanggal ini.'));
+  } else {
+    for (const it of filtered) {
+      const row = el('div', 'cal-trx');
+      const left = el('div');
+      left.append(el('strong', null, it.judul), el('div', 'muted', it.kategori + ' · ' + (it.cara === 'tunai' || it.tunai ? 'Tunai' : (it.dompetId ? namaDompet(it.dompetId) : 'Non-tunai'))));
+      const amt = el('b', it.tipe === 'masuk' ? 'hijau' : 'merah', (it.tipe === 'masuk' ? '+' : '-') + rp(it.total));
+      row.append(left, amt);
+      detList.appendChild(row);
+    }
+  }
+}
+
+$('calPrevMonth').onclick = () => { calBulan--; if (calBulan < 0) { calBulan = 11; calTahun--; } renderKalenderCashflow(); };
+$('calNextMonth').onclick = () => { calBulan++; if (calBulan > 11) { calBulan = 0; calTahun++; } renderKalenderCashflow(); };
+[['calModeSemua','semua'],['calModeKeluar','keluar'],['calModeMasuk','masuk']].forEach(([id, m]) => {
+  $(id).onclick = () => {
+    calMode = m;
+    ['calModeSemua','calModeKeluar','calModeMasuk'].forEach(bid => $(bid).setAttribute('aria-pressed', String(bid === id)));
+    renderKalenderCashflow();
+  };
+});
+$('calBtnCatatTgl').onclick = () => {
+  const tgl = calTanggalDipilih || hariIni();
+  goto('catat');
+  $('tgl').value = tgl;
+  simpanDrafCatat();
+  beriPesan('Tanggal catat diatur ke ' + tglIndo(tgl));
+};
 function modeKategoriGrafik(batang) { $('donut').hidden=batang;$('legendDonut').hidden=batang;$('gCategoryBars').hidden=!batang;$('btnGBar').setAttribute('aria-pressed',String(batang));$('btnGDonut').setAttribute('aria-pressed',String(!batang)); }
 $('btnGBar').onclick=()=>modeKategoriGrafik(true);$('btnGDonut').onclick=()=>modeKategoriGrafik(false);$('gRentang').onchange=()=>aturRentangGrafik($('gRentang').value);
 function renderCompare() {
