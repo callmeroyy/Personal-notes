@@ -1976,7 +1976,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   html#financeApp[data-ui="ruang"][data-gaya] :is(input,select,textarea):focus{outline:2px solid var(--ui-accent);outline-offset:2px;box-shadow:none !important}
   html#financeApp[data-ui="ruang"][data-gaya] :is(button,summary,a):focus-visible{outline:2px solid var(--ui-accent);outline-offset:3px;box-shadow:none !important}
   html#financeApp[data-ui="ruang"][data-gaya] input:is([type="checkbox"],[type="radio"]){accent-color:var(--ui-accent)}
-  html#financeApp[data-ui="ruang"][data-gaya] button:where(:not(.tab):not(.nav-plus):not(.ui-side-link):not(.ui-help):not(.style-choice):not(.provider-choice):not(.money-tab):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn)){background:var(--ui-cta) !important;color:var(--ui-on-cta) !important;border-radius:var(--ui-control-r) !important;box-shadow:none !important;font-size:14px;font-weight:600;min-height:43px;line-height:1.5;letter-spacing:0}
+  html#financeApp[data-ui="ruang"][data-gaya] button:where(:not(.tab):not(.nav-plus):not(.ui-side-link):not(.ui-help):not(.style-choice):not(.provider-choice):not(.money-tab):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn):not(.cal-day)){background:var(--ui-cta) !important;color:var(--ui-on-cta) !important;border-radius:var(--ui-control-r) !important;box-shadow:none !important;font-size:14px;font-weight:600;min-height:43px;line-height:1.5;letter-spacing:0}
   html#financeApp[data-ui="ruang"][data-gaya] button:not(.tab):not(.nav-plus):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn):is(.ghost,.sec){background:var(--ui-soft) !important;color:var(--ui-ink) !important}
   html#financeApp[data-ui="ruang"][data-gaya] button:not(.tab):not(.note-palette-btn):not(.note-filter-chip):not(.note-action-btn).del{background:var(--delbg) !important;color:var(--delink) !important}
   html#financeApp[data-ui="ruang"][data-gaya] button.kecil:not(.note-action-btn){font-size:12px !important;min-height:36px;padding:8px 11px !important}
@@ -2292,7 +2292,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     html#financeApp[data-ui="ruang"] #homeMoney{padding:25px}
     html#financeApp[data-ui="ruang"][data-active-page="grafik"] #grafik{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
     html#financeApp[data-ui="ruang"] #grafik>.card{margin-bottom:0}
-    html#financeApp[data-ui="ruang"] #grafik>.chart-filter,html#financeApp[data-ui="ruang"] #gExtraCharts{grid-column:1/-1}
+    html#financeApp[data-ui="ruang"] #grafik>.chart-filter,html#financeApp[data-ui="ruang"] #gExtraCharts,html#financeApp[data-ui="ruang"] #cardKalenderCashflow{grid-column:1/-1}
     html#financeApp[data-ui="ruang"] #catat{max-width:760px;margin:0 auto}
     html#financeApp[data-ui="ruang"] :is(#beranda,#riwayat,#grafik,#setelan,#data),
     :is(#beranda,#riwayat,#grafik,#setelan,#data){max-width:1040px !important;margin:0 auto}
@@ -2490,7 +2490,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     --bv2: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
     --bv3: linear-gradient(160deg, #f8fafc 0%, #e2e8f0 100%);
   }
-  [data-tema="gelap"] {
+  [data-tema="dark"] {
     --cal-pill-bg: rgba(15,23,42,.74);
     --bv0: linear-gradient(135deg, rgba(244,63,94,.26), rgba(225,29,72,.38));
     --bv1: linear-gradient(135deg, rgba(34,197,94,.20), rgba(22,163,74,.32));
@@ -2498,7 +2498,7 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     --bv3: linear-gradient(160deg, rgba(148,163,184,.14), rgba(100,116,139,.24));
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-tema="terang"]) {
+    :root:not([data-tema="light"]) {
       --cal-pill-bg: rgba(15,23,42,.74);
       --bv0: linear-gradient(135deg, rgba(244,63,94,.26), rgba(225,29,72,.38));
       --bv1: linear-gradient(135deg, rgba(34,197,94,.20), rgba(22,163,74,.32));
@@ -2513,11 +2513,28 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     --bv3: linear-gradient(160deg, #f6efe0 0%, #e9e4d0 100%);
   }
   [data-gaya="midnight"] {
-    --cal-pill-bg: rgba(15,17,23,.76);
-    --bv0: linear-gradient(135deg, #2d2414 0%, #4b3919 100%);
-    --bv1: linear-gradient(135deg, #162a23 0%, #1f3d31 100%);
-    --bv2: linear-gradient(155deg, #232836 0%, #31291d 100%);
-    --bv3: radial-gradient(circle at top right, rgba(212,175,55,.28), #1b202b 75%);
+    --bv0: linear-gradient(135deg, #f9ecc6 0%, #f1da9a 100%);
+    --bv1: linear-gradient(135deg, #e2f2e8 0%, #c8e6d4 100%);
+    --bv2: linear-gradient(155deg, #f6efe0 0%, #eadbc0 100%);
+    --bv3: radial-gradient(circle at top right, rgba(212,175,55,.22), #faf6ec 75%);
+  }
+  [data-gaya="arcade"] {
+    --bv0: linear-gradient(135deg, #fae8ff 0%, #f5d0fe 100%);
+    --bv1: linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%);
+    --bv2: repeating-linear-gradient(0deg, #eff6ff, #eff6ff 5px, #e0e7ff 6px);
+    --bv3: linear-gradient(160deg, #ffedd5 0%, #fed7aa 100%);
+  }
+  [data-gaya="orbit"] {
+    --bv0: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+    --bv1: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    --bv2: radial-gradient(circle at top right, rgba(168,85,247,.20), #f5f3ff 75%);
+    --bv3: linear-gradient(160deg, #e0e7ff 0%, #c7d2fe 100%);
+  }
+  [data-gaya="spider"] {
+    --bv0: linear-gradient(135deg, #ffe4e6 0%, #fecdd3 100%);
+    --bv1: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    --bv2: linear-gradient(150deg, #f3e8ff 0%, #e9d5ff 100%);
+    --bv3: radial-gradient(circle at top right, rgba(225,29,72,.16), #fff1f2 78%);
   }
   [data-gaya="matcha"] {
     --bv0: linear-gradient(135deg, #dce8cf 0%, #c5d9b0 100%);
@@ -2530,13 +2547,6 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     --bv1: linear-gradient(135deg, rgba(128,237,206,.34), rgba(165,219,225,.28));
     --bv2: linear-gradient(145deg, rgba(196,161,241,.30), rgba(128,237,206,.24));
     --bv3: radial-gradient(circle at top left, rgba(128,237,206,.24), rgba(196,161,241,.16));
-  }
-  [data-gaya="arcade"] {
-    --cal-pill-bg: rgba(14,16,32,.78);
-    --bv0: linear-gradient(135deg, rgba(244,63,94,.32), rgba(168,85,247,.34));
-    --bv1: linear-gradient(135deg, rgba(6,182,212,.26), rgba(34,197,94,.26));
-    --bv2: repeating-linear-gradient(0deg, rgba(34,211,238,.12), rgba(34,211,238,.12) 4px, rgba(168,85,247,.16) 5px);
-    --bv3: linear-gradient(160deg, rgba(251,146,60,.22), rgba(236,72,153,.22));
   }
   [data-gaya="botanica"] {
     --bv0: linear-gradient(135deg, #e4eed8 0%, #cddfc0 100%);
@@ -2555,13 +2565,6 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     --bv1: linear-gradient(135deg, #e9edd9 0%, #d5dec0 100%);
     --bv2: radial-gradient(circle at top right, #edd7bc, #fbf5ec 78%);
     --bv3: linear-gradient(160deg, #f8efe2 0%, #ebd9c3 100%);
-  }
-  [data-gaya="orbit"] {
-    --cal-pill-bg: rgba(19,17,38,.76);
-    --bv0: linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%);
-    --bv1: linear-gradient(135deg, #1e3a5f 0%, #0f766e 100%);
-    --bv2: radial-gradient(circle at top right, rgba(168,85,247,.38), #231d42 75%);
-    --bv3: linear-gradient(160deg, #2b2450 0%, #3b2d70 100%);
   }
   [data-gaya="sakura"] {
     --bv0: linear-gradient(135deg, #ffd6e0 0%, #ffb3c6 100%);
@@ -2602,12 +2605,12 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     --bv2: linear-gradient(135deg, #cde4f5 0%, #a9d0ec 100%);
     --bv3: linear-gradient(135deg, #e3dac9 0%, #cfc2aa 100%);
   }
-  [data-gaya="blok"] .cal-day.bg-v0 .cal-day-top,
-  [data-gaya="blok"] .cal-day.bg-v1 .cal-day-top {
-    color: #ffffff; text-shadow: 0 1px 0 rgba(0,0,0,.45);
+  html#financeApp[data-gaya="blok"] #cardKalenderCashflow .cal-day.bg-v0 .cal-day-top,
+  html#financeApp[data-gaya="blok"] #cardKalenderCashflow .cal-day.bg-v1 .cal-day-top {
+    color: #ffffff !important; text-shadow: 0 1px 0 rgba(0,0,0,.45);
   }
-  [data-gaya="blok"] .cal-day.bg-v0 .cal-day-cnt,
-  [data-gaya="blok"] .cal-day.bg-v1 .cal-day-cnt { color: #f4f1ea; }
+  html#financeApp[data-gaya="blok"] #cardKalenderCashflow .cal-day.bg-v0 .cal-day-cnt,
+  html#financeApp[data-gaya="blok"] #cardKalenderCashflow .cal-day.bg-v1 .cal-day-cnt { color: #f4f1ea !important; }
   [data-gaya="material"] {
     --bv0: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
     --bv1: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
@@ -2642,12 +2645,41 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
     --bv2: linear-gradient(135deg, #fae8ff 0%, #f3d0ff 100%);
     --bv3: linear-gradient(160deg, #fef3c7 0%, #fde68a 100%);
   }
-  [data-gaya="spider"] {
+  /* Variasi dark mode untuk gaya adaptif */
+  [data-tema="dark"][data-gaya="midnight"] {
+    --cal-pill-bg: rgba(15,17,23,.76);
+    --bv0: linear-gradient(135deg, #2d2414 0%, #4b3919 100%);
+    --bv1: linear-gradient(135deg, #162a23 0%, #1f3d31 100%);
+    --bv2: linear-gradient(155deg, #232836 0%, #31291d 100%);
+    --bv3: radial-gradient(circle at top right, rgba(212,175,55,.28), #1b202b 75%);
+  }
+  [data-tema="dark"][data-gaya="orbit"] {
+    --cal-pill-bg: rgba(19,17,38,.76);
+    --bv0: linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%);
+    --bv1: linear-gradient(135deg, #1e3a5f 0%, #0f766e 100%);
+    --bv2: radial-gradient(circle at top right, rgba(168,85,247,.38), #231d42 75%);
+    --bv3: linear-gradient(160deg, #2b2450 0%, #3b2d70 100%);
+  }
+  [data-tema="dark"][data-gaya="spider"] {
     --cal-pill-bg: rgba(28,22,34,.80);
     --bv0: linear-gradient(135deg, #6b102d 0%, #9f1239 100%);
     --bv1: linear-gradient(135deg, #1b3831 0%, #244a40 100%);
     --bv2: linear-gradient(150deg, #3b1c47 0%, #581c45 100%);
     --bv3: radial-gradient(circle at top right, rgba(225,29,72,.30), #2b1f33 78%);
+  }
+  [data-tema="dark"][data-gaya="arcade"] {
+    --cal-pill-bg: rgba(14,16,32,.78);
+    --bv0: linear-gradient(135deg, rgba(244,63,94,.32), rgba(168,85,247,.34));
+    --bv1: linear-gradient(135deg, rgba(6,182,212,.26), rgba(34,197,94,.26));
+    --bv2: repeating-linear-gradient(0deg, rgba(34,211,238,.12), rgba(34,211,238,.12) 4px, rgba(168,85,247,.16) 5px);
+    --bv3: linear-gradient(160deg, rgba(251,146,60,.22), rgba(236,72,153,.22));
+  }
+  [data-tema="dark"]:is([data-gaya="ruangide"],[data-gaya="matcha"],[data-gaya="sakura"],[data-gaya="ocean"],[data-gaya="glass"],[data-gaya="biasa"],[data-gaya="berwarna"],[data-gaya="neo"],[data-gaya="blok"],[data-gaya="material"],[data-gaya="soft"],[data-gaya="paper"],[data-gaya="flat"],[data-gaya="pop"],[data-gaya="botanica"],[data-gaya="atelier"],[data-gaya="latte"],[data-gaya="aurora"]) {
+    --cal-pill-bg: rgba(15,23,42,.74);
+    --bv0: linear-gradient(135deg, rgba(244,63,94,.28), rgba(225,29,72,.40));
+    --bv1: linear-gradient(135deg, rgba(34,197,94,.22), rgba(22,163,74,.34));
+    --bv2: linear-gradient(135deg, rgba(99,102,241,.24), rgba(79,70,229,.34));
+    --bv3: linear-gradient(160deg, rgba(148,163,184,.16), rgba(100,116,139,.26));
   }
 
   .cal-head { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
@@ -2656,23 +2688,25 @@ html[data-gaya="flat"][data-tema="dark"]{--st-bg:#0e0e10;--st-card:#18181b;--st-
   .cal-month-title { font-size:14px; font-weight:700; min-width:118px; text-align:center; }
   .cal-modes { display:inline-flex; gap:4px; }
   .cal-modes button { width:auto; margin:0; padding:6px 10px; min-height:auto; font-size:12px; }
-  .cal-modes button[aria-pressed="true"] { background:var(--pri); color:#fff; }
+  html#financeApp[data-gaya] #cardKalenderCashflow .cal-modes button[aria-pressed="true"] {
+    background:var(--pri) !important; color:#fff !important;
+  }
   .cal-weekdays { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:4px; }
   .cal-weekdays span { text-align:center; font-size:11px; font-weight:700; color:var(--muted); padding:2px 0; }
   .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
   .cal-empty { min-height:58px; }
-  .cal-day {
-    min-height:58px; width:100%; margin:0; padding:5px 4px; border-radius:10px;
-    border:1px solid var(--line); background:var(--input); color:var(--ink);
-    box-shadow:none; display:flex; flex-direction:column; justify-content:space-between;
+  html#financeApp[data-gaya] #cardKalenderCashflow .cal-day {
+    min-height:58px !important; width:100% !important; margin:0 !important; padding:5px 4px !important; border-radius:10px !important;
+    border:1px solid var(--line) !important; background:var(--input) !important; color:var(--ink) !important;
+    box-shadow:none !important; display:flex; flex-direction:column; justify-content:space-between;
     align-items:stretch; text-align:left; font-weight:500; cursor:pointer;
   }
-  .cal-day.is-selected { outline:2px solid var(--pri); outline-offset:1px; }
-  .cal-day.is-today .cal-day-num { background:var(--pri); color:#fff; border-radius:999px; padding:1px 5px; }
-  .cal-day.bg-v0 { background:var(--bv0); }
-  .cal-day.bg-v1 { background:var(--bv1); }
-  .cal-day.bg-v2 { background:var(--bv2); }
-  .cal-day.bg-v3 { background:var(--bv3); }
+  html#financeApp[data-gaya] #cardKalenderCashflow .cal-day.is-selected { outline:2px solid var(--pri) !important; outline-offset:1px; }
+  html#financeApp[data-gaya] #cardKalenderCashflow .cal-day.is-today .cal-day-num { background:var(--pri); color:#fff; border-radius:999px; padding:1px 5px; }
+  html#financeApp[data-gaya] #cardKalenderCashflow .cal-day.bg-v0 { background:var(--bv0) !important; }
+  html#financeApp[data-gaya] #cardKalenderCashflow .cal-day.bg-v1 { background:var(--bv1) !important; }
+  html#financeApp[data-gaya] #cardKalenderCashflow .cal-day.bg-v2 { background:var(--bv2) !important; }
+  html#financeApp[data-gaya] #cardKalenderCashflow .cal-day.bg-v3 { background:var(--bv3) !important; }
   .cal-day-top { display:flex; justify-content:space-between; align-items:center; gap:2px; }
   .cal-day-num { font-size:11.5px; font-weight:700; line-height:1.25; }
   .cal-day-cnt { font-size:9.5px; color:var(--muted); font-weight:700; }
